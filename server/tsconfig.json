@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "target": "ES2016",
+      "module": "commonjs",
+      "lib": ["es2015","ES2021.String"],
+      "strict": false,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowSyntheticDefaultImports": true,
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "baseUrl": ".",
+      "paths": {
+        "*": ["node_modules/*"],
+        "@/*": ["./*"]
+      },
+      "outDir": "./dist",
+      "rootDir": "./"
+    },
+    "include": ["**/*"],
+    "exclude": ["node_modules"]
+}
