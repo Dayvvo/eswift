@@ -21,6 +21,16 @@ eval("/**\n * Hoists a name from a module or promised module.\n *\n * @param mod
 
 /***/ }),
 
+/***/ "./node_modules/next/font/google/target.css?{\"path\":\"pages\\\\_app.tsx\",\"import\":\"Poppins\",\"arguments\":[{\"weight\":[\"400\",\"700\"],\"style\":[\"normal\",\"italic\"],\"subsets\":[\"latin\"],\"display\":\"swap\"}],\"variableName\":\"poppins\"}":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/font/google/target.css?{"path":"pages\\_app.tsx","import":"Poppins","arguments":[{"weight":["400","700"],"style":["normal","italic"],"subsets":["latin"],"display":"swap"}],"variableName":"poppins"} ***!
+  \*********************************************************************************************************************************************************************************************************************************/
+/***/ ((module) => {
+
+eval("// Exports\nmodule.exports = {\n\t\"style\": {\"fontFamily\":\"'__Poppins_6017c1', '__Poppins_Fallback_6017c1'\"},\n\t\"className\": \"__className_6017c1\"\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9ub2RlX21vZHVsZXMvbmV4dC9mb250L2dvb2dsZS90YXJnZXQuY3NzP3tcInBhdGhcIjpcInBhZ2VzXFxcXF9hcHAudHN4XCIsXCJpbXBvcnRcIjpcIlBvcHBpbnNcIixcImFyZ3VtZW50c1wiOlt7XCJ3ZWlnaHRcIjpbXCI0MDBcIixcIjcwMFwiXSxcInN0eWxlXCI6W1wibm9ybWFsXCIsXCJpdGFsaWNcIl0sXCJzdWJzZXRzXCI6W1wibGF0aW5cIl0sXCJkaXNwbGF5XCI6XCJzd2FwXCJ9XSxcInZhcmlhYmxlTmFtZVwiOlwicG9wcGluc1wifSIsIm1hcHBpbmdzIjoiQUFBQTtBQUNBO0FBQ0EsV0FBVywrREFBK0Q7QUFDMUU7QUFDQSIsInNvdXJjZXMiOlsid2VicGFjazovL2Vzd2lmdC8uL25vZGVfbW9kdWxlcy9uZXh0L2ZvbnQvZ29vZ2xlL3RhcmdldC5jc3M/NTQzZSJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBFeHBvcnRzXG5tb2R1bGUuZXhwb3J0cyA9IHtcblx0XCJzdHlsZVwiOiB7XCJmb250RmFtaWx5XCI6XCInX19Qb3BwaW5zXzYwMTdjMScsICdfX1BvcHBpbnNfRmFsbGJhY2tfNjAxN2MxJ1wifSxcblx0XCJjbGFzc05hbWVcIjogXCJfX2NsYXNzTmFtZV82MDE3YzFcIlxufTtcbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./node_modules/next/font/google/target.css?{\"path\":\"pages\\\\_app.tsx\",\"import\":\"Poppins\",\"arguments\":[{\"weight\":[\"400\",\"700\"],\"style\":[\"normal\",\"italic\"],\"subsets\":[\"latin\"],\"display\":\"swap\"}],\"variableName\":\"poppins\"}\n");
+
+/***/ }),
+
 /***/ "./node_modules/next/dist/pages/_document.js":
 /*!***************************************************!*\
   !*** ./node_modules/next/dist/pages/_document.js ***!
