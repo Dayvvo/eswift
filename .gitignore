@@ -12,6 +12,8 @@ node_modules/
 
 ./.env
 
+.next/
+
 
 # misc
 .DS_Store
