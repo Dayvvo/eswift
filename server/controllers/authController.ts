@@ -4,9 +4,8 @@ import { generalRequestBody } from "../utils/types";
 import { Request, Response } from "express";
 
 
-
-
 class AuthController {
+    
     handleCreateUser = async(personalData:generalRequestBody)=>{
         const newUser  =  await new User({
           ...personalData,
@@ -42,7 +41,7 @@ class AuthController {
         };        
     };
 
-    emailAuthController = async (req: Request, res: Response) => {
+    emailAuthController = async (req: Request, res: Response) => { 
     };
 };
 

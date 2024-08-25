@@ -60,7 +60,7 @@ nextApp.prepare().then(() => {
     app.use(cookieParser());
 
     app.use('/api/auth',authRoutes);
-
+    
     app.get('*', (req, res, next) => {
       if (req.url.startsWith('/api')) {
           console.log('it starts with')

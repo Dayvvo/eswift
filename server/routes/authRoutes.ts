@@ -1,7 +1,7 @@
-import express, {Request, Response} from "express"
-import axios from 'axios';
+import express from "express"
 import authController from "../controllers/authController";
 import passport from "passport";
+import { isAuth } from "@/utils/middleware";
 
 const router = express.Router();
 
@@ -10,15 +10,7 @@ router.get(
   passport.authenticate("google", {
     scope: ["email", "profile"],
   })
-)
-
-router.get(
-  "/google-inapp",
-  passport.authenticate("", {
-    scope: ["email", "profile"],
-    state: "inapp",
-  })
-)
+);
 
 router.get(
   "/google/callback",
@@ -27,5 +19,8 @@ router.get(
     failureRedirect: `${process.env.FRONTEND_URL}`,
   }),
   authController.googleAuthController
-)
+);
+
+router.get('/profile',isAuth,authController.googleAuthController);
+
 export default router;
