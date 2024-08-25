@@ -1,4 +1,6 @@
+import { Text } from "@chakra-ui/react";
 import { useEffect } from "react";
+import { poppins } from "./_app";
 export default function Home() {
 
   useEffect(()=>{
@@ -16,16 +18,23 @@ export default function Home() {
 
     };
 
-    const myCookie = getCookie('auth-cookie') as string;
+    // const myCookie = getCookie('auth-cookie') as string;
 
-    console.log('my cookie',JSON.parse(myCookie))
+    // console.log('my cookie',JSON.parse(myCookie))
+
+    try {
+      const myCookie = getCookie('auth-cookie') as string;
+      console.log('my cookie',JSON.parse(myCookie))      
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+    }
 
 
   },[])
 
   return (
     <>
-      <div style={{fontSize:'30px'}}>ESWIFT</div>
+      <Text style={{fontSize:'30px'}} className={poppins.className}>ESWIFT</Text>
 
     </>
   );
