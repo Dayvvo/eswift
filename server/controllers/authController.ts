@@ -7,12 +7,12 @@ import { validateLoginData } from '../utils/validation/index'
 
 class AuthController {
     
-    handleCreateUser = async(personalData:generalRequestBody)=>{
-        const newUser  =  await new User({
-          ...personalData,
-        }).save();      
-        return newUser;      
-    };
+  handleCreateUser = async(personalData:generalRequestBody)=>{
+      const newUser  =  await new User({
+        ...personalData,
+      }).save();      
+      return newUser;      
+  };
 
   jwtSignAndRedirect = (res: Response, user: generalRequestBody) => {
     const payload = {
@@ -34,9 +34,10 @@ class AuthController {
 
   googleAuthController = async (req: Request, res: Response) => {
     try {
-      const profile = req?.user as generalRequestBody
+      const profile = req?.user as generalRequestBody;
       this.jwtSignAndRedirect(res, profile)
-    } catch (err) {
+    } 
+    catch (err) {
       console.log('err in google auth callback', err)
       console.error(err.message)
       res.status(500).send('Server error')

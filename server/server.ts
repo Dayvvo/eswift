@@ -25,6 +25,7 @@ import crypto from 'crypto'
 const secret = crypto.randomBytes(64).toString('hex')
 
 nextApp.prepare().then(() => {
+  
   let config = new appConfig()
 
   app.use(compress())
@@ -69,7 +70,7 @@ nextApp.prepare().then(() => {
 
   app.get('/', async (req, res) => {
     await nextApp.render(req, res, '/', req.query as NextParsedUrlQuery)
-  })
+  });
 
   app.use(
     express.json({
