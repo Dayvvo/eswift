@@ -13,14 +13,11 @@
     "go": "nodemon dist/server.js"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@types/morgan": "^1.9.9",
-=======
     "@chakra-ui/next-js": "^2.2.0",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
->>>>>>> 98f72766a1685833c3d9bed5bb0182b450c7eea3
     "axios": "^1.7.2",
     "compression": "^1.7.4",
     "config": "^3.3.6",
