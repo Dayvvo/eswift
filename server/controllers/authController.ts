@@ -21,7 +21,7 @@ class AuthController {
       },
     }
     const payloadStringified = JSON.stringify({
-      token: jwt.sign(payload, process.env.JWT_SECRET, {
+      token: jwt.sign(payload, process.env.JWT_SECRET as string, {
         expiresIn: 60 * 2400,
       }),
       user,
@@ -39,12 +39,10 @@ class AuthController {
     } 
     catch (err) {
       console.log('err in google auth callback', err)
-      console.error(err.message)
       res.status(500).send('Server error')
     }
   }
 
-  //TODO: finish function
   emailLoginAuthController = async (req: Request, res: Response) => {
     try {
       const validate = validateLoginData(req.body)
@@ -58,7 +56,6 @@ class AuthController {
         .json({ statusCode: 200, message: `Login Successful` })
     } catch (err) {
       console.log('Error in email login', err)
-      console.error(err.message)
       res.status(500).send('Internal Server Error')
     }
   }

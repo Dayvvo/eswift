@@ -61,4 +61,3 @@ export const isAuth = (req:Request, res:Response, next:NextFunction) => {
 //   }
 // }
 
-module.exports = { auth }
