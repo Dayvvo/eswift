@@ -10,8 +10,7 @@ import mongoose from "mongoose";
 export class appConfig {
 
   host = process.env['NODE_ENV'] !=='production'? 'localhost':'';
-  
-   
+
   initializePassportStrategy = ()=>{
 
     // Serialize User
@@ -20,7 +19,7 @@ export class appConfig {
     })
 
     // Deserialize User
-    passport.deserializeUser((id, done) => {
+    passport.deserializeUser((id:any, done) => {
       done(null, id)
     });
 
@@ -28,13 +27,13 @@ export class appConfig {
     passport.use(
       new GoogleStrategy(
         {
-          clientID: process.env['GOOGLE_CLIENT_ID'],
-          clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
+          clientID: process.env['GOOGLE_CLIENT_ID'] as string,
+          clientSecret: process.env['GOOGLE_CLIENT_SECRET'] as string,
           callbackURL: `${process.env['BACKEND_URL']}/api/auth/google/callback`,
           proxy: true,
           passReqToCallback: true,
-        },
-        async (_req, _accessToken, _refreshToken, profile, done) => {
+        },    
+        async (_req, _accessToken, _refreshToken, profile:Record<string,any>, done) => {
           try {
             let user;
             await User.findOne({ tenantId: profile?.id }).then(
@@ -46,7 +45,7 @@ export class appConfig {
                 else {
                   console.log('creatinig new user')
                   const avatar = profile?.photos[0]?.value
-                  let email = profile?.emails?.find((email) => email?.verified)?.value
+                  let email = profile?.emails?.find((email:Record<string,any>) => email?.verified)?.value
                   let constructNewUserObj = {
                     provider: "google",
                     email,
@@ -74,15 +73,13 @@ export class appConfig {
 
       console.log('connecting db');
 
-      mongoose.connect(process.env.MONGO_URI);
+      mongoose.connect(process.env.MONGO_URI as string);
       console.log("MongoDB Connected...");
 
     }
     catch (err) {
-
-      console.error("error at connecting db", err.message)
+      console.error("error at connecting db", err)
       process.exit(1)
-
     }
   };
 
@@ -92,7 +89,6 @@ export class appConfig {
       'Authorization':''
     }
   });
-
 
 };
 
