@@ -12,11 +12,13 @@ export enum AuthProvider {
 export interface IUser {
   tenantId?: string
   email: string
-  avatar: string
-  provider: AuthProvider
+  avatar?: string
+  provider?: AuthProvider
   lastName: string
   firstName: string
+  hash?: string
   role: UserRole
   isActive: boolean
   isVerified: boolean
+  matchPassword?: FunctionConstructor
 }

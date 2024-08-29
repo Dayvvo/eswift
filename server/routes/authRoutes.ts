@@ -1,25 +1,26 @@
-import express from "express"
-import authController from "../controllers/authController";
-import passport from "passport";
-import { isAuth } from "../utils/middleware";
+import express from 'express'
+import authController from '../controllers/authController'
+import passport from 'passport'
+import { isAuth } from '../utils/middleware'
 
-const router = express.Router();
+const router = express.Router()
 
 router.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["email", "profile"],
+  '/google',
+  passport.authenticate('google', {
+    scope: ['email', 'profile'],
   })
-);
+)
 
 router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    scope: ["email", "profile"],
+  '/google/callback',
+  passport.authenticate('google', {
+    scope: ['email', 'profile'],
     failureRedirect: `${process.env.FRONTEND_URL}`,
   }),
   authController.googleAuthController
-);
+)
 
-router.post('z', authController.emailLoginAuthController)
-export default router;
+router.post('/login', authController.emailLoginAuthController)
+// router.get('/seed', authController.adminSeeder)
+export default router
