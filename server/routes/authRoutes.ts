@@ -21,5 +21,5 @@ router.get(
   authController.googleAuthController
 );
 
-router.post('/login', authController.emailLoginAuthController)
+router.post('z', authController.emailLoginAuthController)
 export default router;

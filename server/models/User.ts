@@ -1,15 +1,22 @@
-import mongoose from "mongoose";
+import { Schema, model } from 'mongoose'
+import { AuthProvider, IUser, UserRole } from '../utils/interfaces'
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema<IUser>(
   {
     tenantId: {
       type: String,
+    },
+    email: {
+      type: String,
+      lowercase: true,
     },
     avatar: {
       type: String,
     },
     provider: {
       type: String,
+      enum: AuthProvider,
+      default: AuthProvider.EMAIL_SIGNUP,
     },
     lastName: {
       type: String,
@@ -21,16 +28,19 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "Guest",
+      enum: UserRole,
+      default: UserRole.GUEST,
     },
     isActive: {
       type: Boolean,
-      default: true
-    }    
+      default: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 )
 
-export default mongoose.model("user", UserSchema)
-
-
+export default model('user', UserSchema)
