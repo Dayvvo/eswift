@@ -50,9 +50,6 @@ const UserSchema = new Schema<IUser>(
 
 UserSchema.method('matchPassword', async function (enteredPassword) {
   const isMatch = await argon.verify(this.hash as string, enteredPassword)
-  console.log('matching...')
-  console.log(isMatch)
-
   return isMatch
 })
 
