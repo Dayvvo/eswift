@@ -24,7 +24,7 @@ class BlogPostController {
     }
   };
 
-  updatatePost = async (req: Request, res: Response) => {
+  updatePost = async (req: Request, res: Response) => {
     try {
       const { error, value } = validateBlogPostData(req.body);
       if (error) {
@@ -58,7 +58,7 @@ class BlogPostController {
       console.log(error);
       res.status(500).send("Internal Server Error");
     }
-    };
+  };
     
   deleteBlogPost = async (req: Request, res: Response) => {
     try {

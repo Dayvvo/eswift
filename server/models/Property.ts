@@ -1,7 +1,6 @@
 
 
 import mongoose, { Schema } from 'mongoose'
-import { PropertyDocuments } from '../utils/types';
 
 
 
