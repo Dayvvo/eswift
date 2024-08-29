@@ -46,7 +46,7 @@ nextApp.prepare().then(() => {
     })
   )
 
-  // Init Middleware
+  // Init Middlewarezx
   app.use(logger('dev'))
 
   app.use(express.json())

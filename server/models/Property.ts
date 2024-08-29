@@ -28,6 +28,10 @@ const Property = new mongoose.Schema({
         type: Schema.Types.ObjectId, //possibly a json string
         ref: 'user',
     },
+    isActive:{
+        type: Boolean,
+        default: true,
+    }
   },
   { timestamps: true }
 )
