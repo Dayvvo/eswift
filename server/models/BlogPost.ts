@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const BlogPostSchema = new mongoose.Schema(
   {
@@ -12,11 +12,6 @@ const BlogPostSchema = new mongoose.Schema(
       type: String, //possibly a json string
       required: true,
     },
-    author: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'user',
-      required: true,
-    },
     tags: [
       {
         type: String,
@@ -25,6 +20,6 @@ const BlogPostSchema = new mongoose.Schema(
     ],
   },
   { timestamps: true }
-)
+);
 
-export default mongoose.model('blogPost', BlogPostSchema)
+export default mongoose.model("blogPost", BlogPostSchema);
