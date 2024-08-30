@@ -2,23 +2,31 @@
   "name": "eswift",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "NODE_ENV=production node dist/server/server.js",
     "frontend": "next dev",
     "backend": "node dist/server/server.js",
-    "dev": "nodemon server/server.ts",
+    "dev": "tsx watch server/server.ts",
     "lint": "next lint",
     "deploy": "next build && mv ./out/ ./server/public/out/ && npm run backend",
     "build": "next build",
-    "go": "nodemon dist/server.js"
+    "go": "nodemon dist/server.js",
+    "clear": "tsc --clearCache"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.2.0",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+<<<<<<< HEAD
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.5",
+=======
+    "@types/morgan": "^1.9.9",
+    "argon2": "^0.41.0",
+    "axios": "^1.7.2",
+>>>>>>> 6fa5940c0773aab29ac6dceaaabb0bff8e7aa78e
     "compression": "^1.7.4",
     "config": "^3.3.6",
     "cookie-parser": "^1.4.5",
@@ -30,6 +38,7 @@
     "express-validator": "^6.12.1",
     "framer-motion": "^11.3.30",
     "fs": "^0.0.1-security",
+    "joi": "^17.13.3",
     "json-server": "^0.17.4",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
@@ -43,7 +52,11 @@
     "styled-components": "^6.1.12"
   },
   "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/express-session": "^1.17.10",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
     "@types/passport": "^1.0.15",
@@ -56,6 +69,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.0",
     "typescript": "^5"
   }
 }

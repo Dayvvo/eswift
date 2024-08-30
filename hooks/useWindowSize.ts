@@ -10,7 +10,8 @@ export const useWindowSize = () => {
 
     useEffect(() => {
         if (!isClient) {
-            return;    }
+            return;    
+        }
 
         const handleResize = () => {
             setSize({

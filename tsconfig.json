@@ -25,6 +25,9 @@
     "target": "es5",
     "forceConsistentCasingInFileNames": true
   },
+  "ts-node": {
+    "esm": true
+  },
   "include": [
     "next-env.d.ts",
     "**/*.ts",

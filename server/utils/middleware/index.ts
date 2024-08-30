@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import jwt from "jsonwebtoken";
 
-export const auth = (req:Request, res:Response, next:NextFunction) => {
+export const isAuth = (req:Request, res:Response, next:NextFunction) => {
   // Get token from the header
   const token = req.header("Authorization")
 
@@ -12,8 +12,8 @@ export const auth = (req:Request, res:Response, next:NextFunction) => {
 
   //  Verify token
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-
+    const decoded = jwt.verify(token, process.env['JWT_SECRET'] as string)
+    console.log('decoded user',decoded)
     // req.user = decoded.user
     next()
   } catch (err) {
@@ -61,4 +61,3 @@ export const auth = (req:Request, res:Response, next:NextFunction) => {
 //   }
 // }
 
-module.exports = { auth }
