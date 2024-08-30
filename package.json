@@ -19,14 +19,10 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-<<<<<<< HEAD
     "@reduxjs/toolkit": "^2.2.7",
-    "axios": "^1.7.5",
-=======
     "@types/morgan": "^1.9.9",
     "argon2": "^0.41.0",
     "axios": "^1.7.2",
->>>>>>> 6fa5940c0773aab29ac6dceaaabb0bff8e7aa78e
     "compression": "^1.7.4",
     "config": "^3.3.6",
     "cookie-parser": "^1.4.5",
