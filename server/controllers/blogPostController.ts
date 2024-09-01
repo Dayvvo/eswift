@@ -20,7 +20,7 @@ class BlogPostController {
       });
     } catch (error) {
       console.log(error);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send("Failed to create blog post");
     }
   };
 
@@ -42,7 +42,7 @@ class BlogPostController {
       });
     } catch (error) {
       console.log(error);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send("Failed to update blog post");
     }
   };
 
@@ -56,14 +56,28 @@ class BlogPostController {
       });
     } catch (error) {
       console.log(error);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send("Failed to fetch blog posts");
     }
   };
-    
+
+  fetchBlogPostById = async (req: Request, res: Response) => {
+    try {
+      const blogPostDetail = await BlogPost.findById(req.params.blogPostId);
+      return res.status(200).json({
+        message: "Fetched successfully",
+        data: blogPostDetail,
+        statusCode: 200,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Failed to fetch blog post details");
+    }
+  };
+
   deleteBlogPost = async (req: Request, res: Response) => {
     try {
       const blogpost = await BlogPost.deleteOne({
-        _id: req.params.blogpostId,
+        _id: req.params.blogPostId,
       });
       return res.status(200).json({
         statusCode: 200,
