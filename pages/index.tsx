@@ -1,7 +1,8 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, TabPanel, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { poppins } from "./_app";
 import Btn from "@/components/Btn";
+import Wrapper from "@/components/Wrapper";
 export default function Home() {
 
   useEffect(()=>{
@@ -35,10 +36,15 @@ export default function Home() {
 
   return (
     <>
-      <Text style={{fontSize:'30px'}} className={poppins.className}>ESWIFT</Text>
-      <Box px={'20%'}>
-        <Btn>Hello</Btn>
-      </Box>
+      <Wrapper>
+        <TabPanel>Dashboard</TabPanel>
+        <TabPanel>Users</TabPanel>
+        <TabPanel>Property</TabPanel>
+        <TabPanel>Projects</TabPanel>
+        <TabPanel>Blog</TabPanel>
+        <TabPanel>TEam</TabPanel>
+        <TabPanel>Settings</TabPanel>
+      </Wrapper>
     </>
   );
 };
