@@ -3,6 +3,8 @@
 import mongoose, { Schema } from 'mongoose'
 
 
+
+
 const Property = new mongoose.Schema({
     state:{
         type:String,
@@ -23,6 +25,9 @@ const Property = new mongoose.Schema({
     },
     areaInSqm:{
         type: Number,
+    },
+    description:{
+        type: String,
     },
     keyFeatures:{
         type: [String],
@@ -48,6 +53,6 @@ const Property = new mongoose.Schema({
     }
   },
   { timestamps: true }
-)
+);
 
-export default mongoose.model('property', Property)
+export default mongoose.model('property', Property);

@@ -20,3 +20,4 @@ export interface GoogleAuthResponse {
   email: string
   email_verified: boolean
 }
+

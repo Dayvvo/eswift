@@ -79,7 +79,7 @@ class AuthController {
     adminUsers.forEach((adminUser) => {
       const newUser = new User(adminUser)
       newUser.save()
-    })
+    });
 
     console.log(`Seed successful`)
     res.send(`SEED COMPLETE!!`)
