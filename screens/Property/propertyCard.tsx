@@ -20,6 +20,7 @@ export const PropertyCard =({
     return(
         <>
             <Box
+                className="RobotoF"
                 bg={'#FFF'}
                 w={{base:'100%',sm:'348px'}} h={'408px'}
                 pb={'16px'} boxShadow={'lg'}
@@ -29,7 +30,8 @@ export const PropertyCard =({
                     position={'relative'}
                     w='100%' h='55%'
                 >
-                    <Text 
+                    <Text
+                        className="montserrat" 
                         position={'absolute'} m={4}
                         fontSize={'18px'}
                         fontWeight={700}
@@ -85,14 +87,13 @@ export const PropertyCard =({
                         </Text>
                     </Flex>
                     <Flex  
-                        flexDir={'column'}
                         justifyContent={"space-between"}
                         alignItems={'center'} gap={'4px'}
                         textColor={'#626871'}
                         fontSize={'14px'} 
                     >
                         <Flex
-                            w={'100%'} h={'18px'} gap={'8px'}
+                             h={'18px'} gap={'8px'}
                             alignItems={'center'}
                         >
                             <Box 
@@ -108,25 +109,21 @@ export const PropertyCard =({
                             </Text>
                         </Flex>
                         <Box w={'1px'} h={'17px'} bg={'#DDE0E5'}/>
-                        <Flex
-                            alignItems={'center'}
+                        <Text
+                            fontWeight={200}
+                            fontSize={{base:'12px', lg:'14px'}}
                         >
-                            <Text
-                                fontWeight={200}
-                                fontSize={{base:'12px', lg:'14px'}}
-                            >
-                                {email}
-                            </Text>
-                        </Flex> 
-                        <Box w={'100%'} h={'1.5px'} bg={'#DDE0E5'}/>
-                        <Btn
-                            m='1px' bg={'#fff'} textColor={'#000'}
-                            display={'flex'} justifyContent={'center'} alignItems={'center'}
-                            w="100%" h="44px" border={'1px solid #000'} borderRadius={'6px'}
-                        >
-                            Verify
-                        </Btn>                      
+                            {email}
+                        </Text>
                     </Flex>
+                    <Box w={'100%'} h={'1.5px'} bg={'#DDE0E5'}/>
+                    <Btn
+                        m='1px' bg={'#fff'} textColor={'#000'} fontSize={'15px'}
+                        display={'flex'} justifyContent={'center'} alignItems={'center'}
+                        w="100%" h="44px" border={'1px solid #000'} borderRadius={'6px'}
+                    >
+                        Verify
+                    </Btn>                      
                 </Flex>
             </Box>
         </>

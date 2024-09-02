@@ -72,6 +72,7 @@ export const PropertyScreen =()=> {
     return(
         <>
             <Box 
+                className="robotoF"
                 px={{base:'16px', lg:'60px'}}
             >
                 <Flex
@@ -89,7 +90,7 @@ export const PropertyScreen =()=> {
                             w='100%' h='100%'
                             _placeholder={{textColor:'var--(soft400)'}}
                         >
-                            <InputLeftElement pointerEvents='none'>
+                            <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
                                 <RiSearch2Line />
                             </InputLeftElement>
                             <Input 
@@ -100,13 +101,13 @@ export const PropertyScreen =()=> {
                         </InputGroup>
                     </Flex>
                     <Btn
-                        display={'flex'} gap={'4px'} alignItems={'center'} justifyContent={'center'}
-                        h={'100%'} w={'100%'}
-                        border={'1px'} borderRadius={'var--(stroke600)'}
+                        display={'flex'} gap={'4px'} alignItems={'center'} bg={'#fff'}
+                        h={'100%'} w={'80px'}
+                        border={'1px solid var(--soft200)'} borderRadius={'8px'}
                         textColor={'var--(sub600)'}
-                        fontWeight={500} fontSize={'14px'}
+                        fontWeight={500} fontSize={'14px'} px={'0'} pt={'0'} pb={'0'}
                     >
-                        <IoFilter/>
+                        <IoFilter className="icon"/>
                         <Text>
                             Filter
                         </Text>

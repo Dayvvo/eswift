@@ -1,8 +1,8 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, TabPanel, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { poppins } from "./_app";
 import Btn from "@/components/Btn";
-import Property from "@/server/models/Property";
+import Wrapper from "@/components/Wrapper";
 import { PropertyScreen } from "@/screens/Property/property";
 export default function Home() {
 
@@ -37,7 +37,9 @@ export default function Home() {
 
   return (
     <>
-      <PropertyScreen/>
+      <Wrapper>
+        <TabPanel><PropertyScreen/></TabPanel>
+      </Wrapper>
     </>
   );
 };

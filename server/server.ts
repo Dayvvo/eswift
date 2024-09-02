@@ -72,6 +72,15 @@ nextApp.prepare().then(() => {
     await nextApp.render(req, res, '/', req.query as NextParsedUrlQuery)
   });
 
+  app.get('/', async (req, res) => {
+    await nextApp.render(req, res, '/', req.query as NextParsedUrlQuery)
+  });
+
+  app.get('/property/', async (req, res) => {
+    await nextApp.render(req, res, '/property', req.query as NextParsedUrlQuery)
+  });
+
+  
   app.use(
     express.json({
       limit: '5mb',
