@@ -16,10 +16,6 @@ const Property = new mongoose.Schema({
       type: String, //possibly a json string
       ref: 'property',
     },
-    owner: {
-        type: String,
-        enum: ['eswift','affiliate']
-    },
     photo:{
         type: String
     },
@@ -27,12 +23,36 @@ const Property = new mongoose.Schema({
         type: Schema.Types.ObjectId, //possibly a json string
         ref: 'user',
     },
+    areaInSqm:{
+        type: Number,
+    },
+    description:{
+        type: String,
+    },
+    keyFeatures:{
+        type: [String],
+    },
+    ownership:{
+        type: String,
+        enum: ['private','commercial']
+    },
+    propertyType:{
+        type: String,
+        enum: ['land','building']
+    },
+    category:{
+        type: String,
+    },
     isActive:{
         type: Boolean,
         default: true,
+    },
+    isVerified:{
+        type: Boolean,
+        default: false,
     }
   },
   { timestamps: true }
-)
+);
 
-export default mongoose.model('property', Property)
+export default mongoose.model('property', Property);
