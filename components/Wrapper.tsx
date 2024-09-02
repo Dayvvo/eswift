@@ -173,7 +173,7 @@ const Header = ({ tabLabel }: { tabLabel: string }) => {
       justifyContent={"space-between"}
       alignItems={"center"}
       borderBottom={"1px solid #E1E4EA"}
-      padding={"0.5rem 1.5rem"}
+      padding={"40px 30px 40px 60px"}
       w={"80vw"}
     >
       <Grid gridTemplateColumns={"40px 2fr"} gap={0}>
