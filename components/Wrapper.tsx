@@ -67,7 +67,7 @@ const NavigationTab = ({ setTabLabel }: { setTabLabel: any }) => {
   };
 
   return (
-    <Box borderRight={"1px solid #E1E4EA"} py="40px" w="244px" minH={"100vh"}>
+    <Box borderRight={"1px solid #E1E4EA"} pt="40px" w="244px" minH={"100vh"}>
       <TabList
         display={"flex"}
         flexDir={"column"}
