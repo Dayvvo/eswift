@@ -11,7 +11,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Divider from "./Divider";
 import {
   BlogIcon,
@@ -26,7 +26,13 @@ import {
 import Btn from "./Btn";
 import { FiHome, FiUser } from "react-icons/fi";
 
-const NavigationTab = ({ setTabLabel }: { setTabLabel: any }) => {
+const NavigationTab = ({
+  tabLabel,
+  setTabLabel,
+}: {
+  tabLabel: string;
+  setTabLabel: any;
+}) => {
   const navData = [
     {
       label: "Dashboard",
@@ -58,12 +64,19 @@ const NavigationTab = ({ setTabLabel }: { setTabLabel: any }) => {
     },
   ];
 
+  const [currentTab, setCurrentTab] = useState("");
+
+  useEffect(() => {
+    const hashValue = window.location.hash.substring(1);
+    setCurrentTab(hashValue);
+  }, [tabLabel]);
+  
+
   const handleTabClick = (tabName: any) => {
     // Replace the "#" in the URL with the tab name
     // const newUrl = window.location.href.replace("#", tabName);
     const newUrl = window.location.href.split("#")[0] + `#${tabName}`;
     window.history.pushState(null, "", newUrl);
-    console.log("newUrl", newUrl);
   };
 
   return (
@@ -76,10 +89,13 @@ const NavigationTab = ({ setTabLabel }: { setTabLabel: any }) => {
         border={"none"}
         onClick={(event: any) => {
           event.preventDefault();
-          const clickedTabName = event.target.textContent.trim();
-          handleTabClick(clickedTabName);
-          console.log("clickedTabName", clickedTabName);
-          setTabLabel(clickedTabName);
+          
+          // Check if the clicked element is a tab (you can customize the condition based on your tab structure)
+          if (event.target && event.target.getAttribute('role') === 'tab') {
+            const clickedTabName = event.target.textContent.trim();
+            handleTabClick(clickedTabName);
+            setTabLabel(clickedTabName);
+          }
         }}
       >
         <Link href={"/"}>
@@ -96,30 +112,30 @@ const NavigationTab = ({ setTabLabel }: { setTabLabel: any }) => {
           alignItems={"flex-start"}
         >
           {navData.map((item) => (
-            <Link href={"#"}>
-              <Tab
-                className="robotoF"
-                fontWeight={500}
-                // padding={"0.6rem 1rem"}
-                borderRadius="6px"
-                fontSize={"0.875rem"}
-                // backgroundColor={path === "/dashboard" ? "#F18313" : ""}
-                // color={path === "/dashboard" ? "#FFF" : ""}
-                _hover={{
-                  backgroundColor: "gray.300",
-                  color: "#000",
-                }}
-                // _selected={{ color: "white", bg: "#F18313" }}
-              >
-                <span style={{ marginRight: "10px" }}>
-                  {/* <DashboardIcon
-                      color={path === "/dashboard" ? "#fff" : "#000"}
+            <Tab
+              className="robotoF"
+              display={"flex"}
+              justifyContent={"start"}
+              fontWeight={500}
+              w="196px"
+              borderRadius="6px"
+              fontSize={"0.875rem"}
+              backgroundColor={currentTab === item.label ? "#F5F7FA" : ""}
+              // color={currentTab === item.label ? "#FFF" : ""}
+              _hover={{
+                backgroundColor: "#F5F7FA",
+                color: "#000",
+              }}
+              // _selected={{ color: "white", bg: "#F18313" }}
+            >
+              <span style={{ marginRight: "10px" }}>
+                {/* <DashboardIcon
+                      color={currentTab === item.label ? "#fff" : "#000"}
                     /> */}
-                  {item.icon}
-                </span>{" "}
-                {item.label}
-              </Tab>
-            </Link>
+                {item.icon}
+              </span>{" "}
+              {item.label}
+            </Tab>
           ))}
         </Box>
         <Box mt={"5rem"}>
@@ -228,7 +244,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
         variant="unstyled"
       >
         <Flex align={"start"} justify="start" gap={0}>
-          <NavigationTab setTabLabel={setTabLabel} />
+          <NavigationTab setTabLabel={setTabLabel} tabLabel={tabLabel} />
           <Box>
             <Header tabLabel={tabLabel} />
             <TabPanels>{children}</TabPanels>
