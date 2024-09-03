@@ -1,3 +1,5 @@
+import { Request, Response, NextFunction } from 'express';
+
 export type generalRequestBody = Record<string, any>
 
 export enum PropertyDocuments {
@@ -21,3 +23,13 @@ export interface GoogleAuthResponse {
   email_verified: boolean
 }
 
+export type ExpressController = (
+  req: Request,
+  res: Response,
+  next?: NextFunction,
+) => any;
+
+export type fnRequest = (
+  req: Request,
+  res: Response,
+) => Promise<any>;
