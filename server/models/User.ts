@@ -40,9 +40,9 @@ const UserSchema = new Schema<IUser>(
       type: Boolean,
       default: true,
     },
-    isVerified: {
-      type: Boolean,
-      default: false,
+    verification: {
+      type: String,
+      default: 'pending',
     },
   },
   { timestamps: true }
