@@ -13,6 +13,7 @@ import indexRoutes from './routes/indexRoutes'
 import passport from 'passport'
 import { NextParsedUrlQuery } from 'next/dist/server/request-meta'
 
+
 const app = express()
 const dev = process.env.NODE_ENV !== 'production'
 const hostname = process.env.HOSTName || 'localhost'
@@ -73,7 +74,15 @@ nextApp.prepare().then(() => {
   });
 
   app.get('/', async (req, res) => {
-    await nextApp.render(req, res, '/', req.query as NextParsedUrlQuery)
+    await nextApp.render(req, res, '/login', req.query as NextParsedUrlQuery)
+  });
+
+  app.get('/', async (req, res) => {
+    await nextApp.render(req, res, '/reset', req.query as NextParsedUrlQuery)
+  });
+
+  app.get('/', async (req, res) => {
+    await nextApp.render(req, res, '/verify-password', req.query as NextParsedUrlQuery)
   });
 
   app.get('/property/', async (req, res) => {

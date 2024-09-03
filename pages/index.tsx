@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { poppins } from "./_app";
 import Btn from "@/components/Btn";
 import Wrapper from "@/components/Wrapper";
-import { PropertyScreen } from "@/screens/Property/property";
 export default function Home() {
 
   useEffect(()=>{
@@ -38,7 +37,13 @@ export default function Home() {
   return (
     <>
       <Wrapper>
-        <TabPanel><PropertyScreen/></TabPanel>
+        <TabPanel>Dashboard</TabPanel>
+        <TabPanel>Users</TabPanel>
+        <TabPanel>Property</TabPanel>
+        <TabPanel>Projects</TabPanel>
+        <TabPanel>Blog</TabPanel>
+        <TabPanel>TEam</TabPanel>
+        <TabPanel>Settings</TabPanel>
       </Wrapper>
     </>
   );

@@ -6,6 +6,8 @@
     --soft200: #E1E4EA;
     --soft400: #99A0AE;
     --sub600: #525866;
+    --strong950: #0E121B;
+    --primaryBase: #335CFF;
 }
 
 .robotoF {
@@ -25,4 +27,8 @@
 
 .icon {
     font-size: 14px;
+}
+.formicon {
+  font-size: 16px;
+  margin: 8px 0 0 2px
 }

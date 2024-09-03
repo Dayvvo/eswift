@@ -83,6 +83,7 @@ export const PropertyScreen =()=> {
                         w={'100%'}
                     >
                         <InputGroup
+                            display={'flex'} alignItems={'center'}
                             border={'1px'} borderRadius={'8px'} 
                             borderColor={'var(--soft200)'}
                             cursor={'search'}
