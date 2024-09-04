@@ -55,12 +55,16 @@ class AuthController {
 
       if (user && user.matchPassword && (await user?.matchPassword(password))) {
         res.json({
-          _id: user._id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: user.role,
-          token: generateToken(user._id),
+          statusCode: 200,
+          message: "Successful",
+          data: {
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+            token: generateToken(user._id),
+          }
         })
       } else {
         res
