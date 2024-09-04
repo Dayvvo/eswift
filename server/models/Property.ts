@@ -1,58 +1,50 @@
-
-
 import mongoose, { Schema } from 'mongoose'
+import { PropertyDocuments } from '../utils/types'
+import { IProperty, PropertyOwner } from '../utils/interfaces'
 
-
-
-
-const Property = new mongoose.Schema({
-    state:{
-        type:String,
+const PropertySchema = new mongoose.Schema<IProperty>(
+  {
+    title: {
+      type: String,
     },
-    lga:{
-        type:String
+    description: {
+      type: String,
+    },
+    type: {
+      type: String,
+    },
+    category: {
+      type: String,
     },
     address: {
-      type: String, //possibly a json string
-      ref: 'property',
+      type: String,
     },
-    photo:{
-        type: String
+    features: {
+      type: [String],
+    },
+    owner: {
+      type: String,
+      enum: PropertyOwner,
+      default: PropertyOwner.ESWIFT,
+    },
+    price: {
+      type: String,
+    },
+    images: {
+      type: [String],
     },
     affiliateId: {
-        type: Schema.Types.ObjectId, //possibly a json string
-        ref: 'user',
+      type: Schema.Types.ObjectId,
+      ref: 'user',
     },
-    areaInSqm:{
-        type: Number,
+    isActive: {
+      type: Boolean,
+      default: true,
     },
-    description:{
-        type: String,
-    },
-    keyFeatures:{
-        type: [String],
-    },
-    ownership:{
-        type: String,
-        enum: ['private','commercial']
-    },
-    propertyType:{
-        type: String,
-        enum: ['land','building']
-    },
-    category:{
-        type: String,
-    },
-    isActive:{
-        type: Boolean,
-        default: true,
-    },
-    isVerified:{
-        type: Boolean,
-        default: false,
-    }
   },
   { timestamps: true }
-);
+)
 
-export default mongoose.model('property', Property);
+const Property = mongoose.model('property', PropertySchema)
+
+export default Property
