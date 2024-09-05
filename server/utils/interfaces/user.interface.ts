@@ -19,6 +19,6 @@ export interface IUser {
   hash?: string
   role: UserRole
   isActive: boolean
-  isVerified: boolean
+  verification: 'pending' | 'verified' | 'rejected'
   matchPassword?: FunctionConstructor
 }

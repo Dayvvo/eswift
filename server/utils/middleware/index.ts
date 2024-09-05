@@ -1,23 +1,40 @@
-import { NextFunction, Request, Response } from "express"
-import jwt from "jsonwebtoken";
+import User from '@/server/models/User'
+import { NextFunction, Request, Response } from 'express'
+import jwt from 'jsonwebtoken'
+import { IUser } from '../interfaces'
 
-export const isAuth = (req:Request, res:Response, next:NextFunction) => {
-  // Get token from the header
-  const token = req.header("Authorization")
+export const isAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let token = ''
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1]
+      const decoded = jwt.verify(
+        token,
+        process.env['JWT_SECRET'] as string
+      ) as any
+      const userFound = await User.findById(decoded?.id).select('-hash')
 
-  // Check if no token
-  if (!token) {
-    return res.status(401).json({ msg: "No token, authorization denied" })
-  }
+      req.user = userFound ? userFound : undefined
+      if (!req.user) {
+        return res
+          .status(401)
+          .json({ message: 'Not authorized, user not found' })
+      }
 
-  //  Verify token
-  try {
-    const decoded = jwt.verify(token, process.env['JWT_SECRET'] as string)
-    console.log('decoded user',decoded)
-    // req.user = decoded.user
-    next()
-  } catch (err) {
-    res.status(401).json({ msg: "Token is not valid" })
+      next()
+    } catch (error) {
+      console.error(error)
+      return res.status(401).json({ message: 'Not authorized, invalid token' })
+    }
+  } else {
+    return res.status(401).json({ message: 'Not authorized, invalid token' })
   }
 }
 
@@ -60,4 +77,3 @@ export const isAuth = (req:Request, res:Response, next:NextFunction) => {
 //     res.status(500).send("Server Error")
 //   }
 // }
-
