@@ -47,12 +47,22 @@ class BlogPostController {
   };
 
   fetchBlogPost = async (req: Request, res: Response) => {
+    const page = parseInt(req.query.page as string) || 1;
+    const POST_PER_PAGE = 1;
+    const skip = (page - 1) * POST_PER_PAGE;
     try {
-      const blogpost = await BlogPost.find();
+      const totalPost = await BlogPost.find().countDocuments();
+      const blogpost = await BlogPost.find().skip(skip).limit(POST_PER_PAGE);
       return res.status(200).json({
         statusCode: 200,
         message: "fetched successfully",
         data: blogpost,
+        totalBlogPost: totalPost,
+        hasNextPage: POST_PER_PAGE * page < totalPost,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalPost / POST_PER_PAGE),
       });
     } catch (error) {
       console.log(error);
