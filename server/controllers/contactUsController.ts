@@ -3,14 +3,8 @@ import { Request, Response } from "express";
 import { validateMailbody } from "../utils/validation";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import { MailType } from "../utils/interfaces/mailtype.interface";
 dotenv.config();
-
-export interface MailType {
-  email: string;
-  name: string;
-  message: string;
-  subject: string;
-}
 
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE,
