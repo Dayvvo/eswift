@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 :root {
     --soft200: #E1E4EA;
@@ -8,6 +9,8 @@
     --sub600: #525866;
     --strong950: #0E121B;
     --primaryBase: #335CFF;
+    --weak50: #F5F7FA;
+    --errorBase: #FB3748;
 }
 
 .robotoF {
@@ -17,6 +20,11 @@
 
 .inter {
   font-family: "Inter", sans-serif;
+  font-style: normal;
+}
+
+.roboto {
+  font-family: "Roboto", sans-serif;
   font-style: normal;
 }
 
@@ -31,4 +39,13 @@
 .formicon {
   font-size: 16px;
   margin: 8px 0 0 2px
+}
+.imageFull{
+  width: 100%;
+  height: 100%;
+}
+
+.imageFull > .image {
+  width: 100%;
+  height: 50%;
 }

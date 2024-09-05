@@ -14,6 +14,7 @@ type PropertyCardProps = {
     user?:string;
     userImage?:string;
 }
+
 export const PropertyCard =({
     image, title, count, pricing, location, email, user, userImage
 }:PropertyCardProps) => {
@@ -28,7 +29,7 @@ export const PropertyCard =({
             >
                 <Flex
                     position={'relative'}
-                    w='100%' h='55%'
+                    w='100%' h='55%' 
                 >
                     <Text
                         className="montserrat" 
