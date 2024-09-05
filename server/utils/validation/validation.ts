@@ -4,6 +4,7 @@ import {
   ILoginValidation,
 } from "./interface.validation";
 import { MailType } from "../interfaces/mailtype.interface";
+import { ProfileInterface } from "../interfaces/profile.interface";
 
 export const validateLoginData = (login: ILoginValidation) => {
   const loginSchema = Joi.object({
@@ -51,12 +52,7 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
   return propertySchema.validate(property);
 };
 
-export const validateMailbody = ({
-  email,
-  name,
-  subject,
-  message,
-}: MailType) => {
+export const validateMailbody = (emailData: MailType) => {
   const mailSchema = Joi.object({
     email: Joi.string()
       .required()
@@ -83,5 +79,26 @@ export const validateMailbody = ({
       .error(new Error("Message is required")),
   });
 
-  return mailSchema.validate({ email, name, message, subject });
+  return mailSchema.validate(emailData);
+};
+
+export const validateProfile = (userProfile: ProfileInterface) => {
+  const profileSchema = Joi.object({
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
+    residentialAddress: Joi.string().required(),
+    officeAddress: Joi.string().required(),
+    city: Joi.string().required(),
+    state: Joi.string().required(),
+    country: Joi.string().required(),
+    areYouAnExistingCustomer: Joi.boolean().required(),
+    howDidYouHearAboutUs: Joi.string().required(),
+    modeOfIdentification: Joi.string().required(),
+    idDocument: Joi.string().required(),
+    passport: Joi.string().required(),
+    agentIdProof: Joi.string().required(),
+    currentOccupation: Joi.string().required(),
+  });
+  return profileSchema.validate(userProfile);
 };
