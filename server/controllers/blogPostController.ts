@@ -10,8 +10,9 @@ class BlogPostController {
         console.log("error", error.message);
         return res.status(400).json(error.message);
       }
-      //   const author = req.user;
-      const blogPost = new BlogPost(value);
+      const author = req.user;
+      const blogPost = new BlogPost({ ...value, author: req.user?._id });
+      console.log(blogPost);
       await blogPost.save();
       return res.status(200).json({
         statusCode: 200,
@@ -31,7 +32,7 @@ class BlogPostController {
         return res.status(400).json(error.message);
       }
       const blogPost = await BlogPost.findOneAndUpdate(
-        { _id: req.params.blogPostId },
+        { _id: req.params.blogPostId, author: req.user?._id },
         { ...value },
         { new: true }
       );
@@ -51,6 +52,8 @@ class BlogPostController {
     const POST_PER_PAGE = 1;
     const skip = (page - 1) * POST_PER_PAGE;
     try {
+      const author = req.user;
+      // console.log("author", author?._id);
       const totalPost = await BlogPost.find().countDocuments();
       const blogpost = await BlogPost.find().skip(skip).limit(POST_PER_PAGE);
       return res.status(200).json({
@@ -58,6 +61,7 @@ class BlogPostController {
         message: "fetched successfully",
         data: blogpost,
         totalBlogPost: totalPost,
+
         hasNextPage: POST_PER_PAGE * page < totalPost,
         hasPreviousPage: page > 1,
         nextPage: page + 1,
@@ -88,6 +92,7 @@ class BlogPostController {
     try {
       const blogpost = await BlogPost.deleteOne({
         _id: req.params.blogPostId,
+        author: req.user?._id,
       });
       return res.status(200).json({
         statusCode: 200,
