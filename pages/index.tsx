@@ -1,9 +1,4 @@
-import { Box, TabPanel, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { poppins } from "./_app";
-import Btn from "@/components/Btn";
-import Wrapper from "@/components/Wrapper";
-import UserComponent from "@/components/UserComponent";
 export default function Home() {
 
   useEffect(()=>{
@@ -37,15 +32,9 @@ export default function Home() {
 
   return (
     <>
-      <Wrapper>
-        <TabPanel>Dashboard</TabPanel>
-        <TabPanel><UserComponent /></TabPanel>
-        <TabPanel>Property</TabPanel>
-        <TabPanel>Projects</TabPanel>
-        <TabPanel>Blog</TabPanel>
-        <TabPanel>TEam</TabPanel>
-        <TabPanel>Settings</TabPanel>
-      </Wrapper>
+      {/* <Wrapper>
+        <UserComponent />
+      </Wrapper> */}
     </>
   );
 };
