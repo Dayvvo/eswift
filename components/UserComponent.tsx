@@ -107,7 +107,7 @@ const UserComponent = () => {
   ];
 
   return (
-    <Box maxW="80vw">
+    <Box>
       <Flex gap={"20px"}>
         <InputGroup>
           <InputLeftElement>
