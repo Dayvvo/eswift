@@ -6,7 +6,7 @@ export interface IPropertyDocs extends Document {
     property: mongoose.Types.ObjectId;
     user: mongoose.Types.ObjectId;
     state: 'blank' | 'submitted' | 'reviewing' | 'accepted' | 'rejected',
-    file: String
+    file: string
 }
 
 const PropertyDocs = new mongoose.Schema<IPropertyDocs>(
@@ -30,7 +30,7 @@ const PropertyDocs = new mongoose.Schema<IPropertyDocs>(
         type: Schema.Types.ObjectId, //possibly a json string
         ref: 'user',
     },
-  
+
   },
   { timestamps: true }
 )

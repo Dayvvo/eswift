@@ -45,6 +45,7 @@ export const validateBlogPostData = (data: {
     tags: Joi.array().items(Joi.string().trim()),
   })
 
+<<<<<<< HEAD
   return blogPostSchema.validate(data)
 }
 
@@ -62,3 +63,22 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
 
   return propertySchema.validate(property)
 }
+=======
+  return blogPostSchema.validate(data);
+};
+
+export const createInspectionValidatorSchema = Joi.object({
+  first_name: Joi.string().required(),
+  last_name: Joi.string().required(),
+  email: Joi.string().email().required(),
+})
+
+export const getAllInspectionsValidation = Joi.object({
+  per_page: Joi.number().optional(),
+  page: Joi.number().optional(),
+})
+
+export const deleteInspection = Joi.object({
+  id: Joi.string().required(),
+})
+>>>>>>> 035480cbf35a728a114460a84ab75c4f30010e97
