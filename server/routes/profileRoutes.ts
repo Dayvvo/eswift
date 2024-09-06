@@ -4,8 +4,8 @@ import { isAuth } from "../utils/middleware";
 
 const router = Router();
 
-router.post("/create-profile", isAuth, profileController.createProfile);
-router.put("/update-profile", isAuth, profileController.updateProfile);
-router.get("/get-profile", isAuth, profileController.getProfileByUserId);
+router.post("/profile", isAuth, profileController.createProfile);
+router.put("/profile", isAuth, profileController.updateProfile);
+router.get("/profile", isAuth, profileController.getProfileByUserId);
 
 export default router;
