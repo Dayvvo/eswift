@@ -1,7 +1,7 @@
 import User from "@/server/models/User";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { IUser } from "../interfaces";
+import { IUser, UserRole } from "../interfaces";
 
 export const isAuth = async (
   req: Request,
@@ -38,6 +38,14 @@ export const isAuth = async (
   }
 };
 
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user?.role !== UserRole.ADMIN) {
+    return res
+      .status(403)
+      .json({ message: "Unauthorized: Admin access required" });
+  }
+  next();
+};
 // // Ensure user is an admin
 // export const admin = async (req:RequestWithUser, res:Response,next:NextFunction) => {
 //   const user = await User.findOne({
