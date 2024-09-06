@@ -50,6 +50,10 @@ class ProfileController {
         { new: true }
       );
 
+      if (!userProfile) {
+        return res.status(404).json({ message: "Profile not found" });
+      }
+
       return res.status(200).json({
         statusCode: 200,
         data: userProfile,
