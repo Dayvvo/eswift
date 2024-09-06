@@ -73,16 +73,32 @@ export class InspectionController {
     } catch (error: any) {
       return res.status(400).json({
         message: "Error occurred fetching inspections",
-        error: error?.message || error
-      })
+        error: error?.message || error,
+      });
     }
   };
 
-  public deleteInspection: fnRequest = async (
-    req: Request,
-    res: Response
-  ) => {
-    const { id } = req.params;
+  public deleteInspection: fnRequest = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const deletedInspection = InspectionSchema.findByIdAndDelete(id);
+
+      if (!deletedInspection) {
+        return res.status(404).json({
+          message: "Inspection does not exist",
+        });
+      }
+
+      return res.status(200).json({
+        code: 200,
+        message: "Inspection deleted successfully",
+      });
+    } catch (error: any) {
+      res.status(400).json({
+        message: "Error occurred deleting inspection",
+        error: error?.message || error,
+      });
+    }
   };
 }
 
