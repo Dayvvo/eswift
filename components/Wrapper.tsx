@@ -104,37 +104,12 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
     },
   ];
 
-  const route = window.location.href;
-  console.log("route", route);
+  // const route = window.location.href;
+  // console.log("route", route);
 
-  const path = route.split("/").pop();
-  console.log("path", path);
+  const path = '/';
 
   return (
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <Box
-      borderRight={"1px solid #E1E4EA"} py="40px" w="244px" minH={"100vh"}>
-=======
-    <Box borderRight={"1px solid #E1E4EA"} pt="40px" w="244px" minH={"100vh"}>
->>>>>>> b574ee1216d2747fd38608ec5715b9dda26e440d
-      <TabList
-        display={"flex"}
-        flexDir={"column"}
-        alignItems={"flex-start"}
-        padding={"0 1.5rem 3.5rem 1.5rem"}
-        border={"none"}
-        onClick={(event: any) => {
-          event.preventDefault();
-          
-          // Check if the clicked element is a tab (you can customize the condition based on your tab structure)
-          if (event.target && event.target.getAttribute('role') === 'tab') {
-            const clickedTabName = event.target.textContent.trim();
-            handleTabClick(clickedTabName);
-            setTabLabel(clickedTabName);
-          }
-        }}
-=======
     <Box>
       <Box
         borderRight={"1px solid #E1E4EA"}
@@ -147,7 +122,6 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
         py="40px"
         overflowY={"auto"}
         display={{ base: "none", lg: "block" }}
->>>>>>> 95f85cda40aec92575722550f6c3dd67828f8167
       >
         <Link href={"/"}>
           <Image src="/logo.svg" width="226px" height="40px" alt="logo" />

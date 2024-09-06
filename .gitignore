@@ -11,8 +11,13 @@ node_modules/
 /coverage
 
 ./.env
+# ... existing code ...
 
+# Next.js build output
+/.next
+.next
 .next/
+.next/*
 
 # misc
 .DS_Store

@@ -1,5 +1,5 @@
-import { PropertyScreen } from "@/screens/Property/property"
-import { PropertyDetails } from "@/screens/Property/propertyDetails"
+import { PropertyScreen } from "@/screens/property/property"
+import { PropertyDetails } from "@/screens/property/propertyDetails"
 
 const Property =()=> {
     return <PropertyDetails/>
