@@ -42,17 +42,17 @@ export const SettingsScreen = () => {
                         w={'100%'}
                         alignItems={'center'}
                         pt={'24px'} pb={'20px'}
-                        border={'1px solid var(--soft200)'}
+                        borderBottom={'1px solid var(--soft200)'}
                     >
                         <Flex 
-                            w={{base:'100%',lg:'50%'}}
-                            justifyContent={'space-between'}
+                            w={'100%'}
                             gap={'24px'}
+                            justifyContent={'space-between'}
                         >
                             <Box>
                                 <Text 
                                     fontWeight={500} fontSize={'14px'} textColor={'var(--strong950)'}
-                                    mb={'6px'}
+                                    mb={'6px'} 
                                 >
                                     Profile Photo
                                 </Text>
@@ -62,22 +62,22 @@ export const SettingsScreen = () => {
                                     Min 400x400px, PNG or JPEG Formats.
                                 </Text>
                             </Box>
-                            <Flex alignItems={'center'}
+                            <Flex alignItems={'center'} w={'40%'}
                                 gap={'20px'} h={'fit-content'} 
                             >
                                 <Box w={'fit-content'} h={'fit-content'} borderRadius={'999px'} overflow={'hidden'}>
                                     <Image width={56} height={56}
                                         src={'/avatar1.png'} alt="/"
                                     />
-                                    <Btn bg={'transparent'}
-                                        display={'flex'} alignItems={'center'} justifyContent={'center'}
-                                        w={'68px'} h={'32px'} 
-                                        borderRadius={'8px'} textColor={'var(--sub600)'} fontWeight={500}
-                                        fontSize={'14px'}
-                                    >
-                                        Upload
-                                    </Btn>
                                 </Box>
+                                <Btn bg={'transparent'}
+                                    display={'flex'} alignItems={'center'} justifyContent={'center'}
+                                    w={'68px'} h={'32px'} 
+                                    borderRadius={'8px'} textColor={'var(--sub600)'} fontWeight={500}
+                                    fontSize={'14px'} border={'1px solid var(--soft200)'}
+                                >
+                                    Upload
+                                </Btn>
                             </Flex>
                         </Flex>
                     </Flex>
@@ -87,15 +87,15 @@ export const SettingsScreen = () => {
                                 w={'100%'}
                                 alignItems={'center'}
                                 py={'20px'}
-                                border={'1px solid var(--soft200)'}
+                                borderBottom={'1px solid var(--soft200)'}
                             >
                                 <Flex 
-                                    w={{base:'100%',lg:'50%'}}
-                                    justifyContent={'space-between'}
+                                    w={'100%'}
                                     gap={'24px'}
+                                    justifyContent={'space-between'}
                                 >
-                                    <Box>
-                                        <Text 
+                                    <Box w={'50%'}>
+                                        <Text
                                             fontWeight={500} fontSize={'14px'} textColor={'var(--strong950)'}
                                             mb={'6px'}
                                         >
@@ -107,12 +107,12 @@ export const SettingsScreen = () => {
                                             {setting?.description}
                                         </Text>
                                     </Box>
-                                    <Flex dir="column" gap={'12px'}>
+                                    <Flex flexDir="column" gap={'12px'} w={'40%'}>
                                         <Text 
                                             fontWeight={500} fontSize={'14px'} textColor={'var(--strong950)'}
                                             maxW={'180px'}
                                         >
-                                            {setting?.type}
+                                            {setting?.info}
                                         </Text>
                                         <Text display={'flex'} alignItems={'center'}
                                             fontWeight={500} fontSize={'14px'} textColor={'var(--primaryBase)'}
@@ -130,7 +130,7 @@ export const SettingsScreen = () => {
                         py={'20px'}
                     >
                         <Flex 
-                            w={'100%'}
+                            w={'100%'} flexDir={{base:'column',lg:'row'}}
                             justifyContent={'space-between'}
                             gap={'24px'}
                         >
@@ -151,7 +151,7 @@ export const SettingsScreen = () => {
                                 display={'flex'} alignItems={'center'} justifyContent={'center'}
                                 w={'148px'} h={'40px'} 
                                 borderRadius={'8px'} textColor={'var(--sub600)'} fontWeight={500}
-                                fontSize={'14px'}
+                                fontSize={'14px'} border={'1px solid var(--soft200)'}
                             >
                                 Change Password
                             </Btn>

@@ -131,3 +131,11 @@ export const ActionIcon = ({color}:{color?: string}) => {
 </svg>
   );
 };
+
+export const PlusIcon = ({color}:{color?: string}) => {
+  return (
+    <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.25 9.38379V4.88379H10.75V9.38379H15.25V10.8838H10.75V15.3838H9.25V10.8838H4.75V9.38379H9.25Z" fill="white"/>
+</svg>
+  );
+};
