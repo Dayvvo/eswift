@@ -1,7 +1,7 @@
 import next from 'next'
 
 import dotenv from 'dotenv'
-import express, { ErrorRequestHandler } from 'express'
+import express from 'express'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -22,20 +22,18 @@ const port = (process.env.PORT || 3000) as number
 const nextApp = next({ dev, hostname, port })
 const handle = nextApp.getRequestHandler()
 dotenv.config()
-import crypto from 'crypto'
-const secret = crypto.randomBytes(64).toString('hex')
 
 nextApp.prepare().then(() => {
   
   let config = new appConfig()
 
-  app.use(compress())
+  app.use(compress());
 
-  app.use(passport.initialize())
+  app.use(passport.initialize());
 
-  config.initializePassportStrategy()
+  config.initializePassportStrategy();
 
-  config.connectDB()
+  config.connectDB();
 
   // Initialize passport
 
@@ -45,20 +43,20 @@ nextApp.prepare().then(() => {
       resave: false, // don't save session if unmodified
       saveUninitialized: true, // don't create session until something stored
     })
-  )
+  );
 
   // Init Middlewarezx
-  app.use(logger('dev'))
+  app.use(logger('dev'));
 
-  app.use(express.json())
+  app.use(express.json());
 
-  app.use(cors())
+  app.use(cors());
 
-  app.use(express.urlencoded({ extended: false }))
+  app.use(express.urlencoded({ extended: false }));
 
-  app.use(cookieParser())
+  app.use(cookieParser());
 
-  app.use('/api', indexRoutes)
+  app.use('/api', indexRoutes);
 
   app.get('*', (req, res, next) => {
     if (req.url.startsWith('/api')) {
@@ -67,21 +65,21 @@ nextApp.prepare().then(() => {
     }
     console.log('it dont starts with')
     return handle(req, res)
-  })
+  });
 
   app.get('/', async (req, res) => {
     await nextApp.render(req, res, '/', req.query as NextParsedUrlQuery)
   });
 
-  app.get('/', async (req, res) => {
+  app.get('/login', async (req, res) => {
     await nextApp.render(req, res, '/login', req.query as NextParsedUrlQuery)
   });
 
-  app.get('/', async (req, res) => {
+  app.get('/reset-password', async (req, res) => {
     await nextApp.render(req, res, '/reset', req.query as NextParsedUrlQuery)
   });
 
-  app.get('/', async (req, res) => {
+  app.get('/verify-password', async (req, res) => {
     await nextApp.render(req, res, '/verify-password', req.query as NextParsedUrlQuery)
   });
 
@@ -89,14 +87,17 @@ nextApp.prepare().then(() => {
     await nextApp.render(req, res, '/property', req.query as NextParsedUrlQuery)
   });
 
+  app.get('/property/:id', async (req, res) => {
+    await nextApp.render(req, res, '/property/[id]', { id: req.params.id, ...req.query } as NextParsedUrlQuery)
+  });
   
   app.use(
     express.json({
       limit: '5mb',
     })
-  )
+  );
 
-  const PORT = process.env.PORT || 5500
+  const PORT = process.env.PORT || 5500;
 
-  app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+  app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 })

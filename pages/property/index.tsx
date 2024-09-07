@@ -1,8 +1,12 @@
-import { PropertyScreen } from "@/screens/property/property"
-import { PropertyDetails } from "@/screens/property/propertyDetails"
+import Wrapper from "@/components/Wrapper"
+import { PropertyScreen } from "@/screens/Property/property"
 
 const Property =()=> {
-    return <PropertyDetails/>
+    return (
+        <Wrapper>
+            <PropertyScreen/>
+        </Wrapper>
+    )
 }
 
 export default Property

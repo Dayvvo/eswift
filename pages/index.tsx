@@ -1,3 +1,4 @@
+import Wrapper from "@/components/Wrapper";
 import { useEffect } from "react";
 export default function Home() {
 
@@ -16,10 +17,6 @@ export default function Home() {
 
     };
 
-    // const myCookie = getCookie('auth-cookie') as string;
-
-    // console.log('my cookie',JSON.parse(myCookie))
-
     try {
       const myCookie = getCookie('auth-cookie') as string;
       console.log('my cookie',JSON.parse(myCookie))      
@@ -32,9 +29,9 @@ export default function Home() {
 
   return (
     <>
-      {/* <Wrapper>
-        <UserComponent />
-      </Wrapper> */}
+      <Wrapper>
+        
+      </Wrapper>
     </>
   );
 };

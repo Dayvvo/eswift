@@ -68,7 +68,8 @@ export const PropertyScreen =()=> {
             userImage:'/userImage.png',
             image:'/prop-img.png',
         },
-    ]
+    ];
+    
     return(
         <>
             <Box 
