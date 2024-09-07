@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, Image, Img, Text } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Divider from "./Divider";
 import Btn from "./Btn";
 import {
@@ -14,7 +14,7 @@ import {
 } from "./svg";
 import { FiHome, FiUser } from "react-icons/fi";
 
-const Header = () => {
+const Header = ({casedPath}: {casedPath: string}) => {
   return (
     <Flex
       justifyContent={"space-between"}
@@ -45,7 +45,7 @@ const Header = () => {
             fontSize={".875rem"}
             fontWeight={500}
           >
-            Dashboard
+            {casedPath || "Dashboard"}
           </Text>
           <Text
             className="robotoF"
@@ -103,12 +103,27 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
       url: "/settings",
     },
   ];
+  const [route, setRoute] = useState('');
+  const [path, setPath] = useState('');
 
-  const route = window.location.href;
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setRoute(window.location.href);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (route) {
+      const newPath = route.split("/").pop() as any;
+      setPath(newPath);
+    }
+  }, [route]);
+
   console.log("route", route);
-
-  const path = route.split("/").pop();
   console.log("path", path);
+
+  const casedPath = `${path.slice(0,1).toUpperCase()}${path.slice(1, path.length)}`
+  // console.log(casedPath);
 
   return (
     <Box>
@@ -219,7 +234,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
           </Grid>
         </Box>
       </Box>
-      <Header />
+      <Header casedPath={casedPath} />
       <Box
         position={"relative"}
         top={"20px"}
