@@ -77,16 +77,20 @@ nextApp.prepare().then(() => {
     await nextApp.render(req, res, '/login', req.query as NextParsedUrlQuery)
   });
 
-  app.get('/', async (req, res) => {
+  app.get('/reset', async (req, res) => {
     await nextApp.render(req, res, '/reset', req.query as NextParsedUrlQuery)
   });
 
-  app.get('/', async (req, res) => {
+  app.get('/verify-password', async (req, res) => {
     await nextApp.render(req, res, '/verify-password', req.query as NextParsedUrlQuery)
   });
 
   app.get('/property/', async (req, res) => {
     await nextApp.render(req, res, '/property', req.query as NextParsedUrlQuery)
+  });
+
+  app.get('/settings', async (req, res) => {
+    await nextApp.render(req, res, '/settings', req.query as NextParsedUrlQuery)
   });
 
   
