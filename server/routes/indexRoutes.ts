@@ -1,20 +1,20 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import propertyRoute from "./propertyRoutes";
 import blogPost from "./blogPostRoute";
-import axios from "axios";
-import authController from "../controllers/authController";
-import passport from "passport";
+import contact from "./contactUsRoutes";
 import authRoutes from "./authRoutes";
-import inspectionRouter from "./inspectionRoutes";
+import inspectionRoute from "./inspectionRoutes";
+import profile from "./profileRoutes";
+import users from "./usersRoutes";
 
 const router = express.Router();
 
 router.use("/auth", authRoutes);
-
 router.use("/property", propertyRoute);
-
 router.use("/blog", blogPost);
-
-router.use("/inspection", inspectionRouter);
+router.use("/contact", contact);
+router.use("/user-detail", profile);
+router.use("/user", users);
+router.use("/inspection", inspectionRoute);
 
 export default router;

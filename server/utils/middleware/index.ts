@@ -1,43 +1,51 @@
-import User from '@/server/models/User'
-import { NextFunction, Request, Response } from 'express'
-import jwt from 'jsonwebtoken'
-import { IUser } from '../interfaces'
+import User from "@/server/models/User";
+import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import { IUser, UserRole } from "../interfaces";
 
 export const isAuth = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  let token = ''
+  let token = "";
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
+    req.headers.authorization.startsWith("Bearer")
   ) {
     try {
-      token = req.headers.authorization.split(' ')[1]
+      token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(
         token,
-        process.env['JWT_SECRET'] as string
-      ) as any
-      const userFound = await User.findById(decoded?.id).select('-hash')
+        process.env["JWT_SECRET"] as string
+      ) as any;
+      const userFound = await User.findById(decoded?.user.id).select("-hash");
 
-      req.user = userFound ? userFound : undefined
+      req.user = userFound ? userFound : undefined;
       if (!req.user) {
         return res
           .status(401)
-          .json({ message: 'Not authorized, user not found' })
+          .json({ message: "Not authorized, user not found" });
       }
 
-      next()
+      next();
     } catch (error) {
-      console.error(error)
-      return res.status(401).json({ message: 'Not authorized, invalid token' })
+      console.error(error);
+      return res.status(401).json({ message: "Not authorized, invalid token" });
     }
   } else {
-    return res.status(401).json({ message: 'Not authorized, invalid token' })
+    return res.status(401).json({ message: "Not authorized, invalid token" });
   }
-}
+};
 
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user?.role !== UserRole.ADMIN) {
+    return res
+      .status(403)
+      .json({ message: "Unauthorized: Admin access required" });
+  }
+  next();
+};
 // // Ensure user is an admin
 // export const admin = async (req:RequestWithUser, res:Response,next:NextFunction) => {
 //   const user = await User.findOne({
