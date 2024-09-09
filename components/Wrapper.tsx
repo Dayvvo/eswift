@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, Image, Img, Text } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Divider from "./Divider";
 import Btn from "./Btn";
 import {
@@ -14,7 +14,7 @@ import {
 } from "./svg";
 import { FiHome, FiUser } from "react-icons/fi";
 
-const Header = () => {
+const Header = ({casedPath}: {casedPath: string}) => {
   return (
     <Flex
       justifyContent={"space-between"}
@@ -45,7 +45,7 @@ const Header = () => {
             fontSize={".875rem"}
             fontWeight={500}
           >
-            Dashboard
+            {casedPath || "Dashboard"}
           </Text>
           <Text
             className="robotoF"
@@ -103,13 +103,49 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
       url: "/settings",
     },
   ];
+ 
+  const [route, setRoute] = useState('');
+  const [path, setPath] = useState('');
 
-  // const route = window.location.href;
-  // console.log("route", route);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setRoute(window.location.href);
+    }
+  }, []);
 
-  const path = '/';
+  useEffect(() => {
+    if (route) {
+      const newPath = route.split("/").pop() as any;
+      setPath(newPath);
+    }
+  }, [route]);
+
+
+  const casedPath = `${path.slice(0,1).toUpperCase()}${path.slice(1, path.length)}`
+  // console.log(casedPath);
 
   return (
+
+    <Box
+      py="40px" w="" minH={"100vh"}>
+      {/* <Box borderRight={"1px solid #E1E4EA"} pt="40px" w="244px" minH={"100vh"}>
+
+        <TabList
+          display={"flex"}
+          flexDir={"column"}
+          alignItems={"flex-start"}
+          padding={"0 1.5rem 3.5rem 1.5rem"}
+          border={"none"}
+          onClick={(event: any) => {
+            event.preventDefault();
+            
+            // Check if the clicked element is a tab (you can customize the condition based on your tab structure)
+            if (event.target && event.target.getAttribute('role') === 'tab') {
+              const clickedTabName = event.target.textContent.trim();
+              handleTabClick(clickedTabName);
+              setTabLabel(clickedTabName);
+            }
+       */}
     <Box>
       <Box
         borderRight={"1px solid #E1E4EA"}
@@ -218,7 +254,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
           </Grid>
         </Box>
       </Box>
-      <Header />
+      <Header casedPath={casedPath} />
       <Box
         position={"relative"}
         top={"20px"}
@@ -229,6 +265,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
         {children}
       </Box>
     </Box>
+  </Box>
   );
 };
 
