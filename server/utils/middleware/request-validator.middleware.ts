@@ -8,29 +8,26 @@
 import Joi from "joi";
 import { Request, Response, NextFunction } from "express";
 
-export const validateRequestMiddleware =
-  (validationSchema: Joi.ObjectSchema, type: string) =>
-  (req: Request, res: Response, next: NextFunction) => {
-
-    const getType = {
-      body: req.body,
-      params: req.params,
-      query: req.query,
-      headers: req.headers,
-      file: req.file,
-    };
-
-    const options = { messages: { key: '{{key}} ' } };
-    const data = (getType as Record<string, any>)[type];
-
-    const validationResult = validationSchema.validate(data, options);
-    if (!validationResult.error) {
-      return next();
-    }
-    const { message } = validationResult.error.details[0];
-    return res.status(422).json({
-      status: 'error',
-      statusCode: 422,
-      message: message.replace(/"/gi, ''),
-    });
+export const validateRequestMiddleware =(validationSchema: Joi.ObjectSchema, type: string) => (req: Request, res: Response, next: NextFunction) => {
+  const getType = {
+    body: req.body,
+    params: req.params,
+    query: req.query,
+    headers: req.headers,
+    file: req.file,
   };
+
+  const options = { messages: { key: '{{key}} ' } };
+  const data = (getType as Record<string, any>)[type];
+
+  const validationResult = validationSchema.validate(data, options);
+  if (!validationResult.error) {
+    return next();
+  };
+  const { message } = validationResult.error.details[0];
+  return res.status(422).json({
+    status: 'error',
+    statusCode: 422,
+    message: message.replace(/"/gi, ''),
+  });
+};
