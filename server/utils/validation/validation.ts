@@ -63,7 +63,6 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
   return propertySchema.validate(property)
 }
 
-
 export const createInspectionValidatorSchema = Joi.object({
   first_name: Joi.string().required(),
   last_name: Joi.string().required(),
@@ -78,3 +77,6 @@ export const getAllInspectionsValidation = Joi.object({
 export const deleteInspection = Joi.object({
   id: Joi.string().required(),
 });
+
+
+
