@@ -1,10 +1,10 @@
-import passport from 'passport'
 import axios from 'axios'
+import mongoose from 'mongoose'
+import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import User from '../models/User'
-import mongoose from 'mongoose'
-import { GoogleAuthResponse } from './types'
 import { AuthProvider, UserRole } from './interfaces'
+import { GoogleAuthResponse } from './types'
 
 export class appConfig {
   host = process.env['NODE_ENV'] !== 'production' ? 'localhost' : ''

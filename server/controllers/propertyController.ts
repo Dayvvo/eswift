@@ -89,7 +89,32 @@ class PropertyController {
     }
   }
 
-  //TODO: Get related Properties
+  deleteProperty = async (req: Request, res: Response) => {
+    const id = req.params.id
+    if (!isValidObjectId(id))
+      return res.status(400).json({
+        statusCode: 400,
+        message: 'Invalid ObjectId',
+      })
+
+    try {
+      const deleted = await Property.findByIdAndDelete(id)
+      if (!deleted)
+        return res.status(404).json({
+          statusCode: 404,
+          message: `Property with id ${id} not found`,
+        })
+
+      return res.json({
+        statusCode: 200,
+        message: 'Successful',
+      })
+    } catch (error: any) {
+      console.log('Error in email login', error)
+      console.error(error?.message)
+      res.status(500).send('An Error ocurred while retrieving data')
+    }
+  }
 }
 
 let propertyController = new PropertyController()

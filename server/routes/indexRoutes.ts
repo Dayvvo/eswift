@@ -2,6 +2,7 @@ import express from "express";
 import propertyRoute from "./propertyRoutes";
 import blogPost from "./blogPostRoute";
 import contact from "./contactUsRoutes";
+import uploadRoute from './uploadRoutes'
 import authRoutes from "./authRoutes";
 import inspectionRoute from "./inspectionRoutes";
 import profile from "./profileRoutes";
@@ -16,5 +17,7 @@ router.use("/contact", contact);
 router.use("/user-detail", profile);
 router.use("/user", users);
 router.use("/inspection", inspectionRoute);
+
+router.use("/upload", uploadRoute)
 
 export default router;

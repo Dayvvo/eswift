@@ -22,5 +22,8 @@ router
   .post(isAuth, propertyController.createProperty)
   .get(isAuth, propertyController.getCreatedProperties)
 
-router.route('/:id').get(isAuth, propertyController.getPropertyById)
+router
+  .route('/:id')
+  .get(isAuth, propertyController.getPropertyById)
+  .delete(isAuth, propertyController.deleteProperty)
 export default router
