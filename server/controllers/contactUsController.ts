@@ -27,6 +27,7 @@ const sendEmailFunction = async ({
     subject: subject,
     name: name,
     text: message,
+    replyTo: email,
   };
 
   try {
