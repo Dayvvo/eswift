@@ -3,9 +3,13 @@ import { RiSearch2Line } from "react-icons/ri";
 import Btn from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
 import { PropertyCard } from "./propertyCard";
+import axios from "axios";
 
 
 export const PropertyScreen =()=> {
+
+    const APIURL = "";
+
 
     const properties = [
         {
