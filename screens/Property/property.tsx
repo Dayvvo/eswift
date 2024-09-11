@@ -4,12 +4,25 @@ import Btn from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
 import { PropertyCard } from "./propertyCard";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 
 export const PropertyScreen =()=> {
 
-    const APIURL = "";
+    const [getProperty, setGetProperty] = useState({});
 
+    useEffect(()=>{
+        axios.get('http://api/property/:id');
+        
+        .then((res: []) => {
+                console.log(res);
+            } 
+        )
+        .catch((err: any) => {
+            console.log(err)
+        }
+        )
+    },[]);
 
     const properties = [
         {
