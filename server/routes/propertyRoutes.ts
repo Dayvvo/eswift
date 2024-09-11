@@ -19,11 +19,11 @@ router.post('/login', authController.emailLoginAuthController)
 
 router
   .route('/')
-  .post(isAuth, propertyController.createProperty)
-  .get(isAuth, propertyController.getCreatedProperties)
+  .post(propertyController.createProperty)
+  .get(propertyController.getCreatedProperties)
 
 router
   .route('/:id')
-  .get(isAuth, propertyController.getPropertyById)
-  .delete(isAuth, propertyController.deleteProperty)
+  .get(propertyController.getPropertyById)
+  .delete(propertyController.deleteProperty)
 export default router
