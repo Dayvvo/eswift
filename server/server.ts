@@ -71,6 +71,10 @@ nextApp.prepare().then(() => {
     await nextApp.render(req, res, '/', req.query as NextParsedUrlQuery)
   });
 
+  app.get('/blog', async (req, res) => {
+    await nextApp.render(req, res, '/blog', req.query as NextParsedUrlQuery)
+  });
+
   app.get('/login', async (req, res) => {
     await nextApp.render(req, res, '/login', req.query as NextParsedUrlQuery)
   });
