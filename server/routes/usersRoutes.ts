@@ -13,4 +13,6 @@ router.put(
   userController.verifyUser
 );
 
+
+
 export default router;

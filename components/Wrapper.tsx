@@ -82,21 +82,21 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
       icon: (color:string) => <FiHome size={"1rem"} color={color} />,
       url: "/property",
     },
-    {
-      label: "Projects",
-      icon: (color:string) => <ProjectIcon color={color} />,
-      url: "/projects",
-    },
+    // {
+    //   label: "Projects",
+    //   icon: (color:string) => <ProjectIcon color={color} />,
+    //   url: "/projects",
+    // },
     {
       label: "Blog",
       icon: (color:string) => <BlogIcon color={color} />,
       url: "/blog",
     },
-    {
-      label: "Team",
-      icon: (color:string) => <FiUser size={"1rem"} color={color} />,
-      url: "/team",
-    },
+    // {
+    //   label: "Team",
+    //   icon: (color:string) => <FiUser size={"1rem"} color={color} />,
+    //   url: "/users",
+    // },
     {
       label: "Settings",
       icon: (color:string) => <SettingsIcon color={color} />,
