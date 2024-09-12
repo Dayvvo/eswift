@@ -11,7 +11,7 @@ export const PropertyScreen =()=> {
 
     const [getProperty, setGetProperty] = useState([]);
     const [page, setPage] = useState(1)
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState();
 
 
     useEffect(()=> {

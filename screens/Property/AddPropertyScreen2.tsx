@@ -1,30 +1,34 @@
 import Btn from "@/components/Btn";
 import { Box, Flex, FormControl, FormHelperText, FormLabel, Input, InputGroup, InputLeftElement, Menu, Select, Text, Textarea } from "@chakra-ui/react"
-import Link from "next/link";
+import { FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 
 
-export const AddPropertyScreenOne =()=> {
+export const AddPropertyScreenTwo =()=> {
     
     const subs:any[] = [
         {
             id:1,
+            count:<FaCheck/>,
             title:'Property Title & Category',
-            bg:'var(--primaryBase)',
+            bg:'#1FC16B',
             text:'#FFF'
         },{
             id:2,
+            count:'2',
             title:'Location & Pricing',
-            bg:'#FFF',
-            text:'var(--sub600)'
+            bg:'var(--primaryBase)',
+            text:'#FFF'
         },
         {
             id:3,
+            count:'3',
             title:'Images',
             bg:'#FFF',
             text:'var(--sub600)'
         },{
             id:4,
+            count:'4',
             title:'Documents',
             bg:'#FFF',
             text:'var(--sub600)'
@@ -62,7 +66,7 @@ export const AddPropertyScreenOne =()=> {
                                         justifyContent={'center'} textColor={`${sub?.text}`}
                                         fontSize={'14px'} fontWeight={400}
                                     >
-                                        {sub?.id}
+                                        {sub?.count}
                                     </Flex>
                                     <Text
                                         fontWeight={400} textColor={'var(--strong950)'}
@@ -88,7 +92,7 @@ export const AddPropertyScreenOne =()=> {
                             fontWeight={500} fontSize={'14px'}
                             textColor={'var(--strong950)'}
                         >
-                            Property Title
+                            Address
                         </FormLabel>
                         <InputGroup
                             border={'1px'} borderRadius={'10px'} 
@@ -101,7 +105,7 @@ export const AddPropertyScreenOne =()=> {
                             <Input 
                             w={'100%'} h={'100%'}
                                 type='text' 
-                                placeholder='A descriptive name for the property'  
+                                placeholder='The location of the property'  
                                 name=""
                                 value={''}          
                             />
@@ -112,44 +116,44 @@ export const AddPropertyScreenOne =()=> {
                             fontWeight={500} fontSize={'14px'}
                             textColor={'var(--strong950)'}
                         >
-                            Property Category
+                            Price<Text as="span" textColor={'var(--primaryBase)'}>*</Text>
                         </FormLabel>
-                        <Select 
+                        <InputGroup
                             border={'1px'} borderRadius={'10px'} 
                             borderColor={'var(--soft200)'}
                             cursor={'text'}
                             fontSize={14} textColor={'var--(sub600)'}
                             w='100%' h='40px'
                             _placeholder={{textColor:'var--(soft400)'}}
-                            placeholder='A descriptive name for the property'
                         >
-                            {
-                                ['Option 1','Option 2','Option 3','Option 4'].map((entry) => (
-                                    <option 
-                                        value={`${entry}`}
-                                    >
-                                        {entry}
-                                    </option>
-                                ))
-                            }
-                            
-                        </Select>
-                    </FormControl>
-                    <FormControl w={'100%'}>
-                        <FormLabel
-                            fontWeight={500} fontSize={'14px'}
-                            textColor={'var(--strong950)'}
-                        >
-                            Description
-                        </FormLabel>
-                        <Textarea
-                            border={'1px'} borderRadius={'10px'} 
-                            borderColor={'var(--soft200)'}
-                            cursor={'text'}
-                            fontSize={14} textColor={'var--(sub600)'}
-                            w='100%' h='120px'
-                            _placeholder={{textColor:'var--(soft400)'}}       
-                        />
+                            <Input 
+                                w={'70%'} h={'100%'}
+                                type='text' 
+                                placeholder='₦ 0.00'  
+                                name=""
+                                value={''}          
+                            />
+                            <Select 
+                                border={'1px'} borderRightRadius={'10px'} 
+                                borderColor={'var(--soft200)'}
+                                cursor={'text'}
+                                fontSize={14} textColor={'var--(sub600)'}
+                                w='30%' h='100%'
+                                _placeholder={{textColor:'var--(soft400)'}}
+                                placeholder='Annually'
+                            >
+                                {
+                                    ['Annually','Weekly','Monthly','Quarterly'].map((entry) => (
+                                        <option  
+                                            value={`${entry}`}
+                                        >
+                                            {entry}
+                                        </option>
+                                    ))
+                                }
+                                
+                            </Select>
+                        </InputGroup>
                     </FormControl>
                 </Flex>
                 <Btn my={'20px'}
