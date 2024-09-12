@@ -3,9 +3,45 @@ import { RiSearch2Line } from "react-icons/ri";
 import Btn from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
 import { PropertyCard } from "./propertyCard";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 
 export const PropertyScreen =()=> {
+
+    const [getProperty, setGetProperty] = useState([]);
+    const [page, setPage] = useState(1)
+    const [inputValue, setInputValue] = useState('');
+
+
+    useEffect(()=> {
+        axios.get('https://api/property/:id')
+        .then((res:any) => {
+                console.log(res);
+            } 
+        )
+        .catch((err: any) => {
+            console.log(err)
+            }
+        )
+    },[]);
+
+    useEffect(()=> {
+        axios.get('https://api/property?keyword=for&PageNumber={page}')
+        .then((res:any) => {
+                console.log(res);
+            } 
+        )
+        .catch((err: any) => {
+            console.log(err)
+            }
+        )
+    },[page]);
+    
+    
+
+
+
 
     const properties = [
         {
@@ -98,11 +134,14 @@ export const PropertyScreen =()=> {
                             <Input 
                                 w={'100%'} h={'100%'}
                                 type='search' 
-                                placeholder='Search...'            
+                                placeholder='Search...'  
+                                value={inputValue}
+                                onChange={(e:any) => setInputValue(e.target.value)} 
+                                         
                             />
                         </InputGroup>
                     </Flex>
-                    <Btn
+                    <Btn onClick={()=> setPage(inputValue)}
                         display={'flex'} gap={'4px'} alignItems={'center'} bg={'#fff'}
                         h={'100%'} w={'80px'}
                         border={'1px solid var(--soft200)'} borderRadius={'8px'}
@@ -129,6 +168,7 @@ export const PropertyScreen =()=> {
                                     userImage={property?.userImage} 
                                     email={property?.email} 
                                     user={property?.user}
+                                    count={page}
                                 />
                             )
                         })

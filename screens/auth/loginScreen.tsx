@@ -4,15 +4,42 @@ import { AuthHeaderProps } from "./authheader"
 import { MdOutlineEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import React from "react";
+import React, { useEffect } from "react";
 import Btn from "@/components/Btn";
 import Link from "next/link";
+import axios from "axios";
+import { useState } from "react";
 
 
 export const LoginScreen =()=> {
 
     const [show, setShow] = React.useState(false)
-    const handleClick = () => setShow(!show)
+    const [inputValue, setInputValue] = useState();
+    const [islogin, setIsLogin ] = useState({
+        email:'',
+        password:'',
+    })
+
+    const handleInput =(event:any)=> {
+        setIsLogin({...islogin, [event.target.name]: event.target.event})
+    }
+
+    const handleSubmit =(event:any) => {
+        event.preventDefault(); 
+        axios.post('https://api/auth/login')
+            .then(
+                (res:any)=> {
+                    console.log(res)
+                }
+            )
+            .catch(
+                (err:any) => {
+                    console.log(err)
+                }
+            )
+
+    }
+    
 
     return(
         <Box display={'flex'} flexDir={'column'} 
@@ -76,7 +103,10 @@ export const LoginScreen =()=> {
                                     <Input 
                                     w={'100%'} h={'100%'}
                                         type='email' 
-                                        placeholder='hello@gmail.com'            
+                                        placeholder='hello@gmail.com'  
+                                        name="email"
+                                        value={inputValue}
+                                        onChange={handleInput}          
                                     />
                                 </InputGroup>
                             <FormHelperText>Email is required</FormHelperText>
@@ -102,10 +132,13 @@ export const LoginScreen =()=> {
                                     <Input 
                                         w={'100%'} h={'100%'} outline={'none'}
                                         type={show ? 'text' : 'Password'} 
-                                        placeholder='*********'            
+                                        placeholder='*********'
+                                        name="password"
+                                        value={inputValue}  
+                                        onChange={handleInput}          
                                     />
                                     <InputRightElement width='4.5rem'>
-                                        <Box onClick={handleClick}>
+                                        <Box onClick={() => setShow(!show)}>
                                             {!show ? <BsEyeSlash className="formicon"/> : <BsEye className="formicon" />}
                                         </Box>
                                     </InputRightElement>
@@ -133,14 +166,14 @@ export const LoginScreen =()=> {
                             </Text>
                         </Link>
                     </Flex>
-                    <Link href={'/reset'}>
-                    <Btn 
-                        bg={'var(--primaryBase)'} display={'flex'} alignItems={'center'}
-                        w={"100%"} h={"40px"} border={"1px"} borderColor={"#FFFFFF"}
-                        borderRadius={'10px'} textColor={'#FFFFFF'}
-                    >
-                        Login
-                    </Btn>
+                    <Link href={'/'}>
+                        <Btn onClick={handleSubmit}
+                            bg={'var(--primaryBase)'} display={'flex'} alignItems={'center'}
+                            w={"100%"} h={"40px"} border={"1px"} borderColor={"#FFFFFF"}
+                            borderRadius={'10px'} textColor={'#FFFFFF'}
+                        >
+                            Login
+                        </Btn>
                     </Link>
                 </Box>
             </Flex>

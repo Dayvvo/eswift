@@ -9,9 +9,6 @@ import Link from "next/link";
 
 export const ResetPasswordScreen =()=> {
 
-    const [show, setShow] = React.useState(false)
-    const handleClick = () => setShow(!show)
-
     return(
         <Box display={'flex'} flexDir={'column'} 
             bg={'#FFF'}
