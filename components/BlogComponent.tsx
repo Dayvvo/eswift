@@ -11,6 +11,7 @@ import {
 import React from "react";
 import { PlusIcon, SearchIcon } from "./svg";
 import Btn from "./Btn";
+import { useRouter } from "next/router";
 
 const BlogComponent = () => {
   const blogData = [
@@ -58,6 +59,8 @@ const BlogComponent = () => {
     },
   ];
 
+  const route = useRouter();
+
   return (
     <>
       <Flex gap={"20px"}>
@@ -79,6 +82,7 @@ const BlogComponent = () => {
             rightIcon={<PlusIcon />}
             bgColor="#1A1D66"
             borderRadius={"8px"}
+            onClick={() => route.push('/blog/add')}
           >
             Add Blog
           </Btn>
