@@ -1,24 +1,38 @@
-import Joi from "joi";
+import Joi from 'joi'
 import {
   IAddPropertyValidation,
   ILoginValidation,
-} from "./interface.validation";
-import { MailType } from "../interfaces/mailtype.interface";
-import { ProfileInterface } from "../interfaces/profile.interface";
+  ISignupValidation,
+} from './interface.validation'
+import { MailType } from '../interfaces/mailtype.interface'
+import { ProfileInterface } from '../interfaces/profile.interface'
+import { UserRole } from '../interfaces'
 
 export const validateLoginData = (login: ILoginValidation) => {
   const loginSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(8).max(36).required(),
-  });
+  })
 
-  return loginSchema.validate(login);
-};
+  return loginSchema.validate(login)
+}
+
+export const validateSignupData = (signup: ISignupValidation) => {
+  const signupSchema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).max(36).required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    role: Joi.valid(UserRole.CLIENT, UserRole.GUEST).required(),
+  })
+
+  return signupSchema.validate(signup)
+}
 
 export const validateBlogPostData = (data: {
-  title: string;
-  content: string;
-  tags: string[];
+  title: string
+  content: string
+  tags: string[]
 }) => {
   const blogPostSchema = Joi.object({
     title: Joi.string()
@@ -26,16 +40,16 @@ export const validateBlogPostData = (data: {
       .trim()
       .min(1)
       .max(255)
-      .error(new Error("Title is required and must be under 256 characters")),
+      .error(new Error('Title is required and must be under 256 characters')),
     content: Joi.string()
       .required()
       .trim()
-      .error(new Error("Content is required")),
+      .error(new Error('Content is required')),
     tags: Joi.array().items(Joi.string().trim()),
-  });
+  })
 
-  return blogPostSchema.validate(data);
-};
+  return blogPostSchema.validate(data)
+}
 
 export const ValidateAddProperty = (property: IAddPropertyValidation) => {
   const propertySchema = Joi.object({
@@ -47,7 +61,7 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
     description: Joi.string().required(),
     features: Joi.array().items(Joi.string().min(2).max(50)).min(1).required(),
     images: Joi.array().items(Joi.string().uri()).min(1).required(),
-  });
+  })
 
   return propertySchema.validate(property)
 }
@@ -56,19 +70,16 @@ export const createInspectionValidatorSchema = Joi.object({
   first_name: Joi.string().required(),
   last_name: Joi.string().required(),
   email: Joi.string().email().required(),
-});
+})
 
 export const getAllInspectionsValidation = Joi.object({
   per_page: Joi.number().optional(),
   page: Joi.number().optional(),
-});
+})
 
 export const deleteInspection = Joi.object({
   id: Joi.string().required(),
-});
-
-
-
+})
 
 export const validateMailbody = (emailData: MailType) => {
   const mailSchema = Joi.object({
@@ -77,28 +88,28 @@ export const validateMailbody = (emailData: MailType) => {
       .trim()
       .min(1)
       .max(255)
-      .error(new Error("Email is required and must be under 256 characters")),
+      .error(new Error('Email is required and must be under 256 characters')),
     name: Joi.string()
       .required()
       .trim()
       .min(1)
       .max(255)
-      .error(new Error("name is required")),
+      .error(new Error('name is required')),
     subject: Joi.string()
       .required()
       .trim()
       .min(1)
       .max(255)
-      .error(new Error("subject is required")),
+      .error(new Error('subject is required')),
     message: Joi.string()
       .required()
       .trim()
       .min(1)
-      .error(new Error("Message is required")),
-  });
+      .error(new Error('Message is required')),
+  })
 
-  return mailSchema.validate(emailData);
-};
+  return mailSchema.validate(emailData)
+}
 
 export const validateProfile = (userProfile: ProfileInterface) => {
   const profileSchema = Joi.object({
@@ -117,6 +128,6 @@ export const validateProfile = (userProfile: ProfileInterface) => {
     passport: Joi.string().required(),
     agentIdProof: Joi.string().required(),
     currentOccupation: Joi.string().required(),
-  });
-  return profileSchema.validate(userProfile);
-};
+  })
+  return profileSchema.validate(userProfile)
+}
