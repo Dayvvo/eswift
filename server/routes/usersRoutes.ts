@@ -4,15 +4,17 @@ import { isAdmin, isAuth } from "../utils/middleware";
 
 const router = Router();
 
-router.get("/users", isAuth, isAdmin, userController.getAllUsers);
-router.get("/users/:userId", isAuth, isAdmin, userController.getUserById);
+router.get("/", isAuth, isAdmin, userController.getAllUsers);
+
+router.get("/:userId", isAuth, isAdmin, userController.getUserById);
+
 router.put(
-  "/users/:userId/verification",
+  "/:userId/verify",
   isAuth,
   isAdmin,
   userController.verifyUser
 );
 
-
+router.post('/add', userController.addUser);
 
 export default router;

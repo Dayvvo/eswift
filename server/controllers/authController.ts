@@ -4,9 +4,7 @@ import { generalRequestBody } from '../utils/types'
 import { Request, Response } from 'express'
 import {
   ILoginValidation,
-  ISignupValidation,
   validateLoginData,
-  validateSignupData,
 } from '../utils/validation/index'
 import { adminUsers } from '../data'
 import generateToken from '../utils/helperFunctions/generateToken'
@@ -76,44 +74,6 @@ class AuthController {
           .status(401)
           .json({ statusCode: 401, message: 'Wrong Email or Password' })
       }
-    } catch (err) {
-      console.log('Error in email login', err)
-      res.status(500).send('Internal Server Error')
-    }
-  }
-
-  emailSignupController = async (req: Request, res: Response) => {
-    try {
-      const body: ISignupValidation = req.body
-      const validate = validateSignupData(body)
-      const { error } = validate
-      if (error) {
-        return res.status(400).json(error.details[0])
-      }
-      const { email, password, firstName, lastName, role } = body
-      const userExists = await User.findOne({ email })
-
-      if (userExists) {
-        return res
-          .status(400)
-          .json({ statusCode: 400, message: 'User with email already exists' })
-      }
-
-      const user = await User.create({
-        email,
-        hash: password,
-        firstName,
-        lastName,
-        role,
-      })
-
-      return res.status(201).json({
-        _id: user._id,
-        firstName: user.firstName,
-        email: user.email,
-        role: user.role,
-        token: generateToken(user._id),
-      })
     } catch (err) {
       console.log('Error in email login', err)
       res.status(500).send('Internal Server Error')
