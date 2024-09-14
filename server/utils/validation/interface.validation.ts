@@ -1,6 +1,16 @@
+import { UserRole } from '../interfaces'
+
 export interface ILoginValidation {
   email: string
   password: string
+}
+
+export interface ISignupValidation {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  role: UserRole
 }
 
 export interface IAddPropertyValidation {

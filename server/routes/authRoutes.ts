@@ -22,5 +22,6 @@ router.get(
 )
 
 router.post('/login', authController.emailLoginAuthController)
+router.post('/signup', authController.emailSignupController)
 // router.get('/seed', authController.adminSeeder)
 export default router
