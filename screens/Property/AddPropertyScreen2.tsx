@@ -4,7 +4,7 @@ import { FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 
 
-export const AddPropertyScreenTwo =()=> {
+export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
     
     const subs:any[] = [
         {
@@ -119,6 +119,8 @@ export const AddPropertyScreenTwo =()=> {
                             Price<Text as="span" textColor={'var(--primaryBase)'}>*</Text>
                         </FormLabel>
                         <InputGroup
+                            display={'flex'}
+                            alignItems={'center'}
                             border={'1px'} borderRadius={'10px'} 
                             borderColor={'var(--soft200)'}
                             cursor={'text'}
@@ -128,17 +130,20 @@ export const AddPropertyScreenTwo =()=> {
                         >
                             <Input 
                                 w={'70%'} h={'100%'}
+                                borderRight={'1px solid var(--soft400)'}
+                                borderRightRadius={'0'}
                                 type='text' 
                                 placeholder='₦ 0.00'  
                                 name=""
                                 value={''}          
                             />
                             <Select 
-                                border={'1px'} borderRightRadius={'10px'} 
-                                borderColor={'var(--soft200)'}
-                                cursor={'text'}
+                                cursor={'pointer'}
+                                border={'0px solid #FFFFFF'}
+                                borderLeftRadius={'0px'}
+                                _focusWithin={'0px solid #FFFFFF'}
                                 fontSize={14} textColor={'var--(sub600)'}
-                                w='30%' h='100%'
+                                w='30%' h='40px'
                                 _placeholder={{textColor:'var--(soft400)'}}
                                 placeholder='Annually'
                             >
@@ -156,7 +161,8 @@ export const AddPropertyScreenTwo =()=> {
                         </InputGroup>
                     </FormControl>
                 </Flex>
-                <Btn my={'20px'}
+                <Btn onClick={onClick}
+                    my={'20px'}
                     border={'1px solid var(--primaryBase)'} display={'flex'} alignItems={'center'}
                     w={"100%"} h={"40px"} bg={"#FFFFFF"}
                     borderRadius={'10px'} textColor={'var(--primaryBase)'}

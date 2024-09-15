@@ -5,10 +5,40 @@ import { IoFilter } from "react-icons/io5";
 import { PropertyCard } from "./propertyCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Modal } from "@/components/modal";
+import { AddPropertyScreenOne } from "./AddPropertyScreen1";
+import { AddPropertyScreenTwo } from "./AddPropertyScreen2";
+import { AddPropertyScreenThree } from "./AddPropertyScreen3";
+import { AddPropertyScreenFour } from "./AddPropertyScreen4";
+import { BsPlus } from "react-icons/bs";
 
 
 export const PropertyScreen =()=> {
 
+    const [showModal , setShowModal] = useState(false);
+    const [currentChildComponent , setCurrentChildComponent] = useState<React.ReactNode | null>(null);
+  
+    const toggleModal =()=> {
+        setShowModal ( prevState => !prevState);
+    }
+
+    const openAddPropertyScreenOne =()=> {
+        setCurrentChildComponent (<AddPropertyScreenOne onClick={openAddPropertyScreenTwo}  />)
+        setShowModal(true);
+    }
+    const openAddPropertyScreenTwo =()=> {
+        setCurrentChildComponent (<AddPropertyScreenTwo onClick={openAddPropertyScreenThree}  />)
+        setShowModal(true);
+    }
+    const openAddPropertyScreenThree =()=> {
+        setCurrentChildComponent (<AddPropertyScreenThree onClick={openAddPropertyScreenFour}  />)
+        setShowModal(true);
+    }
+    const openAddPropertyScreenFour =()=> {
+        setCurrentChildComponent (<AddPropertyScreenFour onClick={toggleModal}  />)
+        setShowModal(true);
+    }
+    
     const [getProperty, setGetProperty] = useState([]);
     const [page, setPage] = useState(1)
     const [inputValue, setInputValue] = useState();
@@ -38,8 +68,7 @@ export const PropertyScreen =()=> {
         )
     },[page]);
     
-    
-
+   
 
 
 
@@ -107,7 +136,12 @@ export const PropertyScreen =()=> {
     ];
     
     return(
-        <>
+        <>  
+            <Modal onClose={toggleModal}
+                isVisible={showModal}
+            >
+                {currentChildComponent}
+            </Modal>
             <Box 
                 className="robotoF"
                 px={{base:'16px', lg:'60px'}}
@@ -151,6 +185,18 @@ export const PropertyScreen =()=> {
                         <IoFilter className="icon"/>
                         <Text>
                             Filter
+                        </Text>
+                    </Btn>
+                    <Btn onClick={openAddPropertyScreenOne}
+                        display={'flex'} gap={'4px'} alignItems={'center'} bg={'#fff'}
+                        h={'100%'} w={'80px'}
+                        border={'1px solid var(--soft200)'} borderRadius={'8px'}
+                        textColor={'var--(sub600)'}
+                        fontWeight={500} fontSize={'14px'} px={'0'} pt={'0'} pb={'0'}
+                    >
+                        <BsPlus className="icon"/>
+                        <Text>
+                            Add
                         </Text>
                     </Btn>
                 </Flex>

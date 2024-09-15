@@ -4,7 +4,7 @@ import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";
 
 
-export const AddPropertyScreenOne =()=> {
+export const AddPropertyScreenOne =({onClick}:{onClick:()=>void})=> {
     
     const subs:any[] = [
         {
@@ -121,7 +121,7 @@ export const AddPropertyScreenOne =()=> {
                             fontSize={14} textColor={'var--(sub600)'}
                             w='100%' h='40px'
                             _placeholder={{textColor:'var--(soft400)'}}
-                            placeholder='A descriptive name for the property'
+                            placeholder='Category of the property'
                         >
                             {
                                 ['Option 1','Option 2','Option 3','Option 4'].map((entry) => (
@@ -152,7 +152,8 @@ export const AddPropertyScreenOne =()=> {
                         />
                     </FormControl>
                 </Flex>
-                <Btn my={'20px'}
+                <Btn onClick={onClick} 
+                    my={'20px'}
                     border={'1px solid var(--primaryBase)'} display={'flex'} alignItems={'center'}
                     w={"100%"} h={"40px"} bg={"#FFFFFF"}
                     borderRadius={'10px'} textColor={'var(--primaryBase)'}

@@ -5,7 +5,7 @@ import { FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 
 
-export const AddPropertyScreenFour =()=> {
+export const AddPropertyScreenFour =({onClick}:{onClick:()=>void})=> {
     
     const subs:any[] = [
         {
@@ -168,8 +168,8 @@ export const AddPropertyScreenFour =()=> {
                         </Text>
                     </Flex>
                 </Flex>
-                
-                <Btn my={'20px'}
+                <Btn onClick={onClick}
+                    my={'20px'}
                     border={'1px solid var(--primaryBase)'} display={'flex'} alignItems={'center'}
                     w={"100%"} h={"40px"} bg={"#FFFFFF"}
                     borderRadius={'10px'} textColor={'var(--primaryBase)'}
