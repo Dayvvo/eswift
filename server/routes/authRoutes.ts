@@ -1,7 +1,6 @@
 import express from 'express'
 import authController from '../controllers/authController'
 import passport from 'passport'
-import { isAuth } from '../utils/middleware'
 
 const router = express.Router()
 
@@ -22,5 +21,5 @@ router.get(
 )
 
 router.post('/login', authController.emailLoginAuthController)
-// router.get('/seed', authController.adminSeeder)
+
 export default router
