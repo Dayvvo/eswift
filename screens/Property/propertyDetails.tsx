@@ -13,23 +13,23 @@ export const PropertyDetails =()=> {
             key: 'Spacious living area with ample natural light'
         },
         {
-            id:1,
+            id:2,
             key: 'Modern kitchen with stainless steel appliances'
         },
         {
-            id:1,
+            id:3,
             key: '3 generously sized bedrooms'
         },
         {
-            id:1,
+            id:4,
             key: '2 well-appointed bathrooms.'
         },
         {
-            id:1,
+            id:5,
             key: 'Spacious living area with ample natural light'
         },
         {
-            id:1,
+            id:6,
             key: 'Spacious living area with ample natural light'
         }
     ]
@@ -39,19 +39,19 @@ export const PropertyDetails =()=> {
             doc:'/'
         },
         {
-            id:1,
+            id:2,
             doc:'/'
         },
         {
-            id:1,
+            id:3,
             doc:'/'
         },
         {
-            id:1,
+            id:4,
             doc:'/'
         },
         {
-            id:1,
+            id:5,
             doc:'/'
         },
     ]
@@ -67,7 +67,7 @@ export const PropertyDetails =()=> {
             image:'/prop-img.png',
         },
         {
-            id:1,
+            id:2,
             title:'3 bedroom flat',
             pricing:'2,000,000',
             location:'12, Osinowo estate Gbagada, Lagos, Nigeria',
@@ -77,7 +77,7 @@ export const PropertyDetails =()=> {
             image:'/prop-img.png',
         },
         {
-            id:1,
+            id:3,
             title:'3 bedroom flat',
             pricing:'2,000,000',
             location:'12, Osinowo estate Gbagada, Lagos, Nigeria',

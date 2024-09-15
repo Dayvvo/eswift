@@ -3,34 +3,47 @@ import React, { ReactNode } from "react";
 import { RxCross2 } from "react-icons/rx";
 
 interface ModalProps {
-    children?:ReactNode;
-    onClick?:()=> void;
+    children?: ReactNode;
+    onClose?: any;
+    isVisible?: any;
 
 }
 export const Modal:React.FC<ModalProps> =({
-    onClick, children
+     children, onClose , isVisible
 })=> {
+
+    const ModalClose =(e:any)=>{
+        if(e.target.id === "close")
+        onClose()
+    };  
+
+    if (!isVisible) return null;
+
     return (
         <>
-            <Box id="close"
-                onClick={onClick}
+            <Box
+                onClick={ModalClose}
                 w={'100vw'} h={'100vh'}
-                zIndex={100} bg={'#00000015'}
+                zIndex={100} bg={'#00000075'}
+                backdropFilter={'blur(10px)'}
+                pos={'fixed'}
             >
                 <Flex 
-                    w={'100vw'} h={'100vh'}
-                    backdropFilter={'blur(10px)'}
+                    id="close"
+                    px={'12px'}
+                    w={'100%'} h={'100%'}
                     justifyContent={'center'} alignItems={'center'}
                 >
                     <Flex
-                        bg={'#FFF'}
-                        maxW={'768px'} h={'fit-content'}
+                        flexDir={'column'}
+                        bg={'#FFFFFF'}
+                       maxW={'768px'} h={'fit-content'}
                         borderRadius={'15px'} px={{base:'16px', md:'40px'}}
                         py={{base:'12px',md:'20px'}}
                     >
                         <Flex 
                             w={'100%'} h={'fit-content'} 
-                            gap={'12px'} justifyContent={'space-between'}
+                            gap={'12px'} justifyContent={'space-between'} alignItems={'center'}
                             p={'20px'} className="robotoF" textColor={'var(--strong950)'}
                         >
                             <Text 
@@ -38,7 +51,9 @@ export const Modal:React.FC<ModalProps> =({
                             >
                                 Add Property
                             </Text>
-                            <Box onClick={onClick}>
+                            <Box 
+                                fontSize={'18px'}
+                                onClick={onClose}>
                                 <RxCross2 />
                             </Box>
                         </Flex>
