@@ -23,8 +23,8 @@ class ProfileController {
 
       const profileData = new Profile({ ...value, userId });
       await profileData.save();
-      return res.status(200).json({
-        statusCode: 200,
+      return res.status(201).json({
+        statusCode: 201,
         data: profileData,
         message: "profile created",
       });
@@ -54,8 +54,8 @@ class ProfileController {
         return res.status(404).json({ message: "Profile not found" });
       }
 
-      return res.status(200).json({
-        statusCode: 200,
+      return res.status(201).json({
+        statusCode: 201,
         data: userProfile,
         message: "profile updated",
       });

@@ -14,8 +14,8 @@ class BlogPostController {
       const blogPost = new BlogPost({ ...value, author: req.user?._id });
       console.log(blogPost);
       await blogPost.save();
-      return res.status(200).json({
-        statusCode: 200,
+      return res.status(201).json({
+        statusCode: 201,
         data: blogPost,
         message: "Blog post created",
       });
@@ -36,8 +36,8 @@ class BlogPostController {
         { ...value },
         { new: true }
       );
-      return res.status(200).json({
-        statusCode: 200,
+      return res.status(201).json({
+        statusCode: 201,
         message: "updated successfully",
         data: blogPost,
       });
