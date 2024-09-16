@@ -60,3 +60,20 @@
   color: #99A0AE;
   font-size: 20px;
 }
+
+.quill-style .ql-container {
+  height: 250px;
+  border-radius: 7px;
+  background-color: #F5F7FA;
+  border: none !important;
+}
+
+.ql-toolbar {
+  border-radius: 7px;
+  background-color: #F5F7FA;
+  position: absolute;
+  bottom: 0;
+  z-index: 99;
+  width: 700px;
+  border: none !important;
+}

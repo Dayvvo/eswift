@@ -1,0 +1,1382 @@
+{
+	"info": {
+		"_postman_id": "1cce2aa3-e560-4f58-81c4-7d6c272fb191",
+		"name": "Eswift",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14601321",
+		"_collection_link": "https://interstellar-comet-668950.postman.co/workspace/Team-Workspace~3d749df0-e0a4-4fa9-8eb0-b7ef755e6288/collection/20812049-1cce2aa3-e560-4f58-81c4-7d6c272fb191?action=share&source=collection_link&creator=14601321"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json().data",
+									"if (!response) {",
+									"    return",
+									"}",
+									"",
+									"const token = response.token",
+									"pm.collectionVariables.set('TOKEN', token)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@eswift.com\",\n    \"password\": \"adminuser\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Wrong Email Or Password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@eswift.com\",\n    \"password\": \"password1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/auth/login",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "54"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"36-F1tlhFkQfcdoV/5QrvFUoGVD0d4\""
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "connect.sid=s%3ApQDOYYw8vOlL8ytfRmLxBQZtaVvy8x0o.kdHD0RyW%2BQZl2dXHt9L2EpsJcrjrCGZxujr65j6Y1k8; Path=/; HttpOnly"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Aug 2024 01:12:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"message\": \"Wrong Email or Password\"\n}"
+						},
+						{
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@eswift.com\",\n    \"password\": \"adminuser\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/auth/login",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "140"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8c-zj3CkWYMCCpsT6z0sxlBHjyE358\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Aug 2024 01:13:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"_id\": \"66cfc37a8bc96bde69ba69bf\",\n    \"firstName\": \"admin\",\n    \"lastName\": \"user\",\n    \"email\": \"admin@eswift.com\",\n    \"role\": \"ADMIN\",\n    \"token\": \"generated token\"\n}"
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Property",
+			"item": [
+				{
+					"name": "Create Property",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Y2ZjMzdhOGJjOTZiZGU2OWJhNjliZiIsImlhdCI6MTcyNTQwMzEzNCwiZXhwIjoxNzI3OTk1MTM0fQ.uEuuyQekAF52gmhURe9QJzCelyctjj784xBXyZJX4_U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nice house2\",\n    \"type\": \"Bungalow\",\n    \"address\": \"12 Main St\",\n    \"price\": \"120000\",\n    \"category\": \"Sample\",\n    \"description\": \"Very NIce House\",\n    \"features\": [\"nice\", \"cheap\", \"open spaces\"],\n    \"images\": [\"https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/property",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"property"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Nice house\",\n    \"type\": \"Bungallow\",\n    \"address\": \"12 Main St\",\n    \"price\": \"120000\",\n    \"category\": \"Sample\",\n    \"description\": \"Very NIce House\",\n    \"features\": [\"nice\", \"cheap\", \"open spaces\"],\n    \"images\": [\"https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/property",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"property"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "568"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"238-NE8brdR+l9oAmMbo7Cm52QVo0uU\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 03 Sep 2024 23:15:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"message\": \"Property Created\",\n    \"data\": {\n        \"title\": \"Nice house\",\n        \"description\": \"Very NIce House\",\n        \"type\": \"Bungallow\",\n        \"category\": \"Sample\",\n        \"address\": \"12 Main St\",\n        \"features\": [\n            \"nice\",\n            \"cheap\",\n            \"open spaces\"\n        ],\n        \"owner\": \"ESWIFT\",\n        \"price\": \"120000\",\n        \"images\": [\n            \"https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D\"\n        ],\n        \"isActive\": true,\n        \"_id\": \"66d7989b7b4af9a684ce3120\",\n        \"createdAt\": \"2024-09-03T23:15:39.317Z\",\n        \"updatedAt\": \"2024-09-03T23:15:39.317Z\",\n        \"__v\": 0\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get/Search Properties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/property?keyword=for&pageNumber=1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"property"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "for"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/property?keyword=for&pageNumber=1",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"property"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "for"
+										},
+										{
+											"key": "pageNumber",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "610"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"262-zGnd0P5Y3iTuWelSpQJUuhg88Bc\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 03 Sep 2024 23:46:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"message\": \"Property List\",\n    \"data\": [\n        {\n            \"_id\": \"66d79fd1fcf82ba630dde123\",\n            \"title\": \"different for search\",\n            \"description\": \"Very NIce House\",\n            \"type\": \"Bungalow\",\n            \"category\": \"Sample\",\n            \"address\": \"12 Main St\",\n            \"features\": [\n                \"nice\",\n                \"cheap\",\n                \"open spaces\"\n            ],\n            \"owner\": \"ESWIFT\",\n            \"price\": \"120000\",\n            \"images\": [\n                \"https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D\"\n            ],\n            \"isActive\": true,\n            \"createdAt\": \"2024-09-03T23:46:25.111Z\",\n            \"updatedAt\": \"2024-09-03T23:46:25.111Z\",\n            \"__v\": 0\n        }\n    ],\n    \"pagination\": {\n        \"page\": 1,\n        \"pages\": 1\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Property By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/property/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"property",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "66d79fd1fcf82ba630dde123"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/property/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"property",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "66d79fd1fcf82ba630dde123"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "571"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"23b-+ZB7bPL+V3Ztl6I/zI5J2KhhtIg\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Sep 2024 00:04:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"message\": \"Successful\",\n    \"data\": {\n        \"_id\": \"66d79fd1fcf82ba630dde123\",\n        \"title\": \"different for search\",\n        \"description\": \"Very NIce House\",\n        \"type\": \"Bungalow\",\n        \"category\": \"Sample\",\n        \"address\": \"12 Main St\",\n        \"features\": [\n            \"nice\",\n            \"cheap\",\n            \"open spaces\"\n        ],\n        \"owner\": \"ESWIFT\",\n        \"price\": \"120000\",\n        \"images\": [\n            \"https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D\"\n        ],\n        \"isActive\": true,\n        \"createdAt\": \"2024-09-03T23:46:25.111Z\",\n        \"updatedAt\": \"2024-09-03T23:46:25.111Z\",\n        \"__v\": 0\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Property",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/property/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"property",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "66d7989b7b4af9a684ce3120"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/property/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"property",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "66d7989b7b4af9a684ce3120"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "41"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"29-00GmpAaa84AyFNbin+Qw00INGDE\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 07 Sep 2024 00:47:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"message\": \"Successful\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Blog",
+			"item": [
+				{
+					"name": "All blog posts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/blog/post",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"blog",
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a single post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/blog/post/:blogPostId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"blog",
+								"post",
+								":blogPostId"
+							],
+							"variable": [
+								{
+									"key": "blogPostId",
+									"value": "66d9fd6945fbaf90974d28ab",
+									"description": "post id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create blog post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n    \"title\": \"postman\",\r\n    \"content\": \"testing postman documentations for blog post for frontend developers\",\r\n    \"tags\": [\"mail\", \"good\"]\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/blog/post",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"blog",
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update a blog post by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n    \"title\": \"yea\",\r\n    \"content\": \"documentations for blog post for frontend developers\",\r\n    \"tags\": [\"mail\", \"book\"]\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/blog/post/:blogPostId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"blog",
+								"post",
+								":blogPostId"
+							],
+							"variable": [
+								{
+									"key": "blogPostId",
+									"value": "66dc27a67d40aa03014eb190"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete blog post by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/blog/delete-post/:blogPostId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"blog",
+								"delete-post",
+								":blogPostId"
+							],
+							"variable": [
+								{
+									"key": "blogPostId",
+									"value": "66dc27a67d40aa03014eb190"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inspections",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/inspection/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"inspection",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\":\"string\",\n    \"first_name\": \"david\",\n    \"last_name\": \"string\",\n    \"email\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/inspection",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"inspection"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "get user profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user-detail/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user-detail",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  // userId: string\r\n  \"firstName\": \"Meesy\",\r\n  \"lastName\": \"Weezy\",\r\n  \"phoneNumber\": \"08069605169\",\r\n  \"residentialAddress\": \"Eko\",\r\n  \"officeAddress\": \"Leki\",\r\n  \"city\": \"Lasgidi\",\r\n  \"state\": \"Lagoes\",\r\n  \"country\": \"Nigeria\",\r\n  \"areYouAnExistingCustomer\": true,\r\n  \"howDidYouHearAboutUs\": \"Facebook\",\r\n  \"modeOfIdentification\": \"Nin\",\r\n  \"idDocument\": \"soft copy\",\r\n  \"passport\": \"soft copy\",\r\n  \"agentIdProof\": \"soft copy\",\r\n  \"currentOccupation\": \"SE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user-detail/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user-detail",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  // userId: string\r\n  \"firstName\": \"Meesy\",\r\n  \"lastName\": \"Weezy\",\r\n  \"phoneNumber\": \"08069605169\",\r\n  \"residentialAddress\": \"Eko\",\r\n  \"officeAddress\": \"Leki\",\r\n  \"city\": \"Lasgidi\",\r\n  \"state\": \"Lagoes\",\r\n  \"country\": \"Nigeria\",\r\n  \"areYouAnExistingCustomer\": true,\r\n  \"howDidYouHearAboutUs\": \"Facebook\",\r\n  \"modeOfIdentification\": \"Nin\",\r\n  \"idDocument\": \"soft copy\",\r\n  \"passport\": \"soft copy\",\r\n  \"agentIdProof\": \"soft copy\",\r\n  \"currentOccupation\": \"SE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user-detail/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user-detail",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Upload",
+			"item": [
+				{
+					"name": "Upload single",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "alI33zI_B/access_flow.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/upload/image",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"upload",
+								"image"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "alI33zI_B/access_flow.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/upload/image",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"upload",
+										"image"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "134"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"86-e0Fz4qWyWEUFxYR+24g90RJKCP8\""
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "connect.sid=s%3ACnBiYq3SAZ5M4olswPJjwOkfjRjGfY9F.HWUP9YGKhjNk%2BbIv18hcoa7qmj4UjrdhzVIMhUXhKUw; Path=/; HttpOnly"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 07 Sep 2024 00:21:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"message\": \"Success\",\n    \"data\": \"https://res.cloudinary.com/dnpvndlmy/image/upload/v1725668499/qsnerbtmbwqggjaz5l3c.png\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Upload Multiple Files",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"k80iyORNV/query_flow.png",
+										"k80iyORNV/network_management.png",
+										"k80iyORNV/audit.png"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/upload/images",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"upload",
+								"images"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "files",
+											"type": "file",
+											"src": [
+												"k80iyORNV/query_flow.png",
+												"k80iyORNV/network_management.png",
+												"k80iyORNV/audit.png"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/upload/images",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"upload",
+										"images"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "314"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"13a-pnu75w+M9m2JyrxqgepiFRBagTM\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 07 Sep 2024 00:38:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"message\": \"Success\",\n    \"data\": [\n        \"https://res.cloudinary.com/dnpvndlmy/image/upload/v1725669501/anvavbfnpm13op9ljaip.png\",\n        \"https://res.cloudinary.com/dnpvndlmy/image/upload/v1725669502/gwjtkqabd5bhcuzxfgoa.png\",\n        \"https://res.cloudinary.com/dnpvndlmy/image/upload/v1725669504/gsbu9ypc03bje99vcqib.png\"\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Contact us",
+			"item": [
+				{
+					"name": "contact us",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"alt.x7-9ou4l1ii@yopmail.com\",\r\n  \"name\": \"testing this stuff if it will work for us all \",\r\n  \"message\": \"jUST \",\r\n  \"subject\": \"CONGRATULATIONS\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/email/contact-us",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"email",
+								"contact-us"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get all users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single user by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/users/:userId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "66d9b57849cfe0da42bc2f72"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkOWI1Nzg0OWNmZTBkYTQyYmMyZjcyIn0sImlhdCI6MTcyNTY5OTY4MywiZXhwIjoxNzI1ODQzNjgzfQ.3sn0vjKZsTv1ve-tBeHrlbFwU7qW5zX2ZJeG71HSe5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"verification\": \"pending\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user/users/:userId/verification",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"users",
+								":userId",
+								"verification"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "66d9b57849cfe0da42bc2f72"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "localhost:5500/api",
+			"type": "string"
+		},
+		{
+			"key": "TOKEN",
+			"value": ""
+		}
+	]
+}
