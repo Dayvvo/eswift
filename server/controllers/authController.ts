@@ -2,7 +2,10 @@ import jwt from 'jsonwebtoken'
 import User from '../models/User'
 import { generalRequestBody } from '../utils/types'
 import { Request, Response } from 'express'
-import { ILoginValidation, validateLoginData } from '../utils/validation/index'
+import {
+  ILoginValidation,
+  validateLoginData,
+} from '../utils/validation/index'
 import { adminUsers } from '../data'
 import generateToken from '../utils/helperFunctions/generateToken'
 
@@ -56,7 +59,7 @@ class AuthController {
       if (user && user.matchPassword && (await user?.matchPassword(password))) {
         res.json({
           statusCode: 200,
-          message: "Successful",
+          message: 'Successful',
           data: {
             _id: user._id,
             firstName: user.firstName,
@@ -64,7 +67,7 @@ class AuthController {
             email: user.email,
             role: user.role,
             token: generateToken(user._id),
-          }
+          },
         })
       } else {
         res
@@ -77,13 +80,11 @@ class AuthController {
     }
   }
 
-  emailAuthController = async (req: Request, res: Response) => {}
-
   adminSeeder = async (req: Request, res: Response) => {
     adminUsers.forEach((adminUser) => {
       const newUser = new User(adminUser)
       newUser.save()
-    });
+    })
 
     console.log(`Seed successful`)
     res.send(`SEED COMPLETE!!`)
