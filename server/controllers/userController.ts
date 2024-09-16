@@ -21,8 +21,8 @@ class UserController {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      res.json({
-        statusCode: 200,
+      res.status(201).json({
+        statusCode: 201,
         message: "Verification status updated successfully",
         data: user,
       });
@@ -61,20 +61,21 @@ class UserController {
   };
 
   addUser = async (req: Request, res: Response) => {
+    const body: ISignupValidation = req.body;
+
     try {
-      const body: ISignupValidation = req.body
-      const validate = validateSignupData(body)
-      const { error } = validate
+      const validate = validateSignupData(body);
+      const { error } = validate;
       if (error) {
-        return res.status(400).json(error.details[0])
+        return res.status(400).json(error.details[0]);
       }
-      const { email, password, firstName, lastName, role } = body
-      const userExists = await User.findOne({ email })
+      const { email, password, firstName, lastName, role } = body;
+      const userExists = await User.findOne({ email });
 
       if (userExists) {
         return res
           .status(400)
-          .json({ statusCode: 400, message: 'User with email already exists' })
+          .json({ statusCode: 400, message: "User with email already exists" });
       }
 
       const user = await User.create({
@@ -83,7 +84,7 @@ class UserController {
         firstName,
         lastName,
         role,
-      })
+      });
 
       return res.status(201).json({
         _id: user._id,
@@ -91,13 +92,12 @@ class UserController {
         email: user.email,
         role: user.role,
         token: generateToken(user._id),
-      })
+      });
     } catch (err) {
-      console.log('Error in email login', err)
-      res.status(500).send('Internal Server Error')
+      console.log("Error in email login", err);
+      res.status(500).send("Internal Server Error");
     }
-  }
-
+  };
 }
 
 let userController = new UserController();
