@@ -16,5 +16,6 @@ router.put(
   isAdmin,
   userController.verifyUser
 );
+router.post("/add-user", userController.addUser);
 
 export default router;
