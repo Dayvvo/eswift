@@ -10,8 +10,13 @@ interface BlogObj {
 const useBlog = () => {
 
   const addBlog = useCallback(async(data:BlogObj) => {
-    const res = await axios.post('http://localhost:5500/blog/post', {data});
-    console.log('res', res)
+    try {
+      const res = await axios.post('http://localhost:5500/api/blog/post', {data});
+      console.log('res', res)
+    }
+    catch (err) {
+      console.log('error calling addblog', err);
+    }
     // return res
   }, [])
 

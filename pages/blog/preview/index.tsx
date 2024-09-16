@@ -43,13 +43,13 @@ const PreviewBlog = () => {
     tags: ["mail", "good"]
   }
 
-  const addBlogFn = () => {
+  const addBlogFn = async () => {
     try {
-      const req = addBlog(data);
+      const req = await addBlog(data);
       console.log('req', req);
     }
     catch (err) {
-      console.log(err);
+      console.log("error calling post", err);
     }
   }
 
@@ -186,7 +186,7 @@ const PreviewBlog = () => {
           className="mulish"
           fontWeight={500}
           fontSize={".875rem"}
-          // onClick={addBlogFn}
+          onClick={addBlogFn}
         >
           Publish
         </Btn>
