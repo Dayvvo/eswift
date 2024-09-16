@@ -13,7 +13,7 @@ router.put(
   isAuth,
   isAdmin,
   userController.verifyUser
-);
+);   
 
 router.post('/add', userController.addUser);
 
