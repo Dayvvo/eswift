@@ -42,13 +42,11 @@ class ContactUsController {
   sendEmail = async (req: Request, res: Response) => {
     try {
       const { error, value } = validateMailbody(req.body);
-      console.log("value", value);
-
       if (error) {
         return res.status(400).json(error.message);
       }
       const mailSent = await sendEmailFunction(value);
-      return res.status(200).json({
+      return res.status(201).json({
         message: "Email sent successfully",
         data: mailSent,
       });
