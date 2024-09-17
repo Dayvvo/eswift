@@ -7,12 +7,9 @@ class BlogPostController {
     try {
       const { error, value } = validateBlogPostData(req.body);
       if (error) {
-        console.log("error", error.message);
         return res.status(400).json(error.message);
       }
-      const author = req.user;
       const blogPost = new BlogPost({ ...value, author: req.user?._id });
-      console.log(blogPost);
       await blogPost.save();
       return res.status(201).json({
         statusCode: 201,
@@ -49,11 +46,10 @@ class BlogPostController {
 
   fetchBlogPost = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
-    const POST_PER_PAGE = 1;
+    const POST_PER_PAGE = 50;
     const skip = (page - 1) * POST_PER_PAGE;
     try {
       const author = req.user;
-      // console.log("author", author?._id);
       const totalPost = await BlogPost.find().countDocuments();
       const blogpost = await BlogPost.find().skip(skip).limit(POST_PER_PAGE);
       return res.status(200).json({
