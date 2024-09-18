@@ -9,9 +9,12 @@ interface BlogObj {
 
 const useBlog = () => {
 
+  const baseUrl = 'http://localhost:5500/api';
+  // const baseUrl = `${process.env.BACKEND_URL}/api`;
+
   const addBlog = useCallback(async(data:BlogObj) => {
     try {
-      const res = await axios.post('http://localhost:5500/api/blog/post', {data});
+      const res = await axios.post(`${baseUrl}/blog/post`, {data});
       console.log('res', res)
     }
     catch (err) {
@@ -20,8 +23,20 @@ const useBlog = () => {
     // return res
   }, [])
 
+  const deleteBlog = useCallback(async(blogPostId:number) => {
+    try {
+      const res = await axios.delete(`${baseUrl}/blog/delete-post/:${blogPostId}`);
+      console.log('res', res)
+    }
+    catch (err) {
+      console.log('error deleting blog', err);
+    }
+    // return res
+  }, [])
+
   return {
     addBlog,
+    deleteBlog,
   }
 }
 
