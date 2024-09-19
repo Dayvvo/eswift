@@ -1,7 +1,6 @@
 import express from 'express'
 import authController from '../controllers/authController'
 import passport from 'passport'
-import { isAuth } from '../utils/middleware'
 import propertyController from '../controllers/propertyController'
 
 const router = express.Router()
@@ -26,4 +25,5 @@ router
   .route('/:id')
   .get(propertyController.getPropertyById)
   .delete(propertyController.deleteProperty)
+
 export default router
