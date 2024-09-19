@@ -41,6 +41,10 @@ const PropertySchema = new mongoose.Schema<IProperty>(
       type: Boolean,
       default: true,
     },
+    verificationState: {
+      type: String,
+      enum: Object.values(PropertyDocuments),
+    },
   },
   { timestamps: true }
 )
