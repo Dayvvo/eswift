@@ -13,6 +13,12 @@ export enum PropertyDocuments {
   GovConsent = 'GovConsent',
 }
 
+export enum PropertyVerification {
+  Pending = 'Pending',
+  Verified = 'Verfied',
+  Rejected = 'Rejected'
+}
+
 export interface GoogleAuthResponse {
   sub: string
   name: string
