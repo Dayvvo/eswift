@@ -1,5 +1,7 @@
 import Btn from "@/components/Btn";
-import { Box, Flex, FormControl, FormHelperText, FormLabel, Input, InputGroup, InputLeftElement, Menu, Select, Text, Textarea } from "@chakra-ui/react"
+import { Box, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Menu, Select, Text, Textarea } from "@chakra-ui/react"
+import axios from "axios";
+import { ChangeEvent, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -36,6 +38,30 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
 
         
     ]
+
+    const [inputValue, setInputValue] = useState({
+        "address":"",
+        "price":"",
+        "period":"",
+    })
+
+    const handleInput =(event:ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>)=> {
+        setInputValue({...inputValue, [event.target.name]: event.target.value})
+    }
+
+    const handleSubmit =(e:ChangeEvent<HTMLFormElement>) => {
+
+        axios.post('', inputValue)
+        .then((res)=>{
+                
+                onClick()
+            }
+        )
+        .catch((err)=> {
+                console.log(err)
+            }
+        )
+    }
 
     return(
         <>
@@ -106,8 +132,9 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
                             w={'100%'} h={'100%'}
                                 type='text' 
                                 placeholder='The location of the property'  
-                                name=""
-                                value={''}          
+                                name="address"
+                                value={inputValue?.address}
+                                onChange={handleInput}          
                             />
                         </InputGroup>
                     </FormControl>
@@ -134,8 +161,9 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
                                 borderRightRadius={'0'}
                                 type='text' 
                                 placeholder='₦ 0.00'  
-                                name=""
-                                value={''}          
+                                name="price"
+                                value={inputValue?.price} 
+                                onChange={handleInput}         
                             />
                             <Select 
                                 cursor={'pointer'}
@@ -145,7 +173,9 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
                                 fontSize={14} textColor={'var--(sub600)'}
                                 w='30%' h='40px'
                                 _placeholder={{textColor:'var--(soft400)'}}
-                                placeholder='Annually'
+                                placeholder='select the period'
+                                value={inputValue?.period}
+                                onChange={handleInput}
                             >
                                 {
                                     ['Annually','Weekly','Monthly','Quarterly'].map((entry) => (

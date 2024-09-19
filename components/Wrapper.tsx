@@ -13,6 +13,8 @@ import {
   UserIcon,
 } from "./svg";
 import { FiHome, FiUser } from "react-icons/fi";
+import { NextRouter, useRouter } from "next/router";
+import axios from "axios";
 
 const Header = ({ casedPath }: { casedPath: string }) => {
   return (
@@ -121,6 +123,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   // }, [route]);
 
   // const casedPath = `${path.slice(0,1).toUpperCase()}${path.slice(1, path.length)}`
+  const navigate = useRouter() as NextRouter;
 
   const [route, setRoute] = useState("");
   const [path, setPath] = useState("");
@@ -145,6 +148,29 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
       }
     }
   }, [route]);
+
+  useEffect(()=> {
+
+    const storedData = localStorage.getItem('userData');
+    if (!storedData) {
+        navigate.push('/login');
+    } else {
+        try{
+            const parsedUserData = JSON.parse(storedData);
+        }
+        catch (err) {
+            navigate.push('/login')
+        }
+    }
+
+},[navigate])
+
+const LogOut =()=> {
+  localStorage.removeItem('token');
+  localStorage.removeItem('userData')
+  navigate.push('/login')
+}
+
 
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;
 
@@ -240,7 +266,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
                   blackchang@gmail.com
                 </Text>
               </Flex>
-              <Btn
+              <Btn onClick={LogOut}
                 color="#fff"
                 bgColor="#FF3B30BF"
                 w="100%"

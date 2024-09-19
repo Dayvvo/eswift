@@ -1,44 +1,71 @@
-import { Box, Checkbox, Flex , FormControl, FormHelperText, FormLabel, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Text } from "@chakra-ui/react"
+import { Box, Checkbox, Flex, FormControl, FormHelperText, FormLabel, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Text } from "@chakra-ui/react"
 import Image from "next/image"
 import { AuthHeaderProps } from "./authheader"
 import { MdOutlineEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import Btn from "@/components/Btn";
 import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/router";
+
 
 
 export const LoginScreen =()=> {
 
-    const [show, setShow] = React.useState(false)
-    const [inputValue, setInputValue] = useState();
-    const [islogin, setIsLogin ] = useState({
-        email:'',
-        password:'',
+    const navigate = useRouter();
+
+    const [show, setShow] = React.useState<boolean>(false);
+
+    const [isLogin, setIsLogin ] = useState({
+        "email":"",
+        "password":"",
     })
 
-    const handleInput =(event:any)=> {
-        setIsLogin({...islogin, [event.target.name]: event.target.event})
+    const handleInput =(event:ChangeEvent<HTMLInputElement>)=> {
+        setIsLogin({...isLogin, [event.target.name]: event.target.value})
     }
 
-    const handleSubmit =(event:any) => {
+    const handleSubmit = (event:ChangeEvent<HTMLFormElement>) => {
+
         event.preventDefault(); 
-        axios.post('https://api/auth/login')
+        axios.post('/api/auth/login',isLogin)
             .then(
-                (res:any)=> {
-                    console.log(res)
+                (res)=> {
+                    const Data = res?.data?.data as {};
+                    const token = res?.data?.data?.token as string;
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+                        localStorage.setItem('userData', JSON.stringify(Data));
+                    navigate.push('/')
                 }
             )
             .catch(
-                (err:any) => {
+                (err) => {
                     console.log(err)
                 }
             )
 
     }
+
+    useEffect(()=> {
+
+        const storedData = localStorage.getItem('userData');
+        if (!storedData) {
+            navigate.push('/login');
+        } else {
+            try{
+                const parsedUserData = JSON.parse(storedData);
+                console.log(parsedUserData);
+            }
+            catch (err) {
+                navigate.push('/login')
+            }
+        }
+
+    },[navigate])
+    
     
 
     return(
@@ -78,18 +105,21 @@ export const LoginScreen =()=> {
                         description="Enter your details to login."
                     />
                     <Box w={'100%'} border={'1px solid var(--soft200)'} my={'24px'}/>
-                    <Flex 
-                        flexDir={'column'}
-                        w={'100%'} gap={'12px'}
-                    >
-                        <FormControl w={'100%'}>
-                            <FormLabel
-                                fontWeight={500} fontSize={'14px'}
-                                textColor={'var(--strong950)'}
-                            >
-                                Email address
-                            </FormLabel>
+                    <form onSubmit={handleSubmit}>
+                        <Flex 
+                            flexDir={'column'}
+                            w={'100%'} gap={'12px'}
+                        >
+                            
+                            <FormControl w={'100%'}>
+                                <FormLabel
+                                    fontWeight={500} fontSize={'14px'}
+                                    textColor={'var(--strong950)'}
+                                >
+                                    Email address
+                                </FormLabel>
                                 <InputGroup
+                                    display={'flex'} justifyContent={'center'}
                                     border={'1px'} borderRadius={'10px'} 
                                     borderColor={'var(--soft200)'}
                                     cursor={'text'}
@@ -101,80 +131,79 @@ export const LoginScreen =()=> {
                                         <MdOutlineEmail className="formicon"/>
                                     </InputLeftElement>
                                     <Input 
-                                    w={'100%'} h={'100%'}
+                                        w={'100%'} h={'100%'}
                                         type='email' 
                                         placeholder='hello@gmail.com'  
                                         name="email"
-                                        value={inputValue}
                                         onChange={handleInput}          
                                     />
                                 </InputGroup>
-                            <FormHelperText>Email is required</FormHelperText>
-                        </FormControl>
-                        <FormControl w={'100%'}>
-                            <FormLabel
-                                fontWeight={500} fontSize={'14px'}
+                                <FormHelperText color={'var(--errorBase)'} fontSize={'12px'}>{ isLogin?.email.length < 3 ? "Email is required" : "" }</FormHelperText>
+                            </FormControl>
+                            <FormControl w={'100%'}>
+                                <FormLabel
+                                    fontWeight={500} fontSize={'14px'}
+                                    textColor={'var(--strong950)'}
+                                >
+                                    Password
+                                </FormLabel>
+                                    <InputGroup
+                                        display={'flex'} justifyContent={'center'}
+                                        border={'1px'} borderRadius={'10px'} 
+                                        borderColor={'var(--soft200)'}
+                                        cursor={'text'}
+                                        fontSize={14} textColor={'var--(sub600)'}
+                                        w='100%' h='40px'
+                                        _placeholder={{textColor:'var--(soft400)'}}
+                                    >
+                                        <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
+                                            <RiLockPasswordLine className="formicon"/>
+                                        </InputLeftElement>
+                                        <Input 
+                                            w={'100%'} h={'100%'} outline={'none'}
+                                            type={show ? 'text' : 'Password'} 
+                                            placeholder='*********'
+                                            name="password"
+                                            onChange={handleInput}          
+                                        />
+                                        <InputRightElement width='fit-content' marginRight={'20px'} cursor={'pointer'}>
+                                            <Box onClick={() => setShow(!show)}>
+                                                {!show ? <BsEyeSlash className="formicon"/> : <BsEye className="formicon" />}
+                                            </Box>
+                                        </InputRightElement>
+                                    </InputGroup>
+                                    <FormHelperText color={'var(--errorBase)'} fontSize={'12px'}>{ isLogin?.password.length < 8 ? "minimum of 8 characters" : "" }</FormHelperText>
+                            </FormControl>
+                        </Flex>
+                        <Flex 
+                            w="100%" my={'24px'}
+                            justifyContent={'space-between'} 
+                        >
+                        
+                            <Checkbox
+                                fontWeight={400} fontSize={'14px'}
                                 textColor={'var(--strong950)'}
                             >
-                                Password
-                            </FormLabel>
-                                <InputGroup
-                                    border={'1px'} borderRadius={'10px'} 
-                                    borderColor={'var(--soft200)'}
-                                    cursor={'text'}
-                                    fontSize={14} textColor={'var--(sub600)'}
-                                    w='100%' h='40px'
-                                    _placeholder={{textColor:'var--(soft400)'}}
+                                Keep me logged in
+                            </Checkbox>
+                            <Link href={'/reset'}>
+                                <Text 
+                                    fontWeight={500} fontSize={'14px'}
+                                    textColor={'var(--sub600)'} textDecor={'underline'}
                                 >
-                                    <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
-                                        <RiLockPasswordLine className="formicon"/>
-                                    </InputLeftElement>
-                                    <Input 
-                                        w={'100%'} h={'100%'} outline={'none'}
-                                        type={show ? 'text' : 'Password'} 
-                                        placeholder='*********'
-                                        name="password"
-                                        value={inputValue}  
-                                        onChange={handleInput}          
-                                    />
-                                    <InputRightElement width='4.5rem'>
-                                        <Box onClick={() => setShow(!show)}>
-                                            {!show ? <BsEyeSlash className="formicon"/> : <BsEye className="formicon" />}
-                                        </Box>
-                                    </InputRightElement>
-                                </InputGroup>
-                            <FormHelperText>Minimum of 8characters</FormHelperText>
-                        </FormControl>
-                    </Flex>
-                    <Flex 
-                        w="100%" my={'24px'}
-                        justifyContent={'space-between'} 
-                    >
-                       
-                        <Checkbox
-                            fontWeight={400} fontSize={'14px'}
-                            textColor={'var(--strong950)'}
-                        >
-                            Keep me logged in
-                        </Checkbox>
-                        <Link href={'/reset'}>
-                            <Text 
-                                fontWeight={500} fontSize={'14px'}
-                                textColor={'var(--sub600)'} textDecor={'underline'}
-                            >
-                                Forgot password?
-                            </Text>
-                        </Link>
-                    </Flex>
-                    <Link href={'/'}>
-                        <Btn onClick={handleSubmit}
+                                    Forgot password?
+                                </Text>
+                            </Link>
+                        </Flex>
+                        <Btn 
+                            type="Submit"
                             bg={'var(--primaryBase)'} display={'flex'} alignItems={'center'}
                             w={"100%"} h={"40px"} border={"1px"} borderColor={"#FFFFFF"}
                             borderRadius={'10px'} textColor={'#FFFFFF'}
                         >
                             Login
                         </Btn>
-                    </Link>
+                    </form>
                 </Box>
             </Flex>
             <Text

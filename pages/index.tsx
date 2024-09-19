@@ -1,5 +1,6 @@
 import Wrapper from "@/components/Wrapper";
 import { useEffect } from "react";
+
 export default function Home() {
 
   useEffect(()=>{
@@ -29,9 +30,9 @@ export default function Home() {
 
   return (
     <>
-      <Wrapper>
-        a
-      </Wrapper>
+        <Wrapper>
+          
+        </Wrapper>
     </>
   );
 };
