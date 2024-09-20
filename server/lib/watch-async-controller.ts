@@ -9,7 +9,7 @@
 */
 
 import { Request, Response, NextFunction } from "express";
-import { ExpressController } from "../utils/types"
+import { ExpressController } from "../utils/interfaces/types";
 
 export const WatchAsyncController =
   (fn: ExpressController) =>

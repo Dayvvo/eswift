@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
-import { PropertyDocuments } from '../utils/types'
+import { PropertyDocuments } from '../utils/interfaces/types'
 import { IProperty, PropertyOwner } from '../utils/interfaces'
 
 const PropertySchema = new mongoose.Schema<IProperty>(

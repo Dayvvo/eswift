@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import InspectionSchema from "../models/Inspection";
 import UserSchema from "../models/User";
-import { fnRequest } from "../utils/types";
+import { fnRequest } from "../utils/interfaces/types";
 
 export class InspectionController {
   public createInspection: fnRequest = async (req: Request, res: Response) => {
