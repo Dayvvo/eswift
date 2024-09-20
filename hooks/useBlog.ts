@@ -34,9 +34,20 @@ const useBlog = () => {
     // return res
   }, [])
 
+  const getBlog = async () => {
+    try {
+      const res = await axios.get(`${baseUrl}/blog/post`);
+      console.log('res', res);
+    }
+    catch (err) {
+      console.log('error', err)
+    }
+  }
+
   return {
     addBlog,
     deleteBlog,
+    getBlog,
   }
 }
 

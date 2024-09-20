@@ -2,10 +2,11 @@ import Btn from "@/components/Btn";
 import ImageUpload, { ImageData } from "@/components/ImageUpload";
 import { PlusIcon, UploadIcon } from "@/components/svg";
 import Wrapper from "@/components/Wrapper";
+import useBlog from "@/hooks/useBlog";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 // import ReactQuill from "react-quill";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -28,6 +29,8 @@ const AddBlog = () => {
   const [articleTitle, setArticleTitle] = useState("");
   const [bodyValue, setBodyValue] = useState("");
   const [conclusionValue, setConclusionValue] = useState("");
+
+  const { getBlog } = useBlog();
 
   const route = useRouter();
 
@@ -53,6 +56,15 @@ const AddBlog = () => {
   //     }
   //   }
   // };
+
+  useEffect(() => {
+    const getBlogFn = async () => {
+      const req = await getBlog();
+      console.log('req', req);
+    }
+
+    getBlogFn();
+  }, [])
 
   const headerImageChange = (image: any) => {
     console.log("new image", image);
