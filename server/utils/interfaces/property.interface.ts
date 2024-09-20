@@ -20,5 +20,6 @@ export interface IProperty {
   owner: PropertyOwner
   images: Array<string>
   affiliateId: any
-  isActive: boolean
+  isActive: boolean,
+  verificationState : 'Pending' | 'Verified' | 'Rejected'
 }
