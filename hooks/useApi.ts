@@ -28,18 +28,17 @@ export type ApiClient = {
 };
 
 const client = ({
-  token = "",
-  baseURL = "",
+  token = localStorage.getItem('token'),
+  baseURL = "/",
   withCredentials = true,
   cancelToken,
 }: {
-  token?: string;
+  token?: string | null;
   baseURL?: string;
   withCredentials?: boolean;
   cancelToken?: CancelToken;
 }) => {
   return axios.create({
-    ...(baseURL && { baseURL }),
     headers: {
       ...(token && { Authorization: token }),
       "Content-Type": "application/json",
