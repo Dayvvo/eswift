@@ -14,8 +14,6 @@ const PreviewBlog = () => {
 
   const {addBlog} = useBlog();
 
-  console.log("headerImage", headerImage);
-
   useEffect(() => {
     const parsedImage = localStorage.getItem("headerImage");
     const storedImage = localStorage.getItem("headerImage")?.toString() || null;
