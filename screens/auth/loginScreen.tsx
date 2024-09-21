@@ -37,7 +37,7 @@ export const LoginScreen =()=> {
                     const Data = res?.data?.data as {};
                     const token = res?.data?.data?.token as string;
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-                        localStorage.setItem('userData', JSON.stringify(Data));
+                    localStorage.setItem('userData', JSON.stringify(Data));
                     navigate.push('/')
                 }
             )
@@ -46,7 +46,6 @@ export const LoginScreen =()=> {
                     console.log(err)
                 }
             )
-
     }
 
     useEffect(()=> {

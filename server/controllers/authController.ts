@@ -1,11 +1,9 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User'
-import { generalRequestBody } from '../utils/types'
+import { generalRequestBody } from '../utils/interfaces/types'
 import { Request, Response } from 'express'
-import {
-  ILoginValidation,
-  validateLoginData,
-} from '../utils/validation/index'
+import { ILoginValidation } from '../utils/interfaces/interface.validation'
+import { validateLoginData } from '../utils/validation'
 import { adminUsers } from '../data'
 import generateToken from '../utils/helperFunctions/generateToken'
 

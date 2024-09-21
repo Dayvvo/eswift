@@ -1,3 +1,4 @@
+'use client'
 import { Box, Flex, Grid, Image, Img, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { ReactNode, useEffect, useState } from "react";
@@ -15,6 +16,7 @@ import {
 import { FiHome, FiUser } from "react-icons/fi";
 import { NextRouter, useRouter } from "next/router";
 import axios from "axios";
+import useAuth from "@/hooks/useAuth";
 
 const Header = ({ casedPath }: { casedPath: string }) => {
   return (
@@ -106,33 +108,17 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
     },
   ];
 
-  // const [route, setRoute] = useState('');
-  // const [path, setPath] = useState('');
-
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     setRoute(window.location.href);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   if (route) {
-  //     const newPath = route.split("/").pop() as any;
-  //     setPath(newPath);
-  //   }
-  // }, [route]);
-
-  // const casedPath = `${path.slice(0,1).toUpperCase()}${path.slice(1, path.length)}`
+  const {isWindow} = useAuth();
   const navigate = useRouter() as NextRouter;
 
-  const [route, setRoute] = useState("");
+  const [route,setRoute] = useState("");
   const [path, setPath] = useState("");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (isWindow) {
       setRoute(window.location.href);
     }
-  }, []);
+  }, [isWindow]);
 
   useEffect(() => {
     if (route) {
@@ -163,13 +149,13 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
         }
     }
 
-},[navigate])
+  },[navigate])
 
-const LogOut =()=> {
-  localStorage.removeItem('token');
-  localStorage.removeItem('userData')
-  navigate.push('/login')
-}
+  const LogOut =()=> {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData')
+    navigate.push('/login')
+  }
 
 
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;
@@ -288,7 +274,7 @@ const LogOut =()=> {
           maxW={{ base: "full", lg: "80vw" }}
           px="20px"
         >
-          {children}
+          { route ? children : <></>}
         </Box>
       </Box>
     </Box>
