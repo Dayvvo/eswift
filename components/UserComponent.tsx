@@ -22,6 +22,7 @@ import {
 import React, { useEffect } from "react";
 import { ActionIcon, FilterIcon, SearchIcon } from "./svg";
 import axios from "axios";
+import { useApiUrl } from "@/hooks/useApi";
 
 const UserComponent = () => {
   const tableData = [
@@ -108,9 +109,9 @@ const UserComponent = () => {
     },
   ];
 
+  const client = useApiUrl()
   useEffect(()=>{
-    axios.get('/api/user/users') 
-    
+    client.query('/user/users') 
       .then(
         (res)=> {
           console.log(res)
@@ -123,8 +124,6 @@ const UserComponent = () => {
       )
     
   },[])
-
-  
 
   return (
     <Box>
@@ -182,8 +181,8 @@ const UserComponent = () => {
                 "Property",
                 "User Type",
                 "Action",
-              ].map((item) => (
-                <Th textTransform={"none"} p="8px">
+              ].map((item,key) => (
+                <Th key={key} textTransform={"none"} p="8px">
                   <Text
                     className="robotoF"
                     color={"#525866"}
@@ -197,8 +196,8 @@ const UserComponent = () => {
             </Tr>
           </Thead>
           <Tbody fontSize={'.875rem'} fontWeight={400} className="robotoF">
-            {tableData.map((item) => (
-              <Tr>
+            {tableData.map((item,key) => (
+              <Tr key={key}>
                 <Td color={'#0E121B'} py='12px'>{item.name}</Td>
                 <Td color={'#525866'} py='12px'>{item.email}</Td>
                 <Td color={'#525866'} py='12px'>{item.phoneNum}</Td>
