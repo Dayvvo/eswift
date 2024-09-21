@@ -129,7 +129,7 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
                             _placeholder={{textColor:'var--(soft400)'}}
                         >
                             <Input 
-                            w={'100%'} h={'100%'}
+                                w={'100%'} h={'100%'}
                                 type='text' 
                                 placeholder='The location of the property'  
                                 name="address"
@@ -151,12 +151,12 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
                             border={'1px'} borderRadius={'10px'} 
                             borderColor={'var(--soft200)'}
                             cursor={'text'}
-                            fontSize={14} textColor={'var--(sub600)'}
+                            fontSize={14} textColor={'var(--sub600)'}
                             w='100%' h='40px'
-                            _placeholder={{textColor:'var--(soft400)'}}
+                            _placeholder={{textColor:'var(--soft400)'}}
                         >
                             <Input 
-                                w={'70%'} h={'100%'}
+                                w={'90%'} h={'100%'}
                                 borderRight={'1px solid var(--soft400)'}
                                 borderRightRadius={'0'}
                                 type='text' 
@@ -170,11 +170,10 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
                                 border={'0px solid #FFFFFF'}
                                 borderLeftRadius={'0px'}
                                 _focusWithin={'0px solid #FFFFFF'}
-                                fontSize={14} textColor={'var--(sub600)'}
-                                w='30%' h='40px'
-                                _placeholder={{textColor:'var--(soft400)'}}
-                                placeholder='select the period'
-                                value={inputValue?.period}
+                                fontSize={14} textColor={'var(--sub600)'}
+                                w='20%' h='40px'
+                                _placeholder={{textColor:'var(--soft400)'}}
+                                placeholder='Duration'
                                 onChange={handleInput}
                             >
                                 {

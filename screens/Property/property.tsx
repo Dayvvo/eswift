@@ -45,7 +45,7 @@ export const PropertyScreen =()=> {
 
 
     useEffect(()=> {
-        axios.get('https://api/property/:id')
+        axios.get('/api/property/:id')
         .then((res:any) => {
                 console.log(res);
             } 
@@ -57,7 +57,7 @@ export const PropertyScreen =()=> {
     },[]);
 
     useEffect(()=> {
-        axios.get('https://api/property?keyword=for&PageNumber={page}')
+        axios.get('/api/property?keyword=for&PageNumber={page}')
         .then((res:any) => {
                 console.log(res);
             } 
