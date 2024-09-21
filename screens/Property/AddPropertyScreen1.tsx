@@ -1,6 +1,8 @@
 import Btn from "@/components/Btn";
 import { Box, Flex, FormControl, FormHelperText, FormLabel, Input, InputGroup, InputLeftElement, Menu, Select, Text, Textarea } from "@chakra-ui/react"
+import axios from "axios";
 import Link from "next/link";
+import { ChangeEvent, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 
 
@@ -32,6 +34,31 @@ export const AddPropertyScreenOne =({onClick}:{onClick:()=>void})=> {
 
         
     ]
+
+    const [inputValue, setInputValue] = useState({
+        "title":"",
+        "category":"",
+        "description":"",
+    })
+
+    const handleInput =(event:ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>)=> {
+        setInputValue({...inputValue, [event.target.name]: event.target.value})
+    }
+
+    const handleSubmit =(e:ChangeEvent<HTMLFormElement>) => {
+
+        axios.post('',inputValue)
+        .then((res)=>{
+                
+                onClick()
+            }
+        )
+        .catch((err)=> {
+
+            }
+        )
+    }
+
 
     return(
         <>
@@ -102,8 +129,9 @@ export const AddPropertyScreenOne =({onClick}:{onClick:()=>void})=> {
                             w={'100%'} h={'100%'}
                                 type='text' 
                                 placeholder='A descriptive name for the property'  
-                                name=""
-                                value={''}          
+                                name="title"
+                                value={inputValue?.title}
+                                onChange={handleInput}          
                             />
                         </InputGroup>
                     </FormControl>
@@ -115,13 +143,11 @@ export const AddPropertyScreenOne =({onClick}:{onClick:()=>void})=> {
                             Property Category
                         </FormLabel>
                         <Select 
-                            border={'1px'} borderRadius={'10px'} 
-                            borderColor={'var(--soft200)'}
-                            cursor={'text'}
-                            fontSize={14} textColor={'var--(sub600)'}
-                            w='100%' h='40px'
-                            _placeholder={{textColor:'var--(soft400)'}}
+                            w='100%' h='40px' border={'1px solid var(--soft200)'} borderRadius={'10px'} 
+                            fontSize={14} textColor={'var--(sub600)'} _placeholder={{textColor:'var--(soft400)'}}
                             placeholder='Category of the property'
+                            value={inputValue?.category}
+                            onChange={handleInput}
                         >
                             {
                                 ['Option 1','Option 2','Option 3','Option 4'].map((entry) => (
@@ -143,12 +169,10 @@ export const AddPropertyScreenOne =({onClick}:{onClick:()=>void})=> {
                             Description
                         </FormLabel>
                         <Textarea
-                            border={'1px'} borderRadius={'10px'} 
-                            borderColor={'var(--soft200)'}
-                            cursor={'text'}
-                            fontSize={14} textColor={'var--(sub600)'}
-                            w='100%' h='120px'
-                            _placeholder={{textColor:'var--(soft400)'}}       
+                            border={'1px solid var(--soft200)'} borderRadius={'10px'} cursor={'text'}
+                            fontSize={14} textColor={'var--(sub600)'} _placeholder={{textColor:'var--(soft400)'}}  
+                            value={inputValue?.description} 
+                            onChange={handleInput}     
                         />
                     </FormControl>
                 </Flex>
