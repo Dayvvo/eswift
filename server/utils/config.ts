@@ -4,7 +4,7 @@ import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import User from '../models/User'
 import { AuthProvider, UserRole } from './interfaces'
-import { GoogleAuthResponse } from './types'
+import { GoogleAuthResponse } from './interfaces/types'
 
 export class appConfig {
   host = process.env['NODE_ENV'] !== 'production' ? 'localhost' : ''

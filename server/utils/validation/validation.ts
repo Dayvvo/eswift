@@ -3,7 +3,7 @@ import {
   IAddPropertyValidation,
   ILoginValidation,
   ISignupValidation,
-} from './interface.validation'
+} from '../interfaces/interface.validation'
 import { MailType } from '../interfaces/mailtype.interface'
 import { ProfileInterface } from '../interfaces/profile.interface'
 import { UserRole } from '../interfaces'

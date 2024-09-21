@@ -3,6 +3,7 @@ import path from 'path'
 
 // multer config
 const multerConfig = multer({
+  limits: { fileSize: 2 * 1024 * 1024 }, //2MB
   storage: multer.diskStorage({}),
   fileFilter: (req, file: Express.Multer.File, cb) => {
     let ext = path.extname(file.originalname)

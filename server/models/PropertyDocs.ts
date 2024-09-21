@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
-import { PropertyDocuments } from '../utils/types';
-
+import { PropertyDocuments } from '../utils/interfaces/types';
 export interface IPropertyDocs extends Document {
     name: DocumentType;
     property: mongoose.Types.ObjectId;
