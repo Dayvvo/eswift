@@ -1,6 +1,6 @@
 import Btn from "@/components/Btn";
 import { Box, Flex, FormControl, FormHelperText, FormLabel, Input, InputGroup, InputLeftElement, Menu, Select, Text, Textarea } from "@chakra-ui/react"
-import { useState } from "react";
+import { ChangeEvent, ReactNode, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { RiUploadCloud2Line } from "react-icons/ri";
@@ -39,8 +39,29 @@ export const AddPropertyScreenThree =({onClick}:{onClick:()=>void})=> {
         
     ]
 
-    const [dragging, setDragging] = useState(false);
-    const [uploadedFile, setUploadedFile] = useState(null);
+    const validfileTypes:string[] = ['image/jpeg', 'image/png', 'image/gif']; 
+    const maxFileSize:number = 5 * 1024 * 1024 ;
+
+
+    const [dragging, setDragging] = useState<boolean>(false);
+    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+    const [error, setError] = useState<string | null>(null)
+
+    const validateFile = (File:File): void => {  
+        
+        if (!validfileTypes.includes(File.type)) {
+            setError(`Invalid file type. ${validfileTypes.join(',')} are supported, only`)
+            return;
+        }
+
+        if (File.size > maxFileSize) {
+            setError(`File exceeds maximum size of ${maxFileSize}MB`)
+            return;
+        }
+        
+        setUploadedFile(File);
+        setError(null);
+    }
 
     const handleDragEnter = (e:any) => {
         e.preventDefault();
@@ -48,26 +69,38 @@ export const AddPropertyScreenThree =({onClick}:{onClick:()=>void})=> {
     };
     
     const handleDragLeave = (e:any) => {
-    e.preventDefault();
-    setDragging(false);
+        e.preventDefault();
+        setDragging(false);
     };
 
     const handleDrop = (e:any) => {
-    e.preventDefault();
-    setDragging(false);
-    setUploadedFile(e.dataTransfer.files[0]);
+        e.preventDefault();
+        setDragging(false);
+        setUploadedFile(e.dataTransfer.files[0]);
     };
 
-    const handleUpload = () => {
+    const handleUpload = (e:ChangeEvent<HTMLImageElement>) => {
         const input = document.createElement('input');
         input.type = 'file';
         input.click();
         input.addEventListener('change', (e: any) => {
-          const file = e.target.files[0];
-          console.log(file);
+          const file:File = e.target.files[0];
         });
-      }
+    }
 
+    const handleSubmit =(e:ChangeEvent<HTMLFormElement>) => {
+
+        axios.post('', handleUpload)
+        .then((res)=>{
+                
+                onClick()
+            }
+        )
+        .catch((err)=> {
+                console.log(err)
+            }
+        )
+    }
 
     return(
         <>
@@ -124,11 +157,31 @@ export const AddPropertyScreenThree =({onClick}:{onClick:()=>void})=> {
                 >
                     <RiUploadCloud2Line className="arrow"/>
                     <Box>
-                        <Text fontSize={'14px'}
-                            fontWeight={500} textColor={'var(--strong950)'}
-                        >
-                            { uploadedFile ? `Uploaded file:` : `Choose a file or drag & drop it here.` }
-                        </Text>
+                        {   dragging ? 
+                                <Text fontSize={'14px'}
+                                    fontWeight={500} textColor={'var(--strong950)'}
+                                > 
+                                    Drop the File here
+                                </Text>
+                            :
+                                <Text fontSize={'14px'}
+                                    fontWeight={500} textColor={'var(--strong950)'}
+                                > 
+                                    Click to Upload or drag & drop it here.
+                                </Text>
+                        }
+                        { error ? 
+                            <Text fontSize={'14px'}
+                                fontWeight={500} textColor={'#FF3B30'}
+                            > 
+                                {error}
+                            </Text> : uploadedFile && <Text fontSize={'14px'}
+                                fontWeight={500} textColor={'var(--strong950)'}
+                            > 
+                                Uploaded File: {uploadedFile?.name}
+                            </Text>
+                            
+                        }
                         <Text fontSize={'14px'}
                             fontWeight={400} textColor={'var(--sub600)'}
                         >
