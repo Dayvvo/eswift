@@ -18,8 +18,10 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React from "react";
+
+import React, { useEffect } from "react";
 import { ActionIcon, FilterIcon, SearchIcon } from "./svg";
+import axios from "axios";
 
 const UserComponent = () => {
   const tableData = [
@@ -105,6 +107,24 @@ const UserComponent = () => {
       action: <ActionIcon />,
     },
   ];
+
+  useEffect(()=>{
+    axios.get('/api/user/users') 
+    
+      .then(
+        (res)=> {
+          console.log(res)
+        }
+      )
+      .catch(
+        (err)=> {
+          console.log(err)
+        }
+      )
+    
+  },[])
+
+  
 
   return (
     <Box>

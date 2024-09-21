@@ -20,47 +20,46 @@ export const Modal:React.FC<ModalProps> =({
     if (!isVisible) return null;
 
     return (
-        <>
-            <Box
-                onClick={ModalClose}
+        <Box
+            onClick={ModalClose}
+            w={'100vw'} h={'100vh'}
+            zIndex={100} bg={'#00000075'}
+            backdropFilter={'blur(10px)'}
+            pos={'fixed'}
+        >
+            <Flex 
+                id="close"
+                px={'12px'}
                 w={'100vw'} h={'100vh'}
-                zIndex={100} bg={'#00000075'}
-                backdropFilter={'blur(10px)'}
-                pos={'fixed'}
+                justifyContent={'center'} alignItems={'center'}
             >
-                <Flex 
-                    id="close"
-                    px={'12px'}
-                    w={'100%'} h={'100%'}
-                    justifyContent={'center'} alignItems={'center'}
+                <Flex
+                    flexDir={'column'}
+                    bg={'#FFFFFF'}
+                    maxW={'768px'} h={'fit-content'}
+                    borderRadius={'15px'} px={{base:'16px', md:'40px'}}
+                    py={{base:'12px',md:'20px'}}
                 >
-                    <Flex
-                        flexDir={'column'}
-                        bg={'#FFFFFF'}
-                       maxW={'768px'} h={'fit-content'}
-                        borderRadius={'15px'} px={{base:'16px', md:'40px'}}
-                        py={{base:'12px',md:'20px'}}
+                    <Flex 
+                        w={'100%'} h={'fit-content'} 
+                        gap={'12px'} justifyContent={'space-between'} alignItems={'center'}
+                        p={'20px'} className="robotoF" textColor={'var(--strong950)'}
                     >
-                        <Flex 
-                            w={'100%'} h={'fit-content'} 
-                            gap={'12px'} justifyContent={'space-between'} alignItems={'center'}
-                            p={'20px'} className="robotoF" textColor={'var(--strong950)'}
+                        <Text 
+                            fontSize={'18px'} fontWeight={500}
                         >
-                            <Text 
-                                fontSize={'18px'} fontWeight={500}
-                            >
-                                Add Property
-                            </Text>
-                            <Box 
-                                fontSize={'18px'}
-                                onClick={onClose}>
-                                <RxCross2 />
-                            </Box>
-                        </Flex>
-                        {children}
+                            Add Property
+                        </Text>
+                        <Box 
+                            fontSize={'18px'}
+                            onClick={onClose}>
+                            <RxCross2 />
+                        </Box>
                     </Flex>
+                    {children}
                 </Flex>
-            </Box>
-        </>
+            </Flex>
+        </Box>
+    
     )
 }
