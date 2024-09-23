@@ -30,8 +30,6 @@ const AddBlog = () => {
   const [bodyValue, setBodyValue] = useState("");
   const [conclusionValue, setConclusionValue] = useState("");
 
-  const { getBlog } = useBlog();
-
   const route = useRouter();
 
   // console.log("headerImage", headerImage);
@@ -57,14 +55,18 @@ const AddBlog = () => {
   //   }
   // };
 
-  useEffect(() => {
-    const getBlogFn = async () => {
-      const req = await getBlog();
-      console.log('req', req);
-    }
 
-    getBlogFn();
-  }, [])
+  const previewData = {
+    articleTitle: articleTitle,
+    introValue: introValue,
+    bodyValue: bodyValue,
+    conclusionValue: conclusionValue,
+  }
+
+  const toPreview = () => {
+    localStorage.setItem("previewData", JSON.stringify(previewData));
+    route.push('/blog/preview');
+  }
 
   const headerImageChange = (image: any) => {
     console.log("new image", image);
@@ -164,11 +166,7 @@ const AddBlog = () => {
             fontSize={".875rem"}
             fontWeight={500}
             className="inter"
-            onClick={() =>
-              route.push(
-                `/blog/preview?articleTitle=${articleTitle}&introValue=${introValue}&bodyValue=${bodyValue}&conclusionValue=${conclusionValue}`
-              )
-            }
+            onClick={toPreview}
           >
             Preview
           </Btn>

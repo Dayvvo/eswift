@@ -11,11 +11,15 @@ const PreviewBlog = () => {
 
   const [headerImage, setHeaderImage] = useState<string | null>(null);
   const [bodyImage, setBodyImage] = useState<string | null>(null);
+  const [previewData, setPreviewData] = useState(null) as any;
+  
+
+  console.log('previewData', previewData);
 
   const {addBlog} = useBlog();
 
   useEffect(() => {
-    const parsedImage = localStorage.getItem("headerImage");
+    // const parsedImage = localStorage.getItem("headerImage");
     const storedImage = localStorage.getItem("headerImage")?.toString() || null;
 
     if (storedImage) {
@@ -24,16 +28,24 @@ const PreviewBlog = () => {
   }, []);
 
   useEffect(() => {
+    const unParsedPreviewData = localStorage.getItem('previewData');
+    if (unParsedPreviewData) {
+      const parsedPreviewData = JSON.parse(unParsedPreviewData);
+      setPreviewData(parsedPreviewData);
+    }
+  }, [])
+
+  useEffect(() => {
     const storedImage = localStorage.getItem("bodyImage");
     if (storedImage) {
       setBodyImage(storedImage);
     }
   }, []);
 
-  const articleTitle = router.query.articleTitle as string;
-  const introValue = router.query.introValue as string;
-  const bodyValue = router.query.bodyValue as string;
-  const conclusionValue = router.query.conclusionValue as string;
+  const articleTitle = previewData ? previewData.articleTitle : "";
+  const introValue = previewData ? previewData.introValue : "";
+  const bodyValue = previewData ? previewData.bodyValue : "";
+  const conclusionValue = previewData ? previewData.conclusionValue : "";
 
   const data = {
     title: articleTitle,
@@ -43,7 +55,12 @@ const PreviewBlog = () => {
 
   const addBlogFn = async () => {
     try {
-      const req = await addBlog(data);
+      const req = await addBlog(data) as any;
+      if (req?.statusCode === 201) {
+        localStorage.removeItem('previewData')
+        localStorage.removeItem('bodyImage')
+        localStorage.removeItem('headerImage')
+      }
       console.log('req', req);
     }
     catch (err) {
@@ -70,6 +87,7 @@ const PreviewBlog = () => {
           className="mulish"
           fontWeight={500}
           fontSize={".875rem"}
+          onClick={addBlogFn}
         >
           Publish
         </Btn>

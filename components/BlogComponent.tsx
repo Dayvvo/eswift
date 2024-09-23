@@ -8,7 +8,7 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { PlusIcon, SearchIcon } from "./svg";
 import Btn from "./Btn";
 import { useRouter } from "next/router";
@@ -60,7 +60,16 @@ const BlogComponent = () => {
     },
   ];
 
-  const { deleteBlog } = useBlog();
+  const { deleteBlog, getBlog } = useBlog();
+
+  useEffect(() => {
+    const getBlogFn = async () => {
+      const req = await getBlog();
+      console.log('req', req);
+    }
+
+    getBlogFn();
+  }, [])
 
   const deleteBlogFn = async (blogPostId:number) => {
     try {

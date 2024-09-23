@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
+import httpClient from "./useApi";
 
 interface BlogObj {
   title: string;
@@ -26,16 +27,13 @@ const useBlog = () => {
     console.log("storedToken", userData);
   }, []);
 
+  const { query, post } = httpClient({token});
+
   const addBlog = useCallback(async (data: BlogObj) => {
     try {
-      const res = await axios.post(`${baseUrl}/blog/post`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
-      // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      console.log("res", res);
-      // return res;
+      const res = await post(`${baseUrl}/blog/post`, data);
+      // console.log("res", res);
+      return res;
     } catch (err) {
       console.log("error calling addblog", err);
     }
@@ -56,8 +54,8 @@ const useBlog = () => {
 
   const getBlog = async () => {
     try {
-      const res = await axios.get(`${baseUrl}/blog/post`);
-      console.log("res", res);
+      const res = await query(`${baseUrl}/blog/post`);
+      return res;
     } catch (err) {
       console.log("error", err);
     }
