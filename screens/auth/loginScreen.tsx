@@ -18,6 +18,11 @@ export const LoginScreen =()=> {
     const navigate = useRouter();
 
     const [show, setShow] = React.useState<boolean>(false);
+    const [validation , setValidation] = useState<boolean>(true);
+
+    const openValidationText =()=> {
+        setValidation(false);
+    }
 
     const [isLogin, setIsLogin ] = useState({
         "email":"",
@@ -117,7 +122,7 @@ export const LoginScreen =()=> {
                                 >
                                     Email address
                                 </FormLabel>
-                                <InputGroup
+                                <InputGroup onFocus={openValidationText}
                                     display={'flex'} justifyContent={'center'}
                                     border={'1px'} borderRadius={'10px'} 
                                     borderColor={'var(--soft200)'}
@@ -137,7 +142,9 @@ export const LoginScreen =()=> {
                                         onChange={handleInput}          
                                     />
                                 </InputGroup>
-                                <FormHelperText color={'var(--errorBase)'} fontSize={'12px'}>{ isLogin?.email.length < 3 ? "Email is required" : "" }</FormHelperText>
+                                {   validation ? <></> :
+                                    <FormHelperText color={'var(--errorBase)'} fontSize={'12px'}>{ isLogin?.email.length < 3 ? "Email is required*" : "" }</FormHelperText>
+                                }
                             </FormControl>
                             <FormControl w={'100%'}>
                                 <FormLabel
@@ -171,7 +178,9 @@ export const LoginScreen =()=> {
                                             </Box>
                                         </InputRightElement>
                                     </InputGroup>
-                                    <FormHelperText color={'var(--errorBase)'} fontSize={'12px'}>{ isLogin?.password.length < 8 ? "minimum of 8 characters" : "" }</FormHelperText>
+                                    {   validation ? <></> :
+                                        <FormHelperText color={'var(--errorBase)'} fontSize={'12px'}>{ isLogin?.password.length < 8 ? "minimum of 8 characters*" : "" }</FormHelperText>
+                                    }
                             </FormControl>
                         </Flex>
                         <Flex 
