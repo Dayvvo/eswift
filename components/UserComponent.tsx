@@ -19,107 +19,130 @@ import {
   Tr,
 } from "@chakra-ui/react";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ActionIcon, FilterIcon, SearchIcon } from "./svg";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useApiUrl } from "@/hooks/useApi";
 
-const UserComponent = () => {
-  const tableData = [
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Opeyemi Adeyemi",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "10",
-      userType: "Seller",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Anigboro Napoleon",
-      email: "anigboronapoleon@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "8",
-      userType: "Affiliate",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Anigboro Napoleon",
-      email: "anigboronapoleon@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "5",
-      userType: "Affiliate",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-  ];
 
-  const client = useApiUrl()
+interface Users {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: number;
+  createdAt: string | number;
+  property: string;
+  role: string;
+  action: HTMLButtonElement;
+
+
+}
+
+const UserComponent = () => {
+  // const tableData = [
+  //   {
+  //     name: "Oronnaye Ayomide",
+  //     email: "oronnayeayomide@gmail.com",
+  //     phoneNum: "09094631170",
+  //     dateCreated: "12 September 2024",
+  //     property: "Nil",
+  //     userType: "Buyer",
+  //     action: <ActionIcon />,
+  //   },
+  //   {
+  //     name: "Opeyemi Adeyemi",
+  //     email: "oronnayeayomide@gmail.com",
+  //     phoneNum: "09094631170",
+  //     dateCreated: "12 September 2024",
+  //     property: "10",
+  //     userType: "Seller",
+  //     action: <ActionIcon />,
+  //   },
+  //   {
+  //     name: "Anigboro Napoleon",
+  //     email: "anigboronapoleon@gmail.com",
+  //     phoneNum: "09094631170",
+  //     dateCreated: "12 September 2024",
+  //     property: "8",
+  //     userType: "Affiliate",
+  //     action: <ActionIcon />,
+  //   },
+  //   {
+  //     name: "Anigboro Napoleon",
+  //     email: "anigboronapoleon@gmail.com",
+  //     phoneNum: "09094631170",
+  //     dateCreated: "12 September 2024",
+  //     property: "5",
+  //     userType: "Affiliate",
+  //     action: <ActionIcon />,
+  //   },
+  //   {
+  //     name: "Oronnaye Ayomide",
+  //     email: "oronnayeayomide@gmail.com",
+  //     phoneNum: "09094631170",
+  //     dateCreated: "12 September 2024",
+  //     property: "Nil",
+  //     userType: "Buyer",
+  //     action: <ActionIcon />,
+  //   },
+  //   {
+  //     name: "Oronnaye Ayomide",
+  //     email: "oronnayeayomide@gmail.com",
+  //     phoneNum: "09094631170",
+  //     dateCreated: "12 September 2024",
+  //     property: "Nil",
+  //     userType: "Buyer",
+  //     action: <ActionIcon />,
+  //   },
+  //   {
+  //     name: "Oronnaye Ayomide",
+  //     email: "oronnayeayomide@gmail.com",
+  //     phoneNum: "09094631170",
+  //     dateCreated: "12 September 2024",
+  //     property: "Nil",
+  //     userType: "Buyer",
+  //     action: <ActionIcon />,
+  //   },
+  //   {
+  //     name: "Oronnaye Ayomide",
+  //     email: "oronnayeayomide@gmail.com",
+  //     phoneNum: "09094631170",
+  //     dateCreated: "12 September 2024",
+  //     property: "Nil",
+  //     userType: "Buyer",
+  //     action: <ActionIcon />,
+  //   },
+  //   {
+  //     name: "Oronnaye Ayomide",
+  //     email: "oronnayeayomide@gmail.com",
+  //     phoneNum: "09094631170",
+  //     dateCreated: "12 September 2024",
+  //     property: "Nil",
+  //     userType: "Buyer",
+  //     action: <ActionIcon />,
+  //   },
+  // ];
+
+
+  const [userData, setUserData] = useState<Users[]>([]);
+  const [error, setError] = useState<boolean>(false);
+
+  const client = useApiUrl();
   useEffect(()=>{
     client.query('/user/users') 
       .then(
-        (res)=> {
-          console.log(res)
+        (res:AxiosResponse<unknown, any>) => {
+          console.log(res?.data)
+          const response = res as AxiosResponse<{data: Users[]}>
+          const users = response?.data?.data;
+          setUserData(users)
         }
       )
       .catch(
-        (err)=> {
+        (err:AxiosError)=> {
           console.log(err)
+          setError(true);
         }
       )
     
@@ -196,18 +219,18 @@ const UserComponent = () => {
             </Tr>
           </Thead>
           <Tbody fontSize={'.875rem'} fontWeight={400} className="robotoF">
-            {tableData.map((item,key) => (
+            {userData.map((item, key) => (
               <Tr key={key}>
-                <Td color={'#0E121B'} py='12px'>{item.name}</Td>
-                <Td color={'#525866'} py='12px'>{item.email}</Td>
-                <Td color={'#525866'} py='12px'>{item.phoneNum}</Td>
-                <Td color={'#525866'} py='12px'>{item.dateCreated}</Td>
-                <Td color={'#525866'} py='12px'>{item.property}</Td>
-                <Td color={'#525866'} py='12px'>{item.userType}</Td>
+                <Td color={'#0E121B'} py='12px'>{item?.firstName} {item?.lastName}</Td>
+                <Td color={'#525866'} py='12px'>{item?.email}</Td>
+                <Td color={'#525866'} py='12px'>{item?.phoneNumber}</Td>
+                <Td color={'#525866'} py='12px'>{item?.createdAt}</Td>
+                <Td color={'#525866'} py='12px'></Td>
+                <Td color={'#525866'} py='12px'>{item?.role}</Td>
                 <Td color={'#525866'} py='12px'>
                   <Menu>
                     <MenuButton as={"button"} className="robotoF">
-                      {item.action}
+                      <ActionIcon />
                     </MenuButton>
                     <MenuList>
                       <MenuItem>Edit</MenuItem>
@@ -225,3 +248,7 @@ const UserComponent = () => {
 };
 
 export default UserComponent;
+function setData(users: any) {
+  throw new Error("Function not implemented.");
+}
+
