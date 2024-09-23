@@ -19,7 +19,7 @@ export interface IProperty {
   price: string
   owner: PropertyOwner
   images: Array<string>
-  affiliateId: any
+  creatorID: any
   isActive: boolean,
   verificationState : 'Pending' | 'Verified' | 'Rejected'
 }
