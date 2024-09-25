@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose'
-import * as argon from 'argon2'
-import { AuthProvider, IUser, UserRole } from '../utils/interfaces'
+import { Schema, model } from "mongoose";
+import * as argon from "argon2";
+import { AuthProvider, IUser, UserRole } from "../utils/interfaces";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -31,6 +31,10 @@ const UserSchema = new Schema<IUser>(
       type: String,
       lowercase: true,
     },
+    propertyCount: {
+      type: Number,
+      default: 0,
+    },
     role: {
       type: String,
       enum: UserRole,
@@ -42,23 +46,36 @@ const UserSchema = new Schema<IUser>(
     },
     verification: {
       type: String,
-      default: 'pending',
+      default: "pending",
     },
   },
   { timestamps: true }
-)
+);
 
-UserSchema.method('matchPassword', async function (enteredPassword) {
-  const isMatch = await argon.verify(this.hash as string, enteredPassword)
-  return isMatch
-})
+UserSchema.methods.increasePropertyCount = function () {
+  let propsCount = this.propertyCount;
+  propsCount += 1;
+  this.propertyCount = propsCount;
+  return this.save();
+};
+UserSchema.methods.decreasePropertyCount = function () {
+  let propsCount = this.propertyCount;
+  propsCount -= 1;
+  this.propertyCount = propsCount;
+  return this.save();
+};
 
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('hash')) {
-    next()
+UserSchema.method("matchPassword", async function (enteredPassword) {
+  const isMatch = await argon.verify(this.hash as string, enteredPassword);
+  return isMatch;
+});
+
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("hash")) {
+    next();
   }
 
-  this.hash = await argon.hash(this.hash as string)
-})
+  this.hash = await argon.hash(this.hash as string);
+});
 
-export default model('user', UserSchema)
+export default model("user", UserSchema);
