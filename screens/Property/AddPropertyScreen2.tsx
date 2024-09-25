@@ -1,5 +1,7 @@
 import Btn from "@/components/Btn";
-import { Box, Flex, FormControl, FormHelperText, FormLabel, Input, InputGroup, InputLeftElement, Menu, Select, Text, Textarea } from "@chakra-ui/react"
+import { Box, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Menu, Select, Text, Textarea } from "@chakra-ui/react"
+import axios from "axios";
+import { ChangeEvent, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -36,6 +38,30 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
 
         
     ]
+
+    const [inputValue, setInputValue] = useState({
+        "address":"",
+        "price":"",
+        "period":"",
+    })
+
+    const handleInput =(event:ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>)=> {
+        setInputValue({...inputValue, [event.target.name]: event.target.value})
+    }
+
+    const handleSubmit =(e:ChangeEvent<HTMLFormElement>) => {
+
+        axios.post('', inputValue)
+        .then((res)=>{
+                
+                onClick()
+            }
+        )
+        .catch((err)=> {
+                console.log(err)
+            }
+        )
+    }
 
     return(
         <>
@@ -103,11 +129,12 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
                             _placeholder={{textColor:'var--(soft400)'}}
                         >
                             <Input 
-                            w={'100%'} h={'100%'}
+                                w={'100%'} h={'100%'}
                                 type='text' 
                                 placeholder='The location of the property'  
-                                name=""
-                                value={''}          
+                                name="address"
+                                value={inputValue?.address}
+                                onChange={handleInput}          
                             />
                         </InputGroup>
                     </FormControl>
@@ -124,28 +151,30 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
                             border={'1px'} borderRadius={'10px'} 
                             borderColor={'var(--soft200)'}
                             cursor={'text'}
-                            fontSize={14} textColor={'var--(sub600)'}
+                            fontSize={14} textColor={'var(--sub600)'}
                             w='100%' h='40px'
-                            _placeholder={{textColor:'var--(soft400)'}}
+                            _placeholder={{textColor:'var(--soft400)'}}
                         >
                             <Input 
-                                w={'70%'} h={'100%'}
+                                w={'90%'} h={'100%'}
                                 borderRight={'1px solid var(--soft400)'}
                                 borderRightRadius={'0'}
                                 type='text' 
                                 placeholder='₦ 0.00'  
-                                name=""
-                                value={''}          
+                                name="price"
+                                value={inputValue?.price} 
+                                onChange={handleInput}         
                             />
                             <Select 
                                 cursor={'pointer'}
                                 border={'0px solid #FFFFFF'}
                                 borderLeftRadius={'0px'}
                                 _focusWithin={'0px solid #FFFFFF'}
-                                fontSize={14} textColor={'var--(sub600)'}
-                                w='30%' h='40px'
-                                _placeholder={{textColor:'var--(soft400)'}}
-                                placeholder='Annually'
+                                fontSize={14} textColor={'var(--sub600)'}
+                                w='20%' h='40px'
+                                _placeholder={{textColor:'var(--soft400)'}}
+                                placeholder='Duration'
+                                onChange={handleInput}
                             >
                                 {
                                     ['Annually','Weekly','Monthly','Quarterly'].map((entry) => (

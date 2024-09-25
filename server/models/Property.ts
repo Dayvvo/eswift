@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { PropertyDocuments, PropertyVerification } from "../utils/types";
+import { PropertyVerification } from "../utils/interfaces/types";
 import { IProperty, PropertyOwner } from "../utils/interfaces";
 
 const PropertySchema = new mongoose.Schema<IProperty>(
@@ -33,7 +33,7 @@ const PropertySchema = new mongoose.Schema<IProperty>(
     images: {
       type: [String],
     },
-    affiliateId: {
+    creatorID: {
       type: Schema.Types.ObjectId,
       ref: "user",
     },

@@ -1,7 +1,8 @@
+"use client"
+
 import type { AxiosRequestConfig, AxiosResponse, CancelToken } from "axios";
 import axios from "axios";
-import { useSelector } from "./useDispatch";
-import { API_URL } from "@/config/config";
+import { useCallback, useEffect, useState } from "react";
 
 
 export type ApiClient = {
@@ -28,18 +29,19 @@ export type ApiClient = {
 };
 
 const client = ({
-  token = "",
-  baseURL = "",
+  token,
   withCredentials = true,
   cancelToken,
 }: {
-  token?: string;
-  baseURL?: string;
+  token?: string | null;
   withCredentials?: boolean;
   cancelToken?: CancelToken;
 }) => {
+  let baseURL= '/api'
+
+  console.log('token in client',token)
   return axios.create({
-    ...(baseURL && { baseURL }),
+    baseURL,
     headers: {
       ...(token && { Authorization: token }),
       "Content-Type": "application/json",
@@ -47,19 +49,18 @@ const client = ({
     withCredentials,
     cancelToken,
   });
+
 };
 
 function httpClient({
-  baseURL = API_URL,
   token,
 }: {
-  baseURL?: string;
   token?: string;
 }) {
   return {
     query: async <T extends any>(q: string, headers?: AxiosRequestConfig) => {
       try {
-        const resp = client({ token, baseURL }).get(q, headers);
+        const resp = client({ token }).get(q, headers);
         const result: AxiosResponse<T, any> = await Promise.resolve(resp);
         return result;
       } catch (err) {
@@ -69,7 +70,7 @@ function httpClient({
     delete: async (q: string, headers?: AxiosRequestConfig) => {
       try {
         return await Promise.resolve(
-          client({ token, baseURL }).delete(q, headers)
+          client({ token }).delete(q, headers)
         );
       } catch (err) {
         return Promise.reject(err);
@@ -81,7 +82,7 @@ function httpClient({
       headers?: AxiosRequestConfig
     ) => {
       try {
-        const resp = client({ token, baseURL }).post(q, data, headers);
+        const resp = client({ token }).post(q, data, headers);
         const result: AxiosResponse<T, any> = await Promise.resolve(resp);
         return result.data;
       } catch (err) {
@@ -94,7 +95,7 @@ function httpClient({
       headers?: AxiosRequestConfig
     ) => {
       try {
-        const resp = client({ token, baseURL }).put(q, data, headers);
+        const resp = client({ token }).put(q, data, headers);
         const result: AxiosResponse<T, any> = await Promise.resolve(resp);
         return result.data;
       } catch (err) {
@@ -107,7 +108,7 @@ function httpClient({
       headers?: AxiosRequestConfig
     ) => {
       try {
-        const resp = client({ token, baseURL }).patch(q, data, headers);
+        const resp = client({ token }).patch(q, data, headers);
         const result: AxiosResponse<T, any> = await Promise.resolve(resp);
         return result.data;
       } catch (err) {
@@ -117,14 +118,17 @@ function httpClient({
   };
 }
 
-export function useApiUrl(token?: string, baseUrl?: string) {
-  const { token: StateToken }: any = useSelector<any>(
-    (state) => state.auth.auth
-  );
+export function useApiUrl() {
+  
+  const userFromLocalStorage = window.localStorage.getItem("userData") 
 
-  const authToken = token || `Bearer ${StateToken}`;
+  console.log('localstorage',userFromLocalStorage)
 
-  return httpClient({ baseURL: baseUrl ?? API_URL, token: authToken });
+  const token = userFromLocalStorage?JSON.parse(userFromLocalStorage)?.token:''
+
+  const client = useCallback(()=> httpClient({token}) ,[token])
+
+  return client();
 }
 
 export default httpClient;

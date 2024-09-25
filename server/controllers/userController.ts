@@ -1,6 +1,7 @@
 import User from "../models/User";
 import { Request, Response } from "express";
-import { ISignupValidation, validateSignupData } from "../utils/validation";
+import { validateSignupData } from "../utils/validation";
+import { ISignupValidation } from "../utils/interfaces/interface.validation";
 import generateToken from "../utils/helperFunctions/generateToken";
 
 class UserController {

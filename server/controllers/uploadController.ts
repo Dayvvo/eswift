@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import cloudinary from '../config/cloudinary.config'
+import cloudinary from '../utils/config/cloudinary.config'
 import { UploadApiResponse } from 'cloudinary'
 
 class UploadController {
