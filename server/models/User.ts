@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose'
 import * as argon from 'argon2'
 import { AuthProvider, IUser, UserRole } from '../utils/interfaces'
+import { generateRefCode } from '../utils/helperFunctions/generateRefCode'
 
 const UserSchema = new Schema<IUser>(
   {
@@ -36,6 +37,13 @@ const UserSchema = new Schema<IUser>(
       enum: UserRole,
       default: UserRole.GUEST,
     },
+    refCode: {
+      type: String,
+    },
+    refCount: {
+      type: Number,
+      default: 0,
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -59,6 +67,8 @@ UserSchema.pre('save', async function (next) {
   }
 
   this.hash = await argon.hash(this.hash as string)
+
+  this.refCode = generateRefCode(8)
 })
 
 export default model('user', UserSchema)
