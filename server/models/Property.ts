@@ -33,7 +33,7 @@ const PropertySchema = new mongoose.Schema<IProperty>(
     images: {
       type: [String],
     },
-    affiliateId: {
+    creatorID: {
       type: Schema.Types.ObjectId,
       ref: 'user',
     },

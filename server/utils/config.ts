@@ -5,6 +5,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import User from '../models/User'
 import { AuthProvider, UserRole } from './interfaces'
 import { GoogleAuthResponse } from './interfaces/types'
+import { generateRefCode } from './helperFunctions/generateRefCode'
 
 export class appConfig {
   host = process.env['NODE_ENV'] !== 'production' ? 'localhost' : ''
@@ -48,6 +49,7 @@ export class appConfig {
                 lastName: verifiedUser.family_name,
                 avatar: verifiedUser.picture,
                 provider: AuthProvider.GOOGLE,
+                refCode: generateRefCode(8),
                 role: UserRole.CLIENT,
                 isActive: true,
                 isVerified: verifiedUser.email_verified,
