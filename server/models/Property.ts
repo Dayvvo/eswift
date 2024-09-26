@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose'
-import { PropertyDocuments } from '../utils/interfaces/types'
-import { IProperty, PropertyOwner } from '../utils/interfaces'
+import mongoose, { Schema } from "mongoose";
+import { PropertyVerification } from "../utils/interfaces/types";
+import { IProperty, PropertyOwner } from "../utils/interfaces";
 
 const PropertySchema = new mongoose.Schema<IProperty>(
   {
@@ -35,7 +35,7 @@ const PropertySchema = new mongoose.Schema<IProperty>(
     },
     creatorID: {
       type: Schema.Types.ObjectId,
-      ref: 'user',
+      ref: "user",
     },
     isActive: {
       type: Boolean,
@@ -43,12 +43,13 @@ const PropertySchema = new mongoose.Schema<IProperty>(
     },
     verificationState: {
       type: String,
-      enum: Object.values(PropertyDocuments),
+      enum: Object.values(PropertyVerification),
+      default: "Pending",
     },
   },
   { timestamps: true }
-)
+);
 
-const Property = mongoose.model('property', PropertySchema)
+const Property = mongoose.model("property", PropertySchema);
 
-export default Property
+export default Property;
