@@ -22,6 +22,8 @@ export const isAuth = async (
       console.log('user found',decoded)
       const userFound = await User.findById(decoded?.id).select("-hash");
 
+      console.log('userFound', userFound);
+
       req.user = userFound ? userFound : undefined;
       if (!req.user) {
         return res

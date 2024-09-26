@@ -8,10 +8,11 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { PlusIcon, SearchIcon } from "./svg";
 import Btn from "./Btn";
 import { useRouter } from "next/router";
+import useBlog from "@/hooks/useBlog";
 
 const BlogComponent = () => {
   const blogData = [
@@ -59,6 +60,27 @@ const BlogComponent = () => {
     },
   ];
 
+  const { deleteBlog, getBlog } = useBlog();
+
+  useEffect(() => {
+    const getBlogFn = async () => {
+      const req = await getBlog();
+      console.log('req', req);
+    }
+
+    getBlogFn();
+  }, [])
+
+  const deleteBlogFn = async (blogPostId:number) => {
+    try {
+      const req = await deleteBlog(blogPostId);
+      console.log('req', req);
+    }
+    catch (err) {
+      console.log("error calling post", err);
+    }
+  }
+
   const route = useRouter();
 
   return (
@@ -89,7 +111,7 @@ const BlogComponent = () => {
         </Box>
       </Flex>
       <SimpleGrid columns={3} spacing={5} mt="20px">
-        {blogData.map((item) => {
+        {blogData.map((item, index) => {
           return (
             <Box
               bgColor={"#fff"}
@@ -146,6 +168,7 @@ const BlogComponent = () => {
                   fontSize={".937rem"}
                   w='144px'
                   h='28px'
+                  onClick={() => deleteBlogFn(index)}
                 >
                   Delete
                 </Btn>

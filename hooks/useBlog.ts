@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import httpClient from "./useApi";
 
 interface BlogObj {
   title: string;
@@ -8,21 +9,63 @@ interface BlogObj {
 }
 
 const useBlog = () => {
+  const baseUrl = "http://localhost:5500/api";
+  const [token, setToken] = useState("");
 
-  const addBlog = useCallback(async(data:BlogObj) => {
-    try {
-      const res = await axios.post('http://localhost:5500/api/blog/post', {data});
-      console.log('res', res)
+  console.log("token", token)
+
+  useEffect(() => {
+
+    const userData = localStorage.getItem(("userData")) || null;
+
+    if (userData) {
+      const parsedData = JSON.parse(userData);
+      console.log(parsedData);
+      setToken(parsedData.token);
     }
-    catch (err) {
-      console.log('error calling addblog', err);
+
+    console.log("storedToken", userData);
+  }, []);
+
+  const { query, post } = httpClient({token});
+
+  const addBlog = useCallback(async (data: BlogObj) => {
+    try {
+      const res = await post(`${baseUrl}/blog/post`, data);
+      // console.log("res", res);
+      return res;
+    } catch (err) {
+      console.log("error calling addblog", err);
     }
     // return res
-  }, [])
+  }, [token]);
+
+  const deleteBlog = useCallback(async (blogPostId: number) => {
+    try {
+      const res = await axios.delete(
+        `${baseUrl}/blog/delete-post/:${blogPostId}`
+      );
+      console.log("res", res);
+    } catch (err) {
+      console.log("error deleting blog", err);
+    }
+    // return res
+  }, []);
+
+  const getBlog = async () => {
+    try {
+      const res = await query(`${baseUrl}/blog/post`);
+      return res;
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
 
   return {
     addBlog,
-  }
-}
+    deleteBlog,
+    getBlog,
+  };
+};
 
 export default useBlog;
