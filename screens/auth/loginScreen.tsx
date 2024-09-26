@@ -18,11 +18,10 @@ export const LoginScreen =()=> {
     const navigate = useRouter();
 
     const [show, setShow] = React.useState<boolean>(false);
-    const [validation , setValidation] = useState<boolean>(true);
+    const [emailValidation , setEmailValidation] = useState<boolean>(true);
+    const [passWordValidation , setPasswordValidation] = useState<boolean>(true);
 
-    const openValidationText =()=> {
-        setValidation(false);
-    }
+
 
     const [isLogin, setIsLogin ] = useState({
         "email":"",
@@ -43,7 +42,7 @@ export const LoginScreen =()=> {
                     const token = res?.data?.data?.token as string;
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
                     localStorage.setItem('userData', JSON.stringify(Data));
-                    navigate.push('/')
+                    navigate.push('/dashboard')
                 }
             )
             .catch(
@@ -122,14 +121,14 @@ export const LoginScreen =()=> {
                                 >
                                     Email address
                                 </FormLabel>
-                                <InputGroup onFocus={openValidationText}
+                                <InputGroup onFocus={()=> setEmailValidation(false)}
                                     display={'flex'} justifyContent={'center'}
                                     border={'1px'} borderRadius={'10px'} 
                                     borderColor={'var(--soft200)'}
                                     cursor={'text'}
                                     fontSize={14} textColor={'var--(sub600)'}
                                     w='100%' h='40px'
-                                    _placeholder={{textColor:'var--(soft400)'}}
+                                    _placeholder={{textColor:'var--(soft400)', fontSize:12}}
                                 >
                                     <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
                                         <MdOutlineEmail className="formicon"/>
@@ -142,7 +141,7 @@ export const LoginScreen =()=> {
                                         onChange={handleInput}          
                                     />
                                 </InputGroup>
-                                {   validation ? <></> :
+                                {   emailValidation ? <></> :
                                     <FormHelperText color={'var(--errorBase)'} fontSize={'12px'}>{ isLogin?.email.length < 3 ? "Email is required*" : "" }</FormHelperText>
                                 }
                             </FormControl>
@@ -153,14 +152,14 @@ export const LoginScreen =()=> {
                                 >
                                     Password
                                 </FormLabel>
-                                    <InputGroup
+                                    <InputGroup onFocus={() => setPasswordValidation(false)}
                                         display={'flex'} justifyContent={'center'}
                                         border={'1px'} borderRadius={'10px'} 
                                         borderColor={'var(--soft200)'}
                                         cursor={'text'}
                                         fontSize={14} textColor={'var--(sub600)'}
                                         w='100%' h='40px'
-                                        _placeholder={{textColor:'var--(soft400)'}}
+                                        _placeholder={{textColor:'var--(soft400)',fontSize:12}}
                                     >
                                         <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
                                             <RiLockPasswordLine className="formicon"/>
@@ -178,7 +177,7 @@ export const LoginScreen =()=> {
                                             </Box>
                                         </InputRightElement>
                                     </InputGroup>
-                                    {   validation ? <></> :
+                                    {   passWordValidation ? <></> :
                                         <FormHelperText color={'var(--errorBase)'} fontSize={'12px'}>{ isLogin?.password.length < 8 ? "minimum of 8 characters*" : "" }</FormHelperText>
                                     }
                             </FormControl>
