@@ -55,7 +55,6 @@ const AddBlog = () => {
   //   }
   // };
 
-
   const previewData = {
     articleTitle: articleTitle,
     introValue: introValue,
@@ -69,12 +68,10 @@ const AddBlog = () => {
   }
 
   const headerImageChange = (image: any) => {
-    console.log("new image", image);
     localStorage.setItem("headerImage", image?.dataUrl);
   };
 
   const bodyImageChange = (image: any) => {
-    console.log("new image", image);
     localStorage.setItem("bodyImage", image?.dataUrl);
   };
 

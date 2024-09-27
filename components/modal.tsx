@@ -22,10 +22,10 @@ export const Modal:React.FC<ModalProps> =({
     return (
         <Box
             onClick={ModalClose}
-            w={'100vw'} h={'100vh'}
+            w={'100%'} h={'100%'}
             zIndex={100} bg={'#00000075'}
             backdropFilter={'blur(10px)'}
-            pos={'fixed'}
+            pos={'fixed'} top={0} left={0}
         >
             <Flex 
                 id="close"

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import httpClient from "./useApi";
 
@@ -13,7 +12,6 @@ interface PropertyObj {
 }
 
 const useProperty = () => {
-  const baseUrl = "http://localhost:5500/api";
   const [token, setToken] = useState("");
 
   console.log("token", token)
@@ -35,7 +33,7 @@ const useProperty = () => {
 
   const addProperty = useCallback(async (data: PropertyObj) => {
     try {
-      const res = await post(`${baseUrl}/property`, data);
+      const res = await post(`/property`, data);
       // console.log("res", res);
       return res;
     } catch (err) {
