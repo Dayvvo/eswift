@@ -23,7 +23,7 @@ import React, { useEffect, useState } from "react";
 import { ActionIcon, FilterIcon, SearchIcon } from "./svg";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useApiUrl } from "@/hooks/useApi";
-import moment from "moment";
+import moment from 'moment';
 
 
 interface Users {
@@ -130,6 +130,7 @@ const UserComponent = () => {
   const [error, setError] = useState<boolean>(false);
 
   const client = useApiUrl();
+  
   useEffect(()=>{
     client.query('/user/users') 
       .then(

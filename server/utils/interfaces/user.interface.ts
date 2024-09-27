@@ -1,12 +1,12 @@
 export enum UserRole {
-  CLIENT = 'CLIENT',
-  ADMIN = 'ADMIN',
-  GUEST = 'GUEST',
+  CLIENT = "CLIENT",
+  ADMIN = "ADMIN",
+  GUEST = "GUEST",
 }
 
 export enum AuthProvider {
-  GOOGLE = 'google',
-  EMAIL_SIGNUP = 'email_signup',
+  GOOGLE = "google",
+  EMAIL_SIGNUP = "email_signup",
 }
 
 export interface IUser {
@@ -19,6 +19,7 @@ export interface IUser {
   refCode: string
   refCount: number
   hash?: string
+  propertyCount: number
   role: UserRole
   isActive: boolean
   verification: 'pending' | 'verified' | 'rejected'

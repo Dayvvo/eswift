@@ -45,6 +45,8 @@ export const AddPropertyScreenTwo =({onClick}:{onClick:()=>void})=> {
         "period":"",
     })
 
+    console.log('inputValue1', inputValue);
+
     const handleInput =(event:ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>)=> {
         setInputValue({...inputValue, [event.target.name]: event.target.value})
     }
