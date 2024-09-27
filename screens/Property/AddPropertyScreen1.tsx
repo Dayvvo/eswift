@@ -41,6 +41,8 @@ export const AddPropertyScreenOne =({onClick}:{onClick:()=>void})=> {
         "description":"",
     })
 
+    console.log('inputValue', inputValue);
+
     const handleInput =(event:ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>)=> {
         setInputValue({...inputValue, [event.target.name]: event.target.value})
     }
@@ -128,10 +130,10 @@ export const AddPropertyScreenOne =({onClick}:{onClick:()=>void})=> {
                             <Input 
                             w={'100%'} h={'100%'}
                                 type='text' 
-                                placeholder='A descriptive name for the property'  
+                                placeholder='A descriptive name for the property'
                                 name="title"
                                 value={inputValue?.title}
-                                onChange={handleInput}          
+                                onChange={handleInput}
                             />
                         </InputGroup>
                     </FormControl>
