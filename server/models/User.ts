@@ -82,7 +82,6 @@ UserSchema.pre("save", async function (next) {
   if (!this.isModified("hash")) {
     next();
   }
-
   this.hash = await argon.hash(this.hash as string)
 
   this.refCode = generateRefCode(8)

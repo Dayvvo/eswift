@@ -23,8 +23,7 @@ import useProperty from "@/hooks/useProperty";
 
 export const PropertyScreen = () => {
   const [showModal, setShowModal] = useState(false);
-  const [currentChildComponent, setCurrentChildComponent] =
-    useState<React.ReactNode | null>(null);
+  const [currentChildComponent, setCurrentChildComponent] = useState<React.ReactNode | null>(null);
 
   const propertyData = {
     title: "Nice house2",
@@ -52,7 +51,6 @@ export const PropertyScreen = () => {
   }
 
   const toggleModal = () => {
-    addPropertyFn();
     setShowModal((prevState) => !prevState);
   };
 
@@ -62,18 +60,21 @@ export const PropertyScreen = () => {
     );
     setShowModal(true);
   };
+  
   const openAddPropertyScreenTwo = () => {
     setCurrentChildComponent(
       <AddPropertyScreenTwo onClick={openAddPropertyScreenThree} />
     );
     setShowModal(true);
   };
+  
   const openAddPropertyScreenThree = () => {
     setCurrentChildComponent(
       <AddPropertyScreenThree onClick={openAddPropertyScreenFour} />
     );
     setShowModal(true);
   };
+  
   const openAddPropertyScreenFour = () => {
     setCurrentChildComponent(<AddPropertyScreenFour onClick={toggleModal} />);
     setShowModal(true);
@@ -173,6 +174,7 @@ export const PropertyScreen = () => {
       <Modal onClose={toggleModal} isVisible={showModal}>
         {currentChildComponent}
       </Modal>
+
       <Box className="robotoF" px={{ base: "16px", lg: "0" }}>
         <Flex my={"24px"} gap={"12px"} w={"100%"} h={"36px"}>
           <Flex w={"100%"}>
@@ -268,6 +270,7 @@ export const PropertyScreen = () => {
           })}
         </Grid>
       </Box>
+  
     </>
   );
 };
