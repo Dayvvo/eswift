@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { Box, Flex, Img, Text } from "@chakra-ui/react"
 import { TbCurrencyNaira } from "react-icons/tb";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import Image from "next/image"
@@ -23,7 +23,7 @@ export const PropertyCard =({
             <Box
                 className="RobotoF"
                 bg={'#FFF'}
-                w={{base:'100%',sm:'348px'}} h={'408px'}
+                w={{base:'100%',sm:'314px'}} h={'408px'}
                 pb={'16px'} boxShadow={'lg'}
                 borderRadius={'15px'} overflow={'hidden'}
             >
@@ -46,6 +46,11 @@ export const PropertyCard =({
                         src={`${image}`} 
                         alt={'property'}
                     />
+                    {/* <Img
+                        width={'340px'}
+                        src={`${image}`}
+                        alt="property"
+                    /> */}
                 </Flex>
                 <Flex  
                     className=""

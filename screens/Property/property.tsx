@@ -144,7 +144,7 @@ export const PropertyScreen =()=> {
             </Modal>
             <Box 
                 className="robotoF"
-                px={{base:'16px', lg:'60px'}}
+                px={{base:'16px', lg:'0'}}
             >
                 <Flex
                     my={'24px'} gap={'12px'}

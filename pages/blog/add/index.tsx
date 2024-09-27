@@ -2,10 +2,11 @@ import Btn from "@/components/Btn";
 import ImageUpload, { ImageData } from "@/components/ImageUpload";
 import { PlusIcon, UploadIcon } from "@/components/svg";
 import Wrapper from "@/components/Wrapper";
+import useBlog from "@/hooks/useBlog";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 // import ReactQuill from "react-quill";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -53,6 +54,19 @@ const AddBlog = () => {
   //     }
   //   }
   // };
+
+
+  const previewData = {
+    articleTitle: articleTitle,
+    introValue: introValue,
+    bodyValue: bodyValue,
+    conclusionValue: conclusionValue,
+  }
+
+  const toPreview = () => {
+    localStorage.setItem("previewData", JSON.stringify(previewData));
+    route.push('/blog/preview');
+  }
 
   const headerImageChange = (image: any) => {
     console.log("new image", image);
@@ -152,11 +166,7 @@ const AddBlog = () => {
             fontSize={".875rem"}
             fontWeight={500}
             className="inter"
-            onClick={() =>
-              route.push(
-                `/blog/preview?articleTitle=${articleTitle}&introValue=${introValue}&bodyValue=${bodyValue}&conclusionValue=${conclusionValue}`
-              )
-            }
+            onClick={toPreview}
           >
             Preview
           </Btn>

@@ -16,6 +16,8 @@ export interface IUser {
   provider?: AuthProvider;
   lastName: string;
   firstName: string;
+  refCode: string
+  refCount: number
   hash?: string;
   role: UserRole;
   isActive: boolean;
