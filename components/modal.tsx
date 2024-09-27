@@ -25,7 +25,7 @@ export const Modal:React.FC<ModalProps> =({
             w={'100vw'} h={'100vh'}
             zIndex={100} bg={'#00000075'}
             backdropFilter={'blur(10px)'}
-            pos={'fixed'}
+            position={'fixed'}
         >
             <Flex 
                 id="close"

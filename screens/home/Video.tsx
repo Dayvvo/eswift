@@ -5,12 +5,10 @@ import Image from "next/image"
 export const Video =()=> {
     return (
         <>
-            <Box id="video" width={"100%"}
-            >
-                <Image src={''} alt="/" 
-                        width={200}
-                        height={200}
-                />
+            <Box id="video" width={"100%"}>
+                <video width={'100%'} height={'100vh'} loop autoPlay>
+                    <source src="" type="video/mp4"/>
+                </video>
             </Box>
         </>
     )

@@ -2,15 +2,15 @@ import { Flex, Box, Text, Input, InputGroup, InputLeftElement, Grid } from "@cha
 import { RiSearch2Line } from "react-icons/ri";
 import Btn from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
-import { PropertyCard } from "./propertyCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "@/components/modal";
+import { BsPlus } from "react-icons/bs";
 import { AddPropertyScreenOne } from "./AddPropertyScreen1";
 import { AddPropertyScreenTwo } from "./AddPropertyScreen2";
 import { AddPropertyScreenThree } from "./AddPropertyScreen3";
 import { AddPropertyScreenFour } from "./AddPropertyScreen4";
-import { BsPlus } from "react-icons/bs";
+import { PropertyCard } from "./propertyCard";
 
 
 export const PropertyScreen =()=> {
@@ -40,8 +40,8 @@ export const PropertyScreen =()=> {
     }
     
     const [getProperty, setGetProperty] = useState([]);
-    const [page, setPage] = useState(1)
-    const [inputValue, setInputValue] = useState();
+    const [page, setPage] = useState<number>(1)
+    const [inputValue, setInputValue] = useState<string | number>('');
 
 
     useEffect(()=> {

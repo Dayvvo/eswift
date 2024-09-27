@@ -2,10 +2,12 @@
 import NavBar from "@/components/navBar";
 import { Box } from "@chakra-ui/react"
 import Hero from "./hero";
-import { SectionOne } from "./sectionOne";
+import { AboutSection } from "./homeAboutSection";
 import { SectionTwo } from "./sectionTwo";
-import { HeroProps } from "@/components/heroProps";
+import { HeroProps } from "@/screens/home/heroProps";
 import { SectionThree } from "./sectionThree";
+import { Video } from "./video";
+
 
 
 const HomePage =()=> {
@@ -16,7 +18,8 @@ const HomePage =()=> {
             <Box>
                 <NavBar/>
                 <Hero/>
-                <SectionOne/>
+                <AboutSection/>
+                <Video/>
                 <SectionTwo/>
                 <Box
                     py={'120px'}
@@ -24,7 +27,7 @@ const HomePage =()=> {
                     display={'flex'} flexDir={'column'} gap={'120px'}
                 >
                     <HeroProps bgImage={"url('/Find-Dream.jpg')"} bg={"#00000080"} 
-                        Nav={""} header={"Find Dream Properties"} 
+                        Nav={"/properties"} header={"Find Dream Properties"} 
                         details={"Explore our extensive listings of properties in Lagos and beyond."} 
                         buttonPos={'rotate'} w={'100%'} h={'100vh'}
                     />

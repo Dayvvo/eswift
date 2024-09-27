@@ -21,7 +21,7 @@ export const PropertyCard =({
     return(
         <>
             <Box
-                className="RobotoF"
+                className="robotoF"
                 bg={'#FFF'}
                 w={{base:'100%',sm:'314px'}} h={'408px'}
                 pb={'16px'} boxShadow={'lg'}
