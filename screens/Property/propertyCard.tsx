@@ -29,7 +29,7 @@ export const PropertyCard =({
             >
                 <Flex
                     position={'relative'}
-                    w='100%' h='55%' 
+                    w='100%' h='55%'
                 >
                     <Text
                         className="montserrat" 
