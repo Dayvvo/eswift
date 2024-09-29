@@ -2,9 +2,9 @@
 import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
 import { Box, Text, Flex, } from "@chakra-ui/react";
-import { AboutSection } from "./AboutPageSection";
 import { Video } from "./video";
-import { MoreDetails } from "./MoreDetails";
+import { MoreDetails } from "./moreDetails";
+import { AboutSection } from "./aboutPageSection";
 
 
 const AboutUsScreen =( )=> {
@@ -26,6 +26,7 @@ const AboutUsScreen =( )=> {
                     px={{base:'1rem',lg:'4rem'}}
                     display={'flex'} flexDir={'column'} 
                     alignItems={'center'} gap={'20px'}
+                    mb={'120px'}
                 >
                     <Text
                         className="antic"

@@ -1,7 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
-import Arrow from "../public/Arrow.gif"
 
 interface HeroProps {
     bgImage:string;
@@ -50,7 +49,7 @@ export const HeroProps:React.FC<HeroProps> =({
                 {details}
             </Text>
             <Link href={`${Nav}`} className={`${buttonPos}`}>
-                <Image src={Arrow} alt="/" width={150} height={150}/>
+                <Image src={'/Arrow.gif'} alt="/" width={150} height={150}/>
             </Link>
         </Flex>
     </Box>

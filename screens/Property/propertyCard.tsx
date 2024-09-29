@@ -45,7 +45,7 @@ export const PropertyCard =({image, title, count, pricing, location, email, user
                     src={`${image}`}
                     alt="property"
                 /> */}
-            </Flex>
+            </Box>
             <Flex  
                 className=""
                 flexDir={'column'} gap={'8px'}
@@ -125,6 +125,6 @@ export const PropertyCard =({image, title, count, pricing, location, email, user
                     Verify
                 </Btn>                      
             </Flex>
-        </Box>
+        </>
     )
 }

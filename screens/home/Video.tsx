@@ -7,7 +7,7 @@ export const Video =()=> {
         <>
             <Box id="video" width={"100%"}>
                 <video width={'100%'} height={'100vh'} loop autoPlay>
-                    <source src="" type="video/mp4"/>
+                    <source src="/PropertiesVid.mp4" type="video/mp4"/>
                 </video>
             </Box>
         </>

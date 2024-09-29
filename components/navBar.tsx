@@ -52,7 +52,7 @@ const NavBar = () => {
     {
       id:3,
       Navigator:'About Us',
-      Link:'/aboutUs'
+      Link:'/about'
     },
     {
       id:4,
@@ -62,12 +62,12 @@ const NavBar = () => {
     {
       id:5,
       Navigator:'Blog',
-      Link:'/blog'
+      Link:'/blogspot'
     },
     {
       id:6,
       Navigator:'Contact Us',
-      Link:'/conta'
+      Link:'/contact'
     }
   ] 
   
