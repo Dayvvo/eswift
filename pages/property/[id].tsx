@@ -1,14 +1,12 @@
-import Wrapper from "@/components/Wrapper"
-import { PropertyDetails } from "@/screens/property/propertyDetails"
-
-
+import Wrapper from "@/components/Wrapper";
+import { PropertyDetails } from "@/screens/Property/propertyDetails";
 
 const PropertyDetailScreen = () => {
-    return (
-        <Wrapper>
-            <PropertyDetails/>
-        </Wrapper>
-    )
-}
+  return (
+    <Wrapper>
+      <PropertyDetails />
+    </Wrapper>
+  );
+};
 
-export default PropertyDetailScreen
+export default PropertyDetailScreen;

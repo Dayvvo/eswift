@@ -39,7 +39,6 @@ const client = ({
 }) => {
   let baseURL= '/api'
 
-  console.log('token in client',token)
   return axios.create({
     baseURL,
     headers: {
@@ -121,8 +120,6 @@ function httpClient({
 export function useApiUrl() {
   
   const userFromLocalStorage = window.localStorage.getItem("userData") 
-
-  console.log('localstorage',userFromLocalStorage)
 
   const token = userFromLocalStorage?JSON.parse(userFromLocalStorage)?.token:''
 

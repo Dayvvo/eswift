@@ -15,7 +15,8 @@ interface CustomButtonProps extends ButtonProps {
   disabled?: boolean | any;
   bgColor?: string;
   hover?: any;
-  onClick?: () => void;
+  // onClick?: () => void |  (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (() => void) | ((e: React.MouseEvent<HTMLButtonElement>) => void);
   [key: string]: any;
 }
 

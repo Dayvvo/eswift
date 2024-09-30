@@ -15,7 +15,7 @@ import { RiSearch2Line } from "react-icons/ri";
 import Btn from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
 import { PropertyCard } from "./propertyCard";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "@/components/modal";
 import { AddPropertyScreenOne } from "./AddPropertyScreen1";
@@ -23,53 +23,111 @@ import { AddPropertyScreenTwo } from "./AddPropertyScreen2";
 import { AddPropertyScreenThree } from "./AddPropertyScreen3";
 import { AddPropertyScreenFour } from "./AddPropertyScreen4";
 import { BsPlus } from "react-icons/bs";
+import useProperty from "@/hooks/useProperty";
+import { useImage, useInputNumber, useInputText } from "@/hooks/useInput";
+import { useApiUrl } from "@/hooks/useApi";
 
 interface MyData {
   _id: any;
   title: string;
-  pricing: string;
-  location: string;
+  price: string;
+  address: string;
   email: string;
-  user: string;
+  owner: string;
   userImage: string;
-  image: string;
+  images: any;
+  creatorID: any;
+}
+interface User {
+  _id: any;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: number;
+  avatar: any;
 }
 export const PropertyScreen = () => {
   const [showModal, setShowModal] = useState(false);
-  const [currentChildComponent, setCurrentChildComponent] =
-    useState<React.ReactNode | null>(null);
-
-  const toggleModal = () => {
-    setShowModal((prevState) => !prevState);
-  };
-
-  const openAddPropertyScreenOne = () => {
-    setCurrentChildComponent(
-      <AddPropertyScreenOne onClick={openAddPropertyScreenTwo} />
-    );
-    setShowModal(true);
-  };
-  const openAddPropertyScreenTwo = () => {
-    setCurrentChildComponent(
-      <AddPropertyScreenTwo onClick={openAddPropertyScreenThree} />
-    );
-    setShowModal(true);
-  };
-  const openAddPropertyScreenThree = () => {
-    setCurrentChildComponent(
-      <AddPropertyScreenThree onClick={openAddPropertyScreenFour} />
-    );
-    setShowModal(true);
-  };
-  const openAddPropertyScreenFour = () => {
-    setCurrentChildComponent(<AddPropertyScreenFour onClick={toggleModal} />);
-    setShowModal(true);
-  };
-
   const [getProperty, setGetProperty] = useState<MyData[]>([]);
   const [page, setPage] = useState<any>(1);
   const [inputValue, setInputValue] = useState<any>("");
   const [loading, setLoading] = useState(false);
+  const [showScreen, setShowScreen] = useState(1);
+  const [users, setUsers] = useState<User[]>([]);
+
+  const {
+    input: title,
+    onChangeInput: onChangeTitle,
+    reset: titleReset,
+  } = useInputText((title) => title.length > 2);
+  const {
+    input: category,
+    onChangeInput: onChangeCategory,
+    reset: categoryReset,
+  } = useInputText((category) => category !== "");
+  const {
+    input: description,
+    onChangeInput: onChangeDescription,
+    reset: descriptionReset,
+  } = useInputText((description) => description.length > 8);
+  const {
+    input: address,
+    onChangeInput: onChangeAddress,
+    reset: addressReset,
+  } = useInputText((address) => address.length > 3);
+  const {
+    input: typeOfProperty,
+    onChangeInput: onChangeType,
+    reset: typeReset,
+  } = useInputText((typeOfProperty) => typeOfProperty !== "");
+
+  const {
+    input: price,
+    onChangeInput: onChangePrice,
+    reset: priceReset,
+  } = useInputText((price) => price !== "");
+  const {
+    image,
+    onChangeHandler: onChangeImage,
+    error: imageError,
+    reset: imageReset,
+  } = useImage();
+
+  const client = useApiUrl();
+  const { addProperty } = useProperty();
+
+  const addPropertyFn = async () => {
+    // const formData = new FormData();
+    // formData.append("title", title);
+    try {
+      const req = await addProperty({
+        title,
+        type: typeOfProperty,
+        address,
+        price: price,
+        category,
+        description,
+        features: ["nice", "cheap", "open spaces"],
+        images: [
+          "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        ],
+      });
+      setShowModal(false);
+      titleReset();
+      categoryReset();
+      descriptionReset();
+      imageReset();
+      priceReset();
+      typeReset();
+      addressReset();
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
 
   //   useEffect(() => {
   //     axios
@@ -81,69 +139,6 @@ export const PropertyScreen = () => {
   //         console.log(err);
   //       });
   //   }, []);
-
-  const properties = [
-    {
-      _id: 1,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      _id: 2,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      _id: 3,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      _id: 4,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      _id: 5,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      _id: 6,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-  ];
 
   const getPropertyFunction = async () => {
     setLoading(true);
@@ -159,15 +154,65 @@ export const PropertyScreen = () => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response: AxiosResponse<{ data: User[] }> = await client.query(
+          `/user/users`
+        );
+        setUsers(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
+    fetchData();
+  }, []);
   useEffect(() => {
     getPropertyFunction();
-  }, [page, inputValue]);
+  }, [page, inputValue, showModal]);
 
   return (
     <>
       <Modal onClose={toggleModal} isVisible={showModal}>
-        {currentChildComponent}
+        {/* {currentChildComponent} */}
+        {showScreen === 1 ? (
+          <AddPropertyScreenOne
+            onChangeTitle={onChangeTitle}
+            onChangeCategory={onChangeCategory}
+            onChangeDescription={onChangeDescription}
+            description={description}
+            title={title}
+            category={category}
+            onClick={() => setShowScreen(2)}
+          />
+        ) : showScreen === 2 ? (
+          <AddPropertyScreenTwo
+            address={address}
+            price={price}
+            typeOfProperty={typeOfProperty}
+            onChangeAddress={onChangeAddress}
+            onChangePrice={onChangePrice}
+            onChangeType={onChangeType}
+            next={() => setShowScreen(3)}
+            previous={() => setShowScreen(1)}
+          />
+        ) : showScreen === 3 ? (
+          <AddPropertyScreenThree
+            next={() => setShowScreen(4)}
+            previous={() => setShowScreen(2)}
+            images={image}
+            onChangeImage={onChangeImage}
+            error={imageError}
+          />
+        ) : showScreen === 4 ? (
+          <AddPropertyScreenFour
+            next={addPropertyFn}
+            previous={() => setShowScreen(3)}
+          />
+        ) : (
+          ""
+        )}
       </Modal>
       <Box className="robotoF" px={{ base: "16px", lg: "0" }}>
         <Flex my={"24px"} gap={"12px"} w={"100%"} h={"36px"}>
@@ -219,7 +264,7 @@ export const PropertyScreen = () => {
             <Text>Filter</Text>
           </Btn>
           <Btn
-            onClick={openAddPropertyScreenOne}
+            onClick={toggleModal}
             display={"flex"}
             gap={"4px"}
             alignItems={"center"}
@@ -264,19 +309,23 @@ export const PropertyScreen = () => {
                 }}
                 gap={{ base: "24px", lg: "28px" }}
               >
-                {getProperty.map((property) => (
-                  <PropertyCard
-                    key={property?._id}
-                    image={property?.image || "/"}
-                    title={property?.title}
-                    pricing={property?.pricing}
-                    location={property?.location}
-                    userImage={property?.userImage || "/"}
-                    email={property?.email}
-                    user={property?.user}
-                    count={page}
-                  />
-                ))}
+                {getProperty.map((property) => {
+                  const user = users.find((u) => u._id === property?.creatorID);
+
+                  return (
+                    <PropertyCard
+                      key={property?._id}
+                      image={property?.images || "/"}
+                      title={property?.title}
+                      pricing={property?.price}
+                      location={property?.address}
+                      userImage={user?.avatar || "/"}
+                      email={user?.email}
+                      user={user?.firstName}
+                      count={page}
+                    />
+                  );
+                })}
               </Grid>
             ) : (
               <Card>
