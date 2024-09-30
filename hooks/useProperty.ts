@@ -44,9 +44,21 @@ const useProperty = () => {
     // return res
   }, [token]);
 
+  const getPropertyDetails = useCallback(async (id:string) => {
+    try {
+      const res = await query (`${baseUrl}/property/${id}`);
+      console.log('res', res);
+      return res;
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }, []);
+
 
   return {
     addProperty,
+    getPropertyDetails,
   };
 };
 
