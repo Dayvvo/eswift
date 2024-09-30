@@ -109,7 +109,8 @@ export const PropertyDetails = () => {
 
   const { getPropertyDetails } = useProperty();
 
-  const id = "66f699a6a550b7134feaf1bf";
+  const id = "66fa705efac0a5ffbf2f4451";
+  // const id = "66f99f3a96037b9a90b745d2";
 
   const getPropertyDetailFn = async () => {
     try {
@@ -137,7 +138,7 @@ export const PropertyDetails = () => {
             w={"100%"}
             h={"max-content"}
           >
-            {[detailsData?.images].map((item, index) => (
+            {detailsData?.images.map((item: any, index: any) => (
               <GridItem rowSpan={index === 0 ? 2 : 1}>
                 <Image w={"100%"} h={"100%"} src={item} alt={``} />
               </GridItem>
@@ -224,7 +225,8 @@ export const PropertyDetails = () => {
                     <Flex key={index} alignItems={"center"} gap={"4px"}>
                       <BsDot />
                       <Text>
-                        {feature.slice(0, 1).toUpperCase()}{feature.slice(1, feature.length).toLowerCase()}
+                        {feature.slice(0, 1).toUpperCase()}
+                        {feature.slice(1, feature.length).toLowerCase()}
                       </Text>
                     </Flex>
                   );
@@ -287,68 +289,70 @@ export const PropertyDetails = () => {
               gap={"16px"}
               className="robotoF"
             >
-              {
-              user.role === "ADMIN" ? detailsData.verificationState === "Pending" || "Rejected" ? (
-                <Flex gap={'16px'} direction={'column'}>
-                <Btn
-                  bg={"transparent"}
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  w="100%"
-                  border="1px solid var(--primaryBase)"
-                  borderRadius={"10px"}
-                  h={"40px"}
-                  textColor={"var(--primaryBase)"}
-                >
-                  Verify
-                </Btn>
-                <Btn
-                  bg={"transparent"}
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  w="100%"
-                  border="1px solid var(--errorBase)"
-                  borderRadius={"10px"}
-                  h={"40px"}
-                  textColor={"var(--errorBase)"}
-                >
-                  Decline
-                </Btn>
-              </Flex>
+              {user.role === "ADMIN" ? (
+                detailsData?.verificationState === "Verified" ? (
+                  <Flex gap={"16px"} direction={"column"}>
+                    <Btn
+                      bg={"transparent"}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      w="100%"
+                      border="1px solid var(--primaryBase)"
+                      borderRadius={"10px"}
+                      h={"40px"}
+                      textColor={"var(--primaryBase)"}
+                    >
+                      Suspend
+                    </Btn>
+                    <Btn
+                      bg={"transparent"}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      w="100%"
+                      border="1px solid var(--errorBase)"
+                      borderRadius={"10px"}
+                      h={"40px"}
+                      textColor={"var(--errorBase)"}
+                    >
+                      Delete
+                    </Btn>
+                  </Flex>
+                ) : (
+                  <Flex gap={"16px"} direction={"column"}>
+                    <Btn
+                      bg={"transparent"}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      w="100%"
+                      border="1px solid var(--primaryBase)"
+                      borderRadius={"10px"}
+                      h={"40px"}
+                      textColor={"var(--primaryBase)"}
+                    >
+                      Verify
+                    </Btn>
+                    <Btn
+                      bg={"transparent"}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      w="100%"
+                      border="1px solid var(--errorBase)"
+                      borderRadius={"10px"}
+                      h={"40px"}
+                      textColor={"var(--errorBase)"}
+                    >
+                      Decline
+                    </Btn>
+                  </Flex>
+                )
               ) : (
-                <Flex gap={'16px'} direction={'column'}>
-                <Btn
-                  bg={"transparent"}
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  w="100%"
-                  border="1px solid var(--primaryBase)"
-                  borderRadius={"10px"}
-                  h={"40px"}
-                  textColor={"var(--primaryBase)"}
-                >
-                  Suspend
-                </Btn>
-                <Btn
-                  bg={"transparent"}
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  w="100%"
-                  border="1px solid var(--errorBase)"
-                  borderRadius={"10px"}
-                  h={"40px"}
-                  textColor={"var(--errorBase)"}
-                >
-                  Delete
-                </Btn>
-              </Flex>
-              ) : <></>
-            }
-              
+                <></>
+              )}
+
               <Flex
                 bg={"var(--weak50)"}
                 w={"100%"}

@@ -5,8 +5,8 @@ import { PropertyDetails } from "@/screens/Property/propertyDetails"
 const Property =()=> {
     return (
         <Wrapper>
-            <PropertyScreen/>
-            {/* <PropertyDetails /> */}
+            {/* <PropertyScreen/> */}
+            <PropertyDetails />
         </Wrapper>
     )
 }
