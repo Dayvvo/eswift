@@ -47,6 +47,8 @@ export const AddPropertyScreenThree =({onClick}:{onClick:()=>void})=> {
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null)
 
+    // console.log('uploadedFile', uploadedFile);
+
     const validateFile = (File:File): void => {  
         
         if (!validfileTypes.includes(File.type)) {

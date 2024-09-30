@@ -10,18 +10,18 @@ export enum AuthProvider {
 }
 
 export interface IUser {
-  tenantId?: string;
-  email: string;
-  avatar?: string;
-  provider?: AuthProvider;
-  lastName: string;
-  firstName: string;
+  tenantId?: string
+  email: string
+  avatar?: string
+  provider?: AuthProvider
+  lastName: string
+  firstName: string
   refCode: string
   refCount: number
-  hash?: string;
-  role: UserRole;
-  isActive: boolean;
-  propertyCount: number;
-  verification: "pending" | "verified" | "rejected";
-  matchPassword?: FunctionConstructor;
+  hash?: string
+  propertyCount: number
+  role: UserRole
+  isActive: boolean
+  verification: 'pending' | 'verified' | 'rejected'
+  matchPassword?: FunctionConstructor
 }

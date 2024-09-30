@@ -1,5 +1,5 @@
 import Wrapper from "@/components/Wrapper"
-import { PropertyDetails } from "@/screens/Property/propertyDetails"
+import { PropertyDetails } from "@/screens/property/propertyDetails"
 
 
 

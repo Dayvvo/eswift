@@ -1,4 +1,5 @@
-import Wrapper from "@/components/Wrapper";
+
+import HomePage from "@/screens/home/home";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -28,11 +29,5 @@ export default function Home() {
 
   },[])
 
-  return (
-    <>
-        <Wrapper>
-          
-        </Wrapper>
-    </>
-  );
+  return <HomePage/>
 };
