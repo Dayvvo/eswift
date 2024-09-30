@@ -18,11 +18,11 @@ import { PropertyCard } from "./propertyCard";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "@/components/modal";
+import { BsPlus } from "react-icons/bs";
 import { AddPropertyScreenOne } from "./AddPropertyScreen1";
 import { AddPropertyScreenTwo } from "./AddPropertyScreen2";
 import { AddPropertyScreenThree } from "./AddPropertyScreen3";
 import { AddPropertyScreenFour } from "./AddPropertyScreen4";
-import { BsPlus } from "react-icons/bs";
 import useProperty from "@/hooks/useProperty";
 import { useImage, useInputNumber, useInputText } from "@/hooks/useInput";
 import { useApiUrl } from "@/hooks/useApi";
@@ -129,17 +129,7 @@ export const PropertyScreen = () => {
     setShowModal((prevState) => !prevState);
   };
 
-  //   useEffect(() => {
-  //     axios
-  //       .get("/api/property/:id")
-  //       .then((res: any) => {
-  //         console.log(res);
-  //       })
-  //       .catch((err: any) => {
-  //         console.log(err);
-  //       });
-  //   }, []);
-
+    
   const getPropertyFunction = async () => {
     setLoading(true);
     try {

@@ -62,18 +62,18 @@ const NavBar = () => {
     {
       id:5,
       Navigator:'Blog',
-      Link:'/blog'
+      Link:'/blogspot'
     },
     {
       id:6,
       Navigator:'Contact Us',
-      Link:'/conta'
+      Link:'/contact'
     }
   ] 
   
   return (
-    <Box display={`${pathname === "/dashboard" ? "none": ""}`} 
-      bg={`${pathname === "/" ? "#FFF" : "" }`} 
+    <Box 
+      bg={`${pathname !== "/" ? "" : "#FFF" }`} 
       position="relative" w="100vw" height="fit-content"
     >
       <Box
@@ -120,8 +120,9 @@ const NavBar = () => {
                     _active={{ fontWeight: "800" }}
                     fontSize={`${pathname === `${Links?.Link}` ? "16px" : "14px"}`}
                     _hover={{fontSize:'16px'}}
-                    transition='all'
-                    transitionDuration='300'
+                    transition='font-size'
+                    transitionDuration='500'
+                    transitionTimingFunction={'ease-in-out'}
                     // border={"1px solid var(--TextCol)"}
                   >
                     {Links?.Navigator}
