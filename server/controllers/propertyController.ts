@@ -16,10 +16,10 @@ class PropertyController {
       if (error) {
         return res.status(400).json(error.details[0]);
       }
-      console.log("value", value);
+      
       const newProperty = await Property.create({
         ...value,
-        affiliateId: req.user?._id,
+        creatorID: req.user?._id,
       });
       await req.user?.increasePropertyCount();
       return res.status(201).json({
