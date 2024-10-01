@@ -4,7 +4,7 @@ import {
   validateLoginData,
 } from '../utils/validation/index'
 import Property from '../models/Property'
-import { IUser } from '../utils/interfaces'
+import { IUser, IUserInRequest } from '../utils/interfaces'
 import { isValidObjectId } from 'mongoose'
 
 class PropertyController {
@@ -16,12 +16,12 @@ class PropertyController {
       if (error) {
         return res.status(400).json(error.details[0])
       }
-
+      const user = req.user as IUserInRequest
       const newProperty = await Property.create({
         ...value,
-        creatorID: req.user?._id,
+        creatorID: user?._id,
       })
-      await req.user?.increasePropertyCount()
+      await user?.increasePropertyCount()
       return res.status(201).json({
         statusCode: 201,
         message: 'Property Created',
@@ -135,7 +135,8 @@ class PropertyController {
           statusCode: 404,
           message: `Property with id ${id} not found`,
         })
-      await req.user?.decreasePropertyCount()
+      const user = req.user as IUserInRequest
+      await user?.decreasePropertyCount()
       return res.json({
         statusCode: 200,
         message: 'Successful',

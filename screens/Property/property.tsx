@@ -65,6 +65,7 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeCategory,
     reset: categoryReset,
   } = useInputText((category) => category !== "");
+ 
   const {
     input: description,
     onChangeInput: onChangeDescription,

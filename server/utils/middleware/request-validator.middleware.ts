@@ -7,6 +7,11 @@
 
 import Joi from "joi";
 import { Request, Response, NextFunction } from "express";
+import {  IUserInRequest } from "../interfaces";
+
+export interface ExpressRequest extends Request {
+  user: IUserInRequest; // Make it optional, if user may not always exist
+}
 
 export const validateRequestMiddleware =(validationSchema: Joi.ObjectSchema, type: string) => (req: Request, res: Response, next: NextFunction) => {
   const getType = {

@@ -3,8 +3,8 @@ import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
 import { Box, Text, Flex, } from "@chakra-ui/react";
 import { Video } from "./video";
-import { MoreDetails } from "./moreDetails";
-import { AboutSection } from "./aboutPageSection";
+import { MoreDetails } from "./MoreDetails";
+import { AboutSection } from "./AboutPageSection";
 
 
 const AboutUsScreen =( )=> {

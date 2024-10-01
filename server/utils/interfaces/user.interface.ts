@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongoose';
+
 export enum UserRole {
   CLIENT = "CLIENT",
   ADMIN = "ADMIN",
@@ -10,6 +12,7 @@ export enum AuthProvider {
 }
 
 export interface IUser {
+  _id: ObjectId
   tenantId?: string
   email: string
   avatar?: string
@@ -24,4 +27,12 @@ export interface IUser {
   isActive: boolean
   verification: 'pending' | 'verified' | 'rejected'
   matchPassword?: FunctionConstructor
+  increasePropertyCount?: FunctionConstructor
+  decreasePropertyCount?: FunctionConstructor
+}
+
+export interface IUserInRequest extends IUser {
+  matchPassword: FunctionConstructor
+  increasePropertyCount: FunctionConstructor
+  decreasePropertyCount: FunctionConstructor
 }

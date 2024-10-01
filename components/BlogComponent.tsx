@@ -117,6 +117,7 @@ const BlogComponent = () => {
               bgColor={"#fff"}
               maxW={"340px"}
               boxShadow={"0px 17.579px 52.738px 0px rgba(133, 133, 133, 0.10)"}
+              key={index}
             >
               <Box w="100%" borderRadius={"7px 7px 0 0"}>
                 <Img src={item.img} w="100%" />

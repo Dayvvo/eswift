@@ -1,53 +1,36 @@
 "use client";
 
+import { R } from "@/utils/types";
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
-const AppContext = createContext<any>({
-  check: "",
-  user: {
-    firstName: "",
-    lastName: "",
-    email: "",
-    role: "",
-  },
-});
 
-export function AppWrapper({ children }: { children: ReactNode }) {
-  const check = "context check!";
+interface IGlobalContext {
+  user: R,
+  token:string,
+  properties: R
+};
 
-  const [user, setUser] = useState<any>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    role: "",
-  });
+const defaultContextState = {
+  user:{},
+  token:'',
+  properties: {},
+};
 
-  const userData =
-    typeof window !== "undefined" ? localStorage.getItem("userData") : null;
+const AppContext = createContext<{globalContext:IGlobalContext,setGlobalContext?:Dispatch<SetStateAction<IGlobalContext>> }>({globalContext:defaultContextState});
 
-  useEffect(() => {
-    if (userData) {
-      const parsedData = JSON.parse(userData);
-      console.log(parsedData);
-      setUser((prevData: any) => ({
-        ...prevData,
-        firstName: parsedData.firstName,
-        lastName: parsedData.lastName,
-        email: parsedData.email,
-        role: parsedData.role,
-      }));
-    }
+export function AppContextWrapper({ children }: { children: ReactNode }) {
 
-    console.log("context user", user);
-  }, []);
+  const [globalContext,setGlobalContext] = useState<IGlobalContext>(defaultContextState);
 
-  return <AppContext.Provider value={{check, user}}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{globalContext,setGlobalContext}}>{children}</AppContext.Provider>;
+
 }
 
 export function useAppContext() {

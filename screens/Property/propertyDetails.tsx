@@ -18,6 +18,7 @@ import { PropertyCard } from "./propertyCard";
 import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
+import { R } from "@/utils/types";
 
 export const PropertyDetails = () => {
   const Features: any[] = [
@@ -101,28 +102,25 @@ export const PropertyDetails = () => {
     },
   ];
 
-  const { user } = useAppContext();
+  const { globalContext } = useAppContext();
 
-  console.log("user", user);
+  const {user} = globalContext;
 
   const [detailsData, setDetailsData] = useState<any>(null);
 
   const { getPropertyDetails } = useProperty();
 
   const id = "66fa705efac0a5ffbf2f4451";
-  // const id = "66f99f3a96037b9a90b745d2";
 
   const getPropertyDetailFn = async () => {
     try {
-      const req = await getPropertyDetails(id);
-      console.log("req", req);
-      setDetailsData(req?.data?.data);
+      const request = await getPropertyDetails(id);
+      const data = request.data as R;
+      setDetailsData(data?.data);
     } catch (err) {
       console.log(err);
     }
   };
-
-  console.log("detailsData", detailsData);
 
   useEffect(() => {
     getPropertyDetailFn();
@@ -366,7 +364,7 @@ export const PropertyDetails = () => {
                   fontWeight={500}
                   textColor={"var(--soft400)"}
                 >
-                  {user.role}
+                  {user?.role}
                 </Text>
               </Flex>
               <Flex

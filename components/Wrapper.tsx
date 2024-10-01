@@ -86,21 +86,11 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
       icon: (color: string) => <FiHome size={"1rem"} color={color} />,
       url: "/property",
     },
-    // {
-    //   label: "Projects",
-    //   icon: (color:string) => <ProjectIcon color={color} />,
-    //   url: "/projects",
-    // },
     {
       label: "Blog",
       icon: (color: string) => <BlogIcon color={color} />,
       url: "/blog",
     },
-    // {
-    //   label: "Team",
-    //   icon: (color:string) => <FiUser size={"1rem"} color={color} />,
-    //   url: "/users",
-    // },
     {
       label: "Settings",
       icon: (color: string) => <SettingsIcon color={color} />,
@@ -122,13 +112,10 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (route) {
-      // Get the full path after the domain
       const fullPath = new URL(route).pathname;
 
-      // Split the path by "/" and filter out any empty segments
       const pathSegments = fullPath.split("/").filter((segment) => segment);
 
-      // Check if there are path segments and set the first one
       if (pathSegments.length > 0) {
         setPath(pathSegments[0]); // Always picks the first segment after the domain
       }
@@ -151,7 +138,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
 
   },[navigate])
 
-  const LogOut =()=> {
+  const logout =()=> {
     localStorage.removeItem('token');
     localStorage.removeItem('userData')
     navigate.push('/login')
@@ -159,8 +146,6 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
 
 
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;
-
-  // console.log(casedPath);
 
   return (
     <Box py="40px" w="" minH={"100vh"}>
@@ -194,7 +179,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
               const iconColor = isActive ? "#335CFF" : "#525866";
 
               return (
-                <Link href={item.url}>
+                <Link href={item.url} key={item.url}>
                   <Box
                     className="robotoF"
                     cursor={"pointer"}
@@ -252,7 +237,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
                   blackchang@gmail.com
                 </Text>
               </Flex>
-              <Btn onClick={LogOut}
+              <Btn onClick={logout}
                 color="#fff"
                 bgColor="#FF3B30BF"
                 w="100%"

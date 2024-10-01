@@ -36,11 +36,11 @@ const ContactScreen =( )=> {
                 </Box>
                 <Box
                     display="flex"
-                    flexDir={{base:'', lg:'row'}}
+                    flexDirection={{ lg:'row'}}
                     w={'100%'}
                     h={{base:'auto',lg:'440px'}}
                     gap="20px"
-                    alignitems='center' mb={20}
+                    alignItems='center' mb={20}
                 >
                     <Box
                         w={{base:'100%',lg:'50%'}}
