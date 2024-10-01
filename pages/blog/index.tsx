@@ -1,5 +1,5 @@
-import BlogComponent from "@/components/BlogComponent";
 import Wrapper from "@/components/Wrapper";
+import BlogScreen from "@/screens/Blog";
 import { Flex, Input, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 
@@ -10,7 +10,7 @@ const Blog = () => {
 
   return (
     <Wrapper>
-      <BlogComponent />
+      <BlogScreen />
     </Wrapper>
   );
 };
