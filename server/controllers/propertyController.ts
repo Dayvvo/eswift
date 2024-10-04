@@ -6,29 +6,151 @@ import {
 import Property from "../models/Property";
 import { IUser } from "../utils/interfaces";
 import { isValidObjectId } from "mongoose";
+import PropertyDocs from "../models/PropertyDocs";
+import mongoose from "mongoose";
 
 class PropertyController {
   //TODO: finish function
+  // createProperty = async (req: Request, res: Response) => {
+  //   const validate = ValidateAddProperty(req.body);
+  //   const { value, error } = validate;
+
+  //   const allowedNames = [
+  //     "FamilyReceipt",
+  //     "SurveyPlan",
+  //     "Layout",
+  //     "Affidavit",
+  //     "Agreement",
+  //     "CofO",
+  //     "PowerOfAttorney",
+  //     "GovConsent",
+  //   ];
+  //   if (!allowedNames.includes(value.name)) {
+  //     return res.status(400).json({ message: "Invalid file name" });
+  //   }
+  //   try {
+  //     if (error) {
+  //       return res.status(400).json(error.details[0]);
+  //     }
+  //     const newPropertyData = {
+  //       title: value.title,
+  //       type: value.type,
+  //       address: value.address,
+  //       price: value.price,
+  //       category: value.category,
+  //       duration: value.duration,
+  //       description: value.description,
+  //       features: value.features,
+  //       images: value.images,
+  //     };
+  //     const newProperty = new Property({
+  //       newPropertyData,
+  //       creatorID: req.user?._id,
+  //     });
+  //     await newProperty.save();
+  //     await req.user?.increasePropertyCount();
+  //     const propertyDoc = await PropertyDocs.create({
+  //       name: value.name,
+  //       property: newProperty._id,
+  //       file: value.file,
+  //       user: newProperty.creatorID,
+  //     });
+
+  //     const propertyDatas = {
+  //       property: newProperty,
+  //       propertyDocument: propertyDoc,
+  //     };
+  //     return res.status(201).json({
+  //       statusCode: 201,
+  //       message: "Property Created",
+  //       data: propertyDatas,
+  //     });
+  //   } catch (err: any) {
+  //     console.error(err?.message);
+  //     res.status(500).send("An Error ocurred while creating property");
+  //   }
+  // };
   createProperty = async (req: Request, res: Response) => {
+    const validate = ValidateAddProperty(req.body);
+    const { value, error } = validate;
+
+    const allowedNames = [
+      "FamilyReceipt",
+      "SurveyPlan",
+      "Layout",
+      "Affidavit",
+      "Agreement",
+      "CofO",
+      "PowerOfAttorney",
+      "GovConsent",
+    ];
+
+    if (!allowedNames.includes(value.name)) {
+      return res.status(400).json({ message: "Invalid file name" });
+    }
+    if (error) {
+      return res.status(400).json(error.details[0]);
+    }
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
-      const validate = ValidateAddProperty(req.body);
-      const { value, error } = validate;
-      if (error) {
-        return res.status(400).json(error.details[0]);
-      }
-      
-      const newProperty = await Property.create({
-        ...value,
+      // Create the new property data
+      const newPropertyData = {
+        title: value.title,
+        type: value.type,
+        address: value.address,
+        price: value.price,
+        category: value.category,
+        duration: value.duration,
+        description: value.description,
+        features: value.features,
+        images: value.images,
+      };
+
+      // Create the new Property document with creatorID
+      const newProperty = new Property({
+        ...newPropertyData, // Spread operator for cleaner syntax
         creatorID: req.user?._id,
       });
-      await req.user?.increasePropertyCount();
+
+      // Save the new property and capture its ID
+      await newProperty.save({ session });
+
+      if (!newProperty) {
+        return res.status(404).json({ message: "Property not found" });
+      }
+      const propertyId = newProperty._id; // Store the ID for later use
+      const creatorId = newProperty.creatorID; // Store the ID for later use
+
+      // Create the PropertyDocs document with the property ID
+      const propertyDoc = await PropertyDocs.create(
+        {
+          name: value.name,
+          property: propertyId,
+          file: value.file,
+          user: creatorId,
+        },
+        { session }
+      );
+
+      if (!propertyDoc) {
+        throw new Error("Property document creation failed");
+      }
+      await session.commitTransaction();
+      session.endSession();
+      const propertyDatas = {
+        property: newProperty,
+        propertyDocument: propertyDoc,
+      };
+
       return res.status(201).json({
         statusCode: 201,
         message: "Property Created",
-        data: newProperty,
+        data: propertyDatas,
       });
     } catch (err: any) {
-      console.error(err?.message);
+      await session.abortTransaction();
+      session.endSession();
       res.status(500).send("An Error ocurred while creating property");
     }
   };
@@ -144,6 +266,18 @@ class PropertyController {
     } catch (error: any) {
       console.log("Error in email login", error);
       console.error(error?.message);
+      res.status(500).send("An Error ocurred while retrieving data");
+    }
+  };
+  getPropertyDocs = async (req: Request, res: Response) => {
+    try {
+      const propsDoc = await PropertyDocs.find();
+      res.status(200).json({
+        message: "success",
+        data: propsDoc,
+      });
+    } catch (error) {
+      console.error(error);
       res.status(500).send("An Error ocurred while retrieving data");
     }
   };
