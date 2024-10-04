@@ -1,9 +1,6 @@
 import React, { useRef, useState } from "react";
-import { Upload } from "../widget/Svg";
 import { Text } from "@chakra-ui/react";
 import axios from "axios";
-import BaseDirectories from "./BaseDirectories";
-import UploadProgress from "./UploadProgess";
 import useToast from "../hooks/useToast";
 
 const FileUpload = ({
@@ -30,7 +27,7 @@ const FileUpload = ({
     formData.append("file", data);
 
     const request = axios.create({
-      baseURL: `${BaseDirectories.API_BASE_URL}/api/v1/kitchens/upload-kitchen-kyc`,
+      baseURL: `/api/v1/kitchens/upload-kitchen-kyc`,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -45,7 +42,7 @@ const FileUpload = ({
 
     request
       .post(
-        `${BaseDirectories.API_BASE_URL}/api/v1/kitchens/upload-kitchen-kyc`,
+        `/api/v1/kitchens/upload-kitchen-kyc`,
         formData
       )
       .then((res: any) => {
@@ -121,7 +118,8 @@ const FileUpload = ({
           />
         </div>
       ) : (
-        <UploadProgress file={file} />
+        <>/</>
+        // <UploadProgress file={file} />
       )}
     </>
   ) : (
@@ -154,7 +152,7 @@ const FileUpload = ({
             gap: "16px",
           }}
         >
-          <Upload />
+          {/* <Upload /> */}
           <Text
             color={"#0A070F"}
             fontSize={"14px"}

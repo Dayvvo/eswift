@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import BlogPost from "../models/BlogPost";
 import { validateBlogPostData } from "../utils/validation";
+import { IUserInRequest } from "../utils/interfaces";
 
 class BlogPostController {
   createBlogPost = async (req: Request, res: Response) => {
@@ -9,14 +10,18 @@ class BlogPostController {
       if (error) {
         return res.status(400).json(error.message);
       }
-      const blogPost = new BlogPost({ ...value, author: req.user?._id });
+      const user = req.user as any;
+
+      const blogPost = new BlogPost({ ...value, author: user?._id as string });
+      
       await blogPost.save();
       return res.status(201).json({
         statusCode: 201,
         data: blogPost,
         message: "Blog post created",
       });
-    } catch (error) {
+    } 
+    catch (error) {
       console.log(error);
       res.status(500).send("Failed to create blog post");
     }
@@ -28,8 +33,9 @@ class BlogPostController {
       if (error) {
         return res.status(400).json(error.message);
       }
+      const user = req.user as IUserInRequest
       const blogPost = await BlogPost.findOneAndUpdate(
-        { _id: req.params.blogPostId, author: req.user?._id },
+        { _id: req.params.blogPostId, author: user?._id },
         { ...value },
         { new: true }
       );
@@ -86,9 +92,10 @@ class BlogPostController {
 
   deleteBlogPost = async (req: Request, res: Response) => {
     try {
+      const user = req.user as IUserInRequest
       const blogpost = await BlogPost.deleteOne({
         _id: req.params.blogPostId,
-        author: req.user?._id,
+        author: user?._id as any,
       });
       return res.status(200).json({
         statusCode: 200,

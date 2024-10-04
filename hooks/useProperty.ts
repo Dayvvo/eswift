@@ -36,7 +36,6 @@ const useProperty = () => {
     async (data: PropertyObj) => {
       try {
         const res = await post(`/property`, data);
-        // console.log("res", res);
         return res;
       } catch (err: any) {
         console.log("error calling addProperty", err);
@@ -46,9 +45,15 @@ const useProperty = () => {
     },
     [token]
   );
+  const getPropertyDetails = useCallback(async (id:string) => {
+      const res = await query (`/property/${id}`);
+      return res;
+  }, []);
+
 
   return {
     addProperty,
+    getPropertyDetails,
   };
 };
 

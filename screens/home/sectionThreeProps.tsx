@@ -20,12 +20,16 @@ export const SectionThreeProps:React.FC<props> =(
     }
 )=> {
     const ListData = listData;
+
+    const mobileDirection = mobile as ('row' | 'column')
+    const webDirection = web as ('row' | 'column')
+
     return (
         <>
             
             <Flex bg={"#FFFFFF"}
                 w={'100%'} h={'fit-content'}
-                flexDirection={{base:`${mobile}`, lg:`${web}`}}
+                flexDirection={{base:`${mobileDirection}`, lg:`${webDirection}`}}
                 width={"100%"} gap={`${gap}`}
                 alignItems={'center'}
                 px={{base:'1rem',lg:'2rem'}} 

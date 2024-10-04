@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Profile from "../models/Profile";
 import { validateProfile } from "../utils/validation";
 import User from "../models/User";
+import { IUserInRequest } from "../utils/interfaces";
 
 class ProfileController {
   createProfile = async (req: Request, res: Response) => {
@@ -11,7 +12,8 @@ class ProfileController {
         // console.log("error", error.message);
         return res.status(400).json(error.message);
       }
-      const userId = req.user?._id;
+      const user = req.user as IUserInRequest;
+      const userId = user?._id;
       if (!userId) {
         return res.status(401).json({ message: "Unauthorized" });
       }
@@ -39,7 +41,8 @@ class ProfileController {
       if (error) {
         return res.status(400).json(error.message);
       }
-      const userId = req.user?._id;
+      const user = req.user as IUserInRequest
+      const userId = user?._id;
       if (!userId) {
         return res.status(401).json({ message: "Unauthorized" });
       }
@@ -66,7 +69,8 @@ class ProfileController {
 
   getProfileByUserId = async (req: Request, res: Response) => {
     try {
-      const userId = req.user?._id;
+      const user = req.user as IUserInRequest
+      const userId = user?._id;
       if (!userId) {
         return res.status(401).json({ message: "Unauthorized" });
       }

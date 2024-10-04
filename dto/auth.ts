@@ -38,7 +38,7 @@ export interface CurrentUserRo {
     createdAt: string;
     updatedAt: string;
   };
-  currentAccount: R;
+  currentAccount: Record<string,any>;
   accounts: Array<{
     name: string;
     alias: string;

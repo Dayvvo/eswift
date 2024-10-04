@@ -69,55 +69,6 @@ export const useInputNumber = (
   };
 };
 
-// export const useImage = () => {
-//   const [images, setImages] = useState<File[]>([]); // Array to store multiple files
-//   const [error, setError] = useState<string | null>(null);
-//   const validfileTypes: string[] = ["image/jpeg", "image/png", "image/gif"];
-//   const maxFileSize: number = 5 * 1024 * 1024;
-
-//   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     if (
-//       event.target instanceof HTMLInputElement &&
-//       event.target.type === "file"
-//     ) {
-//       const selectedFiles = event.target.files!;
-//       const validFiles: File[] = [];
-
-//       Array.from(selectedFiles).forEach((file) => {
-//         if (!validfileTypes.includes(file.type)) {
-//           setError(
-//             `Invalid file type. Only ${validfileTypes.join(
-//               ", "
-//             )} are supported.`
-//           );
-//           return;
-//         }
-//         if (file.size > maxFileSize) {
-//           setError(`File exceeds maximum size of ${maxFileSize}MB.`);
-//           return;
-//         }
-//         validFiles.push(file); // Only add valid files
-//       });
-
-//       if (validFiles.length > 0) {
-//         setImages((prevImages) => [...prevImages, ...validFiles]); // Add new files to the array
-//         setError(null);
-//       }
-//     }
-//   };
-
-//   const reset = () => {
-//     setImages([]); // Reset the array of images
-//   };
-
-//   return {
-//     images, // Array of selected files
-//     onChangeHandler,
-//     error,
-//     reset,
-//   };
-// };
-
 
 export const useImage = () => {
   const [image, setImage] = useState<File | null>(null);

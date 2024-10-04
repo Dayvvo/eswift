@@ -1,4 +1,3 @@
-import constants from "@/config/constant";
 import { createSlice } from "@reduxjs/toolkit";
 
 // import constant from "config/constant";
@@ -6,6 +5,10 @@ import { createSlice } from "@reduxjs/toolkit";
 // import ls from "utils/secureStorage";
 import { RootState } from "../store";
 import { CurrentUserRo, UserType } from "@/dto/auth";
+import { R } from "@/utils/types";
+
+const constants: R = {}
+
 
 export type userType = {
   email: string;
