@@ -22,6 +22,8 @@ router
   .post(isAuth, propertyController.createProperty)
   .get(propertyController.getCreatedProperties);
 
+router.get("/props", propertyController.getPropertyDocs);
+
 router
   .route("/:id")
   .get(propertyController.getPropertyById)
