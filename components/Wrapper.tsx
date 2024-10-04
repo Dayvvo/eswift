@@ -137,11 +137,6 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
     }
   }, [navigate]);
 
-  const LogOut = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userData");
-    navigate.push("/login");
-  };
   const logout =()=> {
     localStorage.removeItem('token');
     localStorage.removeItem('userData')
@@ -241,8 +236,6 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
                   {`${user.email}`}
                 </Text>
               </Flex>
-              <Btn
-                onClick={LogOut}
               <Btn onClick={logout}
                 color="#fff"
                 bgColor="#FF3B30BF"
