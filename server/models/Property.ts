@@ -33,6 +33,9 @@ const PropertySchema = new mongoose.Schema<IProperty>(
     images: {
       type: [String],
     },
+    duration: {
+      type: String,
+    },
     creatorID: {
       type: Schema.Types.ObjectId,
       ref: "user",
@@ -49,6 +52,7 @@ const PropertySchema = new mongoose.Schema<IProperty>(
   },
   { timestamps: true }
 );
+
 
 const Property = mongoose.model("property", PropertySchema);
 
