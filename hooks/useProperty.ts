@@ -7,9 +7,12 @@ interface PropertyObj {
   description: string;
   address: string;
   price: string;
+  duration: string;
   category: string;
   features: string[];
   images: any;
+  name: string;
+  file: any;
 }
 
 const useProperty = () => {
@@ -35,8 +38,9 @@ const useProperty = () => {
         const res = await post(`/property`, data);
         // console.log("res", res);
         return res;
-      } catch (err) {
+      } catch (err: any) {
         console.log("error calling addProperty", err);
+        throw new err();
       }
       // return res
     },
