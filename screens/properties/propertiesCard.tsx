@@ -1,22 +1,28 @@
-import { Box, Flex, Img, Text } from "@chakra-ui/react"
+import { Box, Flex, Text } from "@chakra-ui/react"
 import { TbCurrencyNaira } from "react-icons/tb";
 import Image from "next/image"
+import router from "next/router";
 
 type PropertiesCardProps = {
     picture?:string;
     title?:string;
     pricing?:string;
-    duration?:string;
+    duration?:string | null;
     details?:string;
+    id:string;
 }
 
 export const PropertiesCard =({
-    picture, title, pricing, duration, details
+    picture, title, pricing, duration, details,id
 }:PropertiesCardProps) => {
+
+    const Navigate = () => {
+        router.push(`/properties/${id}`)
+    }
 
     return(
         <>
-            <Box
+            <Box onClick={Navigate}
                 className="roboto"
                 bg={'#FFF'}
                 maxW={'295px'} h={'400px'}

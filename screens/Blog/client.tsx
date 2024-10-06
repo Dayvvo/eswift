@@ -2,6 +2,7 @@ import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
 import { Box, Grid } from "@chakra-ui/react";
 import { BlogCard } from "./blogsCard";
+import { Footer } from "@/components/footer";
 
 const BlogspotScreen =()=> {
 
@@ -49,6 +50,8 @@ const BlogspotScreen =()=> {
             date: '10/02/2020' 
         },
     ]
+
+    
     return(
         <Box>
             <NavBar/>
@@ -81,6 +84,7 @@ const BlogspotScreen =()=> {
                         }
                     </Grid>
                 </Box>
+            <Footer/>
         </Box>
     )
 }
