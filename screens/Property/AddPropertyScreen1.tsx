@@ -150,6 +150,7 @@ export const AddPropertyScreenOne = ({
               onChange={onChangeCategory}
             >
               {["Option 1", "Option 2", "Option 3", "Option 4"].map((entry) => (
+                // eslint-disable-next-line react/jsx-key
                 <option value={`${entry}`}>{entry}</option>
               ))}
             </Select>

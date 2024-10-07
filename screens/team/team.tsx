@@ -4,6 +4,7 @@ import NavBar from "@/components/navBar";
 import { Box, Text, Flex, } from "@chakra-ui/react";
 import { Executives } from "./executives";
 import { Sales } from "./sales";
+import { Footer } from "@/components/footer";
 
 
 const TeamScreen =( )=> {
@@ -28,8 +29,8 @@ const TeamScreen =( )=> {
                    <Executives/>
                    <Sales/>
                 </Box>
+                <Footer/>
             </Box>
-            
         </>
     )
 }
