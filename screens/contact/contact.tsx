@@ -1,4 +1,6 @@
 
+import { Footer } from "@/components/footer";
+import { GalleryView } from "@/components/GalleryViewer";
 import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
 import { Box, Text, Flex, } from "@chakra-ui/react";
@@ -6,7 +8,8 @@ import { Box, Text, Flex, } from "@chakra-ui/react";
 
 
 const ContactScreen =( )=> {
-
+    
+    
     return (
 
         <>
@@ -22,7 +25,7 @@ const ContactScreen =( )=> {
                     px={{base:'1rem',lg:'4rem'}}
                     display={'flex'} flexDir={'column'} 
                     alignItems={'center'} gap={'20px'}
-                    mb={'120px'}
+                    mb={{base:'10px',lg:'120px'}}
                 >
                    <Text
                         className="antic"
@@ -41,35 +44,38 @@ const ContactScreen =( )=> {
                     h={{base:'auto',lg:'440px'}}
                     gap="20px"
                     alignItems='center' mb={20}
+
                 >
                     <Box
                         w={{base:'100%',lg:'50%'}}
-                        px={16}
+                        px={{base:4, lg:16}}
                         display={'flex'} flexDirection={'column'}
                         justifyContent={'center'}
                     >
                         { 
-                        ['Phone: +234 8066895363','WhatsApp: +234 8059112878','Email:eswiftpropertymart@gmail.com'].map((item)=>( 
-                            <Text key={item}
-                                fontSize="30px"
-                                fontWeight={600}
-                                className="roboto"
-                                borderBottom={'2px solid #626871'} 
-                                textColor={'var(--TextCol'} py={'6px'}
-                            >
-                                {item}
-                            </Text>
-                        ))
+                            ['Phone: +234 8066895363','WhatsApp: +234 8059112878','Email:eswiftpropertymart@gmail.com'].map((item)=>( 
+                                <Text key={item}
+                                    fontSize={{base:'20px',lg:"30px"}}
+                                    fontWeight={600}
+                                    className="roboto"
+                                    borderBottom={'2px solid #626871'} 
+                                    textColor={'var(--TextCol'} py={'6px'}
+                                >
+                                    {item}
+                                </Text>
+                            ))
                         }
                     </Box>
                     <Box 
                         w={{base:'100%',lg:'50%'}}
                         bgImage="url('/contact.png')"
+                        h={'100%'}
                         bgSize="cover"
                         bgPosition="center"
                     >
                     </Box>
                 </Box>
+                <Footer/>
             </Box>
             
         </>

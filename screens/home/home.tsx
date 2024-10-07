@@ -6,7 +6,8 @@ import { AboutSection } from "./homeAboutSection";
 import { SectionTwo } from "./sectionTwo";
 import { HeroProps } from "@/screens/home/heroProps";
 import { SectionThree } from "./sectionThree";
-import { Video } from "./Video";
+import { Footer } from "@/components/footer";
+import { Video } from "./video";
 
 
 
@@ -38,6 +39,7 @@ const HomePage =()=> {
                     />
                     <SectionThree/>
                 </Box>
+                <Footer/>
             </Box>
             
         </>
