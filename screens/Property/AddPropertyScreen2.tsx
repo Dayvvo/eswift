@@ -20,18 +20,18 @@ import { IoIosArrowForward } from "react-icons/io";
 interface ButtonFunction {
   next: () => void;
   previous: () => void;
-  typeOfProperty: string;
+  duration: string;
   price: any;
   address: string;
   onChangeAddress: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangePrice: (event: ChangeEvent<HTMLInputElement>) => void;
-  onChangeType: (event: ChangeEvent<HTMLSelectElement>) => void;
+  onChangeDuration: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
 export const AddPropertyScreenTwo = ({
   next,
   previous,
-  typeOfProperty,
-  onChangeType,
+  duration,
+  onChangeDuration,
   price,
   onChangePrice,
   address,
@@ -67,33 +67,6 @@ export const AddPropertyScreenTwo = ({
       text: "var(--sub600)",
     },
   ];
-
-  const [inputValue, setInputValue] = useState({
-    address: "",
-    price: "",
-    period: "",
-  });
-
-  console.log("inputValue1", inputValue);
-
-  const handleInput = (
-    event: ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    setInputValue({ ...inputValue, [event.target.name]: event.target.value });
-  };
-
-  //   const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-  //     axios
-  //       .post("", inputValue)
-  //       .then((res) => {
-  //         onClick();
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   };
 
   return (
     <>
@@ -212,11 +185,13 @@ export const AddPropertyScreenTwo = ({
                 h="40px"
                 _placeholder={{ textColor: "var(--soft400)" }}
                 placeholder="Duration"
-                onChange={onChangeType}
-                value={typeOfProperty}
+                onChange={onChangeDuration}
+                value={duration}
               >
                 {["Annually", "Weekly", "Monthly", "Quarterly"].map((entry) => (
-                  <option value={`${entry}`}>{entry}</option>
+                  <option value={`${entry}`} key={entry}>
+                    {entry}
+                  </option>
                 ))}
               </Select>
             </InputGroup>

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Box, Flex, Grid, Image, Img, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { ReactNode, useEffect, useState } from "react";
@@ -98,11 +98,12 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
     },
   ];
 
-  const {isWindow} = useAuth();
+  const { isWindow } = useAuth();
   const navigate = useRouter() as NextRouter;
 
-  const [route,setRoute] = useState("");
+  const [route, setRoute] = useState("");
   const [path, setPath] = useState("");
+  const [user, setUser] = useState({ firstName: "", lastName: "", email: "" });
 
   useEffect(() => {
     if (isWindow) {
@@ -122,21 +123,19 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
     }
   }, [route]);
 
-  useEffect(()=> {
-
-    const storedData = localStorage.getItem('userData');
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
     if (!storedData) {
-        navigate.push('/login');
+      navigate.push("/login");
     } else {
-        try{
-            const parsedUserData = JSON.parse(storedData);
-        }
-        catch (err) {
-            navigate.push('/login')
-        }
+      try {
+        const parsedUserData = JSON.parse(storedData);
+        setUser(parsedUserData);
+      } catch (err) {
+        navigate.push("/login");
+      }
     }
-
-  },[navigate])
+  }, [navigate]);
 
   const logout =()=> {
     localStorage.removeItem('token');
@@ -226,7 +225,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
                   fontSize={"0.875rem"}
                   fontWeight={500}
                 >
-                  Black Chang
+                  {`${user.firstName} ${user.lastName}`}
                 </Text>
                 <Text
                   color="#525866"
@@ -234,7 +233,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
                   fontSize={"0.75rem"}
                   fontWeight={400}
                 >
-                  blackchang@gmail.com
+                  {`${user.email}`}
                 </Text>
               </Flex>
               <Btn onClick={logout}
@@ -259,7 +258,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
           maxW={{ base: "full", lg: "80vw" }}
           px="20px"
         >
-          { route ? children : <></>}
+          {route ? children : <></>}
         </Box>
       </Box>
     </Box>

@@ -1,25 +1,26 @@
-import { UserRole } from '../interfaces'
+import { UserRole } from "../interfaces";
 
 export interface ILoginValidation {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export interface ISignupValidation {
-  email: string
-  password: string
-  firstName: string
-  lastName: string
-  role: UserRole
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
 }
 
 export interface IAddPropertyValidation {
-  title: string
-  type: string
-  address: string
-  price: string
-  category: string
-  description: string
-  features: Array<string>
-  images: Array<string>
+  title: string;
+  type: string;
+  address: string;
+  price: string;
+  category: string;
+  duration: string;
+  description: string;
+  features: Array<string>;
+  images: Array<string>;
 }
