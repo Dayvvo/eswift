@@ -6,13 +6,10 @@ export const AboutSection =()=> {
     return (
         <>
             <Box id="Main" width={"100%"}
-                bgImage="url('/BG2.png')"
-                bgSize="cover"
-                bgPosition="center"
                 className="robotoF"
                 overflow={'clip'}
             >
-                <Flex bg={"#FFFFFF03"}
+                <Flex bg={"transparent"}
                     flexDir='column'
                     py={"60px"} 
                     width={"100%"} gap={{base:'32px', md:'48px'}}
@@ -37,7 +34,7 @@ export const AboutSection =()=> {
                         textColor={'#827053'}
                         maxW={'1000px'}
                     >
-                        At E-Swift PropertyMart, we understand that finding your dream home is more than just a transaction; it's about finding the perfect space to create memories and build your future. 
+                        At E-Swift PropertyMart, we understand that finding your dream home is more than just a transaction; it`s about finding the perfect space to create memories and build your future. 
                         With our dedicated team of real estate professionals, we are committed to helping you every step of the way.
                     </Text>
                     <Text

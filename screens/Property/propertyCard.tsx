@@ -78,13 +78,10 @@ export const PropertyCard = ({
             {title}
           </Text>
           <Text
-            display={"flex"}
-            alignItems={"center"}
-            fontSize={{ base: "16px", lg: "18px" }}
+            fontSize={{ base: "16px", lg:"18px" }}
             fontWeight={500}
           >
-            <TbCurrencyNaira />
-            {pricing}
+            <TbCurrencyNaira />{pricing}
           </Text>
         </Flex>
         <Flex

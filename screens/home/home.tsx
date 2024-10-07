@@ -8,6 +8,7 @@ import { HeroProps } from "@/screens/home/heroProps";
 import { SectionThree } from "./sectionThree";
 import { Footer } from "@/components/footer";
 import { Video } from "./video";
+import { Background } from "./Background";
 
 
 
@@ -19,6 +20,7 @@ const HomePage =()=> {
             <Box>
                 <NavBar/>
                 <Hero/>
+                <Background/>
                 <AboutSection/>
                 <Video/>
                 <SectionTwo/>

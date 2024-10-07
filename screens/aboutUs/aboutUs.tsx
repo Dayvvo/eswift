@@ -6,6 +6,7 @@ import { Video } from "./video";
 import { Footer } from "@/components/footer";
 import { AboutSection } from "./aboutPageSection";
 import { MoreDetails } from "./moreDetails";
+import { Background } from "../home/Background";
 
 
 const AboutUsScreen =()=> {
@@ -20,6 +21,7 @@ const AboutUsScreen =()=> {
                     details={"Explore our story and how we've become a trusted leader in the industry."} 
                     buttonPos={null} w={"100%"} h={"100vh"} video={"/AboutVid.mp4"}
                 />
+                <Background/>
                 <AboutSection/>
                 <Video/>
                 <Box id="main"

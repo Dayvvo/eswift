@@ -9,6 +9,9 @@ import { PropertiesCard } from "./propertiesCard";
 import { Footer } from "@/components/footer";
 import { useApiUrl } from "@/hooks/useApi";
 import axios from "axios";
+import { LoadMore } from "@/components/LoadMore";
+import Btn from "@/components/Btn";
+import { Background } from "../home/Background";
 
 type properties = {
     id:string;
@@ -25,43 +28,6 @@ const PropertiesScreen =()=> {
     const [fetchData, setFetchData] = useState<properties[]>([])
     const [isLoading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(0);
-
-    // const properties = [
-
-    //     {
-    //         id:1,
-    //         title:'3 bedroom flat',
-    //         pricing:'2,000,000',
-    //         details:'Korem ipsum dolor sit celex dor divorless',
-    //         picture:'/properties-dummy.png',
-    //         duration:'annually'
-    //     },
-    //     {
-    //         id:2,
-    //         title:'3 bedroom flat',
-    //         pricing:'2,000,000',
-    //         details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
-    //         picture:'/properties-dummy.png',
-    //         duration:'annually'
-    //     },
-    //     {
-    //         id:3,
-    //         title:'3 bedroom flat',
-    //         pricing:'2,000,000',
-    //         details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
-    //         picture:'/properties-dummy.png',
-    //         duration:'annually'
-    //     },
-    //     {
-    //         id:4,
-    //         title:'3 bedroom flat',
-    //         pricing:'2,000,000',
-    //         details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
-    //         picture:'/properties-dummy.png',
-    //         duration:'annually'
-    //     },
-    // ]
-
 
 
     useEffect(()=> {
@@ -93,39 +59,54 @@ const PropertiesScreen =()=> {
                     details={"Explore our extensive listings of properties in Lagos and beyond"} 
                     buttonPos={null} w={"100%"} h={"100vh"} video={"/PropertiesVid.mp4"}
                 />
+                <Background/>
                 <Box id='main'
                     py={'120px'}
-                    px={{base:'1rem',lg:'4rem'}}
+                    px={{base:'1rem',lg:'5rem'}}
                     display={'flex'} flexDir={'column'} 
                     alignItems={'center'} gap={'20px'}
                 >
                     <InputGroup
                         display={'flex'} alignItems={'center'}
                         border={'1px'} borderRadius={'10px'} 
-                        borderColor={'var(--strong950)'}
+                        bg={'#E2EDF3'}
+                        borderColor={'#26262630'}
+                        _focusWithin={{border:'1.5px solid #3170A6'}}
                         cursor={'search'}
                         fontSize={14} textColor={'var--(sub600)'}
-                        maxW='820px' h='52px'
-                        _placeholder={{textColor:'var--(soft400)'}}
+                        maxW='1020px' h={{base:'52px',lg:'80px'}}
+                        _placeholder={{textColor:'#666666'}}
+                        className="urbanist" overflow={'hidden'}
                     >
-                        <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
-                            <RiSearch2Line className="iconM"/>
-                        </InputLeftElement>
                         <Input 
-                            w={'100%'} h={'100%'}
+                            w={'80%'} h={'100%'}
+                            border={'none'} _focusVisible={'none'}
                             type='search' 
-                            placeholder='Search...'  
+                            placeholder='Search for a Property'  
                             value={inputValue}
                             onChange={(e:any) => setInputValue(e.target.value)} 
                                         
                         />
-                        <InputRightElement pointerEvents="none" color={'var(--soft400)'}>
-                            <IoFilter className="iconM"/>
+                        <InputRightElement pointerEvents="none" w={'fit-content'} h={'max-content'} mt={4} mx={3} zIndex={30}>
+                            <Btn type={'submit'}
+                                display={'flex'}
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                                W={'148px'}
+                                h="48px"
+                                bg={'#3170A6'}
+                                borderRadius={'8px'}
+                                textColor={'white'}
+                                gap={'8px'}
+                                _hover={{opacity:0.5}}
+                            >
+                                <RiSearch2Line/> Find Property
+                            </Btn>
                         </InputRightElement>
                     </InputGroup>
 
-                    <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(3, 1fr)', xl:'repeat(4, 1fr)'}} 
-                        gap={{base:'24px',lg:'28px'}}
+                    <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(2, 1fr)', xl:'repeat(4, 1fr)'}} 
+                        gap={'20px'}
                     >
                         {
                             fetchData.map((item)=>{
@@ -134,7 +115,6 @@ const PropertiesScreen =()=> {
                                         picture={item?.images[0]} 
                                         title={item?.title} 
                                         pricing={item?.price} 
-                                        duration={null}
                                         details={item?.description}
                                         id={item?.id}
                                     />
@@ -142,6 +122,8 @@ const PropertiesScreen =()=> {
                             })
                         }
                     </Grid>
+
+                    <LoadMore click={()=> page + 1}/>
                     
                 </Box>
                 <Footer/>

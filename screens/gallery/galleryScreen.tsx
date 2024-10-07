@@ -8,11 +8,14 @@ import { RiSearch2Line } from "react-icons/ri";
 import { PropertiesCard } from "../properties/propertiesCard";
 import { GalleryCard } from "./galleryCard";
 import { Footer } from "@/components/footer";
+import { LoadMore } from "@/components/LoadMore";
+import { Background } from "../home/Background";
 
 
 const GalleryScreen =( )=> {
 
     const [inputValue, setInputValue] = useState<string>('')
+    const [page, setPage] = useState<number>(0)
 
     const projects = [
 
@@ -57,6 +60,7 @@ const GalleryScreen =( )=> {
                     details={"Here are some of our notable projects"} 
                     buttonPos={null} w={"100%"} h={"100vh"} video={"/ProjectVid.mp4"}
                 />
+                <Background/>
                 <Box id="main"
                     py={'120px'}
                     px={{base:'1rem',lg:'4rem'}}
@@ -103,7 +107,8 @@ const GalleryScreen =( )=> {
                                 )
                             })
                         }
-                    </Grid>  
+                    </Grid> 
+                    <LoadMore click={()=> page + 1}/> 
                 </Box>
                 <Footer/>
             </Box>
