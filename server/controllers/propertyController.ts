@@ -42,7 +42,7 @@ class PropertyController {
     const regex = new RegExp(keyword, 'i')
 
     const findQuery = {
-      $or: [{ title: regex }, { description: regex }, { category: regex }],
+      $or: [{ title: regex }, { description: regex }, { category: reegex }],
     }
 
     try {
