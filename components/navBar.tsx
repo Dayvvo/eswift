@@ -28,7 +28,11 @@ const NavBar = () => {
     useEffect(() => {
 
       const handleScroll =()=> {
-        setIsScrolled(window.scrollY > 0);
+        if( pathname === '/'){
+          setIsScrolled(window.scrollY > 100);
+        } else {
+          setIsScrolled(window.scrollY >= 0);
+        }
       };
 
       window.addEventListener('scroll', handleScroll);
@@ -73,15 +77,15 @@ const NavBar = () => {
   
   return (
     <Box 
-      bg={`${pathname !== "/" ? "" : "#FFF" }`} 
       position="relative" w="100vw" height="fit-content"
+      
     >
       <Box
         as="nav"
         zIndex={100}
         px={{ base: "1rem", lg:"2rem", xl:"4rem" }}
-        height={{base:'86px',lg:'96px'}} pt={'24px'}
-        bg="Transparent"
+        height={{base:'86px',lg:'96px'}} py={'24px'}
+        bg={`${isScrolled ? "#FFFFFF90" : "" }`} 
         backdropFilter={isScrolled ? 'blur(10px)':'blur(1px)'}
         _hover={{
           bgOpacity: "0.1",

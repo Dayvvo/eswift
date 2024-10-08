@@ -14,11 +14,12 @@ import { BsDot } from "react-icons/bs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { FaRegImages } from "react-icons/fa";
-import { PropertyCard } from "./propertyCard";
+// import { PropertyCard } from "./propertyCard";
 import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
+import { PropertyCard } from "./propertyCard";
 
 export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; cardWidth?: any;}) => {
   const Features: any[] = [

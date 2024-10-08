@@ -7,6 +7,7 @@ import { IoFilter } from "react-icons/io5";
 import { RiSearch2Line } from "react-icons/ri";
 import { PropertiesCard } from "../properties/propertiesCard";
 import { GalleryCard } from "./galleryCard";
+import { Footer } from "@/components/footer";
 
 
 const GalleryScreen =( )=> {
@@ -102,9 +103,9 @@ const GalleryScreen =( )=> {
                                 )
                             })
                         }
-                    </Grid>
-                    
+                    </Grid>  
                 </Box>
+                <Footer/>
             </Box>
             
         </>

@@ -3,11 +3,12 @@ import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
 import { Box, Text, Flex, } from "@chakra-ui/react";
 import { Video } from "./video";
-import { MoreDetails } from "./MoreDetails";
-import { AboutSection } from "./AboutPageSection";
+import { Footer } from "@/components/footer";
+import { AboutSection } from "./aboutPageSection";
+import { MoreDetails } from "./moreDetails";
 
 
-const AboutUsScreen =( )=> {
+const AboutUsScreen =()=> {
 
     return (
 
@@ -48,6 +49,7 @@ const AboutUsScreen =( )=> {
                     </Text>
                     <MoreDetails/>
                 </Box>
+                <Footer/>
             </Box>
             
         </>

@@ -1,52 +1,87 @@
 
 import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
-import { Box, Text, Flex, InputGroup, InputLeftElement, Input, InputRightElement, Grid } from "@chakra-ui/react";
-import { useState } from "react";
+import { Box,InputGroup, InputLeftElement, Input, InputRightElement, Grid } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { IoFilter } from "react-icons/io5";
 import { RiSearch2Line } from "react-icons/ri";
 import { PropertiesCard } from "./propertiesCard";
+import { Footer } from "@/components/footer";
+import { useApiUrl } from "@/hooks/useApi";
+import axios from "axios";
 
+type properties = {
+    id:string;
+    title:string;
+    description:string;
+    price:string;
+    images:string[];
+    duration:string | null;
+}
 
-const PropertiesScreen =( )=> {
+const PropertiesScreen =()=> {
 
     const [inputValue, setInputValue] = useState<string>('')
+    const [fetchData, setFetchData] = useState<properties[]>([])
+    const [isLoading, setLoading] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(0);
 
-    const properties = [
+    // const properties = [
 
-        {
-            id:1,
-            title:'3 bedroom flat',
-            pricing:'2,000,000',
-            details:'Korem ipsum dolor sit celex dor divorless',
-            picture:'/properties-dummy.png',
-            duration:'annually'
-        },
-        {
-            id:2,
-            title:'3 bedroom flat',
-            pricing:'2,000,000',
-            details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
-            picture:'/properties-dummy.png',
-            duration:'annually'
-        },
-        {
-            id:3,
-            title:'3 bedroom flat',
-            pricing:'2,000,000',
-            details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
-            picture:'/properties-dummy.png',
-            duration:'annually'
-        },
-        {
-            id:4,
-            title:'3 bedroom flat',
-            pricing:'2,000,000',
-            details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
-            picture:'/properties-dummy.png',
-            duration:'annually'
-        },
-    ]
+    //     {
+    //         id:1,
+    //         title:'3 bedroom flat',
+    //         pricing:'2,000,000',
+    //         details:'Korem ipsum dolor sit celex dor divorless',
+    //         picture:'/properties-dummy.png',
+    //         duration:'annually'
+    //     },
+    //     {
+    //         id:2,
+    //         title:'3 bedroom flat',
+    //         pricing:'2,000,000',
+    //         details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
+    //         picture:'/properties-dummy.png',
+    //         duration:'annually'
+    //     },
+    //     {
+    //         id:3,
+    //         title:'3 bedroom flat',
+    //         pricing:'2,000,000',
+    //         details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
+    //         picture:'/properties-dummy.png',
+    //         duration:'annually'
+    //     },
+    //     {
+    //         id:4,
+    //         title:'3 bedroom flat',
+    //         pricing:'2,000,000',
+    //         details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
+    //         picture:'/properties-dummy.png',
+    //         duration:'annually'
+    //     },
+    // ]
+
+
+
+    useEffect(()=> {
+        const getPropertyFunction = async () => {
+            setLoading(true);
+            try {
+            setLoading(false);
+            const fetchData = await axios.get(
+                `/api/property?keyword=${inputValue}&PageNumber={${page}}`
+            );
+            console.log(fetchData);
+            setFetchData(fetchData?.data?.data);
+            } catch (error) {
+            setLoading(false);
+            console.log(error);
+            }
+        };
+        getPropertyFunction()
+    },[page, inputValue])
+
 
     return (
 
@@ -93,14 +128,15 @@ const PropertiesScreen =( )=> {
                         gap={{base:'24px',lg:'28px'}}
                     >
                         {
-                            properties.map((property)=>{
+                            fetchData.map((item)=>{
                                 return(
-                                    <PropertiesCard key={property?.id}
-                                        picture={property?.picture} 
-                                        title={property?.title} 
-                                        pricing={property?.pricing} 
-                                        duration={property?.duration}
-                                        details={property?.details}
+                                    <PropertiesCard key={item?.id}
+                                        picture={item?.images[0]} 
+                                        title={item?.title} 
+                                        pricing={item?.price} 
+                                        duration={null}
+                                        details={item?.description}
+                                        id={item?.id}
                                     />
                                 )
                             })
@@ -108,6 +144,7 @@ const PropertiesScreen =( )=> {
                     </Grid>
                     
                 </Box>
+                <Footer/>
             </Box>
             
         </>

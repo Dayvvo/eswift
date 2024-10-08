@@ -37,14 +37,12 @@ const useAuth = () => {
   
     useEffect(()=> {
 
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
-            setUser(JSON.parse(localStorage.getItem('userData') as string));
-        } 
+        if (isWindow) {
+            const userFromLocalStorage = window.localStorage.getItem("userData")
+            userFromLocalStorage && setUser(JSON.parse(userFromLocalStorage)?.user);
+        }
 
-            setLoading(false);
-
-    },[]);
+    },[isWindow]);
   
     const login = async (credentials: {email: string; password: string}) => {
 
