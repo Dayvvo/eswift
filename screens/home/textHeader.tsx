@@ -12,21 +12,24 @@ export const TextHeader =({Header, sub}:props)=> {
         <Box
             w={'100%'}
             h={'fit-content'}
+            my={2}
         >
             <Image src="/Abstract.png" alt="Abstract" w={'54px'} h={'24px'}/>
             <Text
                 className="antic"
                 fontWeight={400} 
-                fontSize={'38px'}
+                fontSize={{base:'24px',lg:'38px'}}
                 textColor={'black'}
+                pl={'4px'}
             >
                 {Header}
             </Text>
             <Text
-                className="robotoF"
+                className="urbanist"
                 fontWeight={500} 
-                fontSize={'18px'}
+                fontSize={{base:'12px',lg:'18px'}}
                 textColor={'#999999'}
+                pl={'4px'}
             >
                 {sub}
             </Text>

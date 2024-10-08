@@ -4,7 +4,7 @@ import Image from "next/image"
 
 export const Sales =()=> {
     
-    const Sales = [
+    const Sales:any[] = [
         {
             id:1,
             person:'Oronnaye Ayomide',
@@ -47,47 +47,60 @@ export const Sales =()=> {
     return (
     
         <Box
-            bg={'#FFF'} w={'100%'} h={''}
+            w={'100%'} h={''}
             py={'54px'} className="antic" display={'flex'} alignItems={'center'}
             flexDir={'column'} my={'120'}
         >
-            <Text
-                textAlign={'center'}
-                fontWeight={400} fontSize={'48px'}
-                textColor={'var(--TextCol)'}
-            >
-                The Sales Team
-            </Text>
-            <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(3, 1fr)', xl:'repeat(3, 1fr)'}} 
+            <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(3, 1fr)'}} 
                 gap={{base:'24px',lg:'40px'}} mt={'80px'} 
             >
                 {
                     Sales.map((item)=>{
                         return(
-                            <Box display={'flex'} flexDir={'column'} gap={'10px'} maxW={'310px'} h={'fit-content'}>
+                            <Box key={item.id}
+                                display={'flex'} 
+                                flexDir={'column'} 
+                                gap={'24px'} 
+                                maxW={'308px'} 
+                                h={'fit-content'} 
+                                p={'16px'}
+                                borderRadius={'12px'} border={'1px solid #262626'}
+                            >
                                 <Box 
                                     w={'100%'} 
-                                    h={'300px'}
+                                    h={'290px'}
                                     borderRadius={'15px'} overflow={'hidden'}
                                 >
-                                    <Image src={`${item?.picture}`} alt="" width={310} height={300} />
+                                    <Image src={`${item?.picture}`} alt="" width={275} height={290} />
                                 </Box>
-                                <Text
-                                    textAlign={'center'}
-                                    fontWeight={300} fontSize={'30px'}
-                                    textColor={'#000'}
-                                    className="robotoF"
+                                <Box 
+                                    display={'flex'} flexDir={'column'}
+                                    textAlign={'center'} justifyContent={'start'}
                                 >
-                                    {item?.person}
-                                </Text>
-                                <Text
-                                    textAlign={'center'}
-                                    fontWeight={400} fontSize={'30px'}
-                                    textColor={'#000'}
-                                >
-                                    {item?.title}
-                                </Text>
-
+                                    <Text
+                                        fontWeight={700} fontSize={'24px'}
+                                        textColor={'#000'}
+                                        className="robotoF"
+                                    >
+                                        {item?.person}
+                                    </Text>
+                                    <Text
+                                        textAlign={'center'}
+                                        fontWeight={400} fontSize={'20px'}
+                                        textColor={'#000'}
+                                        className="robotoF"
+                                    >
+                                        {item?.title}
+                                    </Text>
+                                    <Text
+                                        textAlign={'center'}
+                                        fontWeight={400} fontSize={'18px'}
+                                        textColor={'#000'}
+                                        className="antic"
+                                    >
+                                        {item?.department}
+                                    </Text>
+                                </Box>
                             </Box>
                         )
                     })

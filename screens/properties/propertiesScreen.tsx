@@ -12,6 +12,7 @@ import axios from "axios";
 import { LoadMore } from "@/components/LoadMore";
 import Btn from "@/components/Btn";
 import { Background } from "../home/Background";
+import { TextHeader } from "../home/textHeader";
 
 type properties = {
     id:string;
@@ -46,7 +47,13 @@ const PropertiesScreen =()=> {
             }
         };
         getPropertyFunction()
+
     },[page, inputValue])
+
+    function scrollToSection() {
+        const section = document.querySelector('#main') as HTMLElement;
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
 
 
     return (
@@ -55,9 +62,9 @@ const PropertiesScreen =()=> {
             <Box>
                 <NavBar/>
                 <HeroPropsVideo  
-                    bg={"#00000070"} Nav={"/properties/#main"} header={"Find Dream Properties"} 
-                    details={"Explore our extensive listings of properties in Lagos and beyond"} 
-                    buttonPos={null} w={"100%"} h={"100vh"} video={"/PropertiesVid.mp4"}
+                    bg={"#00000070"} header={"Find Dream Properties"}
+                    details={"Explore our extensive listings of properties in Lagos and beyond"}
+                    buttonPos={null} w={"100%"} h={"100vh"} video={"/PropertiesVid.mp4"} click={scrollToSection}
                 />
                 <Background/>
                 <Box id='main'
@@ -73,13 +80,13 @@ const PropertiesScreen =()=> {
                         borderColor={'#26262630'}
                         _focusWithin={{border:'1.5px solid #3170A6'}}
                         cursor={'search'}
-                        fontSize={14} textColor={'var--(sub600)'}
+                        fontSize={{base:12,lg:14}} textColor={'var--(sub600)'}
                         maxW='1020px' h={{base:'52px',lg:'80px'}}
-                        _placeholder={{textColor:'#666666'}}
                         className="urbanist" overflow={'hidden'}
                     >
                         <Input 
                             w={'80%'} h={'100%'}
+                            _placeholder={{textColor:'#666666', fontSize:{base:'10px',md:'14px',lg:'20px'}}}
                             border={'none'} _focusVisible={'none'}
                             type='search' 
                             placeholder='Search for a Property'  
@@ -87,23 +94,26 @@ const PropertiesScreen =()=> {
                             onChange={(e:any) => setInputValue(e.target.value)} 
                                         
                         />
-                        <InputRightElement pointerEvents="none" w={'fit-content'} h={'max-content'} mt={4} mx={3} zIndex={30}>
-                            <Btn type={'submit'}
+                        <InputRightElement pointerEvents="none" w={'fit-content'} h={'max-content'} mt={{base:2.5,lg:4}} mx={{base:1,lg:3}} zIndex={30}>
+                            <Btn
                                 display={'flex'}
                                 justifyContent={'center'}
                                 alignItems={'center'}
-                                W={'148px'}
-                                h="48px"
+                                W={{base:'60px',lg:'148px'}}
+                                h={{base:'32px',lg:"48px"}}
                                 bg={'#3170A6'}
                                 borderRadius={'8px'}
                                 textColor={'white'}
                                 gap={'8px'}
                                 _hover={{opacity:0.5}}
+                                fontSize={{base:'8px', lg:'14px'}}
                             >
                                 <RiSearch2Line/> Find Property
                             </Btn>
                         </InputRightElement>
                     </InputGroup>
+
+                    <TextHeader Header={"Discover a World of Possibilities"} sub={"Our portfolio of properties is as diverse as yur dreams. Explore the following categories to find the perfect property that resonates with your vision of home"}/>
 
                     <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(2, 1fr)', xl:'repeat(4, 1fr)'}} 
                         gap={'20px'}

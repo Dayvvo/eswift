@@ -5,7 +5,11 @@ import { BlogCard } from "./blogsCard";
 import { Footer } from "@/components/footer";
 
 const BlogspotScreen =()=> {
-
+    function scrollToSection() {
+        const section = document.querySelector('#main') as HTMLElement;
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+    
     const Blogs = [
         {
             id:1,
@@ -56,9 +60,10 @@ const BlogspotScreen =()=> {
         <Box>
             <NavBar/>
             <HeroPropsVideo  
-                bg={"#00000070"} Nav={"#blogs"} header={"Blog"}
+                bg={"#00000070"} header={"Blog"}
                 details={"Your Source for Real Estate Insights and Tips"} 
                 buttonPos={null} w={"100%"} h={"100vh"} video={"/PropertiesVid.mp4"}
+                click={scrollToSection}
             />
             <Box id="blogs"
                     py={'70px'}

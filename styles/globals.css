@@ -16,7 +16,9 @@
     --errorBase: #FB3748;
     --TextCol: #18191F;
 }
-
+.width{
+  width:100% !important;
+}
 .urbanist{
   font-family: "Urbanist", sans-serif;
   font-style: normal;

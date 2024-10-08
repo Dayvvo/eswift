@@ -11,15 +11,22 @@ import { Background } from "../home/Background";
 
 const AboutUsScreen =()=> {
 
+    function scrollToSection() {
+        const section = document.querySelector('#main') as HTMLElement;
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+
     return (
 
         <>
             <Box>
                 <NavBar/>
                 <HeroPropsVideo  
-                    bg={"#00000070"} Nav={"/aboutUs/#main"} header={"The E-Swift Dream"}
+                    bg={"#00000070"} header={"The E-Swift Dream"}
                     details={"Explore our story and how we've become a trusted leader in the industry."} 
                     buttonPos={null} w={"100%"} h={"100vh"} video={"/AboutVid.mp4"}
+                    click={scrollToSection} 
                 />
                 <Background/>
                 <AboutSection/>
