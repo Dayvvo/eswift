@@ -13,15 +13,14 @@ class BlogPostController {
       const user = req.user as any;
 
       const blogPost = new BlogPost({ ...value, author: user?._id as string });
-      
+
       await blogPost.save();
       return res.status(201).json({
         statusCode: 201,
         data: blogPost,
         message: "Blog post created",
       });
-    } 
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).send("Failed to create blog post");
     }
@@ -33,9 +32,9 @@ class BlogPostController {
       if (error) {
         return res.status(400).json(error.message);
       }
-      const user = req.user as IUserInRequest
+      const user = req.user as IUserInRequest;
       const blogPost = await BlogPost.findOneAndUpdate(
-        { _id: req.params.blogPostId, author: user?._id },
+        { _id: req.params.blogPostId },
         { ...value },
         { new: true }
       );
@@ -92,10 +91,9 @@ class BlogPostController {
 
   deleteBlogPost = async (req: Request, res: Response) => {
     try {
-      const user = req.user as IUserInRequest
+      const user = req.user as IUserInRequest;
       const blogpost = await BlogPost.deleteOne({
         _id: req.params.blogPostId,
-        author: user?._id as any,
       });
       return res.status(200).json({
         statusCode: 200,
