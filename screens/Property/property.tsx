@@ -66,7 +66,7 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeCategory,
     reset: categoryReset,
   } = useInputText((category) => category !== "");
- 
+
   const {
     input: description,
     onChangeInput: onChangeDescription,
@@ -160,7 +160,7 @@ export const PropertyScreen = () => {
         position: "top",
         duration: 5000,
       });
-      console.log("err", err);
+      // console.log("err", err);
     }
   };
 
@@ -168,21 +168,6 @@ export const PropertyScreen = () => {
     setShowModal((prevState) => !prevState);
   };
 
-    
-  const getPropertyFunction = async () => {
-    setLoading(true);
-    try {
-      setLoading(false);
-      const getAllProperties = await axios.get(
-        `/api/property?keyword=${inputValue}&PageNumber={${page}}`
-      );
-      setGetProperty(getAllProperties?.data?.data);
-      console.log(getAllProperties?.data);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -198,6 +183,19 @@ export const PropertyScreen = () => {
     fetchData();
   }, []);
   useEffect(() => {
+    const getPropertyFunction = async () => {
+      setLoading(true);
+      try {
+        setLoading(false);
+        const getAllProperties = await axios.get(
+          `/api/property?keyword=${inputValue}&PageNumber={${page}}`
+        );
+        setGetProperty(getAllProperties?.data?.data);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    };
     getPropertyFunction();
   }, [page, inputValue, showModal]);
 
@@ -324,50 +322,41 @@ export const PropertyScreen = () => {
             <Skeleton height="40px" />
           </Stack>
         )}
-        {/* {!loading && getProperty === [] && (
+
+        {!loading && getProperty?.length > 0 && (
+          <Grid
+            templateColumns={{
+              base: "repeat(1, 1fr)",
+              md: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
+            }}
+            gap={{ base: "24px", lg: "28px" }}
+          >
+            {getProperty.map((property) => {
+              const user = users.find((u) => u._id === property?.creatorID);
+
+              return (
+                <PropertyCard
+                  key={property?._id}
+                  image={property?.images}
+                  title={property?.title}
+                  pricing={property?.price}
+                  location={property?.address}
+                  userImage={user?.avatar || "/"}
+                  email={user?.email}
+                  user={user?.firstName}
+                  count={page}
+                />
+              );
+            })}
+          </Grid>
+        )}
+        {!loading && getProperty?.length === 0 && (
           <Card>
             <CardBody>
-              <Text>No property available please check back later</Text>
+              <Text>No property available please wait</Text>
             </CardBody>
           </Card>
-        )} */}
-        {!loading && (
-          <>
-            {getProperty?.length > 0 ? (
-              <Grid
-                templateColumns={{
-                  base: "repeat(1, 1fr)",
-                  md: "repeat(2, 1fr)",
-                  lg: "repeat(3, 1fr)",
-                }}
-                gap={{ base: "24px", lg: "28px" }}
-              >
-                {getProperty.map((property) => {
-                  const user = users.find((u) => u._id === property?.creatorID);
-
-                  return (
-                    <PropertyCard
-                      key={property?._id}
-                      image={property?.images}
-                      title={property?.title}
-                      pricing={property?.price}
-                      location={property?.address}
-                      userImage={user?.avatar || "/"}
-                      email={user?.email}
-                      user={user?.firstName}
-                      count={page}
-                    />
-                  );
-                })}
-              </Grid>
-            ) : (
-              <Card>
-                <CardBody>
-                  <Text>No property available please wait</Text>
-                </CardBody>
-              </Card>
-            )}
-          </>
         )}
       </Box>
     </>
