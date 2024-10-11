@@ -2,18 +2,20 @@ import { Box, Flex, Text } from "@chakra-ui/react"
 import { TbCurrencyNaira } from "react-icons/tb";
 import Image from "next/image"
 import router from "next/router";
+import { MdLocationOn } from "react-icons/md";
+import Btn from "@/components/Btn";
 
 type PropertiesCardProps = {
     picture?:string;
     title?:string;
     pricing?:string;
-    duration?:string | null;
+    location?:string;
     details?:string;
     id:string;
 }
 
 export const PropertiesCard =({
-    picture, title, pricing, duration, details,id
+    picture, title, pricing, location, details,id
 }:PropertiesCardProps) => {
 
     const Navigate = () => {
@@ -22,16 +24,19 @@ export const PropertiesCard =({
 
     return(
         <>
-            <Box onClick={Navigate}
+            <Box
                 className="roboto"
                 bg={'#FFF'}
-                maxW={'295px'} h={'400px'}
-                pb={'1px'} boxShadow={'lg'}
+                maxW={'400px'} h={'fit-content'}
+                p={{base:'14px',sm:'20px'}} borderRadius={'12px'}
+                border={'1px solid #262626'} 
                 overflow={'hidden'}
             >
                 <Flex
                     position={'relative'}
-                    w='100%' h='295px' 
+                    w='100%' h='250px' 
+                    borderRadius={'10px'}
+                    overflow={'hidden'}
                 >
                     <Image 
                         width={1000} height={1000}
@@ -41,39 +46,79 @@ export const PropertiesCard =({
                     />
                 </Flex>
                 <Flex  
-                    className="roboto"
-                    flexDir={'column'} gap={'8px'}
+                    className="robotoF"
+                    flexDir={'column'} gap={'16px'}
                     w={'100%'} 
-                    mt={'8px'} 
-                    px={2}
+                    my={'24px'} 
                 >
-                    <Flex  
+                    <Flex 
                         w={'100%'}
-                        justifyContent={'space-between'} 
-                        alignItems={'center'} textColor={'#000'}
+                        h={'32px'}
+                        alignItems={'center'}
+                        px={'12px'} borderRadius={'28px'}
+                        border={'1px solid #262626'} gap={'4px'}
+                        textColor={'black'} fontSize={'16px'}
+                        className="robotoF" fontWeight={500}
+                    >
+                        <MdLocationOn />
+                        <Text fontSize="14px" maxW={'90%'} overflow={'hidden'} textOverflow={'ellipsis'} whiteSpace={'nowrap'}>
+                            {location}
+                        </Text>
+                    </Flex>
+                    <Flex  
+                        flexDir={'column'}
+                        w={'100%'} 
+                        textColor={'#191919'}
                     >
                         <Text
-                            fontSize={{base:'14px', lg:'14px'}} 
-                            fontWeight={400}
+                            fontSize={{base:'20px', lg:'20px'}} 
+                            fontWeight={600}
                         >
                             {title}
                         </Text>
-                        <Text
-                            display={'flex'} alignItems={'center'}
-                            fontSize={{base:'14px', lg:'14px'}} 
-                            fontWeight={400}
-                        >
-                            <TbCurrencyNaira /> 
-                            {pricing}/
-                            <Text mt={1} as={'span'} fontWeight={400} fontSize={'10px'}>
-                                {duration}
-                            </Text>
+                        <Text h={'48px'} overflow={'hidden'} whiteSpace={'nowrap'} textOverflow={'ellipsis'} fontSize={'16px'} fontWeight={500} textColor={'#999999'} className="roboto">
+                            {details}
                         </Text>
                     </Flex>          
                 </Flex>
-                <Text mt={3} fontSize={'12px'} fontWeight={400} textColor={'#3A314880'} px={2} className="roboto">
-                    {details}
-                </Text>
+                <Flex 
+                    w={'100%'} 
+                    justifyContent={'space-between'}
+                    alignItems={'end'}
+                    gap={'10px'} className="robotoF"
+                >
+                    <Flex 
+                        flexDir={'column'}
+                        justifyContent={'space-between'}
+                    >
+                        <Text fontWeight={500} fontSize={'14px'} textColor={'#999999'}>
+                            Price
+                        </Text>
+                        <Text
+                            display={'flex'} alignItems={'center'}
+                            fontSize={'20px'} 
+                            fontWeight={600} textColor={'#191919'}
+                        >
+                            <TbCurrencyNaira /> 
+                            {pricing}
+                        </Text>
+                    </Flex>
+                    <Btn onClick={Navigate}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        maxW={'208px'}
+                        h="48px"
+                        bg={'#3170A6'}
+                        borderRadius={'8px'}
+                        textColor={'white'}
+                        className="robotoF" fontSize={{base:'10px',md:'14px'}} fontWeight={500}
+                    >
+                        View Properties Details
+                    </Btn>
+
+                </Flex>
+                        
             </Box>
         </>
     )

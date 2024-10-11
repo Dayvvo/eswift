@@ -15,6 +15,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import Link from "next/link";
 import Btn from "./Btn";
 import { Logo } from "./logo";
+import { Background } from "@/screens/home/Background";
 
 
 const NavBar = () => {
@@ -187,6 +188,7 @@ const NavBar = () => {
             gap={20}
             py={"10em"}
           >
+            <Background/>
             <DrawerCloseButton
               color={"#3170A6"}
               fontSize={"20px"}
