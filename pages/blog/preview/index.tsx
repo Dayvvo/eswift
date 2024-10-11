@@ -5,6 +5,7 @@ import useBlog from "@/hooks/useBlog";
 import { Box, Flex, Img, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import useToast from "@/hooks/useToast";
 
 const PreviewBlog = () => {
   const router = useRouter();
@@ -12,11 +13,10 @@ const PreviewBlog = () => {
   const [headerImage, setHeaderImage] = useState<string | null>(null);
   const [bodyImage, setBodyImage] = useState<string | null>(null);
   const [previewData, setPreviewData] = useState(null) as any;
-  
 
-  console.log('previewData', previewData);
+  console.log("previewData", previewData);
 
-  const {addBlog} = useBlog();
+  const { addBlog } = useBlog();
 
   useEffect(() => {
     // const parsedImage = localStorage.getItem("headerImage");
@@ -28,12 +28,12 @@ const PreviewBlog = () => {
   }, []);
 
   useEffect(() => {
-    const unParsedPreviewData = localStorage.getItem('previewData');
+    const unParsedPreviewData = localStorage.getItem("previewData");
     if (unParsedPreviewData) {
       const parsedPreviewData = JSON.parse(unParsedPreviewData);
       setPreviewData(parsedPreviewData);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("bodyImage");
@@ -42,31 +42,54 @@ const PreviewBlog = () => {
     }
   }, []);
 
+  const { toast } = useToast();
+
   const articleTitle = previewData ? previewData.articleTitle : "";
   const introValue = previewData ? previewData.introValue : "";
   const bodyValue = previewData ? previewData.bodyValue : "";
   const conclusionValue = previewData ? previewData.conclusionValue : "";
-
+  // const introTextValue = introValue.replace(/<\/?[^>]+(>|$)/g, "");
+  // const bodyTextValue = bodyValue.replace(/<\/?[^>]+(>|$)/g, "");
+  // const conclusionTextValue = conclusionValue.replace(/<\/?[^>]+(>|$)/g, "");
   const data = {
     title: articleTitle,
-    content: bodyValue,
-    tags: ["mail", "good"]
-  }
+    header_image:
+      "https://res.cloudinary.com/dk8ielbpn/image/upload/v1728370233/shopify/nsokzb9lxciy9pr0ejf7.png.png",
+    introduction: introValue,
+    body: bodyValue,
+    body_image:
+      "https://res.cloudinary.com/dk8ielbpn/image/upload/v1728368487/shopify/pexels-divinetechygirl-1181263.jpg.jpg",
+    // tags: ["mail", "good"],
+  };
 
   const addBlogFn = async () => {
     try {
-      const req = await addBlog(data) as any;
+      const req = (await addBlog(data)) as any;
       if (req?.statusCode === 201) {
-        localStorage.removeItem('previewData')
-        localStorage.removeItem('bodyImage')
-        localStorage.removeItem('headerImage')
+        toast({
+          status: "success",
+          description: "Blog post created",
+          title: "Success",
+          position: "top",
+          duration: 5000,
+        });
+        router.push("/blog");
+        localStorage.removeItem("previewData");
+        localStorage.removeItem("bodyImage");
+        localStorage.removeItem("headerImage");
       }
-      console.log('req', req);
+      // console.log("req", req);
+    } catch (err) {
+      // console.log("error calling post", err);
+      toast({
+        status: "error",
+        description: "Failed to create blog post",
+        title: "Failed",
+        position: "top",
+        duration: 5000,
+      });
     }
-    catch (err) {
-      console.log("error calling post", err);
-    }
-  }
+  };
 
   return (
     <>
@@ -193,7 +216,7 @@ const PreviewBlog = () => {
           dangerouslySetInnerHTML={{ __html: conclusionValue }}
         />
       </Box>
-      <Flex justify={'end'}>
+      <Flex justify={"end"}>
         <Btn
           p="10px 16px"
           borderRadius={"8px"}
