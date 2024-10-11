@@ -7,6 +7,7 @@ import Btn from "@/components/Btn";
 type PropertyCardProps = {
   image?: any;
   count?: number;
+  cardWidth?: any;
   title?: string;
   pricing?: string;
   location?: string;
@@ -21,6 +22,7 @@ export const PropertyCard = ({
   count,
   pricing,
   location,
+  cardWidth,
   email,
   user,
   userImage,
@@ -29,7 +31,7 @@ export const PropertyCard = ({
     <Box
       className="RobotoF"
       bg={"#FFF"}
-      w={{ base: "100%", sm: "314px" }}
+      w={cardWidth || { base: "100%", sm: "314px" }}
       h={"408px"}
       pb={"16px"}
       boxShadow={"lg"}
