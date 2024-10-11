@@ -23,7 +23,7 @@ const useProperty = () => {
 
     if (userData) {
       const parsedData = JSON.parse(userData);
-      console.log(parsedData);
+
       setToken(parsedData.token);
     }
 
@@ -38,18 +38,16 @@ const useProperty = () => {
         const res = await post(`/property`, data);
         return res;
       } catch (err: any) {
-        console.log("error calling addProperty", err);
         throw new err();
       }
       // return res
     },
     [token]
   );
-  const getPropertyDetails = useCallback(async (id:string) => {
-      const res = await query (`/property/${id}`);
-      return res;
+  const getPropertyDetails = useCallback(async (id: string) => {
+    const res = await query(`/property/${id}`);
+    return res;
   }, []);
-
 
   return {
     addProperty,
