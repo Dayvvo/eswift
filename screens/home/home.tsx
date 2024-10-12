@@ -8,17 +8,23 @@ import { HeroProps } from "@/screens/home/heroProps";
 import { SectionThree } from "./sectionThree";
 import { Footer } from "@/components/footer";
 import { Video } from "./Video";
+import { Background } from "./Background";
 
 
 
 const HomePage =()=> {
 
+    function scrollToSection() {
+        const section = document.querySelector('#main') as HTMLElement;
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
 
     return (
         <>
             <Box>
                 <NavBar/>
-                <Hero/>
+                <Hero click={scrollToSection} />
+                <Background/>
                 <AboutSection/>
                 <Video/>
                 <SectionTwo/>
