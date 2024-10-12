@@ -4,7 +4,7 @@ import NavBar from "@/components/navBar";
 import { Box, Text, Flex, } from "@chakra-ui/react";
 import { Video } from "./video";
 import { Footer } from "@/components/footer";
-import { AboutSection } from "./aboutPageSection";
+import { AboutSection } from "./AboutPageSectionboutPageSection";
 import { MoreDetails } from "./MoreDetails";
 import { Background } from "../home/Background";
 
