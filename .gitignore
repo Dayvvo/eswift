@@ -17,6 +17,10 @@ node_modules/
 
 .next/
 
+/dist/*
+dist/*
+
+
 # misc
 .DS_Store
 .env

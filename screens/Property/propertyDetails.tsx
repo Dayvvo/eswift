@@ -14,13 +14,14 @@ import { BsDot } from "react-icons/bs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { FaRegImages } from "react-icons/fa";
-import { PropertyCard } from "./propertyCard";
+// import { PropertyCard } from "./propertyCard";
 import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
+import { PropertyCard } from "./propertyCard";
 
-export const PropertyDetails = () => {
+export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; cardWidth?: any;}) => {
   const Features: any[] = [
     {
       id: 1,
@@ -129,7 +130,7 @@ export const PropertyDetails = () => {
   return (
     <>
       <Box bg={"#FFF"} w={"100%"}>
-        <Flex w={"100%"} my={"24px"} pos={"relative"}>
+        <Flex w={"100%"} my={my || "24px"} pos={"relative"}>
           <Grid
             templateColumns={"repeat(2, 1fr)"}
             gap={"16px"}
@@ -173,7 +174,7 @@ export const PropertyDetails = () => {
             </Flex>
           </Flex>
         </Flex>
-        <Flex flexDir={"column"} w={"100%"} p={"20px"} gap={"24px"}>
+        <Flex flexDir={"column"} w={"100%"} p={p || "20px"} gap={"24px"}>
           <Flex
             flexDir={{ base: "column", lg: "row" }}
             className="montserrat"
@@ -435,7 +436,7 @@ export const PropertyDetails = () => {
         </Flex>
         <Flex
           w={"100%"}
-          justifyContent={"center"}
+          justifyContent={"space-around"}
           gap={{ base: "24px", lg: "20px" }}
           flexWrap={"wrap"}
           mt={{ base: "60px", lg: "120px" }}
@@ -451,6 +452,7 @@ export const PropertyDetails = () => {
                 userImage={property?.userImage}
                 email={property?.email}
                 user={property?.user}
+                cardWidth={cardWidth}
               />
             );
           })}

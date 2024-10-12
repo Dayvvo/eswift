@@ -6,18 +6,25 @@ import { AboutSection } from "./homeAboutSection";
 import { SectionTwo } from "./sectionTwo";
 import { HeroProps } from "@/screens/home/heroProps";
 import { SectionThree } from "./sectionThree";
-import { Video } from "./Video";
+import { Footer } from "@/components/footer";
+import { Video } from "./video";
+import { Background } from "./Background";
 
 
 
 const HomePage =()=> {
 
+    function scrollToSection() {
+        const section = document.querySelector('#main') as HTMLElement;
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
 
     return (
         <>
             <Box>
                 <NavBar/>
-                <Hero/>
+                <Hero click={scrollToSection} />
+                <Background/>
                 <AboutSection/>
                 <Video/>
                 <SectionTwo/>
@@ -38,6 +45,7 @@ const HomePage =()=> {
                     />
                     <SectionThree/>
                 </Box>
+                <Footer/>
             </Box>
             
         </>

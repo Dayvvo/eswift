@@ -1,4 +1,5 @@
-import BlogspotScreen from "@/screens/blogspot/blog";
+import BlogspotScreen from "@/screens/Blog/client";
+
 
 const Blogspot =()=> <BlogspotScreen/>
 

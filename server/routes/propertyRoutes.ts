@@ -6,16 +6,6 @@ import { isAdmin, isAuth } from "../utils/middleware";
 
 const router = express.Router();
 
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    scope: ["email", "profile"],
-    failureRedirect: `${process.env.FRONTEND_URL}`,
-  }),
-  authController.googleAuthController
-);
-
-router.post("/login", authController.emailLoginAuthController);
 
 router
   .route("/")

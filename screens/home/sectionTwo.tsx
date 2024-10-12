@@ -6,7 +6,7 @@ export const SectionTwo =()=> {
     return (
         <>
             
-            <Flex bg={"#FFFFFF"}
+            <Flex bg={"transparent"}
                 flexDir='column'
                 py={"80px"} 
                 width={"100%"} gap={{base:'32px', md:'48px'}}

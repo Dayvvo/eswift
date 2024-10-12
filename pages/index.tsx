@@ -1,8 +1,10 @@
 
 import HomePage from "@/screens/home/home";
-import { useEffect } from "react";
+import { Resdesign } from "@/screens/home/redesign";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [building, setBuilding] = useState<boolean>(true);
 
   useEffect(()=>{
     const getCookie = (name:string) => {
@@ -29,5 +31,11 @@ export default function Home() {
 
   },[])
 
-  return <HomePage/>
+  return (
+      <>
+        {
+          building ?  <Resdesign/>: <HomePage/>
+        }
+      </>
+    )
 };

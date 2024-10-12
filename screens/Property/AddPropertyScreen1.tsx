@@ -1,4 +1,5 @@
-import Btn from "@/components/Btn";
+import Btn from "../../components/Btn";
+import React from  'react'
 import {
   Box,
   Flex,
