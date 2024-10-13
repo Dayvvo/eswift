@@ -18,6 +18,8 @@ router
   .route("/:id")
   .get(propertyController.getPropertyById)
   .delete(isAuth, propertyController.deleteProperty);
+
+router.patch('/:id/freeze', isAuth, propertyController.isActiveSwitch)  
 router.put("/:id/verify", isAuth, isAdmin, propertyController.verifyProperty);
 
 export default router;
