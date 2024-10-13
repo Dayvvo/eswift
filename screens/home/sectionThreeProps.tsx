@@ -19,8 +19,8 @@ export const SectionThreeProps:React.FC<props> =(
         wid, hei, w , h, gap, listData ,
     }
 )=> {
-    const ListData = listData;
 
+    const ListData = listData;
     const mobileDirection = mobile as ('row' | 'column')
     const webDirection = web as ('row' | 'column')
 
