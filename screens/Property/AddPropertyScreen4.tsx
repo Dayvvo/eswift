@@ -1,15 +1,30 @@
 import Btn from "@/components/Btn";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import {
+  Box,
+  Flex,
+  FormControl,
+  FormLabel,
+  Image,
+  Select,
+  Text,
+} from "@chakra-ui/react";
+import { ChangeEvent, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 
 interface ButtonFunction {
   next: () => void;
   previous: () => void;
+  onChangeFileName: (event: ChangeEvent<HTMLSelectElement>) => void;
+  fileName: string;
 }
 
-export const AddPropertyScreenFour = ({ next, previous }: ButtonFunction) => {
+export const AddPropertyScreenFour = ({
+  next,
+  previous,
+  fileName,
+  onChangeFileName,
+}: ButtonFunction) => {
   const subs: any[] = [
     {
       id: 1,
@@ -110,6 +125,46 @@ export const AddPropertyScreenFour = ({ next, previous }: ButtonFunction) => {
               FAMILY RECEIPT
             </Text>
           </Flex>
+          <FormControl w={"100%"}>
+            <FormLabel
+              fontWeight={500}
+              fontSize={"14px"}
+              textColor={"var(--strong950)"}
+            >
+              Property document
+            </FormLabel>
+            <Select
+              fontSize={"12px"}
+              fontWeight={500}
+              textColor={"var(--soft600)"}
+              bg={"var(--weak50)"}
+              w={"100%"}
+              alignItems={"center"}
+              border={"none"}
+              py={"6px"}
+              className="robotoF"
+              borderRadius={"2px"}
+              _placeholder={{ textColor: "var--(soft400)" }}
+              placeholder="File name"
+              value={fileName}
+              onChange={onChangeFileName}
+            >
+              {[
+                { val: "FamilyReceipt", name: "Family receipt" },
+                { val: "SurveyPlan", name: "Survey plan" },
+                { val: "Layout", name: "Layout" },
+                { val: "Affidavit", name: "Affidavit" },
+                { val: "Agreement", name: "Agreement" },
+                { val: "CofO", name: "C of O" },
+                { val: "PowerOfAttorney", name: "Power of attorney" },
+                { val: "GovConsent", name: "Gov Consent" },
+              ].map((entry) => (
+                <option value={`${entry.val}`} key={entry.val}>
+                  {entry.name}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
           <Flex w={"100%"} p={"8px"} gap={"20px"}>
             <Box
               borderRadius={"100%"}

@@ -15,7 +15,7 @@ router.get(
   '/google/callback',
   passport.authenticate('google', {
     scope: ['email', 'profile'],
-    failureRedirect: `${process.env.FRONTEND_URL}`,
+    failureRedirect: `${process.env.BACKEND_URL}/login`,
   }),
   authController.googleAuthController
 )

@@ -21,8 +21,9 @@ export const SectionThreeProps:React.FC<props> =(
 )=> {
 
     const ListData = listData;
-    const mobileDirection = mobile as ('row' | 'column')
-    const webDirection = web as ('row' | 'column')
+
+    const mobileDirection = mobile as ('row' | 'column');
+    const webDirection = web as ('row' | 'column');
 
     return (
         <>

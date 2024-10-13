@@ -1,5 +1,5 @@
 "use client";
-
+import React from 'react';
 import Btn from "@/components/Btn";
 import {
   Box,
@@ -13,7 +13,7 @@ import {
 import { BsDot } from "react-icons/bs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { FaRegImages } from "react-icons/fa";
-import { PropertyCard } from "../screens/property/propertyCard";
+import { PropertyCard } from "../screens/Property/propertyCard";
 import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
