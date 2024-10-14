@@ -14,7 +14,7 @@ import {
 import { RiSearch2Line } from "react-icons/ri";
 import Btn from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
-import { PropertyCard } from "./propertyCard";
+import { PropertyCard } from "./PropertyCard";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "@/components/modal";
