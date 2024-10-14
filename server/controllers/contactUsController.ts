@@ -17,16 +17,27 @@ const transporter = nodemailer.createTransport({
 
 const sendEmailFunction = async ({
   email,
-  name,
+  firstName,
+  lastName,
   message,
-  subject,
+  phoneNumber,
+  inquiryType,
+  howDidYouHear,
 }: MailType) => {
   const mailOptions = {
     from: email,
     to: process.env.CLIENT_EMAIL,
-    subject: subject,
-    name: name,
-    text: message,
+    subject: inquiryType,
+    name: `${firstName} ${lastName}`,
+    text: `
+      Name: ${firstName} ${lastName}
+      Email: ${email}
+      Phone Number: ${phoneNumber}
+      Inquiry Type: ${inquiryType}
+      How did you hear about us: ${howDidYouHear}
+      
+      Message: ${message}
+    `,
     replyTo: email,
   };
 
