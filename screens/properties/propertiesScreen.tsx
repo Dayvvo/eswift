@@ -11,7 +11,7 @@ import { useApiUrl } from "@/hooks/useApi";
 import axios from "axios";
 
 type properties = {
-    id:string;
+    _id:string;
     title:string;
     description:string;
     price:string;
@@ -61,6 +61,10 @@ const PropertiesScreen =()=> {
     //         duration:'annually'
     //     },
     // ]
+
+    const toDetails = (_id: string) => {
+        console.log('id', _id)
+    }
 
 
 
@@ -130,13 +134,14 @@ const PropertiesScreen =()=> {
                         {
                             fetchData.map((item)=>{
                                 return(
-                                    <PropertiesCard key={item?.id}
+                                    <PropertiesCard key={item?._id}
                                         picture={item?.images[0]} 
                                         title={item?.title} 
                                         pricing={item?.price} 
                                         duration={null}
                                         details={item?.description}
-                                        id={item?.id}
+                                        id={item?._id}
+                                        onClick={() => toDetails(item?._id)}
                                     />
                                 )
                             })
