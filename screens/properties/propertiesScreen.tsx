@@ -1,7 +1,7 @@
 
 import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
-import { Box,InputGroup, Input, InputRightElement, Grid } from "@chakra-ui/react";
+import { Box,InputGroup, Input, InputRightElement, Grid } from '@chakra-ui/react'
 import { useEffect, useState } from "react";
 import { RiSearch2Line } from "react-icons/ri";
 import { PropertiesCard } from "./propertiesCard";
