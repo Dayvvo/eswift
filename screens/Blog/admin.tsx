@@ -1,65 +1,43 @@
 import {
   Box,
+  Button,
+  Card,
+  CardBody,
   Flex,
   Img,
   Input,
   InputGroup,
   InputLeftElement,
   SimpleGrid,
+  Skeleton,
+  Stack,
   Text,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { PlusIcon, SearchIcon } from "../../components/svg";
 import Btn from "../../components/Btn";
 import { useRouter } from "next/router";
 import useBlog from "@/hooks/useBlog";
+import DOMPurify from "dompurify";
+import useToast from "@/hooks/useToast";
 // import { useAppContext } from "@/context";
 
+interface BlogPostProps {
+  _id: any;
+  title: string;
+  header_image: string;
+  introduction: string;
+  body: string;
+  body_image: string;
+  createdAt: any;
+}
+
 const BlogScreen = () => {
-  const blogData = [
-    {
-      img: "/img1.png",
-      title: "Myths and Facts about Development",
-      description:
-        "Using our algorithm, we carry out a preliminary assessment to understand the state of your health and determine how best to serve you!",
-      dateCreated: "March 10, 2024",
-    },
-    {
-      img: "/img2.png",
-      title: "Area and Aspects of Real Estate",
-      description:
-        "Using our algorithm, we carry out a preliminary assessment to understand the state of your health and determine how best to serve you!",
-      dateCreated: "March 10, 2024",
-    },
-    {
-      img: "/img1.png",
-      title: "Points of Real Estate Change",
-      description:
-        "Using our algorithm, we carry out a preliminary assessment to understand the state of your health and determine how best to serve you!",
-      dateCreated: "March 10, 2024",
-    },
-    {
-      img: "/img2.png",
-      title: "Myths and Facts about Development",
-      description:
-        "Using our algorithm, we carry out a preliminary assessment to understand the state of your health and determine how best to serve you!",
-      dateCreated: "March 10, 2024",
-    },
-    {
-      img: "/img1.png",
-      title: "Myths and Facts about Development",
-      description:
-        "Using our algorithm, we carry out a preliminary assessment to understand the state of your health and determine how best to serve you!",
-      dateCreated: "March 10, 2024",
-    },
-    {
-      img: "/img2.png",
-      title: "Myths and Facts about Development",
-      description:
-        "Using our algorithm, we carry out a preliminary assessment to understand the state of your health and determine how best to serve you!",
-      dateCreated: "March 10, 2024",
-    },
-  ];
+  
+  const [blogPost, setBlogPost] = useState<BlogPostProps[]>([]);
+  const [isAdmin, setIsAdmin] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   // const { check } = useAppContext();
 
@@ -69,22 +47,59 @@ const BlogScreen = () => {
 
   useEffect(() => {
     const getBlogFn = async () => {
-      const req = await getBlog();
-      console.log('req', req);
-    }
+      setLoading(true);
+      try {
+        const req = await getBlog();
+        setBlogPost(req.data.data);
+        console.log(req.data.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+
+      // console.log("req", req?.data);
+    };
 
     getBlogFn();
-  }, [])
+  }, []);
+  useEffect(() => {
+    const userData = localStorage.getItem("userData") || null;
 
-  const deleteBlogFn = async (blogPostId:number) => {
+    if (userData) {
+      const parsedData = JSON.parse(userData);
+      setIsAdmin(parsedData.role);
+    }
+  }, []);
+
+  const deleteBlogFn = async (blogPostId: any) => {
     try {
-      const req = await deleteBlog(blogPostId);
-      console.log('req', req);
-    }
-    catch (err) {
+      const req = (await deleteBlog(blogPostId)) as any;
+      console.log("req", req);
+      // if(req.statusCode)
+      // const req = (await addBlog(data)) as any;
+      if (req.data?.statusCode === 200) {
+        toast({
+          status: "success",
+          description: "Blog post deleted",
+          title: "Success",
+          position: "top",
+          duration: 5000,
+        });
+        setBlogPost((prevBlogPost) =>
+          prevBlogPost.filter((post) => post._id !== blogPostId)
+        );
+      }
+    } catch (err) {
       console.log("error calling post", err);
+      toast({
+        status: "error",
+        description: "Failed to delete blog post",
+        title: "Failed",
+        position: "top",
+        duration: 5000,
+      });
     }
-  }
+  };
 
   const route = useRouter();
 
@@ -109,79 +124,124 @@ const BlogScreen = () => {
             rightIcon={<PlusIcon />}
             bgColor="#1A1D66"
             borderRadius={"8px"}
-            onClick={() => route.push('/blog/add')}
+            onClick={() => route.push("/blog/add")}
           >
             Add Blog
           </Btn>
         </Box>
       </Flex>
-      <SimpleGrid columns={3} spacing={5} mt="20px">
-        {blogData.map((item, index) => {
-          return (
-            <Box
-              bgColor={"#fff"}
-              maxW={"340px"}
-              boxShadow={"0px 17.579px 52.738px 0px rgba(133, 133, 133, 0.10)"}
-            >
-              <Box w="100%" borderRadius={"7px 7px 0 0"}>
-                <Img src={item.img} w="100%" />
+      {loading && (
+        <Stack>
+          <Skeleton height="40px" />
+          <Skeleton height="40px" />
+          <Skeleton height="40px" />
+        </Stack>
+      )}
+      {!loading && blogPost.length > 0 && (
+        <SimpleGrid columns={3} spacing={5} mt="20px">
+          {blogPost.map((item, index) => {
+            const dateString = new Date(item.createdAt);
+
+            const formattedDate = dateString.toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            });
+            return (
+              <Box
+                key={index}
+                bgColor={"#fff"}
+                maxW={"340px"}
+                boxShadow={
+                  "0px 17.579px 52.738px 0px rgba(133, 133, 133, 0.10)"
+                }
+                display="flex"
+                flexDirection="column" // Ensure the content stacks vertically
+              >
+                <Box w="100%" borderRadius={"7px 7px 0 0"}>
+                  <Img src={item.header_image} alt={item.title} w="100%" />
+                </Box>
+                <Box
+                  flex="1"
+                  // p="10px"
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="space-between"
+                >
+                  {/* Flex and justify space-between ensure the buttons stay at the bottom */}
+                  <Box flex={1} p="20px 25px">
+                    <Text
+                      className="mulish"
+                      fontWeight={700}
+                      color={"#4D4D4D"}
+                      fontSize={".937rem"}
+                    >
+                      {item.title}
+                    </Text>
+                    <Text
+                      className="mulish"
+                      fontWeight={400}
+                      color={"#797979"}
+                      fontSize={".75rem"}
+                      my="20px"
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(item.introduction),
+                      }}
+                    />
+                    <Text
+                      className="mulish"
+                      fontWeight={400}
+                      color={"#797979"}
+                      fontSize={".75rem"}
+                    >
+                      {formattedDate}
+                    </Text>
+                  </Box>
+                  {isAdmin === "ADMIN" && (
+                    <Flex
+                      justify={"space-between"}
+                      gap={"6px"}
+                      mt="auto"
+                      p="10px"
+                    >
+                      <Btn
+                        bgColor="#6AFFB0"
+                        borderRadius={"50px"}
+                        className="robotoF"
+                        fontWeight={400}
+                        fontSize={".937rem"}
+                        w="144px"
+                        h="28px"
+                      >
+                        Edit
+                      </Btn>
+                      <Btn
+                        bgColor="#FF5764"
+                        borderRadius={"50px"}
+                        className="robotoF"
+                        fontWeight={400}
+                        fontSize={".937rem"}
+                        w="144px"
+                        h="28px"
+                        onClick={() => deleteBlogFn(item._id)}
+                      >
+                        Delete
+                      </Btn>
+                    </Flex>
+                  )}
+                </Box>
               </Box>
-              <Box p="20px 25px">
-                <Text
-                  className="mulish"
-                  fontWeight={700}
-                  color={"#4D4D4D"}
-                  fontSize={".937rem"}
-                >
-                  {item.title}
-                </Text>
-                <Text
-                  className="mulish"
-                  fontWeight={400}
-                  color={"#797979"}
-                  fontSize={".75rem"}
-                  my="20px"
-                >
-                  {item.description}
-                </Text>
-                <Text
-                  className="mulish"
-                  fontWeight={400}
-                  color={"#797979"}
-                  fontSize={".75rem"}
-                >
-                  {item.dateCreated}
-                </Text>
-              </Box>
-              <Flex p='10px' justify={'space-between'}>
-                <Btn
-                  bgColor="#6AFFB0"
-                  borderRadius={"50px"}
-                  className="robotoF"
-                  fontWeight={400}
-                  fontSize={".937rem"}
-                  w='144px'
-                  h='28px'
-                >
-                  Edit
-                </Btn>
-                <Btn
-                  bgColor="#FF5764"
-                  borderRadius={"50px"}
-                  className="robotoF"
-                  fontWeight={400}
-                  fontSize={".937rem"}
-                  w='144px'
-                  h='28px'
-                  onClick={() => deleteBlogFn(index)}
-                >
-                  Delete
-                </Btn>
-              </Flex>
-            </Box>
-          );
-        })}
-      </SimpleGrid>
+            );
+          })}
+        </SimpleGrid>
+      )}
+      {!loading && blogPost.length === 0 && (
+        <Card>
+          <CardBody>
+            <Text>No blog post available please wait</Text>
+          </CardBody>
+        </Card>
+      )}
     </>
   );
 };

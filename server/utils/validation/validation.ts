@@ -31,8 +31,11 @@ export const validateSignupData = (signup: ISignupValidation) => {
 
 export const validateBlogPostData = (data: {
   title: string;
-  content: string;
-  tags: string[];
+  header_image: string;
+  introduction: string;
+  body: string;
+  body_image: string;
+  // tags: string[];
 }) => {
   const blogPostSchema = Joi.object({
     title: Joi.string()
@@ -41,11 +44,18 @@ export const validateBlogPostData = (data: {
       .min(1)
       .max(255)
       .error(new Error("Title is required and must be under 256 characters")),
-    content: Joi.string()
+    header_image: Joi.string().uri().required(),
+    introduction: Joi.string()
+      .required()
+      .trim()
+      .min(5)
+      .error(new Error("Introduction is required")),
+    body: Joi.string()
       .required()
       .trim()
       .error(new Error("Content is required")),
-    tags: Joi.array().items(Joi.string().trim()),
+    body_image: Joi.string().uri().required(),
+    // tags: Joi.array().items(Joi.string().trim()),
   });
 
   return blogPostSchema.validate(data);
