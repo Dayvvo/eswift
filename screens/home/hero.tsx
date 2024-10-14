@@ -5,6 +5,7 @@ import Btn from "@/components/Btn";
 import { IoPlayOutline } from "react-icons/io5";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { MouseEventHandler } from "react";
+import { Stats } from "./homeAboutSection";
 
 
 const Hero = ({click}:{click:()=> void}) => {
@@ -55,7 +56,7 @@ const Hero = ({click}:{click:()=> void}) => {
                 </Btn>
               </Link>
             </Flex>
-            
+            <Stats/>
             
           </Flex>
           <Flex

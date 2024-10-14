@@ -1,18 +1,37 @@
 import { Box, Flex, Text } from "@chakra-ui/react"
 import Image from "next/image"
+import { TextHeader } from "../home/textHeader"
+import { Stats } from "../home/homeAboutSection"
+import { Steps, Value } from "../home/sectionTwo"
 
 
 export const AboutSection =()=> {
     return (
         <>
-            <Box id="Main" width={"100%"}
+            <Box width={"100%"}
                 bg="transparent"
                 bgSize="cover"
                 bgPosition="center"
                 className="robotoF"
                 overflow={'clip'}
-                mt={8}
+                mt={20} mb={40}
             >
+                <Flex
+                    px={{base:'1rem',lg:'4rem'}}
+                    w={'100%'}
+                    flexDir={{base:'column', lg:'row'}}
+                    gap={'60px'} mb={40}
+                >
+                    <Flex w={{base:'50%',lg:'100%'}} flexDir={'column'} gap={'30px'} py={'20px'}>
+                        <TextHeader Header={"Our Journey"} 
+                            sub={"Our story is one of continuous growth and evolution. We started as a small team with big dreams, determined to creat a real estate platform that transcended the ordinary. Over the years, we've expanded our reach, forged valuable partnerships, and gained the trust of countless clients."}
+                        />
+                        <Stats/>
+                    </Flex>
+                    <Flex w={{base:'50%',lg:'100%'}}>
+                        <Value/>
+                    </Flex>
+                </Flex>
                 <Flex bg={"transparent"}
                     flexDir='column'
                     py={"60px"} 
@@ -46,6 +65,34 @@ export const AboutSection =()=> {
                         With our dedicated team of real estate professionals, we are committed to helping you every step of the way.
                     </Text>
                 </Flex>
+                <Flex
+                    px={{base:'1rem',lg:'4rem'}}
+                    w={'100%'}
+                    flexDir={{base:'column', lg:'row'}}
+                    gap={'60px'}
+                >
+                    <Flex w={{base:'50%',lg:'100%'}} flexDir={'column'} gap={'30px'} py={'20px'}>
+                        <TextHeader Header={"Our Values"} 
+                            sub={"Our story is one of continuous growth and evolution. We started as a small team with big dreams, determined to creat a real estate platform that transcended the ordinary. Over the years, we've expanded our reach, forged valuable partnerships, and gained the trust of countless clients."}
+                        />
+                        <Stats/>
+                    </Flex>
+                    <Flex w={{base:'50%',lg:'100%'}}>
+                        <Value/>
+                    </Flex>
+                </Flex>
+                <Flex
+                    px={{base:'1rem',lg:'4rem'}}
+                    w={'100%'}
+                    flexDir={{base:'column'}} 
+                    mt={40}
+                >
+                    <TextHeader Header={"Navigating the Eswift Experience"} 
+                        sub={"At Eswift, we`ve designed a straightforward process to help you find and purchase your dream property with ease. Here's a step-by-step guide to how it all works."}
+                    />
+                    <Steps/>
+                </Flex>
+                
             </Box>
         </>
     )

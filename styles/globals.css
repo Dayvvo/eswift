@@ -111,6 +111,10 @@
   object-fit: cover;
 }
 
+.gradient {
+  background-image: linear-gradient(to bottom right, #703BF780, #FFFFFF, #FFFFFF, #FFFFFF);
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }
