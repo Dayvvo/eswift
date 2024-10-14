@@ -25,7 +25,7 @@ const sendEmailFunction = async ({
   howDidYouHear,
 }: MailType) => {
   const mailOptions = {
-    from: email,
+    from: `${firstName} ${lastName} <${email}>`,
     to: process.env.CLIENT_EMAIL,
     subject: inquiryType,
     name: `${firstName} ${lastName}`,

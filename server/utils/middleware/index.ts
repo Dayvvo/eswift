@@ -17,7 +17,6 @@ export const isAuth = async (
         token,
         process.env["JWT_SECRET"] as string
       ) as any;
-      console.log("user found", decoded);
       const userFound = await User.findById(decoded?.id).select("-hash");
 
       console.log("userFound", userFound);
