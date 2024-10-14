@@ -1,9 +1,8 @@
-"use client"
+"use client";
 
 import type { AxiosRequestConfig, AxiosResponse, CancelToken } from "axios";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-
 
 export type ApiClient = {
   query: <T extends any>(
@@ -37,25 +36,20 @@ const client = ({
   withCredentials?: boolean;
   cancelToken?: CancelToken;
 }) => {
-  let baseURL= '/api'
+  let baseURL = "/api";
 
   return axios.create({
     baseURL,
     headers: {
-      ...(token && { Authorization: token }),
+      ...(token && { Authorization: `Bearer ${token}` }),
       "Content-Type": "application/json",
     },
     withCredentials,
     cancelToken,
   });
-
 };
 
-function httpClient({
-  token,
-}: {
-  token?: string;
-}) {
+function httpClient({ token }: { token?: string }) {
   return {
     query: async <T extends any>(q: string, headers?: AxiosRequestConfig) => {
       try {
@@ -68,9 +62,7 @@ function httpClient({
     },
     delete: async (q: string, headers?: AxiosRequestConfig) => {
       try {
-        return await Promise.resolve(
-          client({ token }).delete(q, headers)
-        );
+        return await Promise.resolve(client({ token }).delete(q, headers));
       } catch (err) {
         return Promise.reject(err);
       }
@@ -118,12 +110,13 @@ function httpClient({
 }
 
 export function useApiUrl() {
-  
-  const userFromLocalStorage = window.localStorage.getItem("userData") 
+  const userFromLocalStorage = window.localStorage.getItem("userData");
 
-  const token = userFromLocalStorage?JSON.parse(userFromLocalStorage)?.token:''
+  const token = userFromLocalStorage
+    ? JSON.parse(userFromLocalStorage)?.token
+    : "";
 
-  const client = useCallback(()=> httpClient({token}) ,[token])
+  const client = useCallback(() => httpClient({ token }), [token]);
 
   return client();
 }

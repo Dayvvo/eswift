@@ -4,9 +4,11 @@ import Link from "next/link";
 import Btn from "@/components/Btn";
 import { IoPlayOutline } from "react-icons/io5";
 import { IoIosArrowDropdown } from "react-icons/io";
+import { MouseEventHandler } from "react";
+import { Stats } from "./homeAboutSection";
 
 
-const Hero = () => {
+const Hero = ({click}:{click:()=> void}) => {
 
   return (
     <>
@@ -54,7 +56,7 @@ const Hero = () => {
                 </Btn>
               </Link>
             </Flex>
-            
+            <Stats/>
             
           </Flex>
           <Flex
@@ -69,9 +71,9 @@ const Hero = () => {
         <Box position={'absolute'} bottom={40} display={'flex'} w={'100%'} justifyContent={'center'} fontSize={'30px'}
          zIndex={50} opacity={0.4}
         >
-          <Link href={"#Main"}>
+          <Box onClick={click}>
             <Image src="/HeroPulsing.gif" alt="pulsing" w={78} h={78} className="upside"/>
-          </Link>
+          </Box>
         </Box>
         <Image src="/Underlay.png" alt="" 
           position={'absolute'} zIndex={50} bottom={0}
@@ -79,37 +81,6 @@ const Hero = () => {
         />
       </Box>
     </>
-    // <StyledHero>
-    //   <Box className="hero-container">
-    //     <Box color="var(--minColor)" className="poppins" display={{ lg: "block" }}>
-    //       <Box px={{ base: "1.5rem", lg: "initial" }} py="10rem">
-    //         <Text
-    //           fontWeight={500}
-    //           fontSize={{ base: "2.2rem", md: "3rem", lg: "4.2rem" }}
-    //         >
-    //           Welcome to Casa Central - Your Vision, Our Craftsmanship
-    //         </Text>
-    //         <Button
-    //           bg={"var(--globColor)"}
-    //           border={'1px solid var(--secColor)'}
-    //           borderRadius={4}
-    //           className="poppins"
-    //           color="var(--secColor)"
-    //           fontWeight={500}
-    //           py="25px"
-    //           fontSize={".95rem"}
-    //           _hover={{ bg: "var(--globColor)", color: "var(--secColor)", border: '1px solid var(--secColor)' }}
-    //           mt={{ base: "1.2em", lg: "initial" }}
-    //           onClick={() => {
-    //             router.push("/portfolio");
-    //           }}
-    //         >
-    //           EXPLORE
-    //         </Button>
-    //       </Box>
-    //     </Box>
-    //   </Box>
-    // </StyledHero>
   );
 };
 

@@ -6,29 +6,95 @@ import {
 import Property from '../models/Property'
 import { IUser, IUserInRequest } from '../utils/interfaces'
 import { isValidObjectId } from 'mongoose'
+import PropertyDocs from '../models/PropertyDocs'
+import mongoose from 'mongoose'
 
 class PropertyController {
   //TODO: finish function
   createProperty = async (req: Request, res: Response) => {
+    const validate = ValidateAddProperty(req.body)
+    const { value, error } = validate
+
+    const allowedNames = [
+      'FamilyReceipt',
+      'SurveyPlan',
+      'Layout',
+      'Affidavit',
+      'Agreement',
+      'CofO',
+      'PowerOfAttorney',
+      'GovConsent',
+    ]
+
+    if (!allowedNames.includes(value.name)) {
+      return res.status(400).json({ message: 'Invalid file name' })
+    }
+    if (error) {
+      return res.status(400).json(error.details[0])
+    }
+    const session = await mongoose.startSession()
+    session.startTransaction()
     try {
-      const validate = ValidateAddProperty(req.body)
-      const { value, error } = validate
-      if (error) {
-        return res.status(400).json(error.details[0])
+      // Create the new property data
+      const newPropertyData = {
+        title: value.title,
+        type: value.type,
+        address: value.address,
+        price: value.price,
+        category: value.category,
+        duration: value.duration,
+        description: value.description,
+        features: value.features,
+        images: value.images,
       }
-      const user = req.user as IUserInRequest
-      const newProperty = await Property.create({
-        ...value,
-        creatorID: user?._id,
+
+      // Create the new Property document with creatorID
+      const user = req.user as any
+      const newProperty = new Property({
+        ...newPropertyData, // Spread operator for cleaner syntax
+        creatorID: user?._id as string,
       })
-      await user?.increasePropertyCount()
+
+      // Save the new property and capture its ID
+      await newProperty.save({ session })
+
+      if (!newProperty) {
+        return res.status(404).json({ message: 'Property not found' })
+      }
+      const propertyId = newProperty._id // Store the ID for later use
+      const creatorId = newProperty.creatorID // Store the ID for later use
+
+      // Create the PropertyDocs document with the property ID
+      const propertyDoc = await PropertyDocs.create(
+        {
+          name: value.name,
+          property: propertyId,
+          file: value.file,
+          user: creatorId,
+        },
+        { session }
+      )
+
+      if (!propertyDoc) {
+        throw new Error('Property document creation failed')
+      }
+      const users = req.user as IUserInRequest
+      await users?.increasePropertyCount()
+      await session.commitTransaction()
+      session.endSession()
+      const propertyDatas = {
+        property: newProperty,
+        propertyDocument: propertyDoc,
+      }
+
       return res.status(201).json({
         statusCode: 201,
         message: 'Property Created',
-        data: newProperty,
+        data: propertyDatas,
       })
     } catch (err: any) {
-      console.error(err?.message)
+      await session.abortTransaction()
+      session.endSession()
       res.status(500).send('An Error ocurred while creating property')
     }
   }
@@ -43,6 +109,7 @@ class PropertyController {
 
     const findQuery = {
       $or: [{ title: regex }, { description: regex }, { category: regex }],
+      isActive: true,
     }
 
     try {
@@ -88,6 +155,38 @@ class PropertyController {
       console.log('Error in email login', error)
       console.error(error?.message)
       res.status(500).send('An Error ocurred while retrieving data')
+    }
+  }
+
+  isActiveSwitch = async (req: Request, res: Response) => {
+    const id = req.params.id
+    if (!isValidObjectId(id))
+      return res.status(400).json({
+        statusCode: 400,
+        message: 'Invalid ObjectId',
+      })
+
+    try {
+      const newProperty = await Property.findById(id)
+      if (!newProperty)
+        return res.status(404).json({
+          statusCode: 404,
+          message: `Property with id ${id} not found`,
+        })
+
+      newProperty.isActive = !newProperty.isActive
+      newProperty.save()
+
+      return res.json({
+        statusCode: 200,
+        message: `Property Switched from ${!newProperty.isActive} to ${
+          newProperty.isActive
+        }`,
+      })
+    } catch (error: any) {
+      console.log('Error', error)
+      console.error(error?.message)
+      res.status(500).send('An Error ocurred while updating data')
     }
   }
 
@@ -144,6 +243,18 @@ class PropertyController {
     } catch (error: any) {
       console.log('Error in email login', error)
       console.error(error?.message)
+      res.status(500).send('An Error ocurred while retrieving data')
+    }
+  }
+  getPropertyDocs = async (req: Request, res: Response) => {
+    try {
+      const propsDoc = await PropertyDocs.find()
+      res.status(200).json({
+        message: 'success',
+        data: propsDoc,
+      })
+    } catch (error) {
+      console.error(error)
       res.status(500).send('An Error ocurred while retrieving data')
     }
   }

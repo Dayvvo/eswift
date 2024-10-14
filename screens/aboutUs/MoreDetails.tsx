@@ -54,7 +54,7 @@ export const MoreDetails =()=> {
 
     return (
         <>
-            <Flex bg={"#FFFFFF"}
+            <Flex bg={"transparent"}
                 flexDir='column'
                 width={"100%"}
                 gap={'50px'}

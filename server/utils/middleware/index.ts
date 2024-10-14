@@ -1,5 +1,5 @@
 import User from "@/server/models/User";
-import { NextFunction, Request, Response, } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { IUser, UserRole } from "../interfaces";
 
@@ -9,20 +9,17 @@ export const isAuth = async (
   next: NextFunction
 ) => {
   let token = "";
-  if (
-    req.headers.authorization
-  ) {
+  if (req.headers.authorization) {
     try {
-      token = req.headers.authorization;
-      console.log('token',token)
+      token = req.headers.authorization.split(" ")[1];
+      console.log("tokenssss", token);
       const decoded = jwt.verify(
         token,
         process.env["JWT_SECRET"] as string
       ) as any;
-      console.log('user found',decoded)
       const userFound = await User.findById(decoded?.id).select("-hash");
 
-      console.log('userFound', userFound);
+      console.log("userFound", userFound);
 
       req.user = userFound ? userFound : undefined;
       if (!req.user) {
@@ -43,7 +40,8 @@ export const isAuth = async (
 
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as IUser;
-  if ( user?.role !== UserRole.ADMIN) {
+  console.log("isAdmin", user);
+  if (user?.role !== UserRole.ADMIN) {
     return res
       .status(403)
       .json({ message: "Unauthorized: Admin access required" });

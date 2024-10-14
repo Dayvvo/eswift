@@ -26,6 +26,7 @@ import { AddPropertyScreenFour } from "./AddPropertyScreen4";
 import useProperty from "@/hooks/useProperty";
 import { useImage, useInputNumber, useInputText } from "@/hooks/useInput";
 import { useApiUrl } from "@/hooks/useApi";
+import useToast from "@/hooks/useToast";
 
 interface MyData {
   _id: any;
@@ -65,7 +66,7 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeCategory,
     reset: categoryReset,
   } = useInputText((category) => category !== "");
- 
+
   const {
     input: description,
     onChangeInput: onChangeDescription,
@@ -83,6 +84,17 @@ export const PropertyScreen = () => {
   } = useInputText((typeOfProperty) => typeOfProperty !== "");
 
   const {
+    input: duration,
+    onChangeInput: onChangeDuration,
+    reset: durationReset,
+  } = useInputText((duration) => duration !== "");
+  const {
+    input: fileName,
+    onChangeInput: onChangeFileName,
+    reset: fileNameReset,
+  } = useInputText((fileName) => fileName !== "");
+
+  const {
     input: price,
     onChangeInput: onChangePrice,
     reset: priceReset,
@@ -93,36 +105,62 @@ export const PropertyScreen = () => {
     error: imageError,
     reset: imageReset,
   } = useImage();
-
+  const { toast } = useToast();
   const client = useApiUrl();
-  const { addProperty } = useProperty();
 
+  const { addProperty } = useProperty();
+  // const toast = useToast();
+  const propertyData = {
+    title,
+    type: typeOfProperty,
+    address,
+    price,
+    category,
+    duration,
+    description,
+    features: ["nice", "cheap", "open spaces"],
+    images: [
+      "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    ],
+    name: fileName,
+    file: "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  };
+  // console.log(propertyData);
   const addPropertyFn = async () => {
-    // const formData = new FormData();
-    // formData.append("title", title);
     try {
-      const req = await addProperty({
-        title,
-        type: typeOfProperty,
-        address,
-        price: price,
-        category,
-        description,
-        features: ["nice", "cheap", "open spaces"],
-        images: [
-          "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        ],
-      });
+      const req = await addProperty(propertyData); // If no error occurs, the following code runs
+      // console.log("response", req);
       setShowModal(false);
+
+      toast({
+        status: "success",
+        description: "Property created",
+        title: "Success",
+        position: "top",
+        duration: 5000,
+      });
+      // Reset the form fields after successful creation
+
       titleReset();
       categoryReset();
       descriptionReset();
+      durationReset();
       imageReset();
+      fileNameReset();
       priceReset();
       typeReset();
       addressReset();
+      setShowScreen(1);
     } catch (err) {
-      console.log("err", err);
+      // In case of error, this block will handle it and show the error toast
+      toast({
+        status: "error",
+        description: "Failed to create property",
+        title: "Failed",
+        position: "top",
+        duration: 5000,
+      });
+      // console.log("err", err);
     }
   };
 
@@ -130,21 +168,6 @@ export const PropertyScreen = () => {
     setShowModal((prevState) => !prevState);
   };
 
-    
-  const getPropertyFunction = async () => {
-    setLoading(true);
-    try {
-      setLoading(false);
-      const getAllProperties = await axios.get(
-        `/api/property?keyword=${inputValue}&PageNumber={${page}}`
-      );
-      console.log(getAllProperties);
-      setGetProperty(getAllProperties?.data?.data);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -160,6 +183,19 @@ export const PropertyScreen = () => {
     fetchData();
   }, []);
   useEffect(() => {
+    const getPropertyFunction = async () => {
+      setLoading(true);
+      try {
+        setLoading(false);
+        const getAllProperties = await axios.get(
+          `/api/property?keyword=${inputValue}&PageNumber={${page}}`
+        );
+        setGetProperty(getAllProperties?.data?.data);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    };
     getPropertyFunction();
   }, [page, inputValue, showModal]);
 
@@ -172,6 +208,8 @@ export const PropertyScreen = () => {
             onChangeTitle={onChangeTitle}
             onChangeCategory={onChangeCategory}
             onChangeDescription={onChangeDescription}
+            typeOfProperty={typeOfProperty}
+            onChangeType={onChangeType}
             description={description}
             title={title}
             category={category}
@@ -181,10 +219,10 @@ export const PropertyScreen = () => {
           <AddPropertyScreenTwo
             address={address}
             price={price}
-            typeOfProperty={typeOfProperty}
+            duration={duration}
             onChangeAddress={onChangeAddress}
             onChangePrice={onChangePrice}
-            onChangeType={onChangeType}
+            onChangeDuration={onChangeDuration}
             next={() => setShowScreen(3)}
             previous={() => setShowScreen(1)}
           />
@@ -200,6 +238,8 @@ export const PropertyScreen = () => {
           <AddPropertyScreenFour
             next={addPropertyFn}
             previous={() => setShowScreen(3)}
+            fileName={fileName}
+            onChangeFileName={onChangeFileName}
           />
         ) : (
           ""
@@ -282,50 +322,41 @@ export const PropertyScreen = () => {
             <Skeleton height="40px" />
           </Stack>
         )}
-        {/* {!loading && getProperty === [] && (
+
+        {!loading && getProperty?.length > 0 && (
+          <Grid
+            templateColumns={{
+              base: "repeat(1, 1fr)",
+              md: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
+            }}
+            gap={{ base: "24px", lg: "28px" }}
+          >
+            {getProperty.map((property) => {
+              const user = users.find((u) => u._id === property?.creatorID);
+
+              return (
+                <PropertyCard
+                  key={property?._id}
+                  image={property?.images}
+                  title={property?.title}
+                  pricing={property?.price}
+                  location={property?.address}
+                  userImage={user?.avatar || "/"}
+                  email={user?.email}
+                  user={user?.firstName}
+                  count={page}
+                />
+              );
+            })}
+          </Grid>
+        )}
+        {!loading && getProperty?.length === 0 && (
           <Card>
             <CardBody>
-              <Text>No property available please check back later</Text>
+              <Text>No property available please wait</Text>
             </CardBody>
           </Card>
-        )} */}
-        {!loading && (
-          <>
-            {getProperty?.length > 0 ? (
-              <Grid
-                templateColumns={{
-                  base: "repeat(1, 1fr)",
-                  md: "repeat(2, 1fr)",
-                  lg: "repeat(3, 1fr)",
-                }}
-                gap={{ base: "24px", lg: "28px" }}
-              >
-                {getProperty.map((property) => {
-                  const user = users.find((u) => u._id === property?.creatorID);
-
-                  return (
-                    <PropertyCard
-                      key={property?._id}
-                      image={property?.images || "/"}
-                      title={property?.title}
-                      pricing={property?.price}
-                      location={property?.address}
-                      userImage={user?.avatar || "/"}
-                      email={user?.email}
-                      user={user?.firstName}
-                      count={page}
-                    />
-                  );
-                })}
-              </Grid>
-            ) : (
-              <Card>
-                <CardBody>
-                  <Text>No property available please wait</Text>
-                </CardBody>
-              </Card>
-            )}
-          </>
         )}
       </Box>
     </>

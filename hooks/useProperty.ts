@@ -7,9 +7,12 @@ interface PropertyObj {
   description: string;
   address: string;
   price: string;
+  duration: string;
   category: string;
   features: string[];
   images: any;
+  name: string;
+  file: any;
 }
 
 const useProperty = () => {
@@ -20,7 +23,7 @@ const useProperty = () => {
 
     if (userData) {
       const parsedData = JSON.parse(userData);
-      console.log(parsedData);
+
       setToken(parsedData.token);
     }
 
@@ -34,18 +37,17 @@ const useProperty = () => {
       try {
         const res = await post(`/property`, data);
         return res;
-      } catch (err) {
-        console.log("error calling addProperty", err);
+      } catch (err: any) {
+        throw new err();
       }
       // return res
     },
     [token]
   );
-  const getPropertyDetails = useCallback(async (id:string) => {
-      const res = await query (`/property/${id}`);
-      return res;
+  const getPropertyDetails = useCallback(async (id: string) => {
+    const res = await query(`/property/${id}`);
+    return res;
   }, []);
-
 
   return {
     addProperty,

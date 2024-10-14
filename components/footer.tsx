@@ -231,16 +231,17 @@ export const Footer =()=> {
                         {
                             LegalLink.map((item)=>(
                                 // eslint-disable-next-line react/jsx-key
-                                <Link href={`${item?.Link}`}>
-                                    <Text
+                               
+                                    <Text key={item?.id} width={'fit-content'}
                                         fontWeight={500}
                                         fontSize={'16px'}
                                         textColor={'var(--TextCol)'}
                                         mb={2}
                                     >
+                                        <Link href={`${item?.Link}`} className="width">
                                         {item?.Navigator}
+                                        </Link>
                                     </Text>
-                            </Link>
                             ))
                         }
                     </Box>

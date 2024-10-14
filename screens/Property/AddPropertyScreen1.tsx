@@ -1,4 +1,5 @@
-import Btn from "@/components/Btn";
+import Btn from "../../components/Btn";
+import React from  'react'
 import {
   Box,
   Flex,
@@ -18,6 +19,8 @@ interface AddPropertyScreenOneProps {
   title: string;
   category: string;
   description: string;
+  typeOfProperty: string;
+  onChangeType: (event: ChangeEvent<HTMLSelectElement>) => void;
   onChangeDescription: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeCategory: (event: ChangeEvent<HTMLSelectElement>) => void;
@@ -28,6 +31,8 @@ export const AddPropertyScreenOne = ({
   onChangeTitle,
   category,
   onChangeCategory,
+  typeOfProperty,
+  onChangeType,
   description,
   onChangeDescription,
 }: AddPropertyScreenOneProps) => {
@@ -135,7 +140,7 @@ export const AddPropertyScreenOne = ({
               fontSize={"14px"}
               textColor={"var(--strong950)"}
             >
-              Property Category
+              Property type
             </FormLabel>
             <Select
               w="100%"
@@ -145,16 +150,55 @@ export const AddPropertyScreenOne = ({
               fontSize={14}
               textColor={"var--(sub600)"}
               _placeholder={{ textColor: "var--(soft400)" }}
-              placeholder="Category of the property"
-              value={category}
-              onChange={onChangeCategory}
+              placeholder="Type of property"
+              value={typeOfProperty}
+              onChange={onChangeType}
             >
-              {["Option 1", "Option 2", "Option 3", "Option 4"].map((entry) => (
-                // eslint-disable-next-line react/jsx-key
-                <option value={`${entry}`}>{entry}</option>
+              {["Land", "House"].map((entry) => (
+                <option value={`${entry}`} key={entry}>
+                  {entry}
+                </option>
               ))}
             </Select>
           </FormControl>
+
+          {typeOfProperty && (
+            <FormControl w={"100%"}>
+              <FormLabel
+                fontWeight={500}
+                fontSize={"14px"}
+                textColor={"var(--strong950)"}
+              >
+                Property category
+              </FormLabel>
+              <Select
+                w="100%"
+                h="40px"
+                border={"1px solid var(--soft200)"}
+                borderRadius={"10px"}
+                fontSize={14}
+                textColor={"var--(sub600)"}
+                _placeholder={{ textColor: "var--(soft400)" }}
+                placeholder="Category of the property"
+                value={category}
+                onChange={onChangeCategory}
+              >
+                {typeOfProperty === "House" &&
+                  ["Bungalo", "Duplex", "Self contain"].map((entry) => (
+                    <option value={`${entry}`} key={entry}>
+                      {entry}
+                    </option>
+                  ))}
+                {typeOfProperty === "Land" &&
+                  ["100 X 100", "100 X 150", "200 X 200"].map((entry) => (
+                    <option value={`${entry}`} key={entry}>
+                      {entry}
+                    </option>
+                  ))}
+              </Select>
+            </FormControl>
+          )}
+
           <FormControl w={"100%"}>
             <FormLabel
               fontWeight={500}
