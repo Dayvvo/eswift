@@ -246,7 +246,7 @@ const ContactScreen =( )=> {
                                     name="inquiry"
                                 >
                                     {["Option 1", "Option 2", "Option 4", "Option 5"].map((entry) => (
-                                    <option value={`${entry}`}>{entry}</option>
+                                        <option key={entry} value={`${entry}`}>{entry}</option>
                                     ))}
                                 </Select>
                             </Flex>
@@ -271,7 +271,7 @@ const ContactScreen =( )=> {
                                     name="Select"
                                 >
                                     {["Option 1", "Option 2", "Option 4", "Option 5"].map((entry) => (
-                                        <option value={`${entry}`}>{entry}</option>
+                                        <option key={entry} value={`${entry}`}>{entry}</option>
                                     ))}
                                 </Select>
                             </Flex>    

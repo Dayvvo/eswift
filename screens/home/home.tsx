@@ -33,13 +33,8 @@ const HomePage =()=> {
                     px={{base:'1rem',lg:'4rem'}}
                     display={'flex'} flexDir={'column'} gap={'120px'}
                 >
-                    <HeroProps bgImage={"url('/Find-Dream.jpg')"} bg={"#00000080"} 
-                        Nav={"/properties"} header={"Find Dream Properties"} 
-                        details={"Explore our extensive listings of properties in Lagos and beyond."} 
-                        buttonPos={'rotate'} w={'100%'} h={'100vh'}
-                    />
                     <HeroProps bgImage={"url('/Become-partner.jpg')"} bg={"#00000080"} 
-                        Nav={""} header={"Become Our Partner"} 
+                        Nav={"/contact"} header={"Become Our Partner"} 
                         details={"Join our thriving network of real estate professionals and earn competitive commissions."} 
                         buttonPos={'rotate'} w={'100%'} h={'100vh'}
                     />
