@@ -23,7 +23,7 @@ export const SectionThree =()=> {
     // const specification:any[] = [
     //     {
     //         id:1,
-    //         point:'Property Management: Let us handle the hassle. We offer expert property management, including tenant screening, rent collection, and maintenance.',
+    //         point:'Property Manafzgement: Let us handle the hassle. We offer expert property management, including tenant screening, rent collection, and maintenance.',
     //     },
     //     {
     //         id:2,
@@ -99,7 +99,7 @@ export const SectionThree =()=> {
                                     mb={'30px'}
                                 >
                                     {
-                                        Array(copies).fill().map((_, index)=>(
+                                        Array(copies).map((_, index)=>(
                                             <Flex key={index} w={'38px'} h={'38px'} alignItems={'center'} justifyContent={'center'} fontSize={{base:'20px'}}
                                                 bg={'#1A1D66'} borderRadius={'999px'} textColor={'#FFE500'}
                                             >
