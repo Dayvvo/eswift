@@ -14,7 +14,6 @@ import {
 import { RiSearch2Line } from "react-icons/ri";
 import Btn from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
-import { PropertyCard } from "./PropertyCard";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "@/components/modal";
@@ -27,6 +26,7 @@ import useProperty from "@/hooks/useProperty";
 import { useImage, useInputNumber, useInputText } from "@/hooks/useInput";
 import { useApiUrl } from "@/hooks/useApi";
 import useToast from "@/hooks/useToast";
+import { PropertyCard } from "./propertyCard";
 
 interface MyData {
   _id: any;
