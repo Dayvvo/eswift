@@ -14,7 +14,6 @@ import {
 import { RiSearch2Line } from "react-icons/ri";
 import Btn from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
-import { PropertyCard } from "./propertyCard";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "@/components/modal";
@@ -28,6 +27,7 @@ import { AddPropertyScreenOne } from "./AddPropertyScreen1";
 import { AddPropertyScreenTwo } from "./AddPropertyScreen2";
 import { AddPropertyScreenThree } from "./AddPropertyScreen3";
 import { AddPropertyScreenFour } from "./AddPropertyScreen4";
+import { PropertyCard } from "./propertyCard";
 
 interface MyData {
   _id: any;
