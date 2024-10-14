@@ -13,13 +13,12 @@ export const isAuth = async (
     req.headers.authorization
   ) {
     try {
-      token = req.headers.authorization;
+      token = req.headers.authorization.split(' ')[1];
       console.log('token',token)
       const decoded = jwt.verify(
         token,
         process.env["JWT_SECRET"] as string
       ) as any;
-      console.log('user found',decoded)
       const userFound = await User.findById(decoded?.id).select("-hash");
 
       console.log('userFound', userFound);
