@@ -12,7 +12,7 @@ const router = express.Router();
 router.use("/auth", authRoutes);
 router.use("/property", propertyRoute);
 router.use("/blog", blogPost);
-router.use("/contact", contact);
+router.use("/contact-us", contact);
 router.use("/user", profile);
 router.use("/inspection", inspectionRoute);
 
