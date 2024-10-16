@@ -4,7 +4,7 @@ import { Resdesign } from "@/screens/home/redesign";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [building, setBuilding] = useState<boolean>(true);
+  const [building, setBuilding] = useState<boolean>(false);
 
   useEffect(()=>{
     const getCookie = (name:string) => {

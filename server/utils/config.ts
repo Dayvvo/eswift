@@ -70,8 +70,8 @@ export class appConfig {
     try {
       console.log('connecting db')
 
-      mongoose.connect(process.env.MONGO_URI as string)
-      console.log('MongoDB Connected...')
+      const mongooseConnect = await mongoose.connect(process.env.MONGO_URI as string)
+      console.log('MongoDB Connected...', mongooseConnect.Collection)
     } catch (err) {
       console.error('error at connecting db', err)
       process.exit(1)

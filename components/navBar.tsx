@@ -5,7 +5,6 @@ import {
   DrawerCloseButton,
   DrawerContent,
   DrawerOverlay,
-  Flex,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -49,11 +48,11 @@ const NavBar = () => {
       Navigator:'Properties',
       Link:'/properties'
     },
-    {
-      id:2,
-      Navigator:'Gallery',
-      Link:'/gallery'
-    },
+    // {
+    //   id:2,
+    //   Navigator:'Gallery',
+    //   Link:'/gallery'
+    // },
     {
       id:3,
       Navigator:'About Us',
@@ -79,15 +78,15 @@ const NavBar = () => {
   return (
     <Box 
       position="relative" w="100vw" height="fit-content"
-      
     >
       <Box
         as="nav"
         zIndex={100}
         px={{ base: "1rem", lg:"2rem", xl:"4rem" }}
         height={{base:'86px',lg:'96px'}} py={'24px'}
-        bg={`${isScrolled ? "#FFFFFF90" : "" }`} 
-        backdropFilter={isScrolled ? 'blur(10px)':'blur(1px)'}
+        // bg={`${isScrolled ? "#FFFFFF90" : "" }`} 
+        // backdropFilter={isScrolled ? 'blur(10px)':'blur(1px)'}
+        backgroundColor={'white'}
         _hover={{
           bgOpacity: "0.1",
           backdropfilter:"blur(5px)",
