@@ -28,7 +28,7 @@ export const SectionThreeProps:React.FC<props> =(
     return (
         <>
             
-            <Flex bg={"#FFFFFF"}
+            <Flex bg={"transparent"}
                 w={'100%'} h={'fit-content'}
                 flexDirection={{base:`${mobileDirection}`, lg:`${webDirection}`}}
                 width={"100%"} gap={`${gap}`}

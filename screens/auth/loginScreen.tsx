@@ -10,6 +10,7 @@ import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { Background } from "../home/Background";
 
 
 
@@ -80,6 +81,7 @@ export const LoginScreen =()=> {
             py={'24px'} 
             className="robotoF"
         >
+            <Background/>
             <Box 
                 h={'fit-content'}
             >

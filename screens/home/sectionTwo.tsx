@@ -66,6 +66,7 @@ export const SectionTwo =()=> {
 }
 
 export const Steps =()=> {
+    
     const Card = [
         {
             id:1,

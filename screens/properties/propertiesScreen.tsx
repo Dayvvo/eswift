@@ -1,13 +1,11 @@
 
 import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
-import { Box,InputGroup, InputLeftElement, Input, InputRightElement, Grid } from "@chakra-ui/react";
+import { Box,InputGroup, Input, InputRightElement, Grid } from '@chakra-ui/react'
 import { useEffect, useState } from "react";
-import { IoFilter } from "react-icons/io5";
 import { RiSearch2Line } from "react-icons/ri";
 import { PropertiesCard } from "./propertiesCard";
 import { Footer } from "@/components/footer";
-import { useApiUrl } from "@/hooks/useApi";
 import axios from "axios";
 import { LoadMore } from "@/components/LoadMore";
 import Btn from "@/components/Btn";
@@ -115,8 +113,8 @@ const PropertiesScreen =()=> {
 
                     <TextHeader Header={"Discover a World of Possibilities"} sub={"Our portfolio of properties is as diverse as yur dreams. Explore the following categories to find the perfect property that resonates with your vision of home"}/>
 
-                    <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(2, 1fr)', xl:'repeat(4, 1fr)'}} 
-                        gap={'20px'}
+                    <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(2, 1fr)', xl:'repeat(3, 1fr)'}} 
+                        gap={'20px'} placeContent={'center'}
                     >
                         {
                             fetchData.map((item)=>{

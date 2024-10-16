@@ -4,6 +4,9 @@ import { Box, Grid } from "@chakra-ui/react";
 import { BlogCard } from "./blogsCard";
 import { useEffect, useState } from "react";
 import useBlog from "@/hooks/useBlog";
+import { Background } from "../home/Background";
+import { LoadMore } from "@/components/LoadMore";
+import { Footer } from "@/components/footer";
 
 interface BlogPostProps {
   _id: any;
@@ -18,6 +21,7 @@ interface BlogPostProps {
 const BlogspotScreen = () => {
   const [blogPost, setBlogPost] = useState<BlogPostProps[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page , setPage] = useState<number>(1);
   const { getBlog } = useBlog();
 //   const Blogs = [
 //     {
@@ -105,6 +109,7 @@ const BlogspotScreen = () => {
         h={"100vh"}
         video={"/PropertiesVid.mp4"}
       />
+      <Background/>
       <Box
         id="blogs"
         py={"70px"}
@@ -131,7 +136,10 @@ const BlogspotScreen = () => {
             );
           })}
         </Grid>
+
+        <LoadMore click={()=> page + 1}/>
       </Box>
+      <Footer/>
     </Box>
   );
 };
