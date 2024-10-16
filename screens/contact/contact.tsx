@@ -16,7 +16,7 @@ import Btn from "@/components/Btn";
 
 
 
-const ContactScreen =( )=> {
+const ContactScreen =()=> {
     
     function scrollToSection() {
         const section = document.querySelector('#main') as HTMLElement;
@@ -87,7 +87,7 @@ const ContactScreen =( )=> {
                 <Background/>
                 <Box id="main"
                     py={'120px'}
-                    px={{base:'0.5rem',lg:'2rem'}}
+                    px={{base:'0.5rem',lg:'4rem'}}
                     display={'flex'} flexDir={'column'} 
                     alignItems={'center'} gap={'20px'}
                     mb={{base:'10px',lg:'120px'}}
@@ -154,7 +154,7 @@ const ContactScreen =( )=> {
                         borderRadius={'12px'}
                         className="urbanist"
                     >
-                        <Flex w={'100%'} flexWrap={'wrap'} gap={{base:'20px',lg:'30px'}}>
+                        <Flex w={'100%'} flexWrap={'wrap'} gap={{base:'20px',lg:'30px'}} >
                             <Flex flexDir={'column'} w={{base:'100%',md:'48%',lg:'30%'}}>
                                 <FormLabel
                                     fontWeight={600} fontSize={'16px'}
@@ -207,7 +207,7 @@ const ContactScreen =( )=> {
                                 />
                             </Flex>
                         </Flex>
-                        <Flex w={'100%'} flexWrap={'wrap'} gap={{base:'20px',lg:'30px'}}>
+                        <Flex w={'100%'} flexWrap={'wrap'} gap={{base:'20px',lg:'30px'}} my={10}>
                             <Flex flexDir={'column'} w={{base:'100%',md:'48%',lg:'30%'}}>
                                 <FormLabel
                                     fontWeight={600} fontSize={'16px'}
@@ -293,10 +293,14 @@ const ContactScreen =( )=> {
                         >
                         
                             <Checkbox
-                                fontWeight={500} fontSize={{base:'10px', lg:'16px'}}
-                                textColor={'#262626'}
+                                
                             >
-                                I agree with Terms of Use and Privacy Policy
+                                <Text fontSize={{base:'8px', sm:'12px', md:'14px',lg:'16px'}}
+                                    fontWeight={500} 
+                                    textColor={'#262626'}
+                                >
+                                    I agree with Terms of Use and Privacy Policy
+                                </Text>
                             </Checkbox>
                             <Btn
                                 display={'flex'}
@@ -314,9 +318,7 @@ const ContactScreen =( )=> {
                             </Btn>
                         </Flex>
                     </FormControl>
-                    
                 </Box>
-                
                 <Footer/>
             </Box>
             

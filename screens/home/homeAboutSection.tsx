@@ -12,7 +12,7 @@ export const AboutSection =()=> {
             id:1, 
             icon:<HiMiniBuildingStorefront />,
             title:'Find Your Dream Home',
-            navigate:'',
+            navigate:'/login',
         },
         {
             id:2, 
@@ -156,7 +156,7 @@ export const Stats =()=> {
             <Flex
                 w={{base:'100%',lg:'fit-content'}}
                 flexWrap={'wrap'}
-                gap={{base:'46px',lg:'10px'}} 
+                gap={'10px'} 
                 px="15px" py={'12px'}
                 borderRadius={'10px'}
                 justifyContent={{base:'center',lg:'start'}}
@@ -170,7 +170,6 @@ export const Stats =()=> {
                             textColor={'white'}
                             className="urbanist"
                             flexDir={'column'}
-                            _hover={{bg:'#3170A690'}}
                         >
                             <Text
                                 fontWeight={700}
