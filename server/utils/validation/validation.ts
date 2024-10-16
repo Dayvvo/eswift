@@ -96,29 +96,33 @@ export const deleteInspection = Joi.object({
 
 export const validateMailbody = (emailData: MailType) => {
   const mailSchema = Joi.object({
+    firstName: Joi.string()
+      .required()
+      .trim()
+      .min(1)
+      .max(255)
+      .error(new Error("first name is required")),
     email: Joi.string()
       .required()
       .trim()
       .min(1)
-      .max(255)
-      .error(new Error("Email is required and must be under 256 characters")),
-    name: Joi.string()
+      // .max(255)
+      .email({ tlds: { allow: false } })
+      .error(new Error("Email is required")),
+    lastName: Joi.string()
       .required()
       .trim()
       .min(1)
       .max(255)
-      .error(new Error("name is required")),
-    subject: Joi.string()
-      .required()
-      .trim()
-      .min(1)
-      .max(255)
-      .error(new Error("subject is required")),
+      .error(new Error("last name is required")),
     message: Joi.string()
       .required()
       .trim()
       .min(1)
       .error(new Error("Message is required")),
+    howDidYouHear: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
+    inquiryType: Joi.string().required(),
   });
 
   return mailSchema.validate(emailData);

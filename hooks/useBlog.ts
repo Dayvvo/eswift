@@ -10,6 +10,15 @@ interface BlogObj {
   body_image: string;
   // tags: string[];
 }
+interface MailType {
+  email: string;
+  firstName: string;
+  lastName: string;
+  message: string;
+  phoneNumber: string;
+  inquiryType: string;
+  howDidYouHear: string;
+}
 
 interface BlogResponse {
   data: {
@@ -51,6 +60,17 @@ const useBlog = () => {
     },
     [token]
   );
+  const contactUsFn = async (data: MailType) => {
+    try {
+      const res = await post(`${baseUrl}/contact-us`, data);
+      // console.log("res", res);
+      return res;
+    } catch (err: any) {
+      // console.log("error calling addblog", err);
+      throw new err();
+    }
+    // return res
+  };
 
   const deleteBlog = useCallback(
     async (blogPostId: any) => {
@@ -83,6 +103,7 @@ const useBlog = () => {
     addBlog,
     deleteBlog,
     getBlog,
+    contactApi: contactUsFn,
   };
 };
 

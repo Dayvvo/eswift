@@ -8,7 +8,7 @@ import { HeroProps } from "@/screens/home/heroProps";
 import { SectionThree } from "./sectionThree";
 import { Footer } from "@/components/footer";
 import { Background } from "./Background";
-import { Video } from "./video";
+import { Video } from "./Video";
 
 
 
