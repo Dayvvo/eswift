@@ -12,6 +12,8 @@ import {
   Input,
   Select,
   Checkbox,
+  FormErrorMessage,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { MdArrowOutward } from "react-icons/md";
 import Link from "next/link";
@@ -25,6 +27,7 @@ import { ChangeEvent, useState } from "react";
 import Btn from "@/components/Btn";
 import useBlog from "@/hooks/useBlog";
 import useToast from "@/hooks/useToast";
+import { useInputText } from "@/hooks/useInput";
 
 const ContactScreen = () => {
   function scrollToSection() {
@@ -70,23 +73,123 @@ const ContactScreen = () => {
       navigate: "",
     },
   ];
+
   const [isAgree, setIsAgree] = useState(false);
-  const [isContact, setIsContact] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    message: "",
-    phoneNumber: "",
-    inquiryType: "",
-    howDidYouHear: "",
+  const [loading, setLoading] = useState(false);
+
+  const {
+    input: firstName,
+    onChangeInput: onChangeFirstName,
+    onBlurHandler: onBlurFirstName,
+    reset: resetFirstName,
+    valueIsValid: validFirstName,
+    valueIsInvalid: invalidFirstName,
+  } = useInputText((firstName) => firstName.trim() !== "");
+  const {
+    input: lastName,
+    onChangeInput: onChangeLastName,
+    onBlurHandler: onBlurLastName,
+    reset: resetLastName,
+    valueIsValid: validLastName,
+    valueIsInvalid: invalidLastName,
+  } = useInputText((lastName) => lastName.trim() !== "");
+  const {
+    input: email,
+    onChangeInput: onChangeEmail,
+    onBlurHandler: onBlurEmail,
+    reset: resetEmail,
+    valueIsValid: validEmail,
+    valueIsInvalid: invalidEmail,
+  } = useInputText((email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   });
+
+  const {
+    input: phoneNumber,
+    onChangeInput: onChangePhoneNumber,
+    onBlurHandler: onBlurPhoneNumber,
+    reset: resetPhoneNumber,
+    valueIsValid: validPhoneNumber,
+    valueIsInvalid: invalidPhoneNumber,
+  } = useInputText(
+    (phoneNumber) => phoneNumber.trim() !== "" && phoneNumber.length > 8
+  );
+
+  const {
+    input: inquiryType,
+    onChangeInput: onChangeInquiryType,
+    onBlurHandler: onBlurInquiryType,
+    reset: resetInquiryType,
+    valueIsValid: validInquiryType,
+    valueIsInvalid: invalidInquiryType,
+  } = useInputText((inquiryType) => inquiryType !== "");
+  const {
+    input: howDidYouHear,
+    onChangeInput: onChangeHowDidYouHear,
+    onBlurHandler: onBlurHowDidYouHear,
+    reset: resetHowDidYouHear,
+    valueIsValid: validHowDidYouHear,
+    valueIsInvalid: invalidHowDidYouHear,
+  } = useInputText((howDidYouHear) => howDidYouHear !== "");
+  const {
+    input: message,
+    onChangeInput: onChangeMessage,
+    onBlurHandler: onBlurMessage,
+    reset: resetMessage,
+    valueIsValid: validMessage,
+    valueIsInvalid: invalidMessage,
+  } = useInputText((message) => message.trim() !== "");
+
+  const isContact = {
+    firstName,
+    lastName,
+    email,
+    message,
+    phoneNumber,
+    inquiryType,
+    howDidYouHear,
+  };
   const { contactApi } = useBlog();
   const { toast } = useToast();
 
+  const validate = () => {
+    if (!validFirstName) {
+      onBlurFirstName();
+      return false;
+    } else if (!validLastName) {
+      onBlurLastName();
+      return false;
+    } else if (!validEmail) {
+      onBlurEmail();
+      return false;
+    } else if (!validPhoneNumber) {
+      onBlurPhoneNumber();
+      return false;
+    } else if (!validInquiryType) {
+      onBlurInquiryType();
+      return false;
+    } else if (!validHowDidYouHear) {
+      onBlurHowDidYouHear();
+      return false;
+    } else if (!validMessage) {
+      onBlurMessage();
+      return false;
+    }
+
+    return true;
+  };
+
   const contactUsFn = async () => {
+    const isFormValid = validate();
+
+    if (!isFormValid) {
+      return;
+    }
+    setLoading(true);
     try {
       const req = await contactApi(isContact);
-      
+
       toast({
         status: "success",
         description: "Email sent",
@@ -94,15 +197,14 @@ const ContactScreen = () => {
         position: "top",
         duration: 5000,
       });
-      setIsContact({
-        firstName: "",
-        lastName: "",
-        email: "",
-        message: "",
-        phoneNumber: "",
-        inquiryType: "",
-        howDidYouHear: "",
-      });
+      setLoading(false);
+      resetEmail();
+      resetFirstName();
+      resetHowDidYouHear();
+      resetInquiryType();
+      resetLastName();
+      resetMessage();
+      resetPhoneNumber();
       setIsAgree(false);
     } catch (error) {
       toast({
@@ -113,15 +215,8 @@ const ContactScreen = () => {
         duration: 5000,
       });
       setIsAgree(true);
+      setLoading(false);
     }
-  };
-
-  const handleInput = (
-    event: ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    setIsContact({ ...isContact, [event.target.name]: event.target.value });
   };
 
   return (
@@ -253,17 +348,31 @@ const ContactScreen = () => {
                 <Input
                   w={"100%"}
                   h={"52px"}
-                  border={"1px solid #262626"}
+                  border={
+                    invalidFirstName
+                      ? "1px solid var(--errorBase)"
+                      : "1px solid #262626"
+                  }
                   borderRadius={"6px"}
+                  variant={"unstyled"}
+                  px={"0.7rem"}
                   textColor={"#666"}
                   fontWeight={500}
                   fontSize={{ base: "12px", lg: "14px" }}
                   type="text"
                   placeholder="Enter First Name"
                   name="firstName"
-                  value={isContact.firstName}
-                  onChange={handleInput}
+                  value={firstName}
+                  required
+                  isRequired
+                  onBlur={onBlurFirstName}
+                  onChange={onChangeFirstName}
                 />
+                {invalidFirstName && (
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                    {"Enter a valid first name"}
+                  </FormHelperText>
+                )}
               </Flex>
               <Flex
                 flexDir={"column"}
@@ -279,17 +388,30 @@ const ContactScreen = () => {
                 <Input
                   w={"100%"}
                   h={"52px"}
-                  border={"1px solid #262626"}
+                  border={
+                    invalidLastName
+                      ? "1px solid var(--errorBase)"
+                      : "1px solid #262626"
+                  }
                   borderRadius={"6px"}
+                  variant={"unstyled"}
+                  px={"0.7rem"}
                   textColor={"#666"}
                   fontWeight={500}
                   fontSize={{ base: "12px", lg: "14px" }}
                   type="text"
                   placeholder="Enter Last Name"
                   name="lastName"
-                  value={isContact.lastName}
-                  onChange={handleInput}
+                  value={lastName}
+                  onBlur={onBlurLastName}
+                  onChange={onChangeLastName}
                 />
+
+                {invalidLastName && (
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                    {"Enter a valid last name"}
+                  </FormHelperText>
+                )}
               </Flex>
               <Flex
                 flexDir={"column"}
@@ -305,23 +427,37 @@ const ContactScreen = () => {
                 <Input
                   w={"100%"}
                   h={"52px"}
+                  border={
+                    invalidEmail
+                      ? "1px solid var(--errorBase)"
+                      : "1px solid #262626"
+                  }
                   borderRadius={"6px"}
-                  border={"1px solid #262626"}
+                  variant={"unstyled"}
+                  px={"0.7rem"}
                   textColor={"#666"}
                   fontWeight={500}
                   fontSize={{ base: "12px", lg: "14px" }}
                   type="email"
                   placeholder="Enter your Email"
                   name="email"
-                  value={isContact.email}
-                  onChange={handleInput}
+                  value={email}
+                  onBlur={onBlurEmail}
+                  onChange={onChangeEmail}
                 />
+
+                {invalidEmail && (
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                    Enter a valid email address
+                  </FormHelperText>
+                )}
               </Flex>
             </Flex>
             <Flex
               w={"100%"}
               flexWrap={"wrap"}
               gap={{ base: "20px", lg: "30px" }}
+              mt={"1rem"}
             >
               <Flex
                 flexDir={"column"}
@@ -337,17 +473,29 @@ const ContactScreen = () => {
                 <Input
                   w={"100%"}
                   h={"52px"}
-                  border={"1px solid #262626"}
+                  border={
+                    invalidPhoneNumber
+                      ? "1px solid var(--errorBase)"
+                      : "1px solid #262626"
+                  }
                   borderRadius={"6px"}
+                  variant={"unstyled"}
+                  px={"0.7rem"}
                   textColor={"#666"}
                   fontWeight={500}
                   fontSize={{ base: "12px", lg: "14px" }}
                   type="tel"
                   placeholder="Enter Phone Number"
                   name="phoneNumber"
-                  value={isContact.phoneNumber}
-                  onChange={handleInput}
+                  value={phoneNumber}
+                  onBlur={onBlurPhoneNumber}
+                  onChange={onChangePhoneNumber}
                 />
+                {invalidPhoneNumber && (
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                    Enter a valid last phone number
+                  </FormHelperText>
+                )}
               </Flex>
               <Flex
                 flexDir={"column"}
@@ -363,17 +511,23 @@ const ContactScreen = () => {
                 <Select
                   w={"100%"}
                   h={"52px"}
-                  border={"1px solid #262626"}
+                  border={
+                    invalidInquiryType
+                      ? "1px solid var(--errorBase)"
+                      : "1px solid #262626"
+                  }
+                  borderRadius={"6px"}
+                  outlineColor={"#FFF"}
                   cursor={"pointer"}
-                  borderLeftRadius={"6px"}
                   _focusWithin={"0px solid #FFFFFF"}
                   fontWeight={500}
                   fontSize={{ base: "12px", lg: "14px" }}
                   textColor={"#666"}
                   _placeholder={{ textColor: "#666" }}
                   placeholder="Select Inquiry Type"
-                  onChange={handleInput}
-                  value={isContact.inquiryType}
+                  onBlur={onBlurInquiryType}
+                  onChange={onChangeInquiryType}
+                  value={inquiryType}
                   name="inquiryType"
                 >
                   {["General", "Support", "Customer care", "Payment"].map(
@@ -384,6 +538,11 @@ const ContactScreen = () => {
                     )
                   )}
                 </Select>
+                {invalidInquiryType && (
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                    Select one inquiry type
+                  </FormHelperText>
+                )}
               </Flex>
               <Flex
                 flexDir={"column"}
@@ -393,12 +552,17 @@ const ContactScreen = () => {
                   fontWeight={600}
                   fontSize={"16px"}
                   textColor={"#3170A6"}
+                  whiteSpace={"nowrap"}
                 >
                   How did you hear about us?
                 </FormLabel>
                 <Select
                   cursor={"pointer"}
-                  border={"1px solid #262626"}
+                  border={
+                    invalidHowDidYouHear
+                      ? "1px solid var(--errorBase)"
+                      : "1px solid #262626"
+                  }
                   borderLeftRadius={"6px"}
                   _focusWithin={"0px solid #FFFFFF"}
                   fontWeight={500}
@@ -408,8 +572,9 @@ const ContactScreen = () => {
                   h={"52px"}
                   _placeholder={{ textColor: "#666" }}
                   placeholder="how did you hear about us"
-                  onChange={handleInput}
-                  value={isContact.howDidYouHear}
+                  onChange={onChangeHowDidYouHear}
+                  onBlur={onBlurHowDidYouHear}
+                  value={howDidYouHear}
                   name="howDidYouHear"
                 >
                   {["Twitter", "Instagram", "Tik tok", "Facebook"].map(
@@ -420,13 +585,23 @@ const ContactScreen = () => {
                     )
                   )}
                 </Select>
+
+                {invalidHowDidYouHear && (
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                    Select how you hear about us
+                  </FormHelperText>
+                )}
               </Flex>
             </Flex>
             <Textarea
-              my={8}
+              mt={8}
               w={"100%"}
               h={"122px"}
-              border={"1px solid #262626"}
+              border={
+                invalidMessage
+                  ? "1px solid var(--errorBase)"
+                  : "1px solid #262626"
+              }
               borderRadius={"6px"}
               textColor={"#666"}
               fontWeight={500}
@@ -434,10 +609,20 @@ const ContactScreen = () => {
               _placeholder={{ textColor: "#666" }}
               placeholder="Enter your Message here"
               name="message"
-              value={isContact.message}
-              onChange={handleInput}
+              value={message}
+              onBlur={onBlurMessage}
+              onChange={onChangeMessage}
             />
-
+            {invalidMessage && (
+              <FormHelperText
+                mt={"5px"}
+                mb={8}
+                color={"var(--errorBase)"}
+                fontSize={"12px"}
+              >
+                Enter a valid message
+              </FormHelperText>
+            )}
             <Flex w="100%" my={"24px"} justifyContent={"space-between"}>
               <Checkbox
                 fontWeight={500}
@@ -460,6 +645,8 @@ const ContactScreen = () => {
                 _hover={{ opacity: 0.7 }}
                 fontSize={{ base: "8px", lg: "14px" }}
                 onClick={contactUsFn}
+                isLoading={loading}
+                loadingText="Submitting"
                 disabled={!isAgree}
               >
                 Send Your Message
