@@ -74,7 +74,7 @@ export const LoginScreen =()=> {
 
     return(
         <Box display={'flex'} flexDir={'column'} 
-            bg={'#FFF'}
+            bg={'transparent'}
             justifyContent={'space-between'}
             w={'100%'} h={'100vh'} 
             px={{base:'16px', lg:'44px'}}
@@ -88,12 +88,11 @@ export const LoginScreen =()=> {
                 <Image 
                     width={200}
                     height={100}
-                    src={'/logo.svg'}
+                    src={'/Logo.svg'}
                     alt={'eswift'}
                 />
             </Box>
             <Flex
-                flexBasis={1}
                 justifyContent={'center'}
                 alignItems={'center'}
             >
@@ -103,6 +102,7 @@ export const LoginScreen =()=> {
                     p={{base:'16px', md:'32px'}}
                     border={'1px solid var(--soft200)'}
                     boxShadow={'lg'} borderRadius={'20px'}
+                    bg={'white'}
                 >
                     <AuthHeaderProps
                         icon="/LoginIcon.png"
@@ -130,7 +130,7 @@ export const LoginScreen =()=> {
                                     cursor={'text'}
                                     fontSize={14} textColor={'var--(sub600)'}
                                     w='100%' h='40px'
-                                    _placeholder={{textColor:'var--(soft400)', fontSize:12}}
+                                    _placeholder={{textColor:'var--(soft400)',fontSize:{base:10,lg:12}}}
                                 >
                                     <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
                                         <MdOutlineEmail className="formicon"/>
@@ -161,7 +161,7 @@ export const LoginScreen =()=> {
                                         cursor={'text'}
                                         fontSize={14} textColor={'var--(sub600)'}
                                         w='100%' h='40px'
-                                        _placeholder={{textColor:'var--(soft400)',fontSize:12}}
+                                        _placeholder={{textColor:'var--(soft400)',fontSize:{base:10,lg:12}}}
                                     >
                                         <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
                                             <RiLockPasswordLine className="formicon"/>
@@ -174,7 +174,7 @@ export const LoginScreen =()=> {
                                             onChange={handleInput}          
                                         />
                                         <InputRightElement width='fit-content' marginRight={'20px'} cursor={'pointer'}>
-                                            <Box onClick={() => setShow(!show)}>
+                                            <Box onClick={() => setShow(!show)} h={'fit-content'}>
                                                 {!show ? <BsEyeSlash className="formicon"/> : <BsEye className="formicon" />}
                                             </Box>
                                         </InputRightElement>
@@ -189,15 +189,17 @@ export const LoginScreen =()=> {
                             justifyContent={'space-between'} 
                         >
                         
-                            <Checkbox
-                                fontWeight={400} fontSize={'14px'}
-                                textColor={'var(--strong950)'}
-                            >
-                                Keep me logged in
+                            <Checkbox>
+                                <Text
+                                    fontWeight={400} fontSize={{base:'12px',lg:'14px'}}
+                                    textColor={'var(--strong950)'}
+                                >
+                                    Keep me logged in
+                                </Text>
                             </Checkbox>
                             <Link href={'/reset'}>
                                 <Text 
-                                    fontWeight={500} fontSize={'14px'}
+                                    fontWeight={500} fontSize={{base:'12px',lg:'14px'}}
                                     textColor={'var(--sub600)'} textDecor={'underline'}
                                 >
                                     Forgot password?
@@ -213,6 +215,26 @@ export const LoginScreen =()=> {
                             Login
                         </Btn>
                     </form>
+                    <Flex 
+                        w="100%" my={'10px'}
+                        justifyContent={'space-between'} 
+                        alignItems={'center'}
+                    >
+                        <Text
+                            fontWeight={400} fontSize={{base:'10px',lg:'14px'}}
+                            textColor={'var(--strong950)'}
+                        >
+                            Don`t have an account?
+                        </Text>
+                        <Link href={'/signup'}>
+                            <Text 
+                                fontWeight={500} fontSize={'14px'}
+                                textColor={'var(--sub600)'} textDecor={'underline'}
+                            >
+                                Sign Up
+                            </Text>
+                        </Link>
+                    </Flex>
                 </Box>
             </Flex>
             <Text
