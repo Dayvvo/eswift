@@ -568,6 +568,7 @@ const ContactScreen = () => {
                   fontWeight={600}
                   fontSize={"16px"}
                   textColor={"#3170A6"}
+                  whiteSpace={"nowrap"}
                 >
                   How did you hear about us?
                 </FormLabel>
