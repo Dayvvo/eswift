@@ -99,6 +99,37 @@ class PropertyController {
     }
   }
 
+  adminGetAllProperties = async (req: Request, res: Response) => {
+    const pageSize = 12
+    const page = Number(req.params.pageNumber) || 1
+
+    const keyword = req.query.keyword as string
+    const regex = new RegExp(keyword, 'i')
+
+    const findQuery = {
+      $or: [{ title: regex }, { description: regex }, { category: regex }],
+    }
+
+    try {
+      const count = await Property.countDocuments(findQuery)
+      const properties = await Property.find(findQuery)
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+
+      return res.status(200).json({
+        statusCode: 200,
+        message: 'Property List',
+        data: properties,
+        pagination: { page, pages: Math.ceil(count / pageSize) },
+      })
+    } catch (err: any) {
+      console.log('Error in email login', err)
+      console.error(err?.message)
+      res.status(500).send('An Error ocurred while retrieving data')
+    }
+
+  }
+
   //TODO: finish function
   getCreatedProperties = async (req: Request, res: Response) => {
     const pageSize = 12
@@ -179,7 +210,7 @@ class PropertyController {
 
       return res.json({
         statusCode: 200,
-        message: `Property Switched from ${!newProperty.isActive} to ${
+        message: `Property active switched from ${!newProperty.isActive} to ${
           newProperty.isActive
         }`,
       })
