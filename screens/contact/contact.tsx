@@ -13,6 +13,7 @@ import {
   Select,
   Checkbox,
   FormErrorMessage,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { MdArrowOutward } from "react-icons/md";
 import Link from "next/link";
@@ -348,7 +349,9 @@ const ContactScreen = () => {
                   w={"100%"}
                   h={"52px"}
                   border={
-                    invalidFirstName ? "1px solid #FB3748" : "1px solid #262626"
+                    invalidFirstName
+                      ? "1px solid var(--errorBase)"
+                      : "1px solid #262626"
                   }
                   borderRadius={"6px"}
                   variant={"unstyled"}
@@ -366,14 +369,9 @@ const ContactScreen = () => {
                   onChange={onChangeFirstName}
                 />
                 {invalidFirstName && (
-                  <Text
-                    fontSize={"14px"}
-                    fontWeight={500}
-                    textColor={"#FB3748"}
-                    mt={"5px"}
-                  >
-                    Enter a valid first name
-                  </Text>
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                    {"Enter a valid first name"}
+                  </FormHelperText>
                 )}
               </Flex>
               <Flex
@@ -391,7 +389,9 @@ const ContactScreen = () => {
                   w={"100%"}
                   h={"52px"}
                   border={
-                    invalidLastName ? "1px solid #FB3748" : "1px solid #262626"
+                    invalidLastName
+                      ? "1px solid var(--errorBase)"
+                      : "1px solid #262626"
                   }
                   borderRadius={"6px"}
                   variant={"unstyled"}
@@ -406,15 +406,11 @@ const ContactScreen = () => {
                   onBlur={onBlurLastName}
                   onChange={onChangeLastName}
                 />
+
                 {invalidLastName && (
-                  <Text
-                    fontSize={"14px"}
-                    fontWeight={500}
-                    textColor={"#FB3748"}
-                    mt={"5px"}
-                  >
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                     {"Enter a valid last name"}
-                  </Text>
+                  </FormHelperText>
                 )}
               </Flex>
               <Flex
@@ -432,7 +428,9 @@ const ContactScreen = () => {
                   w={"100%"}
                   h={"52px"}
                   border={
-                    invalidEmail ? "1px solid #FB3748" : "1px solid #262626"
+                    invalidEmail
+                      ? "1px solid var(--errorBase)"
+                      : "1px solid #262626"
                   }
                   borderRadius={"6px"}
                   variant={"unstyled"}
@@ -447,15 +445,11 @@ const ContactScreen = () => {
                   onBlur={onBlurEmail}
                   onChange={onChangeEmail}
                 />
+
                 {invalidEmail && (
-                  <Text
-                    fontSize={"14px"}
-                    fontWeight={500}
-                    textColor={"#FB3748"}
-                    mt={"5px"}
-                  >
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                     Enter a valid email address
-                  </Text>
+                  </FormHelperText>
                 )}
               </Flex>
             </Flex>
@@ -481,7 +475,7 @@ const ContactScreen = () => {
                   h={"52px"}
                   border={
                     invalidPhoneNumber
-                      ? "1px solid #FB3748"
+                      ? "1px solid var(--errorBase)"
                       : "1px solid #262626"
                   }
                   borderRadius={"6px"}
@@ -498,14 +492,9 @@ const ContactScreen = () => {
                   onChange={onChangePhoneNumber}
                 />
                 {invalidPhoneNumber && (
-                  <Text
-                    fontSize={"14px"}
-                    fontWeight={500}
-                    textColor={"#FB3748"}
-                    mt={"5px"}
-                  >
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                     Enter a valid last phone number
-                  </Text>
+                  </FormHelperText>
                 )}
               </Flex>
               <Flex
@@ -524,7 +513,7 @@ const ContactScreen = () => {
                   h={"52px"}
                   border={
                     invalidInquiryType
-                      ? "1px solid #FB3748"
+                      ? "1px solid var(--errorBase)"
                       : "1px solid #262626"
                   }
                   borderRadius={"6px"}
@@ -550,14 +539,9 @@ const ContactScreen = () => {
                   )}
                 </Select>
                 {invalidInquiryType && (
-                  <Text
-                    fontSize={"14px"}
-                    fontWeight={500}
-                    textColor={"#FB3748"}
-                    mt={"5px"}
-                  >
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                     Select one inquiry type
-                  </Text>
+                  </FormHelperText>
                 )}
               </Flex>
               <Flex
@@ -576,7 +560,7 @@ const ContactScreen = () => {
                   cursor={"pointer"}
                   border={
                     invalidHowDidYouHear
-                      ? "1px solid #FB3748"
+                      ? "1px solid var(--errorBase)"
                       : "1px solid #262626"
                   }
                   borderLeftRadius={"6px"}
@@ -601,15 +585,11 @@ const ContactScreen = () => {
                     )
                   )}
                 </Select>
+
                 {invalidHowDidYouHear && (
-                  <Text
-                    fontSize={"14px"}
-                    fontWeight={500}
-                    textColor={"#FB3748"}
-                    mt={"5px"}
-                  >
+                  <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                     Select how you hear about us
-                  </Text>
+                  </FormHelperText>
                 )}
               </Flex>
             </Flex>
@@ -618,7 +598,9 @@ const ContactScreen = () => {
               w={"100%"}
               h={"122px"}
               border={
-                invalidMessage ? "1px solid #FB3748" : "1px solid #262626"
+                invalidMessage
+                  ? "1px solid var(--errorBase)"
+                  : "1px solid #262626"
               }
               borderRadius={"6px"}
               textColor={"#666"}
@@ -632,15 +614,14 @@ const ContactScreen = () => {
               onChange={onChangeMessage}
             />
             {invalidMessage && (
-              <Text
-                fontSize={"14px"}
-                fontWeight={500}
-                textColor={"#FB3748"}
+              <FormHelperText
                 mt={"5px"}
                 mb={8}
+                color={"var(--errorBase)"}
+                fontSize={"12px"}
               >
                 Enter a valid message
-              </Text>
+              </FormHelperText>
             )}
             <Flex w="100%" my={"24px"} justifyContent={"space-between"}>
               <Checkbox
