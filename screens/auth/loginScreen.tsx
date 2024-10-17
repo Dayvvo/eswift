@@ -29,11 +29,7 @@ import useToast from "@/hooks/useToast";
 
 export const LoginScreen = () => {
   const navigate = useRouter();
-
   const [show, setShow] = React.useState<boolean>(false);
-  const [emailValidation, setEmailValidation] = useState<boolean>(true);
-  const [passWordValidation, setPasswordValidation] = useState<boolean>(true);
-
   const {
     input: email,
     onChangeInput: onChangeEmail,
@@ -53,10 +49,7 @@ export const LoginScreen = () => {
     valueIsValid: validPassword,
     valueIsInvalid: invalidPassword,
   } = useInputText((password) => password.trim().length > 7);
-  //   const [isLogin, setIsLogin] = useState({
-  //     email: "",
-  //     password: "",
-  //   });
+
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const isLogin = {
@@ -207,7 +200,6 @@ export const LoginScreen = () => {
                   Password
                 </FormLabel>
                 <InputGroup
-                  onFocus={() => setPasswordValidation(false)}
                   display={"flex"}
                   justifyContent={"center"}
                   border={"1px"}
