@@ -19,7 +19,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ActionIcon, FilterIcon, SearchIcon } from "../../components/svg";
 import axios from "axios";
 import { useApiUrl } from "@/hooks/useApi";
@@ -109,21 +109,20 @@ const UserScreen = () => {
     },
   ];
 
-  const client = useApiUrl()
-  useEffect(()=>{
-    client.query('/user/users') 
-      .then(
-        (res)=> {
-          console.log(res)
-        }
-      )
-      .catch(
-        (err)=> {
-          console.log(err)
-        }
-      )
-    
-  },[])
+  const [table, setTable] = useState<any>(null);
+
+  const client = useApiUrl();
+  useEffect(() => {
+    client
+      .query("/user/users")
+      .then((res) => {
+        console.log(res);
+        setTable(res?.data?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Box>
@@ -181,7 +180,7 @@ const UserScreen = () => {
                 "Property",
                 "User Type",
                 "Action",
-              ].map((item,key) => (
+              ].map((item, key) => (
                 <Th key={key} textTransform={"none"} p="8px">
                   <Text
                     className="robotoF"
@@ -195,28 +194,49 @@ const UserScreen = () => {
               ))}
             </Tr>
           </Thead>
-          <Tbody fontSize={'.875rem'} fontWeight={400} className="robotoF">
-            {tableData.map((item,key) => (
-              <Tr key={key}>
-                <Td color={'#0E121B'} py='12px'>{item.name}</Td>
-                <Td color={'#525866'} py='12px'>{item.email}</Td>
-                <Td color={'#525866'} py='12px'>{item.phoneNum}</Td>
-                <Td color={'#525866'} py='12px'>{item.dateCreated}</Td>
-                <Td color={'#525866'} py='12px'>{item.property}</Td>
-                <Td color={'#525866'} py='12px'>{item.userType}</Td>
-                <Td color={'#525866'} py='12px'>
-                  <Menu>
-                    <MenuButton as={"button"} className="robotoF">
-                      {item.action}
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem>Edit</MenuItem>
-                      <MenuItem>Delete</MenuItem>
-                    </MenuList>
-                  </Menu>
-                </Td>
-              </Tr>
-            ))}
+          <Tbody fontSize={".875rem"} fontWeight={400} className="robotoF">
+            {table &&
+              table.map((item: any) => (
+                <Tr key={item._id}>
+                  <Td color={"#0E121B"} py="12px">{`${item.firstName
+                    .slice(0, 1)
+                    .toUpperCase()}${item.firstName.slice(
+                    1,
+                    item.firstName.length
+                  )} ${item.lastName
+                    .slice(0, 1)
+                    .toUpperCase()}${item.lastName.slice(
+                    1,
+                    item.firstName.length
+                  )}`}</Td>
+                  <Td color={"#525866"} py="12px">
+                    {item.email}
+                  </Td>
+                  <Td color={"#525866"} py="12px">
+                    {"09094631170"}
+                  </Td>
+                  <Td color={"#525866"} py="12px">
+                    {item.createdAt.split("T")[0]}
+                  </Td>
+                  <Td color={"#525866"} py="12px">
+                    {item.propertyCount}
+                  </Td>
+                  <Td color={"#525866"} py="12px">
+                    {item.role}
+                  </Td>
+                  <Td color={"#525866"} py="12px">
+                    <Menu>
+                      <MenuButton as={"button"} className="robotoF">
+                        <ActionIcon />
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem>Edit</MenuItem>
+                        <MenuItem>Delete</MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Td>
+                </Tr>
+              ))}
           </Tbody>
         </Table>
       </TableContainer>
