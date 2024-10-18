@@ -115,7 +115,7 @@ const UserScreen = () => {
   useEffect(() => {
     client
       .query("/user/users")
-      .then((res) => {
+      .then((res:any) => {
         console.log(res);
         setTable(res?.data?.data);
       })
