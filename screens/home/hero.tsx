@@ -24,7 +24,7 @@ const Hero = ({click}:{click:()=> void}) => {
         >
           <Flex 
             px={{ base: "1rem", lg:"6rem" }}
-            flexDir={"column"} gap={"16px"} color={"var(--TextCol)"}
+            flexDir={"column"} gap={{base:'12px',sm:"16px"}} color={"var(--TextCol)"}
             w={{base:"100%", xl:"50%"}} className="robotoF"
           >
             <Text textAlign={{base:'center', lg:'start'}} fontSize={{base:"32px",md:'42px', lg:'38px', xl:"64px"}} fontWeight={400} className="antic">
