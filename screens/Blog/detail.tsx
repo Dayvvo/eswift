@@ -5,4 +5,4 @@ const BlogDetailScreen =()=>{
     <>
     </>
 }
-return BlogDetailScreen
+export default BlogDetailScreen;

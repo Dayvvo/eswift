@@ -5,8 +5,8 @@ import { Box, Text, Flex, } from "@chakra-ui/react";
 import { Video } from "./video";
 import { Footer } from "@/components/footer";
 import { Background } from "../home/Background";
-import { MoreDetails } from "./moreDetails";
-import { AboutSection } from "./aboutPageSection";
+import { MoreDetails } from "./MoreDetails";
+import { AboutSection } from "./AboutPageSection";
 
 
 const AboutUsScreen =()=> {
