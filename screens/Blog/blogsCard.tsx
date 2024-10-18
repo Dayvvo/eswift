@@ -11,6 +11,9 @@ type BlogCardProps = {
 };
 
 export const BlogCard = ({ picture, title, date, details }: BlogCardProps) => {
+
+  
+
   return (
     <>
       <Box

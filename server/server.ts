@@ -91,9 +91,15 @@ nextApp.prepare().then(() => {
     await nextApp.render(req, res, '/property', req.query as NextParsedUrlQuery)
   });
 
-  app.get('/property/:id', async (req, res) => {
+    app.get('/property/:id', async (req, res) => {
     await nextApp.render(req, res, '/property/[id]', { id: req.params.id, ...req.query } as NextParsedUrlQuery)
   });
+
+  app.get('admin/property/:id', async (req, res) => {
+    await nextApp.render(req, res, 'admin/property/[id]', { id: req.params.id, ...req.query } as NextParsedUrlQuery)
+  });
+
+
   app.get('/settings', async (req, res) => {
     await nextApp.render(req, res, '/settings', req.query as NextParsedUrlQuery)
   });

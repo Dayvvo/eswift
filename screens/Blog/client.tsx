@@ -23,56 +23,6 @@ const BlogspotScreen = () => {
   const [loading, setLoading] = useState(false);
   const [page , setPage] = useState<number>(1);
   const { getBlog } = useBlog();
-//   const Blogs = [
-//     {
-//       id: 1,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 2,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 3,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 4,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 5,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 6,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//   ];
 
   function scrollToSection() {
     const section = document.querySelector("#main") as HTMLElement;
@@ -85,7 +35,6 @@ const BlogspotScreen = () => {
       try {
         const req = await getBlog();
         setBlogPost(req.data.data);
-        console.log(req.data.data);
         setLoading(false);
       } catch (error) {
         setLoading(false);

@@ -14,7 +14,6 @@ const PreviewBlog = () => {
   const [bodyImage, setBodyImage] = useState<string | null>(null);
   const [previewData, setPreviewData] = useState(null) as any;
 
-  console.log("previewData", previewData);
 
   const { addBlog } = useBlog();
 

@@ -20,7 +20,7 @@ import { R } from "@/utils/types";
 import { PropertyCard } from '@/screens/property/propertyCard';
 
 
-export const PropertyDetails = () => {
+export const PropertyDetails = ({clientView}:{clientView?:boolean}) => {
   const Features: any[] = [
     {
       id: 1,
@@ -129,7 +129,7 @@ export const PropertyDetails = () => {
     return (
             <Box
                 bg={'#FFF'} 
-                w={'100%'}
+                w={ clientView? '80%': '100%'}
             >
                 {
                     <Flex w={'100%'} my={'24px'} pos={'relative'}
@@ -155,7 +155,8 @@ export const PropertyDetails = () => {
                                 className="robotoF" textColor={'#03142B'}
                                 fontWeight={500} fontSize={{base:'18px', lg:'30px'}}
                             >
-                                <Text>View Gallery</Text>
+
+                                <Text cursor={'pointer'} onClick={()=>{}}>View Gallery</Text>
                                 <FaRegImages />
                             </Flex>
                         </Flex>
