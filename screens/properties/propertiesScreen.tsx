@@ -13,7 +13,7 @@ import { Background } from "../home/Background";
 import { TextHeader } from "../home/textHeader";
 
 type properties = {
-    id:string;
+    _id:string;
     title:string;
     description:string;
     price:string;
@@ -27,6 +27,47 @@ const PropertiesScreen =()=> {
     const [fetchData, setFetchData] = useState<properties[]>([])
     const [isLoading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(0);
+
+    // const properties = [
+
+    //     {
+    //         id:1,
+    //         title:'3 bedroom flat',
+    //         pricing:'2,000,000',
+    //         details:'Korem ipsum dolor sit celex dor divorless',
+    //         picture:'/properties-dummy.png',
+    //         duration:'annually'
+    //     },
+    //     {
+    //         id:2,
+    //         title:'3 bedroom flat',
+    //         pricing:'2,000,000',
+    //         details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
+    //         picture:'/properties-dummy.png',
+    //         duration:'annually'
+    //     },
+    //     {
+    //         id:3,
+    //         title:'3 bedroom flat',
+    //         pricing:'2,000,000',
+    //         details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
+    //         picture:'/properties-dummy.png',
+    //         duration:'annually'
+    //     },
+    //     {
+    //         id:4,
+    //         title:'3 bedroom flat',
+    //         pricing:'2,000,000',
+    //         details:'Non didikai ka imiss epsipass imala sookrat katostar abore ceriss katicu me ta sentende divoless ka krissas',
+    //         picture:'/properties-dummy.png',
+    //         duration:'annually'
+    //     },
+    // ]
+
+    const toDetails = (_id: string) => {
+        console.log('id', _id)
+    }
+
 
 
     useEffect(()=> {
@@ -119,12 +160,13 @@ const PropertiesScreen =()=> {
                         {
                             fetchData.map((item)=>{
                                 return(
-                                    <PropertiesCard key={item?.id}
+                                    <PropertiesCard key={item?._id}
                                         picture={item?.images[0]} 
                                         title={item?.title} 
                                         pricing={item?.price} 
                                         details={item?.description}
-                                        id={item?.id}
+                                        id={item?._id}
+                                        onClick={() => toDetails(item?._id)}
                                     />
                                 )
                             })

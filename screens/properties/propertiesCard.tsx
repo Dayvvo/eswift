@@ -12,25 +12,27 @@ type PropertiesCardProps = {
     location?:string;
     details?:string;
     id:string;
+    onClick?: () => void;
 }
 
 export const PropertiesCard =({
-    picture, title, pricing, location, details,id
+    picture, title, pricing, details, location, id, onClick
 }:PropertiesCardProps) => {
 
-    const Navigate = () => {
-        router.push(`/properties/${id}`)
-    }
+    // const Navigate = () => {
+    //     router.push(`/properties/${id}`)
+    // }
 
     return(
         <>
-            <Box
+            <Box onClick={onClick}
                 className="roboto"
                 bg={'#FFF'}
                 maxW={'400px'} h={'fit-content'}
                 p={{base:'14px',sm:'20px'}} borderRadius={'12px'}
                 border={'1px solid #262626'} 
                 overflow={'hidden'}
+                cursor={'pointer'}
             >
                 <Flex
                     position={'relative'}
@@ -103,7 +105,7 @@ export const PropertiesCard =({
                             {pricing}
                         </Text>
                     </Flex>
-                    <Btn onClick={Navigate}
+                    <Btn onClick={onClick}
                         display={'flex'}
                         justifyContent={'center'}
                         alignItems={'center'}

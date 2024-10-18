@@ -14,6 +14,7 @@ type PropertyCardProps = {
   email?: string;
   user?: string;
   userImage?: string;
+  onClick?: () => void;
 };
 
 export const PropertyCard = ({
@@ -26,6 +27,7 @@ export const PropertyCard = ({
   email,
   user,
   userImage,
+  onClick,
 }: PropertyCardProps) => {
   return (
     <Box
@@ -37,6 +39,8 @@ export const PropertyCard = ({
       boxShadow={"lg"}
       borderRadius={"15px"}
       overflow={"hidden"}
+      cursor={'pointer'}
+      onClick={onClick}
     >
       <Flex position={"relative"} w="100%" h="55%">
         <Text

@@ -165,6 +165,10 @@ export const PropertyScreen = () => {
     }
   };
 
+  const toDetails = (_id: string) => {
+    console.log('id', _id)
+  }
+
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
@@ -347,6 +351,7 @@ export const PropertyScreen = () => {
                   email={user?.email}
                   user={user?.firstName}
                   count={page}
+                  onClick={() => toDetails(property._id)}
                 />
               );
             })}

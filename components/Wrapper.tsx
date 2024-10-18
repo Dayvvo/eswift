@@ -91,6 +91,11 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
       icon: (color: string) => <BlogIcon color={color} />,
       url: "/blog",
     },
+    // {
+    //   label: "Team",
+    //   icon: (color: string) => <FiUser size={"1rem"} color={color} />,
+    //   url: "/team",
+    // },
     {
       label: "Settings",
       icon: (color: string) => <SettingsIcon color={color} />,
