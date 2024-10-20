@@ -1,5 +1,10 @@
-import { Button, ButtonProps } from "@chakra-ui/react";
+import { Box, Button, ButtonProps } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
+
+interface PaginationButtonProps {
+  children?: ReactNode;
+  onClick?: (() => void) | ((e: React.MouseEvent<HTMLButtonElement>) => void);
+}
 
 interface CustomButtonProps extends ButtonProps {
   type?: any;
@@ -66,4 +71,34 @@ const Btn = ({
   );
 };
 
+export const PaginationButton = ({
+  children,
+  onClick,
+}: PaginationButtonProps) => {
+  return (
+    <Box
+      as="button"
+      padding={"6px"}
+      borderRadius={"8px"}
+      h={"32px"}
+      w={"32px"}
+      display={"flex"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      border={"1px solid #E1E4EA"}
+      fontWeight={500}
+      fontSize={"14px"}
+      color={"#525866"}
+      className="inter"
+      cursor={"pointer"}
+      _hover={{
+        bg: "#F5F7FA",
+        border: "none",
+      }}
+      onClick={onClick}
+    >
+      {children}
+    </Box>
+  );
+};
 export default Btn;
