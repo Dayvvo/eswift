@@ -15,4 +15,4 @@ const multerConfig = multer({
   },
 })
 
-export default multerConfig
+export default multerConfig;
