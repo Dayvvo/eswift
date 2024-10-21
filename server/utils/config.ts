@@ -32,12 +32,18 @@ export class appConfig {
           passReqToCallback: true,
         },
         async (
-          _req,
+          req,
           _accessToken,
           _refreshToken,
           profile: Record<string, any>,
           done
         ) => {
+          const refCode = req.query['state'];
+          let refferer ;
+          if (refCode){
+            refferer = User.findOne({refCode})
+          }
+          
           console.log({ profileCheck: profile?._json })
           const verifiedUser: GoogleAuthResponse = profile?._json
           try {
@@ -49,10 +55,14 @@ export class appConfig {
                 lastName: verifiedUser.family_name,
                 avatar: verifiedUser.picture,
                 provider: AuthProvider.GOOGLE,
+                ...refferer?{
+                  referrer: refferer
+                }:{},
                 refCode: generateRefCode(8),
                 role: UserRole.CLIENT,
                 isActive: true,
                 isVerified: verifiedUser.email_verified,
+      
               },
               { upsert: true, new: true }
             )

@@ -41,6 +41,10 @@ const UserSchema = new Schema<IUser>(
       enum: UserRole,
       default: UserRole.GUEST,
     },
+    referrer:{
+      type: Schema.Types.ObjectId,
+      ref:'user'
+    },
     refCode: {
       type: String,
     },

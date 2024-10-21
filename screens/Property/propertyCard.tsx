@@ -3,8 +3,12 @@ import { TbCurrencyNaira } from "react-icons/tb";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import Image from "next/image";
 import Btn from "@/components/Btn";
+import useToast from "@/hooks/useToast";
+import useProperty from "@/hooks/useProperty";
+import { useState } from "react";
 
 type PropertyCardProps = {
+  id?: string;
   image?: any;
   count?: number;
   cardWidth?: any;
@@ -14,9 +18,12 @@ type PropertyCardProps = {
   email?: string;
   user?: string;
   userImage?: string;
+  onClick?: () => void;
+  verificationState?: string;
 };
 
 export const PropertyCard = ({
+  id,
   image,
   title,
   count,
@@ -26,17 +33,68 @@ export const PropertyCard = ({
   email,
   user,
   userImage,
+  onClick,
+  verificationState,
 }: PropertyCardProps) => {
+  const [verificationStatus, setVerificationStatus] =
+    useState(verificationState);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const { toast } = useToast();
+  const { verifyProperty } = useProperty();
+
+  const data = {
+    verificationState: "Verified",
+  };
+  const verifyPropertyFn = async () => {
+    if (!id) {
+      toast({
+        status: "error",
+        description: "Invalid property ID",
+        title: "Error",
+        position: "top",
+        duration: 1000,
+      });
+      return;
+    }
+    setIsVerifying(true);
+    try {
+      const req = await verifyProperty(id, data);
+      console.log(req);
+      if (req.statusCode === 201) {
+        setVerificationStatus(data.verificationState);
+        toast({
+          status: "success",
+          description: "Property verified",
+          title: "Success",
+          position: "top",
+          duration: 1000,
+        });
+      }
+    } catch (err) {
+      toast({
+        status: "error",
+        description: "Failed to verify property",
+        title: "Failed",
+        position: "top",
+        duration: 1000,
+      });
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
   return (
     <Box
       className="RobotoF"
       bg={"#FFF"}
       w={cardWidth || { base: "100%", sm: "314px" }}
-      h={"408px"}
-      pb={"16px"}
+      h={"370px"}
+      // pb={"1px"}
       boxShadow={"lg"}
       borderRadius={"15px"}
       overflow={"hidden"}
+      cursor={'pointer'}
+      onClick={onClick}
     >
       <Flex position={"relative"} w="100%" h="55%">
         <Text
@@ -80,10 +138,14 @@ export const PropertyCard = ({
             {title}
           </Text>
           <Text
-            fontSize={{ base: "16px", lg:"18px" }}
+            fontSize={{ base: "16px", lg: "18px" }}
             fontWeight={500}
+            display={"flex"}
+            alignItems={"center"}
+            flexWrap={"nowrap"}
           >
-            <TbCurrencyNaira />{pricing}
+            <TbCurrencyNaira />
+            {pricing}
           </Text>
         </Flex>
         <Flex
@@ -123,21 +185,51 @@ export const PropertyCard = ({
           </Text>
         </Flex>
         <Box w={"100%"} h={"1.5px"} bg={"#DDE0E5"} />
-        <Btn
-          m="1px"
-          bg={"#fff"}
-          textColor={"#000"}
-          fontSize={"15px"}
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          w="100%"
-          h="44px"
-          border={"1px solid #000"}
-          borderRadius={"6px"}
-        >
-          Verify
-        </Btn>
+        {verificationStatus === "Verified" ? (
+          <Btn
+            m="1px"
+            bg={"#fff"}
+            textColor={"#000"}
+            fontSize={"15px"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            w="100%"
+            h="44px"
+            border={"1px solid #000"}
+            borderRadius={"15px"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
+          >
+            Manage
+          </Btn>
+        ) : (
+          <Btn
+            m="1px"
+            bg={"#fff"}
+            textColor={"#000"}
+            fontSize={"15px"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            w="100%"
+            h="44px"
+            border={"1px solid #000"}
+            borderRadius={"15px"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
+            isLoading={isVerifying}
+            loadingText="Verifying"
+            disabled={isVerifying}
+            onClick={verifyPropertyFn}
+          >
+            verify
+          </Btn>
+        )}
       </Flex>
     </Box>
   );

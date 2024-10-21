@@ -36,6 +36,8 @@ class AuthController {
   googleAuthController = async (req: Request, res: Response) => {
     try {
       const profile = req?.user as generalRequestBody
+
+    
       this.jwtSignAndRedirect(res, profile)
     } catch (err) {
       console.log('err in google auth callback', err)

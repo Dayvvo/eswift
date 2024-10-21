@@ -142,12 +142,6 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
                 <Image w={"100%"} h={"100%"} src={item} alt={``} />
               </GridItem>
             ))}
-            {/* <GridItem rowSpan={1}>
-                            <Image w={'100%'} src={`/Grid-2.png`} alt={``} />
-                        </GridItem>
-                        <GridItem  rowSpan={1}>
-                            <Image w={'100%'}  src={`/Grid-2.png`} alt={``} />
-                        </GridItem> */}
           </Grid>
           <Flex
             w={"100%"}
