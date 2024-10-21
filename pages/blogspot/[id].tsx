@@ -1,10 +1,9 @@
+import { BlogDetailScreen } from "@/screens/Blog/detail";
 
 
 const BlogDetails = ()=>{
     return(
-        <>
-        
-        </>
+        <BlogDetailScreen/>
     )
 };
 

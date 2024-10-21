@@ -16,7 +16,7 @@ export const SectionThree =()=> {
         {
             id:1,
             title:'Efficient and Reliable',
-            review:'Eswift provided us with top-notch service. They helped us sell our property quicklyy and at a great price. We couldn`t be happier with the results.', 
+            review:'Eswift provided us with top-notch service. They helped us sell our property quickly and at a great price. We couldn`t be happier with the results.', 
             user: 'Emilie Thompson',
             location: 'Lagos, Nigeria'
         },
