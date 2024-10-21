@@ -138,7 +138,7 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
             h={"max-content"}
           >
             {detailsData?.images.map((item: any, index: any) => (
-              <GridItem rowSpan={index === 0 ? 2 : 1}>
+              <GridItem rowSpan={index === 0 ? 2 : 1} key={item}>
                 <Image w={"100%"} h={"100%"} src={item} alt={``} />
               </GridItem>
             ))}

@@ -7,6 +7,7 @@ import useBlog from "@/hooks/useBlog";
 import { Background } from "../home/Background";
 import { LoadMore } from "@/components/LoadMore";
 import { Footer } from "@/components/footer";
+import { useRouter } from "next/router";
 
 interface BlogPostProps {
   _id: any;
@@ -19,6 +20,7 @@ interface BlogPostProps {
 }
 
 const BlogspotScreen = () => {
+  const navigate = useRouter();
   const [blogPost, setBlogPost] = useState<BlogPostProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [page , setPage] = useState<number>(1);
@@ -35,6 +37,7 @@ const BlogspotScreen = () => {
       try {
         const req = await getBlog();
         setBlogPost(req.data.data);
+        console.log(req.data.data)
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -76,7 +79,7 @@ const BlogspotScreen = () => {
           {blogPost.map((item) => {
             return (
               <BlogCard
-                key={item?._id}
+                key={item?._id} id={item?._id}
                 picture={item?.header_image}
                 title={item?.title}
                 details={item?.introduction}

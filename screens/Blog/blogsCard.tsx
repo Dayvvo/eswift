@@ -2,21 +2,25 @@ import { Box, Flex, Img, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import moment from "moment";
 import DOMPurify from "dompurify";
+import { useRouter } from "next/router";
+
 
 type BlogCardProps = {
   picture?: string;
   title?: string;
   date?: string;
   details?: string;
+  id?:string;
 };
 
-export const BlogCard = ({ picture, title, date, details }: BlogCardProps) => {
+export const BlogCard = ({ picture, title, date, details, id}: BlogCardProps) => {
 
   
-
+  const navigate = useRouter();
+    
   return (
     <>
-      <Box
+      <Box onClick={ ()=> navigate.push(`/blogspot/${id}`)}
         className="roboto"
         bg={"#FFF"}
         maxW={"388px"}
