@@ -23,9 +23,12 @@ type properties = {
 
 const PropertiesScreen =()=> {
 
-    const [inputValue, setInputValue] = useState<string>('')
-    const [fetchData, setFetchData] = useState<properties[]>([])
+    const [inputValue, setInputValue] = useState<string>('');
+
+    const [fetchData, setFetchData] = useState<properties[]>([]);
+
     const [isLoading, setLoading] = useState<boolean>(false);
+
     const [page, setPage] = useState<number>(0);
 
     // const properties = [
@@ -66,32 +69,36 @@ const PropertiesScreen =()=> {
 
     const toDetails = (_id: string) => {
         console.log('id', _id)
-    }
-
-
+    };
 
     useEffect(()=> {
         const getPropertyFunction = async () => {
             setLoading(true);
             try {
-            setLoading(false);
-            const fetchData = await axios.get(
-                `/api/property?keyword=${inputValue}&PageNumber={${page}}`
-            );
-            console.log(fetchData);
-            setFetchData(fetchData?.data?.data);
-            } catch (error) {
-            setLoading(false);
-            console.log(error);
-            }
+                const fetchData = await axios.get(`/api/property?keyword=${inputValue}&PageNumber={${page}}`);
+                setFetchData(fetchData?.data?.data);
+            } 
+            catch (error) {
+                setLoading(false);
+                console.log(error);
+            };
         };
-        getPropertyFunction()
-
-    },[page, inputValue])
+        getPropertyFunction();
+    },[page, inputValue]);
 
     function scrollToSection() {
         const section = document.querySelector('#main') as HTMLElement;
         section.scrollIntoView({ behavior: 'smooth' });
+    };
+
+
+    const onSubmit = async()=>{
+        try{
+            const fetchData = await axios.get(`/api/property?keyword=${inputValue}&PageNumber={${page}}`);
+        }
+        catch(err){
+
+        }
     }
 
 
@@ -124,28 +131,27 @@ const PropertiesScreen =()=> {
                         className="urbanist" overflow={'hidden'}
                     >
                         <Input 
-                            w={'80%'} h={'100%'}
-                            _placeholder={{textColor:'#666666', fontSize:{base:'10px',md:'14px',lg:'20px'}}}
-                            border={'none'} _focusVisible={'none'}
-                            type='search' 
-                            placeholder='Search for a Property'  
-                            value={inputValue}
-                            onChange={(e:any) => setInputValue(e.target.value)} 
-                                        
+                         w={'80%'} h={'100%'}
+                         _placeholder={{textColor:'#666666', fontSize:{base:'10px',md:'14px',lg:'20px'}}}
+                         border={'none'} _focusVisible={'none'}
+                         type='search' 
+                         placeholder='Search for a property by title, description or category'  
+                         value={inputValue}
+                         onChange={(e:any) => setInputValue(e.target.value)}                      
                         />
                         <InputRightElement pointerEvents="none" w={'fit-content'} h={'max-content'} mt={{base:2.5,lg:4}} mx={{base:1,lg:3}} zIndex={30}>
                             <Btn
-                                display={'flex'}
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                W={{base:'60px',lg:'148px'}}
-                                h={{base:'32px',lg:"48px"}}
-                                bg={'#3170A6'}
-                                borderRadius={'8px'}
-                                textColor={'white'}
-                                gap={'8px'}
-                                _hover={{opacity:0.5}}
-                                fontSize={{base:'8px', lg:'14px'}}
+                             display={'flex'}
+                             justifyContent={'center'}
+                             alignItems={'center'}
+                             W={{base:'60px',lg:'148px'}}
+                             h={{base:'32px',lg:"48px"}}
+                             bg={'#3170A6'}
+                             borderRadius={'8px'}
+                             textColor={'white'}
+                             gap={'8px'}
+                             _hover={{opacity:0.5}}
+                             fontSize={{base:'8px', lg:'14px'}}
                             >
                                 <RiSearch2Line/> Find Property
                             </Btn>

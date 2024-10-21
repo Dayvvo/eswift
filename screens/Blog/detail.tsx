@@ -22,15 +22,16 @@ export const BlogDetailScreen =()=>{
     const navigate = useRouter()
     const fetchBlog = useBlog()
     const {id} = navigate.query;
+    console.log('query',id);
     const [blog, setBlog] = useState<any>(null);
 
     useEffect(()=> {
-        const fetchBlog = () => {
-            const blogDetails = fetchBlog(id);
+        const fetchBlogFn =async () => {
+            const blogDetails = await fetchBlog.getBlog(id as string);
+        
             setBlog(blogDetails);
-            console.log(blogDetails)
         };
-        fetchBlog();
+        id && fetchBlogFn();
 
     },[id])
 

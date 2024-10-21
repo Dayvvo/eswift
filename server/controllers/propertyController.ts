@@ -135,6 +135,7 @@ class PropertyController {
     const page = Number(req.params.pageNumber) || 1;
 
     const keyword = req.query.keyword as string;
+
     const regex = new RegExp(keyword, "i");
 
     const findQuery = {
@@ -143,10 +144,10 @@ class PropertyController {
     };
 
     try {
+    
       const count = await Property.countDocuments(findQuery);
-      const properties = await Property.find(findQuery)
-        .limit(pageSize)
-        .skip(pageSize * (page - 1));
+
+      const properties = await Property.find(findQuery).limit(pageSize).skip(pageSize * (page - 1));
 
       return res.status(200).json({
         statusCode: 200,
@@ -154,11 +155,12 @@ class PropertyController {
         data: properties,
         pagination: { page, pages: Math.ceil(count / pageSize) },
       });
-    } catch (err: any) {
-      console.log("Error in email login", err);
+
+    } 
+    catch (err: any) {    
       console.error(err?.message);
       res.status(500).send("An Error ocurred while retrieving data");
-    }
+    };
   };
 
   getPropertyById = async (req: Request, res: Response) => {

@@ -14,20 +14,20 @@ import {
 import { RiSearch2Line } from "react-icons/ri";
 import Btn, { PaginationButton } from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "@/components/modal";
 import { BsPlus } from "react-icons/bs";
 
 import useProperty from "@/hooks/useProperty";
-import { useImage, useInputNumber, useInputText } from "@/hooks/useInput";
+import { useImage, useInputText } from "@/hooks/useInput";
 import { useApiUrl } from "@/hooks/useApi";
 import useToast from "@/hooks/useToast";
 import { AddPropertyScreenOne } from "./AddPropertyScreen1";
 import { AddPropertyScreenTwo } from "./AddPropertyScreen2";
 import { AddPropertyScreenThree } from "./AddPropertyScreen3";
 import { AddPropertyScreenFour } from "./AddPropertyScreen4";
-import { PropertyCard } from "./PropertyCard";
+import { PropertyCard } from "./propertyCard";
 import {
   DoubleNextBtn,
   DoublePrevBtn,
@@ -46,7 +46,7 @@ interface MyData {
   verificationState: string;
   images: any;
   creatorID: any;
-}
+};
 interface User {
   _id: any;
   firstName: string;
@@ -54,7 +54,8 @@ interface User {
   email: string;
   phoneNumber: number;
   avatar: any;
-}
+};
+
 export const PropertyScreen = () => {
   const [showModal, setShowModal] = useState(false);
   const [getProperty, setGetProperty] = useState<MyData[]>([]);
@@ -70,6 +71,7 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeTitle,
     reset: titleReset,
   } = useInputText((title) => title.length > 2);
+ 
   const {
     input: category,
     onChangeInput: onChangeCategory,
@@ -81,11 +83,13 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeDescription,
     reset: descriptionReset,
   } = useInputText((description) => description.length > 8);
+ 
   const {
     input: address,
     onChangeInput: onChangeAddress,
     reset: addressReset,
   } = useInputText((address) => address.length > 3);
+ 
   const {
     input: typeOfProperty,
     onChangeInput: onChangeType,

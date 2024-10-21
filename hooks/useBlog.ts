@@ -20,11 +20,6 @@ interface MailType {
   howDidYouHear: string;
 }
 
-interface BlogResponse {
-  data: {
-    data: any;
-  };
-}
 
 const useBlog = () => {
   const baseUrl = "http://localhost:5500/api";
@@ -60,6 +55,7 @@ const useBlog = () => {
     },
     [token]
   );
+ 
   const contactUsFn = async (data: MailType) => {
     try {
       const res = await post(`${baseUrl}/contact-us`, data);
@@ -89,13 +85,16 @@ const useBlog = () => {
     [token]
   );
 
-  const getBlog = async () => {
+  const getBlog = async (id:string) => {
     try {
-      const res = await query(`${baseUrl}/blog/post`);
-      return res as BlogResponse;
+      const res = await query(`${baseUrl}/blog/post/${id}`);
+      return res.data as Record<string,unknown>;
     } catch (err: any) {
       // console.log("error", err);
-      throw new err();
+      console.log('err occured');
+      return {
+        message:'error',
+      }
     }
   };
 
