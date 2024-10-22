@@ -5,6 +5,7 @@ import Image from "next/image";
 import Btn from "@/components/Btn";
 import useToast from "@/hooks/useToast";
 import useProperty from "@/hooks/useProperty";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type PropertyCardProps = {
@@ -41,9 +42,14 @@ export const PropertyCard = ({
   const [isVerifying, setIsVerifying] = useState(false);
   const { toast } = useToast();
   const { verifyProperty } = useProperty();
+  const router = useRouter();
+
+  const handleNavigation = () => {
+    router.push("/property/" + id);
+  };
 
   const data = {
-    verificationState: "Verified",
+    verification: "Verified",
   };
   const verifyPropertyFn = async () => {
     if (!id) {
@@ -61,7 +67,7 @@ export const PropertyCard = ({
       const req = await verifyProperty(id, data);
       console.log(req);
       if (req.statusCode === 201) {
-        setVerificationStatus(data.verificationState);
+        setVerificationStatus(data.verification);
         toast({
           status: "success",
           description: "Property verified",
@@ -93,7 +99,7 @@ export const PropertyCard = ({
       boxShadow={"lg"}
       borderRadius={"15px"}
       overflow={"hidden"}
-      cursor={'pointer'}
+      cursor={"pointer"}
       onClick={onClick}
     >
       <Flex position={"relative"} w="100%" h="55%">
@@ -185,28 +191,28 @@ export const PropertyCard = ({
           </Text>
         </Flex>
         <Box w={"100%"} h={"1.5px"} bg={"#DDE0E5"} />
-        {verificationStatus === "Verified" ? (
-          <Btn
-            m="1px"
-            bg={"#fff"}
-            textColor={"#000"}
-            fontSize={"15px"}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            w="100%"
-            h="44px"
-            border={"1px solid #000"}
-            borderRadius={"15px"}
-            _hover={{
-              bg: "#1A1D66",
-              textColor: "#FFF",
-            }}
-          >
-            Manage
-          </Btn>
-        ) : (
-          <Btn
+        <Btn
+          m="1px"
+          bg={"#fff"}
+          textColor={"#000"}
+          fontSize={"15px"}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          w="100%"
+          h="44px"
+          border={"1px solid #000"}
+          borderRadius={"15px"}
+          _hover={{
+            bg: "#1A1D66",
+            textColor: "#FFF",
+          }}
+          onClick={handleNavigation}
+        >
+          View
+        </Btn>
+
+        {/* <Btn
             m="1px"
             bg={"#fff"}
             textColor={"#000"}
@@ -228,8 +234,7 @@ export const PropertyCard = ({
             onClick={verifyPropertyFn}
           >
             verify
-          </Btn>
-        )}
+          </Btn> */}
       </Flex>
     </Box>
   );
