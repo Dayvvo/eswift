@@ -1,5 +1,3 @@
-"use client";
-
 import Btn from "@/components/Btn";
 import {
   Box,
@@ -9,6 +7,10 @@ import {
   SimpleGrid,
   Text,
   Image,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  Checkbox,
 } from "@chakra-ui/react";
 import { BsDot } from "react-icons/bs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
@@ -19,9 +21,38 @@ import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
-import { PropertyCard } from "./propertyCard";
+import { PropertyCard } from "./PropertyCard";
+import { useRouter } from "next/router";
+import {
+  DeclineState,
+  DeleteProperty,
+  SuspendState,
+  VerifyState,
+} from "./VerificationState";
+import useToast from "@/hooks/useToast";
 
-export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; cardWidth?: any;}) => {
+interface MyData {
+  _id: any;
+  title: string;
+  price: string;
+  address: string;
+  email: string;
+  owner: string;
+  userImage: string;
+  verificationState: string;
+  images: any;
+  creatorID: any;
+}
+
+export const PropertyDetails = ({
+  my,
+  p,
+  cardWidth,
+}: {
+  my?: string;
+  p?: string;
+  cardWidth?: any;
+}) => {
   const Features: any[] = [
     {
       id: 1,
@@ -104,42 +135,239 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
   ];
 
   const { globalContext } = useAppContext();
-
-  const {user} = globalContext;
+  const [user, setUser] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    role: "",
+    avatar: "",
+    propertyCount: 0,
+  });
 
   const [detailsData, setDetailsData] = useState<any>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showDeclineModal, setShowDeclineModal] = useState<boolean>(false);
+  const [showSuspendModal, setShowSuspendModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  const [getProperty, setGetProperty] = useState<MyData[]>([]);
+  const { toast } = useToast();
+  const router = useRouter();
 
-  const { getPropertyDetails } = useProperty();
+  const [verificationStatus, setVerificationStatus] = useState(
+    detailsData?.verification
+  );
+  const {
+    getPropertyDetails,
+    propertyCreator,
+    verifyProperty,
+    deleteProperty,
+    getAdminProperty,
+  } = useProperty();
 
-  const id = "66fa705efac0a5ffbf2f4451";
+  const id = router.query.id as string;
 
   const getPropertyDetailFn = async () => {
     try {
       const request = await getPropertyDetails(id);
       const data = request.data as R;
+      setVerificationStatus(data?.data.verification);
+      if (data.statusCode === 200) {
+        const creator = await propertyCreator(data?.data?.creatorID);
+
+        setUser(creator?.data?.data);
+      }
       setDetailsData(data?.data);
     } catch (err) {
       console.log(err);
     }
   };
 
+  const getPropertyFunction = async () => {
+    setIsVerifying(true);
+    try {
+      setIsVerifying(false);
+      const getAllProperties = await getAdminProperty("", 1);
+      setGetProperty(getAllProperties?.data?.data);
+    } catch (error) {
+      setIsVerifying(false);
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getPropertyFunction();
+  }, [showModal, isVerifying]);
+
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
+  const toggleDeclineModal = () => {
+    setShowDeclineModal((prevState) => !prevState);
+  };
+  const toggleSuspendModal = () => {
+    setShowSuspendModal((prevState) => !prevState);
+  };
+  const toggleDeleteModal = () => {
+    setShowDeleteModal((prevState) => !prevState);
+  };
+
+  const verifyPropertyFn = async (status: string) => {
+    if (!id) {
+      toast({
+        status: "error",
+        description: "Invalid property ID",
+        title: "Error",
+        position: "top",
+        duration: 1000,
+      });
+      return;
+    }
+    setIsVerifying(true);
+    try {
+      const req = await verifyProperty(id, {
+        verification: status,
+      });
+      console.log(req);
+      if (req.statusCode === 201) {
+        setVerificationStatus(req.data);
+        toast({
+          status: "success",
+          description: `Property ${req.data}`,
+          title: "Success",
+          position: "top",
+          duration: 1000,
+        });
+        setShowDeclineModal(false);
+        setShowModal(false);
+        setShowSuspendModal(false);
+      }
+    } catch (err) {
+      toast({
+        status: "error",
+        description: "Failed to perform action",
+        title: "Failed",
+        position: "top",
+        duration: 1000,
+      });
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const deletePropertyFn = async () => {
+    try {
+      const req = await deleteProperty(id); // If no error occurs, the following code runs
+      // console.log("response", req);
+      router.push("/property");
+      toast({
+        status: "success",
+        description: "Property deleted",
+        title: "Success",
+        position: "top",
+        duration: 1000,
+      });
+    } catch (err) {
+      toast({
+        status: "error",
+        description: "Failed to delete property",
+        title: "Failed",
+        position: "top",
+        duration: 1000,
+      });
+      // console.log("err", err);
+    }
+  };
+
   useEffect(() => {
     getPropertyDetailFn();
-  }, []);
+  }, [id, showModal, isVerifying]);
 
   return (
     <>
+      <Modal
+        closeOnOverlayClick={true}
+        onClose={() => {
+          setShowModal(false);
+        }}
+        isOpen={showModal}
+      >
+        <ModalOverlay />
+        <ModalContent width={"440px"}>
+          <VerifyState
+            toggleModal={toggleModal}
+            verifyPropertyFn={verifyPropertyFn}
+            isVerifying={isVerifying}
+          />
+        </ModalContent>
+      </Modal>
+      <Modal
+        closeOnOverlayClick={true}
+        onClose={() => {
+          setShowDeclineModal(false);
+        }}
+        isOpen={showDeclineModal}
+      >
+        <ModalOverlay />
+        <ModalContent width={"440px"}>
+          <DeclineState
+            toggleModal={toggleDeclineModal}
+            verifyPropertyFn={verifyPropertyFn}
+            isVerifying={isVerifying}
+          />
+        </ModalContent>
+      </Modal>
+      <Modal
+        closeOnOverlayClick={true}
+        onClose={() => {
+          setShowSuspendModal(false);
+        }}
+        isOpen={showSuspendModal}
+      >
+        <ModalOverlay />
+        <ModalContent width={"440px"}>
+          <SuspendState
+            verifyPropertyFn={verifyPropertyFn}
+            isVerifying={isVerifying}
+            toggleModal={toggleSuspendModal}
+          />
+        </ModalContent>
+      </Modal>
+      <Modal
+        closeOnOverlayClick={true}
+        onClose={() => {
+          setShowDeleteModal(false);
+        }}
+        isOpen={showDeleteModal}
+      >
+        <ModalOverlay />
+        <ModalContent width={"440px"}>
+          <DeleteProperty
+            deletePropertyFn={deletePropertyFn}
+            isVerifying={isVerifying}
+            toggleModal={toggleDeleteModal}
+          />
+        </ModalContent>
+      </Modal>
       <Box bg={"#FFF"} w={"100%"}>
         <Flex w={"100%"} my={my || "24px"} pos={"relative"}>
           <Grid
-            templateColumns={"repeat(2, 1fr)"}
+            templateColumns={
+              detailsData?.images.length === 1 ? "" : "repeat(2, 1fr)"
+            }
             gap={"16px"}
             w={"100%"}
             h={"max-content"}
           >
             {detailsData?.images.map((item: any, index: any) => (
-              <GridItem rowSpan={index === 0 ? 2 : 1}>
-                <Image w={"100%"} h={"100%"} src={item} alt={``} />
+              <GridItem rowSpan={index === 0 ? 2 : 1} key={index}>
+                <Image
+                  w={"100%"}
+                  h={"100%"}
+                  src={item}
+                  alt={`Image ${index + 1}`}
+                  maxHeight={"65vh"}
+                  objectFit="cover"
+                />
               </GridItem>
             ))}
           </Grid>
@@ -283,7 +511,7 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
               className="robotoF"
             >
               {user.role === "ADMIN" ? (
-                detailsData?.verificationState === "Verified" ? (
+                verificationStatus === "verified" ? (
                   <Flex gap={"16px"} direction={"column"}>
                     <Btn
                       bg={"transparent"}
@@ -295,6 +523,7 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--primaryBase)"}
+                      onClick={toggleSuspendModal}
                     >
                       Suspend
                     </Btn>
@@ -308,6 +537,38 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--errorBase)"}
+                      onClick={toggleDeleteModal}
+                    >
+                      Delete
+                    </Btn>
+                  </Flex>
+                ) : verificationStatus === "suspend" ? (
+                  <Flex gap={"16px"} direction={"column"}>
+                    <Btn
+                      bg={"transparent"}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      w="100%"
+                      border="1px solid var(--primaryBase)"
+                      borderRadius={"10px"}
+                      h={"40px"}
+                      textColor={"var(--primaryBase)"}
+                      onClick={toggleModal}
+                    >
+                      Resume
+                    </Btn>
+                    <Btn
+                      bg={"transparent"}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      w="100%"
+                      border="1px solid var(--errorBase)"
+                      borderRadius={"10px"}
+                      h={"40px"}
+                      textColor={"var(--errorBase)"}
+                      onClick={toggleDeleteModal}
                     >
                       Delete
                     </Btn>
@@ -324,6 +585,7 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--primaryBase)"}
+                      onClick={toggleModal}
                     >
                       Verify
                     </Btn>
@@ -337,6 +599,7 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--errorBase)"}
+                      onClick={toggleDeclineModal}
                     >
                       Decline
                     </Btn>
@@ -345,7 +608,6 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
               ) : (
                 <></>
               )}
-
               <Flex
                 bg={"var(--weak50)"}
                 w={"100%"}
@@ -422,7 +684,7 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
                   >
                     PROPERTY
                   </Text>
-                  <Text fontSize={"14px"}>2</Text>
+                  <Text fontSize={"14px"}>{user?.propertyCount}</Text>
                 </Box>
               </Flex>
             </Flex>
@@ -435,18 +697,20 @@ export const PropertyDetails = ({my, p, cardWidth}:{my?: string; p?: string; car
           flexWrap={"wrap"}
           mt={{ base: "60px", lg: "120px" }}
         >
-          {properties.map((property) => {
+          {getProperty.map((property, index) => {
             return (
               <PropertyCard
-                key={property?.id}
-                image={property?.image}
+                key={index}
+                id={property?._id}
+                image={property?.images}
                 title={property?.title}
-                pricing={property?.pricing}
-                location={property?.location}
-                userImage={property?.userImage}
-                email={property?.email}
-                user={property?.user}
-                cardWidth={cardWidth}
+                pricing={property?.price}
+                location={property?.address}
+                verificationState={property?.verificationState}
+                userImage={user?.avatar || "/"}
+                email={user?.email}
+                user={user?.firstName}
+                // count={page}
               />
             );
           })}
