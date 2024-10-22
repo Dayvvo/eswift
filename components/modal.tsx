@@ -6,10 +6,10 @@ interface ModalProps {
     children?: ReactNode;
     onClose?: any;
     isVisible?: any;
-
+    label?: string;
 }
 export const Modal:React.FC<ModalProps> =({
-     children, onClose , isVisible
+    children, onClose , isVisible, label,
 })=> {
 
     const ModalClose =(e:any)=>{
@@ -48,9 +48,10 @@ export const Modal:React.FC<ModalProps> =({
                         <Text 
                             fontSize={'18px'} fontWeight={500}
                         >
-                            Add Property
+                            {label || "Add Property"}
                         </Text>
                         <Box 
+                            cursor={'pointer'}
                             fontSize={'18px'}
                             onClick={onClose}>
                             <RxCross2 />
