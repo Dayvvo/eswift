@@ -23,17 +23,18 @@ import useProperty from "@/hooks/useProperty";
 import { useImage, useInputText } from "@/hooks/useInput";
 import { useApiUrl } from "@/hooks/useApi";
 import useToast from "@/hooks/useToast";
-import { AddPropertyScreenOne } from "./AddPropertyScreen1";
-import { AddPropertyScreenTwo } from "./AddPropertyScreen2";
-import { AddPropertyScreenThree } from "./AddPropertyScreen3";
-import { AddPropertyScreenFour } from "./AddPropertyScreen4";
-import { PropertyCard } from "./propertyCard";
+import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
+import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
+import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
+import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
 import {
   DoubleNextBtn,
   DoublePrevBtn,
   NextBtn,
   PreviousBtn,
 } from "@/components/svg";
+import { useRouter } from "next/navigation";
+import { PropertyCard } from "./PropertyCard";
 
 interface MyData {
   _id: any;
@@ -118,6 +119,8 @@ export const PropertyScreen = () => {
     error: imageError,
     reset: imageReset,
   } = useImage();
+  const router = useRouter();
+
   const { toast } = useToast();
   const client = useApiUrl();
 
@@ -136,7 +139,7 @@ export const PropertyScreen = () => {
       "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     ],
     name: fileName,
-    file: "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    file: "https://res.cloudinary.com/demo/image/upload/example_pdf.pdf",
   };
 
   const addPropertyFn = async () => {
@@ -177,10 +180,6 @@ export const PropertyScreen = () => {
     }
   };
 
-  const toDetails = (_id: string) => {
-    console.log('id', _id)
-  }
-
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
@@ -199,22 +198,23 @@ export const PropertyScreen = () => {
 
     fetchData();
   }, []);
+
+  const getPropertyFunction = async () => {
+    setLoading(true);
+    try {
+      setLoading(false);
+      const getAllProperties = await getAdminProperty(inputValue, page);
+      setGetProperty(getAllProperties?.data?.data);
+      console.log(getAllProperties?.data?.data);
+      setTotalPages(getAllProperties.data?.pagination.pages);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    const getPropertyFunction = async () => {
-      setLoading(true);
-      try {
-        setLoading(false);
-        const getAllProperties = await getAdminProperty(inputValue, page);
-        setGetProperty(getAllProperties?.data?.data);
-        console.log(getAllProperties?.data?.data);
-        setTotalPages(getAllProperties.data?.pagination.pages);
-      } catch (error) {
-        setLoading(false);
-        console.log(error);
-      }
-    };
     getPropertyFunction();
-  }, [page, inputValue, showModal]);
+  }, [showModal, loading]);
 
   const goToNextPage = () => {
     if (page < totalPages) setPage(page + 1);
@@ -307,8 +307,10 @@ export const PropertyScreen = () => {
               h="100%"
               _placeholder={{ textColor: "var--(soft400)" }}
             >
-              <InputLeftElement pointerEvents="none" color={"var(--soft400)"}>
-                <RiSearch2Line />
+              <InputLeftElement color={"var(--soft400)"}>
+                <Box onClick={getPropertyFunction}>
+                  <RiSearch2Line />
+                </Box>
               </InputLeftElement>
               <Input
                 w={"100%"}

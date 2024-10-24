@@ -1,5 +1,5 @@
 import Wrapper from "@/components/Wrapper";
-import { PropertyScreen } from "@/screens/property/property";
+import { PropertyScreen } from "@/screens/Property/Property";
 
 
 const Property =()=> {
