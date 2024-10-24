@@ -212,6 +212,7 @@ export const PropertyCard = ({
             textColor={"#000"}
             fontSize={"15px"}
             display={"flex"}
+            cursor={'pointer'}
             justifyContent={"center"}
             alignItems={"center"}
             w="100%"
