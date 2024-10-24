@@ -22,5 +22,5 @@ export interface IProperty {
   images: Array<string>;
   creatorID: any;
   isActive: boolean;
-  verificationState: "Pending" | "Verified" | "Rejected";
+  verification: "pending" | "verified" | "rejected" | "suspend";
 }

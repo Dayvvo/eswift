@@ -222,16 +222,21 @@ class PropertyController {
 
   verifyProperty = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { verificationState } = req.body;
-    const allowedVerificationStatuses = ["Pending", "Verified", "Rejected"];
-    if (!allowedVerificationStatuses.includes(verificationState)) {
+    const { verification } = req.body;
+    const allowedVerificationStatuses = [
+      "pending",
+      "verified",
+      "rejected",
+      "suspend",
+    ];
+    if (!allowedVerificationStatuses.includes(verification)) {
       return res.status(400).json({ message: "Invalid verification status" });
     }
 
     try {
       const verifyStatus = await Property.findOneAndUpdate(
         { _id: id },
-        { verificationState },
+        { verification },
         { new: true }
       );
 
@@ -242,7 +247,7 @@ class PropertyController {
       res.status(201).json({
         statusCode: 201,
         message: "Verification status updated successfully",
-        data: verifyStatus?.verificationState,
+        data: verifyStatus?.verification,
       });
     } catch (error) {
       res.status(500).send("An error occured while validation property");

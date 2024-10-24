@@ -5,21 +5,19 @@ import { isAdmin, isAuth } from "../utils/middleware";
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   .post(isAuth, propertyController.createProperty)
   .get(propertyController.getCreatedProperties);
 
-router.get('/props', propertyController.getPropertyDocs);
+router.get("/props", propertyController.getPropertyDocs);
 
-router.get('/admin', isAuth, isAdmin, propertyController.adminGetAllProperties);
+router.get("/admin", propertyController.adminGetAllProperties);
 
-router
-  .route('/:id')
-  .get(propertyController.getPropertyById)
-  .delete(isAuth, propertyController.deleteProperty);
+router.get("/:id", propertyController.getPropertyById);
+router.delete("/:id", isAuth, isAdmin, propertyController.deleteProperty);
 
-router.patch('/:id/freeze', isAuth, propertyController.isActiveSwitch);
+router.patch("/:id/freeze", isAuth, propertyController.isActiveSwitch);
 
-router.put('/:id/verify', isAuth, isAdmin, propertyController.verifyProperty);
+router.put("/:id/verify", isAuth, isAdmin, propertyController.verifyProperty);
 
 export default router;
