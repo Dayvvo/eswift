@@ -2,6 +2,8 @@ import {
   Box,
   Button,
   Flex,
+  FormControl,
+  FormLabel,
   Input,
   InputGroup,
   InputLeftElement,
@@ -9,6 +11,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Select,
   Table,
   TableContainer,
   Tbody,
@@ -17,112 +20,85 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { ActionIcon, FilterIcon, SearchIcon } from "../../components/svg";
 import axios from "axios";
 import { useApiUrl } from "@/hooks/useApi";
+import UserDrawer from "./UserDrawer";
+import useUser from "@/hooks/useUser";
+import Btn from "@/components/Btn";
+import { Modal } from "@/components/modal";
 
 const UserScreen = () => {
-  const tableData = [
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Opeyemi Adeyemi",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "10",
-      userType: "Seller",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Anigboro Napoleon",
-      email: "anigboronapoleon@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "8",
-      userType: "Affiliate",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Anigboro Napoleon",
-      email: "anigboronapoleon@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "5",
-      userType: "Affiliate",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-    {
-      name: "Oronnaye Ayomide",
-      email: "oronnayeayomide@gmail.com",
-      phoneNum: "09094631170",
-      dateCreated: "12 September 2024",
-      property: "Nil",
-      userType: "Buyer",
-      action: <ActionIcon />,
-    },
-  ];
-
   const [table, setTable] = useState<any>(null);
+  const [userEl, setUserEl] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    role: "CLIENT",
+  });
+  const { addUser } = useUser()
 
-  const client = useApiUrl();
-  useEffect(() => {
-    client
-      .query("/user/users")
-      .then((res:any) => {
-        console.log(res);
-        setTable(res?.data?.data);
-      })
-      .catch((err) => {
-        console.log(err);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+  
+    if (name) {
+      setUserData((prevDetails) => ({
+        ...prevDetails,
+        [name]: value,  // Use the name from the target as the key
+      }));
+    }
+  };
+
+  const createUser = async () => {
+    try {
+      setUserData({
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+        role: "CLIENT",
       });
+      const res = await addUser(userData);
+      return res;
+    }
+    catch (err) {
+      console.log('err', err)
+    }
+    
+  }
+
+  const { getUser, getUserById } = useUser();
+  console.log("userEl", userEl);
+
+  const getUserFn = async () => {
+    const res: any = await getUser();
+    setTable(res?.data?.data);
+  };
+
+  useEffect(() => {
+    getUserFn();
   }, []);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
+
+  const openDrawer = async (userId: string) => {
+    onOpen();
+    const res: any = await getUserById(userId);
+    console.log("res", res);
+    setUserEl(res?.data?.data);
+  };
+
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
 
   return (
     <Box>
@@ -167,6 +143,49 @@ const UserScreen = () => {
             </MenuList>
           </Menu>
         </Flex>
+        <Btn className="robotoF" onClick={() => setShowModal(true)}>
+          Add User
+        </Btn>
+        <Modal onClose={toggleModal} isVisible={showModal} label="Add User">
+          <FormControl>
+            <Box pt="15px">
+              <FormLabel className="robotoF" fontSize={".875rem"}>
+                First Name
+              </FormLabel>
+              <Input className="robotoF" type="text" w="314px" name="firstName" value={userData.firstName} onChange={handleChange} />
+            </Box>
+            <Box pt="15px">
+              <FormLabel className="robotoF" fontSize={".875rem"}>
+                Last Name
+              </FormLabel>
+              <Input className="robotoF" type="text" w="314px" name="lastName" value={userData.lastName} onChange={handleChange} />
+            </Box>
+            <Box>
+              <FormLabel className="robotoF" fontSize={".875rem"}>
+                Email
+              </FormLabel>
+              <Input className="robotoF" type="email" w="314px" name="email" value={userData.email} onChange={handleChange} />
+            </Box>
+            <Box pt="15px">
+              <FormLabel className="robotoF" fontSize={".875rem"}>
+                Password
+              </FormLabel>
+              <Input className="robotoF" type="text" w="314px" name="password" value={userData.password} onChange={handleChange} />
+            </Box>
+            <Box pt="15px" mb="20px">
+              <FormLabel className="robotoF" fontSize={".875rem"}>
+                User Type
+              </FormLabel>
+              <Select className="robotoF" name="role" w="314px" value={userData.role} onChange={handleChange}>
+                <option value="CLIENT">ADMIN</option>
+                <option value="GUEST">AFFILIATE</option>
+              </Select>
+            </Box>
+            <Btn className="robotoF" type={"submit"} w="full" onClick={createUser}>
+              Create User
+            </Btn>
+          </FormControl>
+        </Modal>
       </Flex>
       <TableContainer mt="30px">
         <Table size="sm">
@@ -197,7 +216,11 @@ const UserScreen = () => {
           <Tbody fontSize={".875rem"} fontWeight={400} className="robotoF">
             {table &&
               table.map((item: any) => (
-                <Tr key={item._id}>
+                <Tr
+                  key={item._id}
+                  cursor={"pointer"}
+                  onClick={() => openDrawer(item._id)}
+                >
                   <Td color={"#0E121B"} py="12px">{`${item.firstName
                     .slice(0, 1)
                     .toUpperCase()}${item.firstName.slice(
@@ -237,6 +260,12 @@ const UserScreen = () => {
                   </Td>
                 </Tr>
               ))}
+            <UserDrawer
+              isOpen={isOpen}
+              onClose={onClose}
+              btnRef={btnRef}
+              userEl={userEl}
+            />
           </Tbody>
         </Table>
       </TableContainer>
