@@ -17,7 +17,7 @@ import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
-import { PropertyCard } from '@/screens/property/propertyCard';
+import { PropertyCard } from '@/screens/Property/PropertyCard';
 import { useRouter } from 'next/router';
 
 

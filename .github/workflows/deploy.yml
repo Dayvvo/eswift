@@ -32,11 +32,10 @@ jobs:
           username: ${{ secrets.DROPLET_USER }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
-            npm install -g pm2
             cd /etc/nginx/sites-available/eswift
             git restore package-lock.json
             git stash
             git pull origin main
             npm install
             npm run build
-            pm2 restart all
+            pm2 start npm --name "nextjs" -- start
