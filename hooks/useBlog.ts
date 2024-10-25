@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import httpClient from "./useApi";
+import { R } from "@/utils/types";
 
 interface BlogObj {
   title: string;
@@ -24,9 +25,6 @@ interface MailType {
 const useBlog = () => {
   const baseUrl = "http://localhost:5500/api";
   const [token, setToken] = useState("");
-
-  console.log(token);
-
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
 
@@ -85,7 +83,9 @@ const useBlog = () => {
     [token]
   );
 
-  const getBlog = async (id:string) => {
+  const getBlog = async () =>  (await query(`${baseUrl}/blog/post`)).data as R; 
+
+  const getBlogByID = async(id:string)=>{
     try {
       const res = await query(`${baseUrl}/blog/post/${id}`);
       return res.data as Record<string,unknown>;
@@ -96,6 +96,7 @@ const useBlog = () => {
         message:'error',
       }
     }
+
   };
 
   return {
@@ -103,6 +104,7 @@ const useBlog = () => {
     deleteBlog,
     getBlog,
     contactApi: contactUsFn,
+    getBlogByID,
   };
 };
 

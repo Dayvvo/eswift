@@ -3,7 +3,7 @@ name: CI/CD TO DIGITAL OCEAN
 on:
   push:
     branches:
-      - main
+      - home
 
 jobs:
   build-and-deploy:

@@ -1,40 +1,23 @@
-import {
-  Flex,
-  Box,
-  Text,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Grid,
-  Stack,
-  Skeleton,
-  Card,
-  CardBody,
-} from "@chakra-ui/react";
+import { Flex, Box,Text, Input, InputGroup, InputLeftElement, Grid, Stack, Skeleton, Card, CardBody} from "@chakra-ui/react";
 import { RiSearch2Line } from "react-icons/ri";
 import Btn, { PaginationButton } from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { Modal } from "@/components/modal";
+import { Modal } from "../../components/modal";
 import { BsPlus } from "react-icons/bs";
 
 import useProperty from "@/hooks/useProperty";
-import { useImage, useInputText } from "@/hooks/useInput";
-import { useApiUrl } from "@/hooks/useApi";
-import useToast from "@/hooks/useToast";
+import { useImage, useInputText } from "../../hooks/useInput";
+import { useApiUrl } from "../../hooks/useApi";
+import useToast from "../../hooks/useToast";
 import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
 import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
 import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
 import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
-import {
-  DoubleNextBtn,
-  DoublePrevBtn,
-  NextBtn,
-  PreviousBtn,
-} from "@/components/svg";
+import { DoubleNextBtn, DoublePrevBtn, NextBtn, PreviousBtn } from "@/components/svg";
 import { useRouter } from "next/navigation";
-import { PropertyCard } from "./PropertyCard";
+import { PropertyCard } from "./propertyCard";
 
 interface MyData {
   _id: any;
@@ -48,6 +31,7 @@ interface MyData {
   images: any;
   creatorID: any;
 };
+
 interface User {
   _id: any;
   firstName: string;
@@ -58,6 +42,7 @@ interface User {
 };
 
 export const PropertyScreen = () => {
+
   const [showModal, setShowModal] = useState(false);
   const [getProperty, setGetProperty] = useState<MyData[]>([]);
   const [page, setPage] = useState<any>(1);
@@ -113,15 +98,18 @@ export const PropertyScreen = () => {
     onChangeInput: onChangePrice,
     reset: priceReset,
   } = useInputText((price) => price !== "");
+ 
   const {
     image,
     onChangeHandler: onChangeImage,
     error: imageError,
     reset: imageReset,
   } = useImage();
+
   const router = useRouter();
 
   const { toast } = useToast();
+ 
   const client = useApiUrl();
 
   const { addProperty, getAdminProperty } = useProperty();

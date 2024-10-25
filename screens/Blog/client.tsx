@@ -9,7 +9,7 @@ import { LoadMore } from "@/components/LoadMore";
 import { Footer } from "@/components/footer";
 import { useRouter } from "next/router";
 
-interface BlogPostProps {
+export interface BlogPostProps {
   _id: any;
   title: string;
   header_image: string;

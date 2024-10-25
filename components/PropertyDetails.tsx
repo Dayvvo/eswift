@@ -1,15 +1,7 @@
 "use client";
 import React from 'react';
 import Btn from "@/components/Btn";
-import {
-  Box,
-  Flex,
-  Grid,
-  GridItem,
-  SimpleGrid,
-  Text,
-  Image,
-} from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, SimpleGrid, Text, Image } from "@chakra-ui/react";
 import { BsDot } from "react-icons/bs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { FaRegImages } from "react-icons/fa";
@@ -17,7 +9,7 @@ import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
-import { PropertyCard } from '@/screens/Property/PropertyCard';
+import { PropertyCard } from '../screens/Property/propertyCard';
 import { useRouter } from 'next/router';
 
 

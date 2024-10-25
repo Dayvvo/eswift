@@ -19,20 +19,17 @@ type blog = {
 
 
 export const BlogDetailScreen =()=>{
-    const navigate = useRouter()
-    const fetchBlog = useBlog()
+    const navigate = useRouter();
+    const fetchBlog = useBlog();
     const {id} = navigate.query;
-    console.log('query',id);
     const [blog, setBlog] = useState<any>(null);
 
     useEffect(()=> {
         const fetchBlogFn =async () => {
-            const blogDetails = await fetchBlog.getBlog(id as string);
-        
+            const blogDetails = await fetchBlog.getBlogByID(id as string);
             setBlog(blogDetails);
         };
         id && fetchBlogFn();
-
     },[id])
 
     return(

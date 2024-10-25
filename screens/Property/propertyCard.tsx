@@ -1,4 +1,4 @@
-import { Box, Flex, Img, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import Image from "next/image";

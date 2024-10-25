@@ -21,7 +21,7 @@ import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
-import { PropertyCard } from "./PropertyCard";
+import { PropertyCard } from "./propertyCard";
 import { useRouter } from "next/router";
 import {
   DeclineState,
