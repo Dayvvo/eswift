@@ -65,9 +65,7 @@ const BlogComponent = () => {
   useEffect(() => {
     const getBlogFn = async () => {
       const req = await getBlog();
-      console.log('req', req);
     }
-
     getBlogFn();
   }, [])
 

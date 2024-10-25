@@ -4,9 +4,9 @@ import NavBar from "@/components/navBar";
 import { Box, Text, Flex, } from "@chakra-ui/react";
 import { Video } from "./video";
 import { Footer } from "@/components/footer";
-import { AboutSection } from "./AboutPageSection";
-import { MoreDetails } from "./MoreDetails";
 import { Background } from "../home/Background";
+import { MoreDetails } from "./MoreDetails";
+import { AboutSection } from "./AboutPageSection";
 
 
 const AboutUsScreen =()=> {
@@ -32,7 +32,7 @@ const AboutUsScreen =()=> {
                 <AboutSection/>
                 <Video/>
                 <Box id="main"
-                    py={'120px'}
+                    py={{base:'60px',lg:'120px'}}
                     px={{base:'1rem',lg:'4rem'}}
                     display={'flex'} flexDir={'column'} 
                     alignItems={'center'} gap={'20px'}

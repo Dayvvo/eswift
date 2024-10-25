@@ -1,135 +1,137 @@
 "use client";
 import React from 'react';
 import Btn from "@/components/Btn";
-import {
-  Box,
-  Flex,
-  Grid,
-  GridItem,
-  SimpleGrid,
-  Text,
-  Image,
-} from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, SimpleGrid, Text, Image } from "@chakra-ui/react";
 import { BsDot } from "react-icons/bs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { FaRegImages } from "react-icons/fa";
-import { PropertyCard } from "../screens/Property/propertyCard";
 import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
+import { PropertyCard } from '../screens/Property/propertyCard';
+import { useRouter } from 'next/router';
 
 
-export const PropertyDetails = () => {
-  const Features: any[] = [
+export const PropertyDetails = ({clientView}:{clientView?:boolean}) => {
+   
+    const Features: any[] = [
     {
-      id: 1,
-      key: "Spacious living area with ample natural light",
+        id: 1,
+        key: "Spacious living area with ample natural light",
     },
     {
-      id: 2,
-      key: "Modern kitchen with stainless steel appliances",
+        id: 2,
+        key: "Modern kitchen with stainless steel appliances",
     },
     {
-      id: 3,
-      key: "3 generously sized bedrooms",
+        id: 3,
+        key: "3 generously sized bedrooms",
     },
     {
-      id: 4,
-      key: "2 well-appointed bathrooms.",
+        id: 4,
+        key: "2 well-appointed bathrooms.",
     },
     {
-      id: 5,
-      key: "Spacious living area with ample natural light",
+        id: 5,
+        key: "Spacious living area with ample natural light",
     },
     {
-      id: 6,
-      key: "Spacious living area with ample natural light",
+        id: 6,
+        key: "Spacious living area with ample natural light",
     },
-  ];
-  const Documents: any[] = [
+    ];
+    const Documents: any[] = [
     {
-      id: 1,
-      doc: "/",
-    },
-    {
-      id: 2,
-      doc: "/",
+        id: 1,
+        doc: "/",
     },
     {
-      id: 3,
-      doc: "/",
+        id: 2,
+        doc: "/",
     },
     {
-      id: 4,
-      doc: "/",
+        id: 3,
+        doc: "/",
     },
     {
-      id: 5,
-      doc: "/",
-    },
-  ];
-  const properties: any[] = [
-    {
-      id: 1,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
+        id: 4,
+        doc: "/",
     },
     {
-      id: 2,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
+        id: 5,
+        doc: "/",
+    },
+    ];
+    const properties: any[] = [
+    {
+        id: 1,
+        title: "3 bedroom flat",
+        pricing: "2,000,000",
+        location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
+        email: "Dominic@gmail.com",
+        user: "Miss Dominic Tromp",
+        userImage: "/userImage.png",
+        image: "/prop-img.png",
     },
     {
-      id: 3,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
+        id: 2,
+        title: "3 bedroom flat",
+        pricing: "2,000,000",
+        location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
+        email: "Dominic@gmail.com",
+        user: "Miss Dominic Tromp",
+        userImage: "/userImage.png",
+        image: "/prop-img.png",
     },
-  ];
+    {
+        id: 3,
+        title: "3 bedroom flat",
+        pricing: "2,000,000",
+        location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
+        email: "Dominic@gmail.com",
+        user: "Miss Dominic Tromp",
+        userImage: "/userImage.png",
+        image: "/prop-img.png",
+    },
+    ];
 
-  const { globalContext } = useAppContext();
+    const { globalContext } = useAppContext();
 
-  const {user} = globalContext;
+    const { user } = globalContext;
 
-  const [detailsData, setDetailsData] = useState<any>(null);
+    const [detailsData, setDetailsData] = useState<any>(null);
 
-  const { getPropertyDetails } = useProperty();
+    const { getPropertyDetails } = useProperty();
 
-  const id = "66fa705efac0a5ffbf2f4451";
+    const {query, isReady} = useRouter();
 
-  const getPropertyDetailFn = async () => {
-    try {
-      const request = await getPropertyDetails(id);
-      const data = request.data as R;
-      setDetailsData(data?.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
-  useEffect(() => {
-    getPropertyDetailFn();
-  }, []);
+    useEffect(() => {
+        if(isReady){
+            (
+                async () => {
+                    try {
+                        const request = await getPropertyDetails(query?.id as string);
+                        const data = request.data as R;
+                        setDetailsData(data?.data);
+                    } 
+                    catch (err) {
+                        console.log(err);
+                    }
+                }
+            )()
+        };
+    }, [isReady]);
+
+    console.log('property details', query?.id );
+
+    const isAdmin = user?.role === 'Admin'
 
     return (
             <Box
                 bg={'#FFF'} 
-                w={'100%'}
+                w={ clientView? '80%': '100%'}
             >
                 {
                     <Flex w={'100%'} my={'24px'} pos={'relative'}
@@ -151,11 +153,12 @@ export const PropertyDetails = () => {
                             <Flex cursor={'pointer'}
                                 bg={'#FFF'} alignItems={'center'} justifyContent={'center'}
                                 w={'250px'} h={{base:'48px',lg:'60px'}}
-                                borderRadius={'8px'} gap={'16px'}
+                                borderRadius={'8px'} gap={'16px'} m='1em'
                                 className="robotoF" textColor={'#03142B'}
                                 fontWeight={500} fontSize={{base:'18px', lg:'30px'}}
                             >
-                                <Text>View Gallery</Text>
+
+                                <Text cursor={'pointer'} onClick={()=>{}}>View Gallery</Text>
                                 <FaRegImages />
                             </Flex>
                         </Flex>
@@ -171,23 +174,33 @@ export const PropertyDetails = () => {
                             w={'100%'} gap={'18px'}
                             className="roboto"
                         >
-                            <Flex
-                                w={'100%'}
-                                alignItems={{base:'start', md:'center'}} gap={'4px'}
-                                textColor={'#626871'} fontWeight={400}
-                                fontSize={{base:'20px', lg:'28px'}} 
-                            >
-                                <HiOutlineLocationMarker />
-                                <Text>
-                                    12, Osinowo estate Gbagada, Lagos, Nigeria
-                                </Text>
+                            <Flex w='100%' justify={'space-between'}>
+                                <Flex
+                                    fontSize={{base:'20px', lg:'28px'}} 
+                                >
+                                    <HiOutlineLocationMarker />
+                                    <Text>
+                                        {detailsData?.address}
+                                    </Text>
+                                </Flex>
+
+                                <Btn
+                                    display={'flex'} alignItems={'center'} justifyContent={'center'}
+                                    bg={'#3170A6'} borderRadius={'6px'} px='2em' h={'48px'}
+                                    textColor={'#FFF'} fontWeight={500} className="roboto"
+                                    fontSize={'16px'}
+                                
+                                >
+                                    Contact us
+                                </Btn>
+
                             </Flex>
+
                             <Text
                                 textColor={'#626871'} fontWeight={400}
                                 fontSize={'18px'} className="roboto"
                             >
-                                Discover your urban oasis in this modern 3-bedroom apartment located in the heart of Gbagada. 
-                                Enjoy breathtaking city views, luxurious amenities, and a prime location.
+                                {detailsData?.description}
                             </Text>
                             <Box
                                 fontSize={'18px'} fontWeight={300} textColor={'#626871'}
@@ -196,14 +209,14 @@ export const PropertyDetails = () => {
                                     Key Features
                                 </Text>
                                 {
-                                    Features.map((feature)=>{
+                                    detailsData?.features.map((feature:string,key:number)=>{
                                         return(
-                                            <Flex key={feature?.id}
+                                            <Flex key={feature+key}
                                                 alignItems={'center'} gap={'4px'}
                                             >
                                                 <BsDot />
                                                 <Text>
-                                                    {feature?.key}
+                                                    {feature}
                                                 </Text>
                                             </Flex>
                                         )
@@ -211,7 +224,7 @@ export const PropertyDetails = () => {
                                 }
                             </Box>
                             { 
-                                user?.role === "Admin" ?
+                                isAdmin ?
                                 <Flex
                                     bg={'var(--weak50)'}
                                     w={'100%'} alignItems={'center'}
@@ -250,7 +263,7 @@ export const PropertyDetails = () => {
                         </Flex>
                     
                         { 
-                            user?.role === 'Admin' ?
+                            isAdmin ?
                             <Flex
                                 flexDir={'column'}
                                 w={{base:'100%', lg:'20%'}}
@@ -371,7 +384,7 @@ export const PropertyDetails = () => {
                         }     
                     </Flex>
             
-                    { user?.role === 'Admin' ?
+                    { isAdmin ?
                         <Flex 
                             w={'100%'} justifyContent={'center'}
                             gap={{base:'24px',lg:'28px'}}

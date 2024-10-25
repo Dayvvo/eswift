@@ -4,8 +4,12 @@ import { Box, Grid } from "@chakra-ui/react";
 import { BlogCard } from "./blogsCard";
 import { useEffect, useState } from "react";
 import useBlog from "@/hooks/useBlog";
+import { Background } from "../home/Background";
+import { LoadMore } from "@/components/LoadMore";
+import { Footer } from "@/components/footer";
+import { useRouter } from "next/router";
 
-interface BlogPostProps {
+export interface BlogPostProps {
   _id: any;
   title: string;
   header_image: string;
@@ -16,59 +20,11 @@ interface BlogPostProps {
 }
 
 const BlogspotScreen = () => {
+  const navigate = useRouter();
   const [blogPost, setBlogPost] = useState<BlogPostProps[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page , setPage] = useState<number>(1);
   const { getBlog } = useBlog();
-//   const Blogs = [
-//     {
-//       id: 1,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 2,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 3,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 4,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 5,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//     {
-//       id: 6,
-//       picture: "/blogdumy.png",
-//       details:
-//         "Lorem ipsum dolor sit amet consectetur. Urna nisl in ullamcorper ac pulvinar ipsum vestibulum in. Sagittis lorem turpis nunc elementum gravida interdum nec. Suspendisse faucibus eu non et.",
-//       title: "Lorem ipsum dolor sit amet consectetur. Euismod ultrices.",
-//       date: "10/02/2020",
-//     },
-//   ];
 
   function scrollToSection() {
     const section = document.querySelector("#main") as HTMLElement;
@@ -81,7 +37,7 @@ const BlogspotScreen = () => {
       try {
         const req = await getBlog();
         setBlogPost(req.data.data);
-        console.log(req.data.data);
+        console.log(req.data.data)
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -105,6 +61,7 @@ const BlogspotScreen = () => {
         h={"100vh"}
         video={"/PropertiesVid.mp4"}
       />
+      <Background/>
       <Box
         id="blogs"
         py={"70px"}
@@ -122,7 +79,7 @@ const BlogspotScreen = () => {
           {blogPost.map((item) => {
             return (
               <BlogCard
-                key={item?._id}
+                key={item?._id} id={item?._id}
                 picture={item?.header_image}
                 title={item?.title}
                 details={item?.introduction}
@@ -131,7 +88,10 @@ const BlogspotScreen = () => {
             );
           })}
         </Grid>
+
+        <LoadMore click={()=> page + 1}/>
       </Box>
+      <Footer/>
     </Box>
   );
 };

@@ -1,32 +1,23 @@
-import {
-  Flex,
-  Box,
-  Text,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Grid,
-  Stack,
-  Skeleton,
-  Card,
-  CardBody,
-} from "@chakra-ui/react";
+import { Flex, Box,Text, Input, InputGroup, InputLeftElement, Grid, Stack, Skeleton, Card, CardBody} from "@chakra-ui/react";
 import { RiSearch2Line } from "react-icons/ri";
-import Btn from "@/components/Btn";
+import Btn, { PaginationButton } from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
-import { PropertyCard } from "./propertyCard";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { Modal } from "@/components/modal";
+import { Modal } from "../../components/modal";
 import { BsPlus } from "react-icons/bs";
-import { AddPropertyScreenOne } from "./AddPropertyScreen1";
-import { AddPropertyScreenTwo } from "./AddPropertyScreen2";
-import { AddPropertyScreenThree } from "./AddPropertyScreen3";
-import { AddPropertyScreenFour } from "./AddPropertyScreen4";
+
 import useProperty from "@/hooks/useProperty";
-import { useImage, useInputNumber, useInputText } from "@/hooks/useInput";
-import { useApiUrl } from "@/hooks/useApi";
-import useToast from "@/hooks/useToast";
+import { useImage, useInputText } from "../../hooks/useInput";
+import { useApiUrl } from "../../hooks/useApi";
+import useToast from "../../hooks/useToast";
+import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
+import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
+import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
+import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
+import { DoubleNextBtn, DoublePrevBtn, NextBtn, PreviousBtn } from "@/components/svg";
+import { useRouter } from "next/navigation";
+import { PropertyCard } from "./propertyCard";
 
 interface MyData {
   _id: any;
@@ -36,9 +27,11 @@ interface MyData {
   email: string;
   owner: string;
   userImage: string;
+  verificationState: string;
   images: any;
   creatorID: any;
-}
+};
+
 interface User {
   _id: any;
   firstName: string;
@@ -46,11 +39,14 @@ interface User {
   email: string;
   phoneNumber: number;
   avatar: any;
-}
+};
+
 export const PropertyScreen = () => {
+
   const [showModal, setShowModal] = useState(false);
   const [getProperty, setGetProperty] = useState<MyData[]>([]);
   const [page, setPage] = useState<any>(1);
+  const [totalPages, setTotalPages] = useState<any>(1);
   const [inputValue, setInputValue] = useState<any>("");
   const [loading, setLoading] = useState(false);
   const [showScreen, setShowScreen] = useState(1);
@@ -61,6 +57,7 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeTitle,
     reset: titleReset,
   } = useInputText((title) => title.length > 2);
+ 
   const {
     input: category,
     onChangeInput: onChangeCategory,
@@ -72,11 +69,13 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeDescription,
     reset: descriptionReset,
   } = useInputText((description) => description.length > 8);
+ 
   const {
     input: address,
     onChangeInput: onChangeAddress,
     reset: addressReset,
   } = useInputText((address) => address.length > 3);
+ 
   const {
     input: typeOfProperty,
     onChangeInput: onChangeType,
@@ -99,17 +98,22 @@ export const PropertyScreen = () => {
     onChangeInput: onChangePrice,
     reset: priceReset,
   } = useInputText((price) => price !== "");
+ 
   const {
     image,
     onChangeHandler: onChangeImage,
     error: imageError,
     reset: imageReset,
   } = useImage();
+
+  const router = useRouter();
+
   const { toast } = useToast();
+ 
   const client = useApiUrl();
 
-  const { addProperty } = useProperty();
-  // const toast = useToast();
+  const { addProperty, getAdminProperty } = useProperty();
+
   const propertyData = {
     title,
     type: typeOfProperty,
@@ -123,9 +127,9 @@ export const PropertyScreen = () => {
       "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     ],
     name: fileName,
-    file: "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    file: "https://res.cloudinary.com/demo/image/upload/example_pdf.pdf",
   };
-  // console.log(propertyData);
+
   const addPropertyFn = async () => {
     try {
       const req = await addProperty(propertyData); // If no error occurs, the following code runs
@@ -164,10 +168,6 @@ export const PropertyScreen = () => {
     }
   };
 
-  const toDetails = (_id: string) => {
-    console.log('id', _id)
-  }
-
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
@@ -186,22 +186,37 @@ export const PropertyScreen = () => {
 
     fetchData();
   }, []);
+
+  const getPropertyFunction = async () => {
+    setLoading(true);
+    try {
+      setLoading(false);
+      const getAllProperties = await getAdminProperty(inputValue, page);
+      setGetProperty(getAllProperties?.data?.data);
+      console.log(getAllProperties?.data?.data);
+      setTotalPages(getAllProperties.data?.pagination.pages);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    const getPropertyFunction = async () => {
-      setLoading(true);
-      try {
-        setLoading(false);
-        const getAllProperties = await axios.get(
-          `/api/property?keyword=${inputValue}&PageNumber={${page}}`
-        );
-        setGetProperty(getAllProperties?.data?.data);
-      } catch (error) {
-        setLoading(false);
-        console.log(error);
-      }
-    };
     getPropertyFunction();
-  }, [page, inputValue, showModal]);
+  }, [showModal, loading]);
+
+  const goToNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
+
+  const goToPrevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const goToPage = (pageNumber: number) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setPage(pageNumber);
+    }
+  };
 
   return (
     <>
@@ -249,8 +264,23 @@ export const PropertyScreen = () => {
           ""
         )}
       </Modal>
-      <Box className="robotoF" px={{ base: "16px", lg: "0" }}>
-        <Flex my={"24px"} gap={"12px"} w={"100%"} h={"36px"}>
+      <Box
+        className="robotoF"
+        px={{ base: "16px", lg: "0" }}
+        height={{ base: "70vh", md: "78vh", lg: "60vh", xl: "65vh" }}
+        overflowY="hidden"
+      >
+        <Flex
+          mb={"24px"}
+          // mt={"10px"}
+          gap={"12px"}
+          w={"100%"}
+          h={"36px"}
+          position="sticky"
+          top="0"
+          zIndex="10"
+          bg="white"
+        >
           <Flex w={"100%"}>
             <InputGroup
               display={"flex"}
@@ -265,8 +295,10 @@ export const PropertyScreen = () => {
               h="100%"
               _placeholder={{ textColor: "var--(soft400)" }}
             >
-              <InputLeftElement pointerEvents="none" color={"var(--soft400)"}>
-                <RiSearch2Line />
+              <InputLeftElement color={"var(--soft400)"}>
+                <Box onClick={getPropertyFunction}>
+                  <RiSearch2Line />
+                </Box>
               </InputLeftElement>
               <Input
                 w={"100%"}
@@ -278,6 +310,30 @@ export const PropertyScreen = () => {
               />
             </InputGroup>
           </Flex>
+          <Btn
+            onClick={toggleModal}
+            display={"flex"}
+            gap={"4px"}
+            alignItems={"center"}
+            bg={"#fff"}
+            h={"100%"}
+            w={"131px"}
+            border={"1px solid var(--soft200)"}
+            borderRadius={"8px"}
+            textColor={"var--(sub600)"}
+            fontWeight={500}
+            fontSize={"14px"}
+            px={"6px"}
+            pt={"0"}
+            pb={"0"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
+          >
+            <Text fontSize={"14px"}>Add Property</Text>
+            <BsPlus className="icon" />
+          </Btn>
           <Btn
             onClick={() => setPage(inputValue)}
             display={"flex"}
@@ -291,79 +347,119 @@ export const PropertyScreen = () => {
             textColor={"var--(sub600)"}
             fontWeight={500}
             fontSize={"14px"}
-            px={"0"}
+            px={"6px"}
             pt={"0"}
             pb={"0"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
           >
             <IoFilter className="icon" />
             <Text>Filter</Text>
           </Btn>
-          <Btn
-            onClick={toggleModal}
-            display={"flex"}
-            gap={"4px"}
-            alignItems={"center"}
-            bg={"#fff"}
-            h={"100%"}
-            w={"80px"}
-            border={"1px solid var(--soft200)"}
-            borderRadius={"8px"}
-            textColor={"var--(sub600)"}
-            fontWeight={500}
-            fontSize={"14px"}
-            px={"0"}
-            pt={"0"}
-            pb={"0"}
-          >
-            <BsPlus className="icon" />
-            <Text>Add</Text>
-          </Btn>
         </Flex>
-        {loading && (
-          <Stack>
-            <Skeleton height="40px" />
-            <Skeleton height="40px" />
-            <Skeleton height="40px" />
-          </Stack>
-        )}
 
-        {!loading && getProperty?.length > 0 && (
-          <Grid
-            templateColumns={{
-              base: "repeat(1, 1fr)",
-              md: "repeat(2, 1fr)",
-              lg: "repeat(3, 1fr)",
-            }}
-            gap={{ base: "24px", lg: "28px" }}
-          >
-            {getProperty.map((property) => {
-              const user = users.find((u) => u._id === property?.creatorID);
+        {/* Scrollable Property Cards Container */}
+        <Box
+        // overflowY={{ xl: "scroll" }}
+        // height={{ xl: "calc(80vh - 100px)" }}
+        // mt={4}
+        >
+          {loading && (
+            <Stack>
+              <Skeleton height="40px" />
+              <Skeleton height="40px" />
+              <Skeleton height="40px" />
+            </Stack>
+          )}
 
-              return (
-                <PropertyCard
-                  key={property?._id}
-                  image={property?.images}
-                  title={property?.title}
-                  pricing={property?.price}
-                  location={property?.address}
-                  userImage={user?.avatar || "/"}
-                  email={user?.email}
-                  user={user?.firstName}
-                  count={page}
-                  onClick={() => toDetails(property._id)}
-                />
-              );
-            })}
-          </Grid>
-        )}
-        {!loading && getProperty?.length === 0 && (
-          <Card>
-            <CardBody>
-              <Text>No property available please wait</Text>
-            </CardBody>
-          </Card>
-        )}
+          {!loading && getProperty?.length > 0 && (
+            <Grid
+              overflowY={{ base: "scroll" }}
+              maxH={{ base: "100vh", xl: "calc(80vh - 100px)" }}
+              mt={4}
+              templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+              gap={{ base: "24px", lg: "28px" }}
+              paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
+            >
+              {getProperty.map((property, index) => {
+                const user = users.find((u) => u._id === property?.creatorID);
+
+                return (
+                  <PropertyCard
+                    key={index}
+                    id={property?._id}
+                    image={property?.images}
+                    title={property?.title}
+                    pricing={property?.price}
+                    location={property?.address}
+                    verificationState={property?.verificationState}
+                    userImage={user?.avatar || "/"}
+                    email={user?.email}
+                    user={user?.firstName}
+                    count={page}
+                  />
+                );
+              })}
+            </Grid>
+          )}
+          {!loading && getProperty?.length === 0 && (
+            <Card>
+              <CardBody>
+                <Text>No property available please wait</Text>
+              </CardBody>
+            </Card>
+          )}
+        </Box>
       </Box>
+      {!loading && getProperty?.length > 0 && (
+        <Box
+          display={"flex"}
+          alignItems={"center"}
+          flexDir={{ base: "column", md: "row" }}
+          justifyContent={{ base: "center", md: "space-between" }}
+          mt={{ base: "14px", md: "10px" }}
+          gap={{ base: "1rem", md: "0rem" }}
+        >
+          <Text
+            fontSize={"14px"}
+            color={"#525866"}
+            className="inter"
+          >{`page ${page} of ${totalPages}`}</Text>
+          <Box
+            display={"flex"}
+            alignItems={"center"}
+            gap={"20px"}
+            justifyContent={"center"}
+            flex="1"
+          >
+            <Box>
+              <DoublePrevBtn />
+            </Box>
+            <Box onClick={goToPrevPage}>
+              <PreviousBtn />
+            </Box>
+            <Box display={"flex"} alignItems={"center"} gap={"5px"}>
+              <PaginationButton onClick={() => goToPage(1)}>1</PaginationButton>
+              <PaginationButton onClick={() => goToPage(2)}>2</PaginationButton>
+              <PaginationButton onClick={() => goToPage(3)}>3</PaginationButton>
+              <PaginationButton onClick={() => goToPage(4)}>4</PaginationButton>
+              <PaginationButton onClick={() => goToPage(5)}>5</PaginationButton>
+              <PaginationButton>...</PaginationButton>
+              <PaginationButton onClick={() => goToPage(16)}>
+                16
+              </PaginationButton>
+            </Box>
+            <Box onClick={goToNextPage}>
+              <NextBtn />
+            </Box>
+            <Box>
+              <DoubleNextBtn />
+            </Box>
+          </Box>
+        </Box>
+      )}
     </>
   );
 };

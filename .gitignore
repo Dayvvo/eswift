@@ -23,8 +23,15 @@ dist/*
 
 # misc
 .DS_Store
+/.env
+./.env
 .env
+/.env.prod
+.env.prod
+./.env.prod
 .env.local
+
+tsconfig.tsbuildinfo
 .env.development.local
 .env.test.local
 .env.production.local

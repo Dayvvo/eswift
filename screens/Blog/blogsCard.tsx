@@ -2,27 +2,34 @@ import { Box, Flex, Img, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import moment from "moment";
 import DOMPurify from "dompurify";
+import { useRouter } from "next/router";
+
 
 type BlogCardProps = {
   picture?: string;
   title?: string;
   date?: string;
   details?: string;
+  id?:string;
 };
 
-export const BlogCard = ({ picture, title, date, details }: BlogCardProps) => {
+export const BlogCard = ({ picture, title, date, details, id}: BlogCardProps) => {
+
+  
+  const navigate = useRouter();
+    
   return (
     <>
-      <Box
+      <Box onClick={ ()=> navigate.push(`/blogspot/${id}`)}
         className="roboto"
         bg={"#FFF"}
-        maxW={"312px"}
-        h={"600px"}
-        boxShadow={"lg"}
-        pb={"1px"}
+        maxW={"388px"}
+        h={{base:'500px',lg:"650px"}}
+        px={{base:'12px',lg:'16px'}} py={{base:'14px',sm:'20px'}}
         overflow={"hidden"}
+        border={'1px solid #262626'} borderRadius={'12px'}
       >
-        <Flex position={"relative"} w="100%" h="388px" mb={"40px"}>
+        <Flex position={"relative"} w="100%" h={{base:'280px',lg:"356px"}} mb={{base:'20px',lg:"40px"}} >
           <Image
             width={1000}
             height={1000}
@@ -37,12 +44,12 @@ export const BlogCard = ({ picture, title, date, details }: BlogCardProps) => {
           flexDir={"column"}
           gap={"10px"}
           w={"100%"}
-          mb={"20px"}
+          mb={{base:'14px',lg:"20px"}}
         >
           <Text
             display={"flex"}
             alignItems={"center"}
-            fontSize={{ base: "14px", lg: "14px" }}
+            fontSize={{ base:"12px", lg: "14px" }}
             fontWeight={500}
             textColor={"#848484"}
           >
@@ -56,10 +63,11 @@ export const BlogCard = ({ picture, title, date, details }: BlogCardProps) => {
             {title}
           </Text>
           <Text
-            fontSize={"14px"}
+            fontSize={{base:'12px',lg:"14px"}}
             fontWeight={300}
             textColor={"#3A3148"}
             textOverflow={"ellipsis"}
+            whiteSpace={"nowrap"}
             overflow={"hidden"}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(details as string),

@@ -16,7 +16,7 @@ export const AuthHeaderProps =({
             flexDir={'column'}
             alignItems={'center'}
             w={'100%'}
-            gap={'8px'}
+            gap={'6px'}
             className="robotoF"
         >
             <Image 
@@ -26,14 +26,16 @@ export const AuthHeaderProps =({
             />
             <Text
                 textColor={'var(--strong950)'}
-                fontSize={'24px'}
-                fontWeight={400}
+                fontSize={{base:'20px',lg:'22px'}}
+                textAlign={'center'}
+                fontWeight={500}
             >
                 {title}
             </Text>
             <Text
                 textColor={'var(--sub600'}
-                fontSize={'16px'}
+                fontSize={{base:'10px',lg:'14px'}}
+                textAlign={'center'}
                 fontWeight={400}
             >
                 {description} <Text as={'span'} fontWeight={500} textColor={'var(--strong950)'}>

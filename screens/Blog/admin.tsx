@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Card,
   CardBody,
   Flex,
@@ -50,10 +49,11 @@ const BlogScreen = () => {
       setLoading(true);
       try {
         const req = await getBlog();
-        setBlogPost(req.data.data);
-        console.log(req.data.data);
+        let data = req?.data as BlogPostProps[]
+        setBlogPost(data);
         setLoading(false);
-      } catch (error) {
+      } 
+      catch (error) {
         setLoading(false);
       }
 

@@ -1,10 +1,7 @@
 import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import Btn from "@/components/Btn";
 import { IoPlayOutline } from "react-icons/io5";
-import { IoIosArrowDropdown } from "react-icons/io";
-import { MouseEventHandler } from "react";
 import { Stats } from "./homeAboutSection";
 
 
@@ -21,13 +18,13 @@ const Hero = ({click}:{click:()=> void}) => {
       >
         <Flex bg={"transparent"}
           flexDir={{base:'column',lg:'row'}}
-          py={"140px"} 
+          py={{base:'80px',lg:"140px"}} 
           width={"100%"} h={"100%"}
           alignItems={{base:"start", lg:"start"}}
         >
           <Flex 
             px={{ base: "1rem", lg:"6rem" }}
-            flexDir={"column"} gap={"16px"} color={"var(--TextCol)"}
+            flexDir={"column"} gap={{base:'12px',sm:"16px"}} color={"var(--TextCol)"}
             w={{base:"100%", xl:"50%"}} className="robotoF"
           >
             <Text textAlign={{base:'center', lg:'start'}} fontSize={{base:"32px",md:'42px', lg:'38px', xl:"64px"}} fontWeight={400} className="antic">
@@ -44,11 +41,11 @@ const Hero = ({click}:{click:()=> void}) => {
                 SEARCH PROPERTIES NOW
               </Text>
               <Flex w={'80px'} h={'2px'} bg={'var(--TextCol)'}/>
-              <Link href={'/'}>
+              <Link href={'/properties'}>
                 <Btn
                   display={'flex'} alignItems={'center'} justifyContent={'center'}
                   py="14px" w={'fit-content'} h={'fit-content'}
-                  px="14px"
+                  px="14px" _hover={{borderColor:'#3170A8'}}
                   borderRadius={'999px'} bg={'transparent'}
                   border={'2px solid var(--TextCol)'} textColor={'var(--TextColor)'} fontSize={'20px'}
                 >

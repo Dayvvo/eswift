@@ -1,11 +1,8 @@
 
 import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
-import { Box, Text, Flex, InputGroup, InputLeftElement, Input, InputRightElement, Grid } from "@chakra-ui/react";
+import { Box, Grid } from "@chakra-ui/react";
 import { useState } from "react";
-import { IoFilter } from "react-icons/io5";
-import { RiSearch2Line } from "react-icons/ri";
-import { GalleryCard } from "./galleryCard";
 import { Footer } from "@/components/footer";
 import { LoadMore } from "@/components/LoadMore";
 import { Background } from "../home/Background";
@@ -24,14 +21,14 @@ const GalleryScreen =( )=> {
             id:'1',
             title:'Oluyole estate',
             description:'Korem ipsum dolor sit celex dor divorless',
-            images:'/properties-dummy.png',
+            images:['/properties-dummy.png'],
             price:'120000'
         },
         {
             id:'2',
             title:'Oluyole estate',
             description:'Korem ipsum dolor sit celex dor divorless',
-            images:'/properties-dummy.png',
+            images:['/properties-dummy.png'],
             price:'120000'
         },
         
@@ -61,21 +58,23 @@ const GalleryScreen =( )=> {
                     display={'flex'} flexDir={'column'} 
                     alignItems={'center'} gap={'20px'}
                 >
-                    <TextHeader Header={"Discover a World of Possibilities"} sub={"Our portfolio of properties is as diverse as yur dreams. Explore the following categories to find the perfect property that resonates with your vision of home"}/>
+                    <TextHeader Header={"Discover a World of Possibilities"} sub={"Our portfolio of properties is as diverse as your dreams. Explore the following categories to find the perfect property that resonates with your vision of home"}/>
                     
 
-                    <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(3, 1fr)', xl:'repeat(4, 1fr)'}} 
-                        gap={{base:'24px',lg:'28px'}}
+                    <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(3, 1fr)', xl:'repeat(3, 1fr)'}} 
+                        gap={{base:'24px',lg:'28px'}} placeContent={'center'}
                     >
                         {
                             projects.map((item)=>{
                                 return(
                                     <PropertiesCard key={item?.id}
-                                        picture={item?.images} 
+                                        images={item?.images} 
                                         title={item?.title} 
-                                        pricing={item?.price} 
-                                        details={item?.description}
-                                        id={item?.id}
+                                        price={item?.price} 
+                                        description={item?.description}
+                                        _id={item?.id}
+                                        address=""
+                                        duration={'20'}
                                     />
                                 )
                             })

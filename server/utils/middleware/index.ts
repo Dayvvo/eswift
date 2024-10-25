@@ -1,4 +1,4 @@
-import User from "@/server/models/User";
+import User from "../../models/User";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { IUser, UserRole } from "../interfaces";
@@ -12,14 +12,11 @@ export const isAuth = async (
   if (req.headers.authorization) {
     try {
       token = req.headers.authorization.split(" ")[1];
-      console.log("tokenssss", token);
       const decoded = jwt.verify(
         token,
         process.env["JWT_SECRET"] as string
       ) as any;
       const userFound = await User.findById(decoded?.id).select("-hash");
-
-      console.log("userFound", userFound);
 
       req.user = userFound ? userFound : undefined;
       if (!req.user) {
@@ -29,8 +26,8 @@ export const isAuth = async (
       }
 
       next();
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error(error['message']);
       return res.status(401).json({ message: "Not authorized, invalid token" });
     }
   } else {
@@ -40,7 +37,6 @@ export const isAuth = async (
 
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as IUser;
-  console.log("isAdmin", user);
   if (user?.role !== UserRole.ADMIN) {
     return res
       .status(403)

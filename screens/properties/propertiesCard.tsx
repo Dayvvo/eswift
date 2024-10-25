@@ -4,6 +4,7 @@ import Image from "next/image"
 import router from "next/router";
 import { MdLocationOn } from "react-icons/md";
 import Btn from "@/components/Btn";
+import { properties } from "@/utils/types";
 
 type PropertiesCardProps = {
     picture?:string;
@@ -11,21 +12,28 @@ type PropertiesCardProps = {
     pricing?:string;
     location?:string;
     details?:string;
+    address:string;
     id:string;
+}
+
+interface propertiesCard extends properties{
+    view?:'client' | 'admin'
     onClick?: () => void;
+
 }
 
 export const PropertiesCard =({
-    picture, title, pricing, details, location, id, onClick
-}:PropertiesCardProps) => {
+    images, title, price, description, address, _id, onClick, view
+}:propertiesCard) => {
 
-    // const Navigate = () => {
-    //     router.push(`/properties/${id}`)
-    // }
+    const Navigate = () => {
+        router.push(`/properties/${_id}`)
+    }
+
 
     return(
         <>
-            <Box onClick={onClick}
+            <Box onClick={view==='client'? Navigate: onClick}
                 className="roboto"
                 bg={'#FFF'}
                 maxW={'400px'} h={'fit-content'}
@@ -43,7 +51,7 @@ export const PropertiesCard =({
                     <Image 
                         width={1000} height={1000}
                         layout="responsive"
-                        src={`${picture}`} 
+                        src={`${images[0]}`} 
                         alt={'property'}
                     />
                 </Flex>
@@ -64,7 +72,7 @@ export const PropertiesCard =({
                     >
                         <MdLocationOn />
                         <Text fontSize="14px" maxW={'90%'} overflow={'hidden'} textOverflow={'ellipsis'} whiteSpace={'nowrap'}>
-                            {location}
+                            {address}
                         </Text>
                     </Flex>
                     <Flex  
@@ -79,7 +87,7 @@ export const PropertiesCard =({
                             {title}
                         </Text>
                         <Text h={'48px'} overflow={'hidden'} whiteSpace={'nowrap'} textOverflow={'ellipsis'} fontSize={'16px'} fontWeight={500} textColor={'#999999'} className="roboto">
-                            {details}
+                            {description}
                         </Text>
                     </Flex>          
                 </Flex>
@@ -102,7 +110,7 @@ export const PropertiesCard =({
                             fontWeight={600} textColor={'#191919'}
                         >
                             <TbCurrencyNaira /> 
-                            {pricing}
+                            {price}
                         </Text>
                     </Flex>
                     <Btn onClick={onClick}

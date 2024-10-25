@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 import cloudinary from '../utils/config/cloudinary.config'
 import { UploadApiResponse } from 'cloudinary'
 
+
+
 class UploadController {
   async uploadFile(file: Express.Multer.File): Promise<string> {
     try {
@@ -16,26 +18,28 @@ class UploadController {
 
   async uploadSingle(req: Request, res: Response) {
     try {
-      const file: Express.Multer.File | null = req.file ? req.file : null
+
+      const file: Express.Multer.File | null = req.file ? req.file : null;
 
       if (!file) {
-        return res
-          .status(400)
-          .json({ statusCode: 400, message: `Bad Request, No file selected` })
-      }
+        return res.status(400).json({ statusCode: 400, message: `Bad Request, No file selected`});
+      };      
 
-      const secureUrl = await uploadController.uploadFile(file)
+      const secureUrl = await uploadController.uploadFile(file);
 
       return res.json({
         statusCode: 200,
         message: `Success`,
         data: secureUrl,
-      })
-    } catch (error: any) {
+      });
+
+    } 
+    catch (error: any) {
       return res.status(500).json({
         statusCode: 500,
         message: `Internal Server Error: ${error.message}`,
-      })
+      });
+    
     }
   }
 
@@ -61,6 +65,10 @@ class UploadController {
       })
     }
   }
+
+
+
+
 }
 
 let uploadController = new UploadController()

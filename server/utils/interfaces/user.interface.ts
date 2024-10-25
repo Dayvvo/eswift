@@ -24,8 +24,9 @@ export interface IUser {
   hash?: string
   propertyCount: number
   role: UserRole
-  isActive: boolean
-  verification: 'pending' | 'verified' | 'rejected'
+  isActive: boolean,
+  referrer: ObjectId,
+  verification: 'pending' | 'verified' | 'rejected',
   matchPassword?: FunctionConstructor
   increasePropertyCount?: FunctionConstructor
   decreasePropertyCount?: FunctionConstructor

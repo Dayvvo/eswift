@@ -44,15 +44,14 @@ const PropertySchema = new mongoose.Schema<IProperty>(
       type: Boolean,
       default: true,
     },
-    verificationState: {
+    verification: {
       type: String,
       enum: Object.values(PropertyVerification),
-      default: "Pending",
+      default: "pending",
     },
   },
   { timestamps: true }
 );
-
 
 const Property = mongoose.model("property", PropertySchema);
 
