@@ -12,7 +12,7 @@ const useToast = () => {
       (status === "success" ? "Success" : status === "error" ? "Error" : "");
 
     toastOpen({
-      position: position || "top",
+      position: position || "top-right",
       duration: duration || 5000,
       title: titleValue,
       description,

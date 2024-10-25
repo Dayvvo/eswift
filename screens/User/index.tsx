@@ -3,10 +3,12 @@ import {
   Button,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   Menu,
   MenuButton,
   MenuItem,
@@ -31,9 +33,12 @@ import UserDrawer from "./UserDrawer";
 import useUser from "@/hooks/useUser";
 import Btn from "@/components/Btn";
 import { Modal } from "@/components/modal";
+import { RiLockPasswordLine } from "react-icons/ri";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+import useToast from "@/hooks/useToast";
 
 const UserScreen = () => {
-  const [table, setTable] = useState<any>(null);
+  const [table, setTable] = useState<any>([]);
   const [userEl, setUserEl] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState({
@@ -43,21 +48,70 @@ const UserScreen = () => {
     lastName: "",
     role: "CLIENT",
   });
-  const { addUser } = useUser()
+  const [show, setShow] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  const [err1, setErr1] = useState(false);
+  const [err2, setErr2] = useState(false);
+  const [err3, setErr3] = useState(false);
+  const [err4, setErr4] = useState(false);
+
+  // const updatedTable = [...table, ...userData]
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { toast } = useToast();
   
+  const { addUser } = useUser();
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
     if (name) {
       setUserData((prevDetails) => ({
         ...prevDetails,
-        [name]: value,  // Use the name from the target as the key
+        [name]: value, // Use the name from the target as the key
       }));
+    }
+  };
+
+  const validateFirstName = () => {
+    if (userData.firstName.length === 0) {
+      setErr1(true);
+    } else {
+      setErr1(false);
+    }
+  };
+
+  const validateLastName = () => {
+    if (userData.lastName.length === 0) {
+      setErr2(true);
+    } else {
+      setErr2(false);
+    }
+  };
+
+  const validateEmail = () => {
+    if (userData.email.length === 0) {
+      setErr3(true);
+    } else {
+      setErr3(false);
+    }
+  };
+
+  const validatePassword = () => {
+    if (userData.password?.length < 8) {
+      setErr4(true);
+    } else {
+      setErr4(false);
     }
   };
 
   const createUser = async () => {
     try {
+      setLoading(true);
+      const res = await addUser(userData);
       setUserData({
         email: "",
         password: "",
@@ -65,14 +119,19 @@ const UserScreen = () => {
         lastName: "",
         role: "CLIENT",
       });
-      const res = await addUser(userData);
+      setShowModal(false);
+      toast({
+        status: "success",
+        title: "User created",
+      });
       return res;
+    } catch (err) {
+      console.log("err", err);
     }
-    catch (err) {
-      console.log('err', err)
+    finally {
+      setLoading(false);
     }
-    
-  }
+  };
 
   const { getUser, getUserById } = useUser();
   console.log("userEl", userEl);
@@ -86,7 +145,7 @@ const UserScreen = () => {
     getUserFn();
   }, []);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  
   const btnRef = React.useRef();
 
   const openDrawer = async (userId: string) => {
@@ -149,39 +208,156 @@ const UserScreen = () => {
         <Modal onClose={toggleModal} isVisible={showModal} label="Add User">
           <FormControl>
             <Box pt="15px">
-              <FormLabel className="robotoF" fontSize={".875rem"}>
-                First Name
+              <FormLabel
+                className="robotoF"
+                display={"flex"}
+                gap={"4px"}
+                fontSize={".875rem"}
+              >
+                <Text>First Name</Text>
+                <Text color={"red"}>*</Text>
               </FormLabel>
-              <Input className="robotoF" type="text" w="314px" name="firstName" value={userData.firstName} onChange={handleChange} />
+              <Input
+                className="robotoF"
+                type="text"
+                w="314px"
+                name="firstName"
+                value={userData.firstName}
+                onChange={handleChange}
+                onBlur={validateFirstName}
+              />
+              {err1 && (
+                <Text className="robotoF" color="red" fontSize={".625rem"}>
+                  First name is important
+                </Text>
+              )}
             </Box>
             <Box pt="15px">
-              <FormLabel className="robotoF" fontSize={".875rem"}>
-                Last Name
+              <FormLabel className="robotoF" fontSize={".875rem"} display={"flex"}
+                gap={"4px"}>
+                <Text>Last Name</Text>
+                <Text color={"red"}>*</Text>
               </FormLabel>
-              <Input className="robotoF" type="text" w="314px" name="lastName" value={userData.lastName} onChange={handleChange} />
-            </Box>
-            <Box>
-              <FormLabel className="robotoF" fontSize={".875rem"}>
-                Email
-              </FormLabel>
-              <Input className="robotoF" type="email" w="314px" name="email" value={userData.email} onChange={handleChange} />
+              <Input
+                className="robotoF"
+                type="text"
+                w="314px"
+                name="lastName"
+                value={userData.lastName}
+                onChange={handleChange}
+                onBlur={validateLastName}
+              />
+              {err2 && (
+                <Text className="robotoF" color="red" fontSize={".625rem"}>
+                  Last name is important
+                </Text>
+              )}
             </Box>
             <Box pt="15px">
-              <FormLabel className="robotoF" fontSize={".875rem"}>
-                Password
+              <FormLabel className="robotoF" fontSize={".875rem"} display={"flex"}
+                gap={"4px"}>
+                <Text>Email</Text>
+                <Text color={"red"}>*</Text>
               </FormLabel>
-              <Input className="robotoF" type="text" w="314px" name="password" value={userData.password} onChange={handleChange} />
+              <Input
+                className="robotoF"
+                type="email"
+                w="314px"
+                name="email"
+                value={userData.email}
+                onChange={handleChange}
+                onBlur={validateEmail}
+              />
+              {err3 && (
+                <Text className="robotoF" color="red" fontSize={".625rem"}>
+                  Email is important
+                </Text>
+              )}
+            </Box>
+            <Box pt="15px">
+              <FormLabel className="robotoF" fontSize={".875rem"} display={"flex"}
+                gap={"4px"}>
+                <Text>Password</Text>
+                <Text color={"red"}>*</Text>
+                </FormLabel>
+              {/* <Input className="robotoF" type="text" w="314px" name="password" value={userData.password} onChange={handleChange} /> */}
+              <InputGroup
+                display={"flex"}
+                justifyContent={"center"}
+                border={"1px"}
+                borderRadius={"10px"}
+                borderColor={"var(--soft200)"}
+                className="robotoF"
+                cursor={"text"}
+                fontSize={14}
+                textColor={"var--(sub600)"}
+                w="100%"
+                h="40px"
+                _placeholder={{ textColor: "var--(soft400)", fontSize: 12 }}
+              >
+                <Input
+                  w={"100%"}
+                  h={"100%"}
+                  outline={"none"}
+                  type={show ? "text" : "Password"}
+                  placeholder="*********"
+                  name="password"
+                  value={userData.password}
+                  onChange={handleChange}
+                  onBlur={validatePassword}
+                />
+                <InputRightElement
+                  width="fit-content"
+                  marginRight={"20px"}
+                  cursor={"pointer"}
+                >
+                  <Box onClick={() => setShow(!show)}>
+                    {!show ? (
+                      <BsEyeSlash className="formicon" />
+                    ) : (
+                      <BsEye className="formicon" />
+                    )}
+                  </Box>
+                </InputRightElement>
+              </InputGroup>
+              {err4 && (
+                <Text className="robotoF" color="red" fontSize={".625rem"}>
+                  Password must be more than 7 characters
+                </Text>
+              )}
             </Box>
             <Box pt="15px" mb="20px">
               <FormLabel className="robotoF" fontSize={".875rem"}>
                 User Type
               </FormLabel>
-              <Select className="robotoF" name="role" w="314px" value={userData.role} onChange={handleChange}>
+              <Select
+                className="robotoF"
+                name="role"
+                w="314px"
+                value={userData.role}
+                onChange={handleChange}
+              >
                 <option value="CLIENT">ADMIN</option>
                 <option value="GUEST">AFFILIATE</option>
               </Select>
             </Box>
-            <Btn className="robotoF" type={"submit"} w="full" onClick={createUser}>
+            <Btn
+              className="robotoF"
+              type={"submit"}
+              w="full"
+              onClick={createUser}
+              isDisabled={
+                err1 ||
+                err2 ||
+                err3 ||
+                err4 ||
+                userData.firstName.length === 0 ||
+                userData.lastName.length === 0 ||
+                userData.email.length === 0 ||
+                userData.password.length === 0
+              }
+              isLoading={loading}
+            >
               Create User
             </Btn>
           </FormControl>
@@ -230,7 +406,7 @@ const UserScreen = () => {
                     .slice(0, 1)
                     .toUpperCase()}${item.lastName.slice(
                     1,
-                    item.firstName.length
+                    item.lastName.length
                   )}`}</Td>
                   <Td color={"#525866"} py="12px">
                     {item.email}
