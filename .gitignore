@@ -30,6 +30,8 @@ dist/*
 .env.prod
 ./.env.prod
 .env.local
+
+tsconfig.tsbuildinfo
 .env.development.local
 .env.test.local
 .env.production.local
