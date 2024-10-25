@@ -8,17 +8,20 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           node-version: 16
+          token: ${{ secrets.GH_PAT }}
+
       # - name: Install dependencies
       #   run: npm install
 
       # - name: Build
-      #   run: npm run build:prod
+      #   run: npm run build
 
       - name: Add directory to PATH
         run: echo "/root/.nvm/versions/node/v18.20.3/bin/" >> $GITHUB_PATH
@@ -36,4 +39,4 @@ jobs:
             git pull origin main
             npm install
             npm run build:prod
-            pm2 start npm --name "nextjs" -- start
+            pm2 start npm --name "eswift" -- start
