@@ -33,7 +33,8 @@ jobs:
           username: ${{ secrets.DROPLET_USER }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
-            cd /etc/nginx/sites-available/eswift
+            echo "running build now"
+            cd /var/www/eswift
             git restore package-lock.json
             git stash
             git pull origin main
