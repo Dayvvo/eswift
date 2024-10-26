@@ -23,7 +23,7 @@ export const validateSignupData = (signup: ISignupValidation) => {
     password: Joi.string().min(8).max(36).required(),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    role: Joi.valid(UserRole.CLIENT, UserRole.GUEST).required(),
+    role: Joi.valid(UserRole.CLIENT, UserRole.AFFILIATE, UserRole.ADMIN, UserRole.AGENT).required(),
   });
 
   return signupSchema.validate(signup);

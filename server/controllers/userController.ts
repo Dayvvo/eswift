@@ -63,7 +63,6 @@ class UserController {
 
   addUser = async (req: Request, res: Response) => {
     const body: ISignupValidation = req.body;
-
     try {
       const validate = validateSignupData(body);
       const { error } = validate;
