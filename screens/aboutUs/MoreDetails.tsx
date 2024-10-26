@@ -19,7 +19,7 @@ export const MoreDetails =()=> {
         },
         {
             id:4,
-            point:'Integrity: At e-Swift PropertyMart, honesty and transparency are at the core of everything we do. You can trust us to always act in your best interests.'
+            point:'Integrity: At E-Swift PropertyMart, honesty and transparency are at the core of everything we do. You can trust us to always act in your best interests.'
         },
         {
             id:5,
@@ -30,16 +30,16 @@ export const MoreDetails =()=> {
     const specification:any[] = [
         {
             id:1,
-            point:'Budget Friendly: At e-Swift, we tailor deals or prices to fit your budget and preferences not ours.',
+            point:'Budget Friendly: At E-Swift, we tailor deals or prices to fit your budget and preferences not ours.',
         },
         {
             id:2,
-            point: 'Affordable Quality: e-Swift helps secure properties in rapidly growing locations at a reasonable price.',
+            point: 'Affordable Quality: E-Swift helps secure properties in rapidly growing locations at a reasonable price.',
         },
         ,
         {
             id:3,
-            point: 'Affordable Quality: e-Swift helps secure properties in rapidly growing locations at a reasonable price.',
+            point: 'Affordable Quality: E-Swift helps secure properties in rapidly growing locations at a reasonable price.',
         },
         {
             id:4,
