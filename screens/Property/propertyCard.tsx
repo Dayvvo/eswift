@@ -93,16 +93,17 @@ export const PropertyCard = ({
     <Box
       className="RobotoF"
       bg={"#FFF"}
-      w={cardWidth || { base: "100%", sm: "314px" }}
-      h={"370px"}
+      maxW={'320px'}
+      h={"420px"}
       // pb={"1px"}
-      boxShadow={"lg"}
+      boxShadow={'md'}
+      border={'1px solid #262626'} 
       borderRadius={"15px"}
       overflow={"hidden"}
       cursor={"pointer"}
       onClick={onClick}
     >
-      <Flex position={"relative"} w="100%" h="55%">
+      <Flex position={"relative"} w="100%" h="60%">
         <Text
           className="montserrat"
           position={"absolute"}
@@ -132,7 +133,7 @@ export const PropertyCard = ({
         gap={"8px"}
         px={"16px"}
         w={"100%"}
-        mt={"8px"}
+        py={"8px"}
       >
         <Flex
           w={"100%"}

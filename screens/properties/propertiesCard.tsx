@@ -86,7 +86,7 @@ export const PropertiesCard =({
                         >
                             {title}
                         </Text>
-                        <Text h={'48px'} overflow={'hidden'} whiteSpace={'nowrap'} textOverflow={'ellipsis'} fontSize={'16px'} fontWeight={500} textColor={'#999999'} className="roboto">
+                        <Text h={'48px'} overflow={'hidden'}  textOverflow={'ellipsis'} fontSize={'16px'} fontWeight={500} textColor={'#999999'} className="roboto">
                             {description}
                         </Text>
                     </Flex>          
@@ -122,7 +122,7 @@ export const PropertiesCard =({
                         bg={'#3170A6'}
                         borderRadius={'8px'}
                         textColor={'white'}
-                        className="robotoF" fontSize={{base:'10px',md:'14px'}} fontWeight={500}
+                        className="robotoF" fontSize={{base:'10px', xl:'14px'}} fontWeight={500}
                     >
                         View Properties Details
                     </Btn>

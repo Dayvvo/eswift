@@ -185,7 +185,7 @@ export const SignUpcreen =()=> {
                                 >
                                     Email address
                                 </FormLabel>
-                                <InputGroup onFocus={()=> setEmailValidation(false)}
+                                <InputGroup 
                                     display={'flex'} justifyContent={'center'} alignItems={'center'}
                                     border={'1px'} borderRadius={'10px'} 
                                     borderColor={'var(--soft200)'}
@@ -216,7 +216,7 @@ export const SignUpcreen =()=> {
                                 >
                                     Phone Number
                                 </FormLabel>
-                                <InputGroup onFocus={()=> setEmailValidation(false)}
+                                <InputGroup 
                                     display={'flex'} justifyContent={'center'} alignItems={'center'}
                                     border={'1px'} borderRadius={'10px'} 
                                     borderColor={'var(--soft200)'}
@@ -272,7 +272,7 @@ export const SignUpcreen =()=> {
                                 >
                                     Password
                                 </FormLabel>
-                                    <InputGroup onFocus={() => setPasswordValidation(false)}
+                                    <InputGroup 
                                         display={'flex'} justifyContent={'center'}
                                         border={'1px'} borderRadius={'10px'} 
                                         borderColor={'var(--soft200)'}

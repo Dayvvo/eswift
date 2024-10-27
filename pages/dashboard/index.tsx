@@ -1,9 +1,11 @@
 import Wrapper from "@/components/Wrapper"
+import DashboardScreen from "@/screens/overview/adminDashboard";
+
 
 const Dashboard =()=> {
     return (
         <Wrapper>
-          d
+          <DashboardScreen/>
         </Wrapper>
     )
 }

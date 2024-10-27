@@ -11,13 +11,14 @@ import useProperty from "@/hooks/useProperty";
 import { useImage, useInputText } from "../../hooks/useInput";
 import { useApiUrl } from "../../hooks/useApi";
 import useToast from "../../hooks/useToast";
-import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
-import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
-import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
-import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
+
 import { DoubleNextBtn, DoublePrevBtn, NextBtn, PreviousBtn } from "@/components/svg";
 import { useRouter } from "next/navigation";
 import { PropertyCard } from "./propertyCard";
+import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
+import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
+import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
+import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
 
 interface MyData {
   _id: any;
@@ -219,7 +220,7 @@ export const PropertyScreen = () => {
   };
 
   return (
-    <>
+    <Box>
       <Modal onClose={toggleModal} isVisible={showModal}>
         {/* {currentChildComponent} */}
         {showScreen === 1 ? (
@@ -266,16 +267,15 @@ export const PropertyScreen = () => {
       </Modal>
       <Box
         className="robotoF"
-        px={{ base: "16px", lg: "0" }}
-        height={{ base: "70vh", md: "78vh", lg: "60vh", xl: "65vh" }}
-        overflowY="hidden"
+        px={{ base: "14px", lg: "0" }}
+        h={{base:'',lg:'100vh'}}
       >
         <Flex
           mb={"24px"}
           // mt={"10px"}
           gap={"12px"}
           w={"100%"}
-          h={"36px"}
+          h={"fit-content"}
           position="sticky"
           top="0"
           zIndex="10"
@@ -292,7 +292,7 @@ export const PropertyScreen = () => {
               fontSize={14}
               textColor={"var--(sub600)"}
               w="100%"
-              h="100%"
+              h="36px"
               _placeholder={{ textColor: "var--(soft400)" }}
             >
               <InputLeftElement color={"var(--soft400)"}>
@@ -310,54 +310,56 @@ export const PropertyScreen = () => {
               />
             </InputGroup>
           </Flex>
-          <Btn
-            onClick={toggleModal}
-            display={"flex"}
-            gap={"4px"}
-            alignItems={"center"}
-            bg={"#fff"}
-            h={"100%"}
-            w={"131px"}
-            border={"1px solid var(--soft200)"}
-            borderRadius={"8px"}
-            textColor={"var--(sub600)"}
-            fontWeight={500}
-            fontSize={"14px"}
-            px={"6px"}
-            pt={"0"}
-            pb={"0"}
-            _hover={{
-              bg: "#1A1D66",
-              textColor: "#FFF",
-            }}
-          >
-            <Text fontSize={"14px"}>Add Property</Text>
-            <BsPlus className="icon" />
-          </Btn>
-          <Btn
-            onClick={() => setPage(inputValue)}
-            display={"flex"}
-            gap={"4px"}
-            alignItems={"center"}
-            bg={"#fff"}
-            h={"100%"}
-            w={"80px"}
-            border={"1px solid var(--soft200)"}
-            borderRadius={"8px"}
-            textColor={"var--(sub600)"}
-            fontWeight={500}
-            fontSize={"14px"}
-            px={"6px"}
-            pt={"0"}
-            pb={"0"}
-            _hover={{
-              bg: "#1A1D66",
-              textColor: "#FFF",
-            }}
-          >
-            <IoFilter className="icon" />
-            <Text>Filter</Text>
-          </Btn>
+          <Flex gap={'12px'} flexDir={{base:'column',sm:'row'}} alignItems={'end'}>
+            <Btn
+              onClick={toggleModal}
+              display={"flex"}
+              gap={"4px"}
+              alignItems={"center"}
+              bg={"#fff"}
+              h={"36px"}
+              w={{base:'fit-content',md:'131px'}}
+              border={"1px solid var(--soft200)"}
+              borderRadius={"8px"}
+              textColor={"var--(sub600)"}
+              fontWeight={500}
+              fontSize={"14px"}
+              px={"6px"}
+              pt={"0"}
+              pb={"0"}
+              _hover={{
+                bg: "#1A1D66",
+                textColor: "#FFF",
+              }}
+            >
+              <Text fontSize={{base:"10px",lg:"14px"}}>Add Property</Text>
+              <BsPlus className="icon" />
+            </Btn>
+            <Btn
+              onClick={() => setPage(inputValue)}
+              display={"flex"}
+              gap={"4px"}
+              alignItems={"center"}
+              bg={"#fff"}
+              h={"36px"}
+              w={"80px"}
+              border={"1px solid var(--soft200)"}
+              borderRadius={"8px"}
+              textColor={"var--(sub600)"}
+              fontWeight={500}
+              fontSize={{base:"10px",lg:"14px"}}
+              px={"6px"}
+              pt={"0"}
+              pb={"0"}
+              _hover={{
+                bg: "#1A1D66",
+                textColor: "#FFF",
+              }}
+            >
+              <IoFilter className="icon" />
+              <Text>Filter</Text>
+            </Btn>
+          </Flex>
         </Flex>
 
         {/* Scrollable Property Cards Container */}
@@ -365,6 +367,7 @@ export const PropertyScreen = () => {
         // overflowY={{ xl: "scroll" }}
         // height={{ xl: "calc(80vh - 100px)" }}
         // mt={4}
+            height={'600px'} overflowY={'scroll'}
         >
           {loading && (
             <Stack>
@@ -376,12 +379,11 @@ export const PropertyScreen = () => {
 
           {!loading && getProperty?.length > 0 && (
             <Grid
-              overflowY={{ base: "scroll" }}
-              maxH={{ base: "100vh", xl: "calc(80vh - 100px)" }}
-              mt={4}
-              templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+              mt={4} w={"fit-content"}
+              templateColumns={{base:"repeat(1, 1fr)",md:"repeat(2, 1fr)",xl:"repeat(3, 1fr)"}}
               gap={{ base: "24px", lg: "28px" }}
               paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
+              placeItems={'center'}
             >
               {getProperty.map((property, index) => {
                 const user = users.find((u) => u._id === property?.creatorID);
@@ -460,6 +462,6 @@ export const PropertyScreen = () => {
           </Box>
         </Box>
       )}
-    </>
+    </Box>
   );
 };
