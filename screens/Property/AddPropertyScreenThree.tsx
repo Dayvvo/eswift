@@ -1,4 +1,5 @@
 import Btn from "@/components/Btn";
+import { DeleteBin } from "@/components/svg";
 import {
   Box,
   Flex,
@@ -12,6 +13,7 @@ import {
   Select,
   Text,
   Textarea,
+  Image,
 } from "@chakra-ui/react";
 import { ChangeEvent, ReactNode, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa";
@@ -24,6 +26,7 @@ interface ButtonFunction {
   images: any;
   error: any;
   onChangeImage: (event: ChangeEvent<HTMLInputElement>) => void;
+  deleteImage: (id: number) => void;
 }
 // export const AddPropertyScreenTwo = ({ next, previous }: ButtonFunction) => {
 
@@ -32,6 +35,7 @@ export const AddPropertyScreenThree = ({
   previous,
   images,
   onChangeImage,
+  deleteImage,
   error,
 }: ButtonFunction) => {
   const subs: any[] = [
@@ -70,6 +74,8 @@ export const AddPropertyScreenThree = ({
 
   const [dragging, setDragging] = useState<boolean>(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+  console.log("images", images);
   // const [error, setError] = useState<string | null>(null);
 
   // const validateFile = (File: File): void => {
@@ -130,6 +136,7 @@ export const AddPropertyScreenThree = ({
   //         console.log(err);
   //       });
   //   };
+  const imageArray = images ? (Array.isArray(images) ? images : [images]) : []; // Ensure images is an array
 
   return (
     <>
@@ -253,6 +260,59 @@ export const AddPropertyScreenThree = ({
             Browse File
           </Btn>
         </Flex>
+        {images.length > 0 && (
+          <Flex
+            gap="15px"
+            overflow="auto"
+            wrap="nowrap"
+            justifyContent={"center"}
+            bgColor={"#E2EDF3"}
+            mt={"20px"}
+            border={"1px solid #262626"}
+            padding="10px"
+            borderRadius={"12px"}
+            css={{
+              "&::-webkit-scrollbar": {
+                height: "4px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                borderRadius: "4px",
+              },
+            }}
+          >
+            {images.map((image: any, index: number) => (
+              <Box
+                key={index}
+                h="74px"
+                borderRadius="6px"
+                flexShrink="0"
+                width="122.22px"
+                position={"relative"}
+                // onClick={() => handleImageClick(index)}
+              >
+                <Image
+                  h="100%"
+                  w="100%"
+                  src={URL.createObjectURL(image)}
+                  alt={image.name}
+                  borderRadius="6px"
+                  objectFit="cover"
+                />
+                <Box
+                  position={"absolute"}
+                  top={"30px"}
+                  left={"50px"}
+                  cursor="pointer"
+                  bgColor={"#999"}
+                  borderRadius={"5px"}
+                  onClick={() => deleteImage(index)}
+                >
+                  <DeleteBin />
+                </Box>
+              </Box>
+            ))}
+          </Flex>
+        )}
         <Flex gap={"2rem"}>
           <Btn
             onClick={previous}
