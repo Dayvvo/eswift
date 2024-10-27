@@ -19,6 +19,17 @@ interface ButtonFunction {
   fileName: string;
 }
 
+
+const FileInputComponent = ({title}:{title:string})=>{
+
+  const [uploaded,setUploaded] = useState<File>();
+  return(
+    <Box>
+      <Box bg='#F5F7FA' p=' 0.3em 1em' > {title.toUpperCase()} </Box>
+    </Box>
+  )
+}
+
 export const AddPropertyScreenFour = ({
   next,
   previous,

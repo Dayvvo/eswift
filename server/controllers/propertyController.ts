@@ -283,6 +283,7 @@ class PropertyController {
       res.status(500).send("An Error ocurred while retrieving data");
     }
   };
+ 
   getPropertyDocs = async (req: Request, res: Response) => {
     try {
       const propsDoc = await PropertyDocs.find();

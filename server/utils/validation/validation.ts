@@ -73,7 +73,10 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
     features: Joi.array().items(Joi.string().min(2).max(50)).min(1).required(),
     images: Joi.array().items(Joi.string().uri()).min(1).required(),
     name: Joi.string().required(),
-    file: Joi.string().uri().required(),
+    documents: Joi.object({
+      
+    }),
+    // file: Joi.string().uri().required(),
   });
 
   return propertySchema.validate(property);
