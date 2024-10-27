@@ -1,4 +1,16 @@
-import { Flex, Box,Text, Input, InputGroup, InputLeftElement, Grid, Stack, Skeleton, Card, CardBody} from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Text,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Grid,
+  Stack,
+  Skeleton,
+  Card,
+  CardBody,
+} from "@chakra-ui/react";
 import { RiSearch2Line } from "react-icons/ri";
 import Btn, { PaginationButton } from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
@@ -15,7 +27,12 @@ import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
 import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
 import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
 import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
-import { DoubleNextBtn, DoublePrevBtn, NextBtn, PreviousBtn } from "@/components/svg";
+import {
+  DoubleNextBtn,
+  DoublePrevBtn,
+  NextBtn,
+  PreviousBtn,
+} from "@/components/svg";
 import { useRouter } from "next/navigation";
 import { PropertyCard } from "./propertyCard";
 
@@ -30,7 +47,7 @@ interface MyData {
   verificationState: string;
   images: any;
   creatorID: any;
-};
+}
 
 interface User {
   _id: any;
@@ -39,10 +56,9 @@ interface User {
   email: string;
   phoneNumber: number;
   avatar: any;
-};
+}
 
 export const PropertyScreen = () => {
-
   const [showModal, setShowModal] = useState(false);
   const [getProperty, setGetProperty] = useState<MyData[]>([]);
   const [page, setPage] = useState<any>(1);
@@ -57,7 +73,7 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeTitle,
     reset: titleReset,
   } = useInputText((title) => title.length > 2);
- 
+
   const {
     input: category,
     onChangeInput: onChangeCategory,
@@ -69,13 +85,13 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeDescription,
     reset: descriptionReset,
   } = useInputText((description) => description.length > 8);
- 
+
   const {
     input: address,
     onChangeInput: onChangeAddress,
     reset: addressReset,
   } = useInputText((address) => address.length > 3);
- 
+
   const {
     input: typeOfProperty,
     onChangeInput: onChangeType,
@@ -98,18 +114,19 @@ export const PropertyScreen = () => {
     onChangeInput: onChangePrice,
     reset: priceReset,
   } = useInputText((price) => price !== "");
- 
+
   const {
-    image,
+    images,
     onChangeHandler: onChangeImage,
     error: imageError,
+    deleteImage,
     reset: imageReset,
   } = useImage();
 
   const router = useRouter();
 
   const { toast } = useToast();
- 
+
   const client = useApiUrl();
 
   const { addProperty, getAdminProperty } = useProperty();
@@ -193,7 +210,7 @@ export const PropertyScreen = () => {
       setLoading(false);
       const getAllProperties = await getAdminProperty(inputValue, page);
       setGetProperty(getAllProperties?.data?.data);
-      console.log(getAllProperties?.data?.data);
+      // console.log(getAllProperties?.data?.data);
       setTotalPages(getAllProperties.data?.pagination.pages);
     } catch (error) {
       setLoading(false);
@@ -249,9 +266,10 @@ export const PropertyScreen = () => {
           <AddPropertyScreenThree
             next={() => setShowScreen(4)}
             previous={() => setShowScreen(2)}
-            images={image}
+            images={images}
             onChangeImage={onChangeImage}
             error={imageError}
+            deleteImage={deleteImage}
           />
         ) : showScreen === 4 ? (
           <AddPropertyScreenFour
