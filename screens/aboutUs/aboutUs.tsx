@@ -19,7 +19,7 @@ const AboutUsScreen = () => {
         <NavBar />
         <HeroPropsVideo
           bg={"#00000070"}
-          header={"The E-Swift Dream"}
+          header={"The e-Swift Dream"}
           details={
             "Explore our story and how we've become a trusted leader in the industry."
           }

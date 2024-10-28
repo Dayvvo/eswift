@@ -39,7 +39,7 @@ const TeamScreen = () => {
       person: "Alale Olatunbosun",
       title: "Field Manager",
       department: "Field & Construction Department",
-      picture: "/field-man.png",
+      picture: "/field-manager.png",
     },
     {
       id: 5,
@@ -59,7 +59,7 @@ const TeamScreen = () => {
       id: 7,
       person: "Jumoke Orimoloye",
       title: "Sales representative",
-      department: "Administrative Department",
+      department: "Front desk officer",
       picture: "/sales-rep.png",
     },
   ];
@@ -70,7 +70,7 @@ const TeamScreen = () => {
         <NavBar />
         <HeroPropsVideo
           bg={"#00000070"}
-          header={"The E-Swift Team"}
+          header={"The e-Swift Team"}
           details={"Meet our dedicated team of real estate professionals."}
           buttonPos={null}
           w={"100%"}

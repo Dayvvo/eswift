@@ -106,7 +106,7 @@ export const AboutSection = () => {
             fontWeight={400}
             maxW={"1240px"}
           >
-            E-Swift PropertyMart is a leading digital real estate company with
+            e-Swift PropertyMart is a leading digital real estate company with
             branches in Akure, Lagos and Abuja offering a comprehensive range of
             services to buyers, sellers, landlords, and tenants through our
             innovative online platforms.
@@ -118,7 +118,7 @@ export const AboutSection = () => {
             textColor={"#3A3148"}
             maxW={"1000px"}
           >
-            At E-Swift PropertyMart, we understand that finding your dream home
+            At e-Swift PropertyMart, we understand that finding your dream home
             is more than just a transaction; it is about finding the perfect
             space to create memories and build your future. With our dedicated
             team of real estate professionals, we are committed to helping you

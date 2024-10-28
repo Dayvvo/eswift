@@ -8,7 +8,7 @@ export const SectionThree = () => {
       id: 1,
       title: "Exceptional Service!",
       review:
-        "Our experience with Eswift was outstanding. Their team`s dedication and professionalism made finding our dream home a breeze. Higly recommended!",
+        "Our experience with e-Swift was outstanding. Their team`s dedication and professionalism made finding our dream home a breeze. Higly recommended!",
       user: "Wade Warren",
       location: "Lagos, Nigeria",
     },
@@ -16,7 +16,7 @@ export const SectionThree = () => {
       id: 1,
       title: "Efficient and Reliable",
       review:
-        "Eswift provided us with top-notch service. They helped us sell our property quickly and at a great price. We couldn`t be happier with the results.",
+        "e-Swift provided us with top-notch service. They helped us sell our property quickly and at a great price. We couldn`t be happier with the results.",
       user: "Emilie Thompson",
       location: "Lagos, Nigeria",
     },
@@ -24,7 +24,7 @@ export const SectionThree = () => {
       id: 1,
       title: "Trusted Advisors",
       review:
-        "The Eswift team guided us through the entire buying process. Their knowledge and commitment to our needs were impressive. Thank you for your support!",
+        "The e-Swift team guided us through the entire buying process. Their knowledge and commitment to our needs were impressive. Thank you for your support!",
       user: "John Mans",
       location: "Lagos, Nigeria",
     },
@@ -38,7 +38,7 @@ export const SectionThree = () => {
         <TextHeader
           Header="What Our Clients Say..."
           sub={
-            "Read the success stories and heartfelt testimonials from our valued clients. Discover why they chose Eswift for their real estate needs."
+            "Read the success stories and heartfelt testimonials from our valued clients. Discover why they chose e-Swift for their real estate needs."
           }
         />
 
@@ -125,19 +125,19 @@ const FAQ = () => {
   const FAQ = [
     {
       id: 1,
-      title: "How do I search for properties on Eswift?",
+      title: "How do I search for properties on e-Swift?",
       response:
         "Learn how to use our user-friendly search tools to find properties that match your criteria.",
     },
     {
       id: 2,
-      title: "What documents do I need to sell my property throught Eswift?",
+      title: "What documents do I need to sell my property throught e-Swift?",
       response:
         "Find out about the necessary documenttation for listing your property with us.",
     },
     {
       id: 3,
-      title: "How can I contact an Eswift agent?",
+      title: "How can I contact an e-Swift agent?",
       response:
         "Discover the different ways you can get in touch with our experienced agents.",
     },
@@ -161,7 +161,7 @@ const FAQ = () => {
     <Box w="100%">
       <TextHeader
         Header="Frequently Asked Questions"
-        sub="Find answers to common questions about Eswift's Services, property listings, and the real estate process. We're here to provide clarity and assist you in every step of the way."
+        sub="Find answers to common questions about e-Swift's Services, property listings, and the real estate process. We're here to provide clarity and assist you in every step of the way."
       />
 
       <Grid
@@ -209,7 +209,7 @@ const FAQ = () => {
 // const data = [
 //     {
 //         id:1,
-//         point: 'Swift & Efficient Sales Process: At E-Swift, our mission is to provide fast solutions for property sellers seeking a swift and efficient sales process. We understand the urgency associated with selling properties and we are committed to delivering prompt and reliable services.',
+//         point: 'Swift & Efficient Sales Process: At e-Swift, our mission is to provide fast solutions for property sellers seeking a swift and efficient sales process. We understand the urgency associated with selling properties and we are committed to delivering prompt and reliable services.',
 //     },
 //     {
 //         id:2,

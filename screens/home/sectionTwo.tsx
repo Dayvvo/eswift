@@ -18,9 +18,9 @@ export const SectionTwo = () => {
       >
         <Box w={"100%"}>
           <TextHeader
-            Header={"Navigating the Eswift Experience"}
+            Header={"Navigating the e-Swift Experience"}
             sub={
-              "At Eswift, we've designed a straightforward process to help you find and purchase your dream property with ease. Here's a step-by-step guide to how it works."
+              "At e-Swift, we've designed a straightforward process to help you find and purchase your dream property with ease. Here's a step-by-step guide to how it works."
             }
           />
           <Steps />
@@ -62,7 +62,7 @@ export const SectionTwo = () => {
           textColor={"#525866"}
           maxW={"1000px"}
         >
-          E-Swift PropertyMart is calling on diligent Affiliate Marketers who
+          e-Swift PropertyMart is calling on diligent Affiliate Marketers who
           would be rewarded with the best commissions on referrals for land or
           property sales and purchase deals. <br />
           Earn up to 2% Commissions on every successful referral.

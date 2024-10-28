@@ -1,4 +1,5 @@
-import { AppContextWrapper } from "@/context";
+import Preloader from "../components/Preloader";
+import { AppContextWrapper } from "../context";
 import "@/styles/globals.css";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
@@ -31,10 +32,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>
         <AppContextWrapper>
           <Head>
-            <title>Eswift</title>
+            <title>e-Swift</title>
             <meta name="Eswift Property Mart" content="Eswift Property Mart" />
             <link rel="icon" href="/footer.png" />
           </Head>
+          <Preloader/>
           <Component {...pageProps} />
         </AppContextWrapper>
     </ChakraProvider>
