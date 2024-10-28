@@ -1,9 +1,10 @@
 import Btn from "../../components/Btn";
-import React from  'react'
+import React from "react";
 import {
   Box,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   InputGroup,
@@ -24,6 +25,14 @@ interface AddPropertyScreenOneProps {
   onChangeDescription: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeCategory: (event: ChangeEvent<HTMLSelectElement>) => void;
+  invalidCategory: boolean | null;
+  invalidTitle: boolean | null;
+  invalidType: boolean | null;
+  invalidDescription: boolean | null;
+  onBlurTitle: any;
+  onBlurType: any;
+  onBlurCategory: any;
+  onBlurDescription: any;
 }
 export const AddPropertyScreenOne = ({
   onClick,
@@ -34,6 +43,14 @@ export const AddPropertyScreenOne = ({
   typeOfProperty,
   onChangeType,
   description,
+  invalidCategory,
+  invalidTitle,
+  invalidDescription,
+  onBlurTitle,
+  onBlurDescription,
+  onBlurType,
+  onBlurCategory,
+  invalidType,
   onChangeDescription,
 }: AddPropertyScreenOneProps) => {
   const subs: any[] = [
@@ -126,13 +143,20 @@ export const AddPropertyScreenOne = ({
               <Input
                 w={"100%"}
                 h={"100%"}
+                border={invalidTitle ? "1px solid var(--errorBase)" : ""}
                 type="text"
                 placeholder="A descriptive name for the property"
                 name="title"
                 value={title}
+                onBlur={onBlurTitle}
                 onChange={onChangeTitle}
               />
             </InputGroup>
+            {invalidTitle && (
+              <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                {"Enter a valid property title"}
+              </FormHelperText>
+            )}
           </FormControl>
           <FormControl w={"100%"}>
             <FormLabel
@@ -145,12 +169,17 @@ export const AddPropertyScreenOne = ({
             <Select
               w="100%"
               h="40px"
-              border={"1px solid var(--soft200)"}
+              border={
+                invalidType
+                  ? "1px solid var(--errorBase)"
+                  : "1px solid var(--soft200)"
+              }
               borderRadius={"10px"}
               fontSize={14}
               textColor={"var--(sub600)"}
               _placeholder={{ textColor: "var--(soft400)" }}
               placeholder="Type of property"
+              onBlur={onBlurType}
               value={typeOfProperty}
               onChange={onChangeType}
             >
@@ -160,6 +189,11 @@ export const AddPropertyScreenOne = ({
                 </option>
               ))}
             </Select>
+            {invalidType && (
+              <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                {"Select valid property type"}
+              </FormHelperText>
+            )}
           </FormControl>
 
           {typeOfProperty && (
@@ -174,13 +208,18 @@ export const AddPropertyScreenOne = ({
               <Select
                 w="100%"
                 h="40px"
-                border={"1px solid var(--soft200)"}
+                border={
+                  invalidCategory
+                    ? "1px solid var(--errorBase)"
+                    : "1px solid var(--soft200)"
+                }
                 borderRadius={"10px"}
                 fontSize={14}
                 textColor={"var--(sub600)"}
                 _placeholder={{ textColor: "var--(soft400)" }}
                 placeholder="Category of the property"
                 value={category}
+                onBlur={onBlurCategory}
                 onChange={onChangeCategory}
               >
                 {typeOfProperty === "House" &&
@@ -196,6 +235,11 @@ export const AddPropertyScreenOne = ({
                     </option>
                   ))}
               </Select>
+              {invalidCategory && (
+                <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                  {"Select type of property"}
+                </FormHelperText>
+              )}
             </FormControl>
           )}
 
@@ -208,15 +252,25 @@ export const AddPropertyScreenOne = ({
               Description
             </FormLabel>
             <Textarea
-              border={"1px solid var(--soft200)"}
+              border={
+                invalidDescription
+                  ? "1px solid var(--errorBase)"
+                  : "1px solid var(--soft200)"
+              }
               borderRadius={"10px"}
               cursor={"text"}
               fontSize={14}
               textColor={"var--(sub600)"}
               _placeholder={{ textColor: "var--(soft400)" }}
               value={description}
+              onBlur={onBlurDescription}
               onChange={onChangeDescription}
             />
+            {invalidDescription && (
+              <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                {"Write valid property description"}
+              </FormHelperText>
+            )}
           </FormControl>
         </Flex>
         <Btn
@@ -230,6 +284,13 @@ export const AddPropertyScreenOne = ({
           bg={"#FFFFFF"}
           borderRadius={"10px"}
           textColor={"var(--primaryBase)"}
+          disabled={
+            invalidCategory ||
+            invalidCategory ||
+            invalidTitle ||
+            invalidType ||
+            invalidDescription
+          }
         >
           Next
         </Btn>

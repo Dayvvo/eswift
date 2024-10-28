@@ -27,7 +27,12 @@ import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
 import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
 import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
 import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
-import { DoubleNextBtn, DoublePrevBtn, NextBtn, PreviousBtn } from "@/components/svg";
+import {
+  DoubleNextBtn,
+  DoublePrevBtn,
+  NextBtn,
+  PreviousBtn,
+} from "@/components/svg";
 import { PropertyCard } from "./propertyCard";
 import { DocumentTypes, R } from "@/utils/types";
 
@@ -51,7 +56,7 @@ interface User {
   email: string;
   phoneNumber: number;
   avatar: any;
-};
+}
 
 export type Documents = {
   [K in DocumentTypes]: File | null;
@@ -66,7 +71,7 @@ export const PropertyScreen = () => {
   const [loading, setLoading] = useState(false);
   const [showScreen, setShowScreen] = useState(1);
   const [users, setUsers] = useState<User[]>([]);
-  
+
   const [documents, setDocuments] = useState<Documents>({
     FamilyReceipt: null,
     SurveyPlan: null,
@@ -78,11 +83,11 @@ export const PropertyScreen = () => {
     GovConsent: null,
   });
 
-  const handleDocumentChange = (name:string, value:File) => {
+  const handleDocumentChange = (name: string, value: File) => {
     if (value) {
-      setDocuments(prev => ({
+      setDocuments((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     }
   };
@@ -90,48 +95,72 @@ export const PropertyScreen = () => {
   const {
     input: title,
     onChangeInput: onChangeTitle,
+    onBlurHandler: onBlurTitle,
+    valueIsInvalid: invalidTitle,
+    valueIsValid: validTitle,
     reset: titleReset,
   } = useInputText((title) => title.length > 2);
 
   const {
     input: category,
     onChangeInput: onChangeCategory,
+    onBlurHandler: onBlurCategory,
+    valueIsInvalid: invlidCategory,
+    valueIsValid: validCategory,
     reset: categoryReset,
   } = useInputText((category) => category !== "");
 
   const {
     input: description,
     onChangeInput: onChangeDescription,
+    onBlurHandler: onBlurDescription,
+    valueIsInvalid: invalidDescription,
+    valueIsValid: validDescription,
     reset: descriptionReset,
   } = useInputText((description) => description.length > 8);
 
   const {
     input: address,
     onChangeInput: onChangeAddress,
+    onBlurHandler: onBlurAddress,
+    valueIsInvalid: invalidAddress,
+    valueIsValid: validAddress,
     reset: addressReset,
   } = useInputText((address) => address.length > 3);
 
   const {
     input: typeOfProperty,
     onChangeInput: onChangeType,
+    onBlurHandler: onBlurType,
+    valueIsInvalid: invlidType,
+    valueIsValid: validType,
     reset: typeReset,
   } = useInputText((typeOfProperty) => typeOfProperty !== "");
 
   const {
     input: duration,
     onChangeInput: onChangeDuration,
+    onBlurHandler: onBlurDuration,
+    valueIsInvalid: invalidDuration,
+    valueIsValid: validDuration,
     reset: durationReset,
   } = useInputText((duration) => duration !== "");
 
   const {
     input: fileName,
     onChangeInput: onChangeFileName,
+    onBlurHandler: onBlurFilename,
+    valueIsInvalid: invalidFilename,
+    valueIsValid: validFilename,
     reset: fileNameReset,
   } = useInputText((fileName) => fileName !== "");
 
   const {
     input: price,
     onChangeInput: onChangePrice,
+    onBlurHandler: onBlurPrice,
+    valueIsInvalid: invalidPrice,
+    valueIsValid: validPrice,
     reset: priceReset,
   } = useInputText((price) => price !== "");
 
@@ -163,37 +192,34 @@ export const PropertyScreen = () => {
     ],
     name: fileName,
     file: "https://res.cloudinary.com/demo/image/upload/example_pdf.pdf",
-    documents
+    documents,
   };
 
   const addPropertyFn = async () => {
-    
-      
-    const {documents,images,features,...rest} = propertyData;
-    
+    const { documents, images, features, ...rest } = propertyData;
+
     const payload: R = {
       ...documents,
       images,
       features,
-      ...rest
-    }
+      ...rest,
+    };
 
     const data = new FormData();
 
-    console.log('payload',payload);
+    console.log("payload", payload);
 
-    console.log('object keys', Object.keys(payload))
+    console.log("object keys", Object.keys(payload));
 
-    Object.keys(payload).map(key=>{
-      if(Array.isArray(payload[key])){
+    Object.keys(payload).map((key) => {
+      if (Array.isArray(payload[key])) {
         let arr = payload[key];
-        arr.map(val=>  data.append(key,val));
+        arr.map((val) => data.append(key, val));
+      } else {
+        data.append(key, payload[key]);
       }
-      else{
-        data.append(key,payload[key]);
-      }
-    })
-    console.log('data',data);
+    });
+    console.log("data", data);
     try {
       const req = await addProperty(data); // If no error occurs, the following code runs
       setShowModal(false);
@@ -261,7 +287,7 @@ export const PropertyScreen = () => {
       console.log(error);
     }
   };
- 
+
   useEffect(() => {
     getPropertyFunction();
   }, [showModal, loading]);
@@ -295,6 +321,14 @@ export const PropertyScreen = () => {
               description={description}
               title={title}
               category={category}
+              invalidCategory={invlidCategory}
+              invalidTitle={invalidTitle}
+              invalidType={invlidType}
+              invalidDescription={invalidDescription}
+              onBlurDescription={onBlurDescription}
+              onBlurTitle={onBlurTitle}
+              onBlurType={onBlurType}
+              onBlurCategory={onBlurCategory}
               onClick={() => setShowScreen(2)}
             />
           ) : showScreen === 2 ? (
@@ -302,6 +336,12 @@ export const PropertyScreen = () => {
               address={address}
               price={price}
               duration={duration}
+              invalidPrice={invalidPrice}
+              invalidDuration={invalidDuration}
+              invalidAddress={invalidAddress}
+              onBlurPrice={onBlurPrice}
+              onBlurAdddress={onBlurAddress}
+              onBlurDuration={onBlurDuration}
               onChangeAddress={onChangeAddress}
               onChangePrice={onChangePrice}
               onChangeDuration={onChangeDuration}
@@ -312,8 +352,9 @@ export const PropertyScreen = () => {
             <AddPropertyScreenThree
               next={() => setShowScreen(4)}
               previous={() => setShowScreen(2)}
-              images={image}
+              images={images}
               onChangeImage={onChangeImage}
+              deleteImage={deleteImage}
               error={imageError}
             />
           ) : showScreen === 4 ? (
@@ -321,7 +362,7 @@ export const PropertyScreen = () => {
               next={addPropertyFn}
               previous={() => setShowScreen(3)}
               fileName={fileName}
-              documents ={documents}
+              documents={documents}
               onChangeFileName={handleDocumentChange}
             />
           ) : (
