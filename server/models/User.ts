@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose'
 import * as argon from 'argon2'
 import { AuthProvider, IUser, UserRole } from '../utils/interfaces'
 import { generateRefCode } from '../utils/helperFunctions/generateRefCode'
+import { required } from 'joi';
 
 const UserSchema = new Schema<IUser>(
   {
@@ -40,6 +41,11 @@ const UserSchema = new Schema<IUser>(
       type: String,
       enum: UserRole,
       default: UserRole.GUEST,
+    },
+    passwordUpdated: {
+      type: Boolean,
+      default: false,
+      required: false
     },
     referrer:{
       type: Schema.Types.ObjectId,

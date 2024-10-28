@@ -20,7 +20,6 @@ export const validateLoginData = (login: ILoginValidation) => {
 export const validateSignupData = (signup: ISignupValidation) => {
   const signupSchema = Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().min(8).max(36).required(),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     role: Joi.valid(UserRole.CLIENT, UserRole.AFFILIATE, UserRole.ADMIN, UserRole.AGENT).required(),
