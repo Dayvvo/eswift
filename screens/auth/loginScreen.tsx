@@ -129,7 +129,7 @@ export const LoginScreen = () => {
     >
       <Background />
       <Box h={"fit-content"}>
-        <Image width={200} height={100} src={"/logo.svg"} alt={"eswift"} />
+        <Image width={200} height={100} src={"/logo.svg"} alt={"e-Swift"} />
       </Box>
       <Flex flexBasis={1} justifyContent={"center"} alignItems={"center"}>
         <Box
@@ -291,7 +291,7 @@ export const LoginScreen = () => {
         </Box>
       </Flex>
       <Text fontSize={"14px"} fontWeight={400} textColor={"var(--sub600)"}>
-        © {new Date().getFullYear()} E-Swift Property Mart
+        © {new Date().getFullYear()} e-Swift Property Mart
       </Text>
     </Box>
   );

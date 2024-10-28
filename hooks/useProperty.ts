@@ -47,9 +47,13 @@ const useProperty = () => {
   } = httpClient({ token });
 
   const addProperty = useCallback(
-    async (data: PropertyObj) => {
+    async (data: FormData) => {
       try {
-        const res = await post(`/property`, data);
+        const res = await post(`/property`, data,{
+          headers:{
+            "Content-Type":'multipart/form-data'
+          }
+        });
         return res;
       } catch (err: any) {
         throw new err();

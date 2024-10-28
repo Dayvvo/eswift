@@ -26,6 +26,10 @@ class PropertyController {
       "GovConsent",
     ];
 
+    console.log('value',value);
+    
+    console.log('error',error);
+
     if (!allowedNames.includes(value.name)) {
       return res.status(400).json({ message: "Invalid file name" });
     }
@@ -283,6 +287,7 @@ class PropertyController {
       res.status(500).send("An Error ocurred while retrieving data");
     }
   };
+ 
   getPropertyDocs = async (req: Request, res: Response) => {
     try {
       const propsDoc = await PropertyDocs.find();
