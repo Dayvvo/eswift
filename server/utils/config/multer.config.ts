@@ -3,11 +3,11 @@ import path from 'path'
 
 // multer config
 const multerConfig = multer({
-  limits: { fileSize: 2 * 1024 * 1024 }, //2MB
-  storage: multer.diskStorage({}),
+  limits: { fileSize: 4 * 1024 * 1024 }, //4MB
+  storage: multer.memoryStorage(),
   fileFilter: (req, file: Express.Multer.File, cb) => {
     let ext = path.extname(file.originalname)
-    if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {
+    if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png' && ext !=='.pdf') {
       cb(null, false)
       return
     }

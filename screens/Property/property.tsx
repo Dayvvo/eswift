@@ -16,8 +16,8 @@ import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
 import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
 import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
 import { DoubleNextBtn, DoublePrevBtn, NextBtn, PreviousBtn } from "@/components/svg";
-import { useRouter } from "next/navigation";
 import { PropertyCard } from "./propertyCard";
+import { DocumentTypes, R } from "@/utils/types";
 
 interface MyData {
   _id: any;
@@ -41,6 +41,10 @@ interface User {
   avatar: any;
 };
 
+export type Documents = {
+  [K in DocumentTypes]: File | null;
+};
+
 export const PropertyScreen = () => {
 
   const [showModal, setShowModal] = useState(false);
@@ -51,6 +55,26 @@ export const PropertyScreen = () => {
   const [loading, setLoading] = useState(false);
   const [showScreen, setShowScreen] = useState(1);
   const [users, setUsers] = useState<User[]>([]);
+  
+  const [documents, setDocuments] = useState<Documents>({
+    FamilyReceipt: null,
+    SurveyPlan: null,
+    Layout: null,
+    Affidavidit: null,
+    Agreement: null,
+    CofO: null,
+    PowerOfAttourney: null,
+    GovConsent: null,
+  });
+
+  const handleDocumentChange = (name:string, value:File) => {
+    if (value) {
+      setDocuments(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
 
   const {
     input: title,
@@ -87,6 +111,7 @@ export const PropertyScreen = () => {
     onChangeInput: onChangeDuration,
     reset: durationReset,
   } = useInputText((duration) => duration !== "");
+
   const {
     input: fileName,
     onChangeInput: onChangeFileName,
@@ -105,8 +130,6 @@ export const PropertyScreen = () => {
     error: imageError,
     reset: imageReset,
   } = useImage();
-
-  const router = useRouter();
 
   const { toast } = useToast();
  
@@ -128,12 +151,37 @@ export const PropertyScreen = () => {
     ],
     name: fileName,
     file: "https://res.cloudinary.com/demo/image/upload/example_pdf.pdf",
+    documents
   };
 
   const addPropertyFn = async () => {
+    
+      
+    const {documents,images,features,...rest} = propertyData;
+    
+    const payload: R = {
+      ...documents,
+      images,
+      features,
+      ...rest
+    }
+
+    const data = new FormData();
+
+    for (const key in Object.keys(payload)) {
+      if(Array.isArray(payload[key])){
+        let arr = payload[key];
+        arr.map(val=>  data.append(key,val));
+      }
+      else{
+        data.append(key,payload[key]);
+      }
+    }
+
+
+    console.log('properties', documents);
     try {
-      const req = await addProperty(propertyData); // If no error occurs, the following code runs
-      // console.log("response", req);
+      const req = await addProperty(data); // If no error occurs, the following code runs
       setShowModal(false);
 
       toast({
@@ -143,7 +191,6 @@ export const PropertyScreen = () => {
         position: "top",
         duration: 5000,
       });
-      // Reset the form fields after successful creation
 
       titleReset();
       categoryReset();
@@ -200,6 +247,7 @@ export const PropertyScreen = () => {
       console.log(error);
     }
   };
+ 
   useEffect(() => {
     getPropertyFunction();
   }, [showModal, loading]);
@@ -220,50 +268,53 @@ export const PropertyScreen = () => {
 
   return (
     <>
-      <Modal onClose={toggleModal} isVisible={showModal}>
-        {/* {currentChildComponent} */}
-        {showScreen === 1 ? (
-          <AddPropertyScreenOne
-            onChangeTitle={onChangeTitle}
-            onChangeCategory={onChangeCategory}
-            onChangeDescription={onChangeDescription}
-            typeOfProperty={typeOfProperty}
-            onChangeType={onChangeType}
-            description={description}
-            title={title}
-            category={category}
-            onClick={() => setShowScreen(2)}
-          />
-        ) : showScreen === 2 ? (
-          <AddPropertyScreenTwo
-            address={address}
-            price={price}
-            duration={duration}
-            onChangeAddress={onChangeAddress}
-            onChangePrice={onChangePrice}
-            onChangeDuration={onChangeDuration}
-            next={() => setShowScreen(3)}
-            previous={() => setShowScreen(1)}
-          />
-        ) : showScreen === 3 ? (
-          <AddPropertyScreenThree
-            next={() => setShowScreen(4)}
-            previous={() => setShowScreen(2)}
-            images={image}
-            onChangeImage={onChangeImage}
-            error={imageError}
-          />
-        ) : showScreen === 4 ? (
-          <AddPropertyScreenFour
-            next={addPropertyFn}
-            previous={() => setShowScreen(3)}
-            fileName={fileName}
-            onChangeFileName={onChangeFileName}
-          />
-        ) : (
-          ""
-        )}
-      </Modal>
+      <form>
+        <Modal onClose={toggleModal} isVisible={showModal}>
+          {/* {currentChildComponent} */}
+          {showScreen === 1 ? (
+            <AddPropertyScreenOne
+              onChangeTitle={onChangeTitle}
+              onChangeCategory={onChangeCategory}
+              onChangeDescription={onChangeDescription}
+              typeOfProperty={typeOfProperty}
+              onChangeType={onChangeType}
+              description={description}
+              title={title}
+              category={category}
+              onClick={() => setShowScreen(2)}
+            />
+          ) : showScreen === 2 ? (
+            <AddPropertyScreenTwo
+              address={address}
+              price={price}
+              duration={duration}
+              onChangeAddress={onChangeAddress}
+              onChangePrice={onChangePrice}
+              onChangeDuration={onChangeDuration}
+              next={() => setShowScreen(3)}
+              previous={() => setShowScreen(1)}
+            />
+          ) : showScreen === 3 ? (
+            <AddPropertyScreenThree
+              next={() => setShowScreen(4)}
+              previous={() => setShowScreen(2)}
+              images={image}
+              onChangeImage={onChangeImage}
+              error={imageError}
+            />
+          ) : showScreen === 4 ? (
+            <AddPropertyScreenFour
+              next={addPropertyFn}
+              previous={() => setShowScreen(3)}
+              fileName={fileName}
+              documents ={documents}
+              onChangeFileName={handleDocumentChange}
+            />
+          ) : (
+            ""
+          )}
+        </Modal>
+      </form>
       <Box
         className="robotoF"
         px={{ base: "16px", lg: "0" }}
