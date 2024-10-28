@@ -107,8 +107,8 @@ const NavBar = () => {
           height={60}
         />
         <Box
-          display={{ base: "none", lg: "flex" }}
-          gap={{md:'18px', xl:'32px'}}
+          display={{ base: "none", xl: "flex" }}
+          gap={{md:'16px', xl:'32px'}}
           alignItems="center"
           justifyContent={"space-between"}
           className="robotoF"
@@ -164,7 +164,7 @@ const NavBar = () => {
         </Box>
 
         <Box
-          display={{ base: "block", lg: "none" }}
+          display={{ base: "block", xl: "none" }}
           cursor={"pointer"}
           ref={btnRef}
           onClick={onOpen}

@@ -116,7 +116,7 @@ export const Steps = () => {
     <Grid
       templateColumns={{
         base: "repeat(1, 1fr)",
-        md: "repeat(2, 1fr)",
+        md: "repeat(1, 1fr)",
         xl: "repeat(3, 1fr)",
       }}
       gap={"20px"}
@@ -126,7 +126,7 @@ export const Steps = () => {
       {Card.map((item) => (
         <Box
           key={item?.id}
-          w={{ base: "100%", sm: "400px", md: "360px", lg: "400px" }}
+          w={{ base: "100%", sm:"400px", md:'500px', lg:'400px' }}
           h={"298px"}
           className="urbanist"
         >
