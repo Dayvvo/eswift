@@ -7,6 +7,7 @@ import {
 import { MailType } from "../interfaces/mailtype.interface";
 import { ProfileInterface } from "../interfaces/profile.interface";
 import { UserRole } from "../interfaces";
+import { PropertyDocuments } from "../interfaces/types";
 
 export const validateLoginData = (login: ILoginValidation) => {
   const loginSchema = Joi.object({
@@ -20,7 +21,6 @@ export const validateLoginData = (login: ILoginValidation) => {
 export const validateSignupData = (signup: ISignupValidation) => {
   const signupSchema = Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().min(8).max(36).required(),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     role: Joi.valid(UserRole.CLIENT, UserRole.AFFILIATE, UserRole.ADMIN, UserRole.AGENT).required(),
@@ -72,10 +72,16 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
     description: Joi.string().required(),
     features: Joi.array().items(Joi.string().min(2).max(50)).min(1).required(),
     images: Joi.array().items(Joi.string().uri()).min(1).required(),
-    name: Joi.string().required(),
     documents: Joi.object({
-      
-    }),
+      [PropertyDocuments.FamilyReceipt]: Joi.string().uri().required(),
+      [PropertyDocuments.SurveyPlan]: Joi.string().uri().required(),
+      [PropertyDocuments.Layout]: Joi.string().uri().required(),
+      [PropertyDocuments.Affidavidit]: Joi.string().uri().required(),
+      [PropertyDocuments.Agreement]: Joi.string().uri().required(),
+      [PropertyDocuments.CofO]: Joi.string().uri().required(),
+      [PropertyDocuments.PowerOfAttourney]: Joi.string().uri().required(),
+      [PropertyDocuments.GovConsent]: Joi.string().uri().required(),
+    }).required(),
     // file: Joi.string().uri().required(),
   });
 

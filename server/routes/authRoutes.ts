@@ -1,17 +1,15 @@
 import express from 'express'
-import authController from '../controllers/authController'
 import passport from 'passport'
+import authController from '../controllers/authController'
 
 const router = express.Router()
 
-router.get(
-  '/google',
-  (req,res,next)=>{
-    const state = req.query['state'] as string;
-    passport.authenticate('google', {
-      scope: ['email', 'profile'],
-      ...state?{state}:{}
-    })(req,res,next)
+router.get('/google', (req, res, next) => {
+  const state = req.query['state'] as string
+  passport.authenticate('google', {
+    scope: ['email', 'profile'],
+    ...(state ? { state } : {}),
+  })(req, res, next)
 })
 
 router.get(

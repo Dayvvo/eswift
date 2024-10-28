@@ -26,6 +26,10 @@ class PropertyController {
       "GovConsent",
     ];
 
+    console.log('value',value);
+    
+    console.log('error',error);
+
     if (!allowedNames.includes(value.name)) {
       return res.status(400).json({ message: "Invalid file name" });
     }

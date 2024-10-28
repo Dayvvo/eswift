@@ -12,3 +12,10 @@ export type properties = {
     documents?:[]
     address:string
 }
+
+
+
+export type DocumentTypes = 
+  'FamilyReceipt' | 'SurveyPlan' | 'Layout' | 'Affidavidit' | 
+  'Agreement' | 'CofO' | 'PowerOfAttourney' | 'GovConsent';
+

@@ -26,7 +26,7 @@ const useAuth = () => {
     const [error, setError] = useState<string | null>(null);
     const [token,setToken] = useState('')
     
-    const isWindow =  typeof window !== 'undefined'
+    const isWindow =  typeof window !== 'undefined';
 
     useEffect(()=>{
       if (isWindow) {
