@@ -168,7 +168,11 @@ export const PropertyScreen = () => {
 
     const data = new FormData();
 
-    for (const key in Object.keys(payload)) {
+    console.log('payload',payload);
+
+    console.log('object keys', Object.keys(payload))
+
+    Object.keys(payload).map(key=>{
       if(Array.isArray(payload[key])){
         let arr = payload[key];
         arr.map(val=>  data.append(key,val));
@@ -176,10 +180,8 @@ export const PropertyScreen = () => {
       else{
         data.append(key,payload[key]);
       }
-    }
-
-
-    console.log('properties', documents);
+    })
+    console.log('data',data);
     try {
       const req = await addProperty(data); // If no error occurs, the following code runs
       setShowModal(false);

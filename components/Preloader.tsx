@@ -2,14 +2,14 @@ import { Image, Modal, ModalOverlay, ModalContent, Center } from "@chakra-ui/rea
 import { useEffect, useState } from "react"
 
 const Preloader = () => {
-    const [isOpen, setIsOpen] = useState(true)
+    const [isOpen, setIsOpen] = useState(true);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsOpen(false)
         }, 2500)
         return () => clearTimeout(timer)
-    }, [])
+    }, []);
 
     return (
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
@@ -23,4 +23,4 @@ const Preloader = () => {
     )
 }
 
-export default Preloader
+export default Preloader;
