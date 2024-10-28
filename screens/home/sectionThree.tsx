@@ -141,21 +141,6 @@ const FAQ = () => {
       response:
         "Discover the different ways you can get in touch with our experienced agents.",
     },
-    {
-      id: 4,
-      title: "",
-      response: "",
-    },
-    {
-      id: 5,
-      title: "",
-      response: "",
-    },
-    {
-      id: 6,
-      title: "",
-      response: "",
-    },
   ];
   return (
     <Box w="100%">
