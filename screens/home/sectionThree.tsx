@@ -45,7 +45,7 @@ export const SectionThree = () => {
         <Flex
           w={"100%"}
           gap={"20px"}
-          flexDir={{ base: "column", lg: "row" }}
+          flexDir={{ base: "column", xl:"row" }}
           justifyContent={"center"}
           alignItems={"center"}
         >
@@ -140,21 +140,6 @@ const FAQ = () => {
       title: "How can I contact an e-Swift agent?",
       response:
         "Discover the different ways you can get in touch with our experienced agents.",
-    },
-    {
-      id: 4,
-      title: "",
-      response: "",
-    },
-    {
-      id: 5,
-      title: "",
-      response: "",
-    },
-    {
-      id: 6,
-      title: "",
-      response: "",
     },
   ];
   return (

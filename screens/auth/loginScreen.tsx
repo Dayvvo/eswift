@@ -119,7 +119,6 @@ export const LoginScreen = () => {
     <Box
       display={"flex"}
       flexDir={"column"}
-      bg={"#FFF"}
       justifyContent={"space-between"}
       w={"100%"}
       h={"100vh"}
@@ -127,14 +126,14 @@ export const LoginScreen = () => {
       py={"24px"}
       className="robotoF"
     >
-      <Background />
+      <Background/>
       <Box h={"fit-content"}>
         <Image width={200} height={100} src={"/logo.svg"} alt={"e-Swift"} />
       </Box>
       <Flex flexBasis={1} justifyContent={"center"} alignItems={"center"}>
         <Box
           w={{ base: "100%", sm: "440px" }}
-          h={"fit-content"}
+          h={"fit-content"} bg={'#FFF'}
           p={{ base: "16px", md: "32px" }}
           border={"1px solid var(--soft200)"}
           boxShadow={"lg"}

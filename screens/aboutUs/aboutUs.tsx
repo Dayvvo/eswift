@@ -4,8 +4,9 @@ import { Box, Text, Flex } from "@chakra-ui/react";
 import { Video } from "./video";
 import { Footer } from "@/components/footer";
 import { Background } from "../home/Background";
-import { MoreDetails } from "./MoreDetails";
-import { AboutSection } from "./AboutPageSection";
+import { AboutSection } from "./aboutPageSection";
+import { MoreDetails } from "./moreDetails";
+
 
 const AboutUsScreen = () => {
   function scrollToSection() {
