@@ -76,10 +76,10 @@ export const PropertyScreen = () => {
     FamilyReceipt: null,
     SurveyPlan: null,
     Layout: null,
-    Affidavidit: null,
+    Affidavit: null,
     Agreement: null,
     CofO: null,
-    PowerOfAttourney: null,
+    PowerOfAttorney: null,
     GovConsent: null,
   });
 
@@ -325,6 +325,10 @@ export const PropertyScreen = () => {
               invalidTitle={invalidTitle}
               invalidType={invlidType}
               invalidDescription={invalidDescription}
+              validCategory={validCategory}
+              validTitle={validTitle}
+              validType={validType}
+              validDescription={validDescription}
               onBlurDescription={onBlurDescription}
               onBlurTitle={onBlurTitle}
               onBlurType={onBlurType}
@@ -339,6 +343,9 @@ export const PropertyScreen = () => {
               invalidPrice={invalidPrice}
               invalidDuration={invalidDuration}
               invalidAddress={invalidAddress}
+              validPrice={validPrice}
+              validDuration={validDuration}
+              validAddress={validAddress}
               onBlurPrice={onBlurPrice}
               onBlurAdddress={onBlurAddress}
               onBlurDuration={onBlurDuration}
