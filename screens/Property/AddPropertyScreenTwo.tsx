@@ -1,8 +1,10 @@
 import Btn from "@/components/Btn";
+import useToast from "@/hooks/useToast";
 import {
   Box,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   InputGroup,
@@ -26,6 +28,15 @@ interface ButtonFunction {
   onChangeAddress: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangePrice: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeDuration: (event: ChangeEvent<HTMLSelectElement>) => void;
+  invalidPrice: boolean | null;
+  invalidDuration: boolean | null;
+  invalidAddress: boolean | null;
+  validPrice: boolean;
+  validDuration: boolean;
+  validAddress: boolean;
+  onBlurPrice: any;
+  onBlurAdddress: any;
+  onBlurDuration: any;
 }
 export const AddPropertyScreenTwo = ({
   next,
@@ -36,7 +47,17 @@ export const AddPropertyScreenTwo = ({
   onChangePrice,
   address,
   onChangeAddress,
+  invalidPrice,
+  invalidDuration,
+  invalidAddress,
+  validPrice,
+  validDuration,
+  validAddress,
+  onBlurPrice,
+  onBlurAdddress,
+  onBlurDuration,
 }: ButtonFunction) => {
+  const { toast } = useToast();
   const subs: any[] = [
     {
       id: 1,
@@ -67,6 +88,36 @@ export const AddPropertyScreenTwo = ({
       text: "var(--sub600)",
     },
   ];
+
+  const validate = () => {
+    if (!validAddress) {
+      onBlurAdddress();
+      return false;
+    } else if (!validPrice) {
+      onBlurPrice();
+      return false;
+    } else if (!validDuration) {
+      onBlurDuration();
+      return false;
+    }
+    return true;
+  };
+
+  const nextFn = () => {
+    const isFormValid = validate();
+
+    if (!isFormValid) {
+      toast({
+        status: "error",
+        description: "Validation failed",
+        title: "Failed",
+        position: "top",
+        duration: 1500,
+      });
+      return;
+    }
+    next();
+  };
 
   return (
     <>
@@ -118,9 +169,13 @@ export const AddPropertyScreenTwo = ({
               Address
             </FormLabel>
             <InputGroup
-              border={"1px"}
               borderRadius={"10px"}
-              borderColor={"var(--soft200)"}
+              // borderColor={"var(--soft200)"}
+              border={
+                invalidAddress
+                  ? "1px solid var(--errorBase)"
+                  : "1px solid var(--soft200)"
+              }
               cursor={"text"}
               fontSize={14}
               textColor={"var--(sub600)"}
@@ -135,9 +190,15 @@ export const AddPropertyScreenTwo = ({
                 placeholder="The location of the property"
                 name="address"
                 value={address}
+                onBlur={onBlurAdddress}
                 onChange={onChangeAddress}
               />
             </InputGroup>
+            {invalidAddress && (
+              <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                {"Enter a valid address"}
+              </FormHelperText>
+            )}
           </FormControl>
           <FormControl w={"100%"}>
             <FormLabel
@@ -172,6 +233,7 @@ export const AddPropertyScreenTwo = ({
                 placeholder="₦ 0.00"
                 name="price"
                 value={price}
+                onBlur={onBlurPrice}
                 onChange={onChangePrice}
               />
               <Select
@@ -186,6 +248,7 @@ export const AddPropertyScreenTwo = ({
                 _placeholder={{ textColor: "var(--soft400)" }}
                 placeholder="Duration"
                 onChange={onChangeDuration}
+                onBlur={onBlurDuration}
                 value={duration}
               >
                 {["Annually", "Weekly", "Monthly", "Quarterly"].map((entry) => (
@@ -195,6 +258,18 @@ export const AddPropertyScreenTwo = ({
                 ))}
               </Select>
             </InputGroup>
+            <Flex justifyContent={"space-between"}>
+              {invalidPrice && (
+                <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                  {"Enter a valid price"}
+                </FormHelperText>
+              )}
+              {invalidDuration && (
+                <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                  {"Select duration"}
+                </FormHelperText>
+              )}
+            </Flex>
           </FormControl>
         </Flex>
         <Flex gap={"2rem"}>
@@ -213,7 +288,7 @@ export const AddPropertyScreenTwo = ({
             Previous
           </Btn>
           <Btn
-            onClick={next}
+            onClick={nextFn}
             my={"20px"}
             border={"1px solid var(--primaryBase)"}
             display={"flex"}

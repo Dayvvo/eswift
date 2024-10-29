@@ -69,62 +69,61 @@ export const useInputNumber = (
   };
 };
 
-
 export const useImage = () => {
-  const [image, setImage] = useState<File | null>(null);
+  const [images, setImages] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const validfileTypes: string[] = ["image/jpeg", "image/png", "image/gif"];
+  const validFileTypes: string[] = ["image/jpeg", "image/png", "image/gif"];
   const maxFileSize: number = 5 * 1024 * 1024;
-
-  // const validateFile = (File: File): void => {
-  //   if (!validfileTypes.includes(File.type)) {
-  //     setError(
-  //       `Invalid file type. ${validfileTypes.join(",")} are supported, only`
-  //     );
-  //     return;
-  //   }
-
-  //   if (File.size > maxFileSize) {
-  //     setError(`File exceeds maximum size of ${maxFileSize}MB`);
-  //     return;
-  //   }
-
-  //   setUploadedFile(File);
-  //   setError(null);
-  // };
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       event.target instanceof HTMLInputElement &&
       event.target.type === "file"
     ) {
-      const selectedFile = event.target.files![0];
-      if (selectedFile) {
-        if (!validfileTypes.includes(selectedFile.type)) {
-          setError(
-            `Invalid file type. ${validfileTypes.join(",")} are supported, only`
-          );
-          return;
+      const selectedFiles = event.target.files;
+
+      if (selectedFiles) {
+        const newImages: File[] = [];
+
+        for (const file of Array.from(selectedFiles)) {
+          if (!validFileTypes.includes(file.type)) {
+            setError(
+              `Invalid file type for '${file.name}'. ${validFileTypes.join(
+                ", "
+              )} are supported.`
+            );
+            continue;
+          }
+          if (file.size > maxFileSize) {
+            setError(
+              `File '${file.name}' exceeds maximum size of ${maxFileSize}MB`
+            );
+            continue;
+          }
+          newImages.push(file);
         }
-        if (selectedFile.size > maxFileSize) {
-          setError(`File exceeds maximum size of ${maxFileSize}MB`);
-          return;
-        }
-        setImage(selectedFile);
+
+        setImages([...images, ...newImages]);
         setError(null);
       }
     }
   };
 
+  const deleteImage = (index: number) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
+  };
+
   const reset = () => {
-    setImage(null);
-    // setIsTouch(false);
+    setImages([]);
   };
 
   return {
-    image,
+    images,
     onChangeHandler,
     error,
     reset,
+    deleteImage,
   };
 };

@@ -25,7 +25,7 @@ const useProperty = () => {
   const baseUrl = "http://localhost:5500/api";
   const [token, setToken] = useState("");
 
-  console.log(token);
+  // console.log(token);
 
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
