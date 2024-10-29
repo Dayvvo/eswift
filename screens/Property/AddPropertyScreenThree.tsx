@@ -1,5 +1,6 @@
 import Btn from "@/components/Btn";
 import { DeleteBin } from "@/components/svg";
+import useToast from "@/hooks/useToast";
 import {
   Box,
   Flex,
@@ -38,6 +39,7 @@ export const AddPropertyScreenThree = ({
   deleteImage,
   error,
 }: ButtonFunction) => {
+  const { toast } = useToast();
   const subs: any[] = [
     {
       id: 1,
@@ -136,7 +138,39 @@ export const AddPropertyScreenThree = ({
   //         console.log(err);
   //       });
   //   };
-  const imageArray = images ? (Array.isArray(images) ? images : [images]) : []; // Ensure images is an array
+
+  // const validate = () => {
+  //   if (!images.length) {
+  //     onBlurTitle();
+  //     return false;
+  //   }
+
+  //   return true;
+  // };
+
+  const nextFn = () => {
+    // const isFormValid = validate();
+
+    if (images.length < 1) {
+      toast({
+        status: "error",
+        title: "Image Upload Required",
+        description: "Please upload at least one image to proceed.",
+        position: "top",
+        duration: 1500,
+      });
+      return;
+    } else if (error) {
+      toast({
+        status: "error",
+        title: "Invalid image upload type",
+        description: "Please upload a valid image type.",
+        position: "top",
+        duration: 1500,
+      });
+    }
+    next();
+  };
 
   return (
     <>
@@ -329,7 +363,7 @@ export const AddPropertyScreenThree = ({
             Previous
           </Btn>
           <Btn
-            onClick={next}
+            onClick={nextFn}
             my={"20px"}
             border={"1px solid var(--primaryBase)"}
             display={"flex"}

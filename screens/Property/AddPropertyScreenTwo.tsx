@@ -1,4 +1,5 @@
 import Btn from "@/components/Btn";
+import useToast from "@/hooks/useToast";
 import {
   Box,
   Flex,
@@ -30,6 +31,9 @@ interface ButtonFunction {
   invalidPrice: boolean | null;
   invalidDuration: boolean | null;
   invalidAddress: boolean | null;
+  validPrice: boolean;
+  validDuration: boolean;
+  validAddress: boolean;
   onBlurPrice: any;
   onBlurAdddress: any;
   onBlurDuration: any;
@@ -46,10 +50,14 @@ export const AddPropertyScreenTwo = ({
   invalidPrice,
   invalidDuration,
   invalidAddress,
+  validPrice,
+  validDuration,
+  validAddress,
   onBlurPrice,
   onBlurAdddress,
   onBlurDuration,
 }: ButtonFunction) => {
+  const { toast } = useToast();
   const subs: any[] = [
     {
       id: 1,
@@ -80,6 +88,36 @@ export const AddPropertyScreenTwo = ({
       text: "var(--sub600)",
     },
   ];
+
+  const validate = () => {
+    if (!validAddress) {
+      onBlurAdddress();
+      return false;
+    } else if (!validPrice) {
+      onBlurPrice();
+      return false;
+    } else if (!validDuration) {
+      onBlurDuration();
+      return false;
+    }
+    return true;
+  };
+
+  const nextFn = () => {
+    const isFormValid = validate();
+
+    if (!isFormValid) {
+      toast({
+        status: "error",
+        description: "Validation failed",
+        title: "Failed",
+        position: "top",
+        duration: 1500,
+      });
+      return;
+    }
+    next();
+  };
 
   return (
     <>
@@ -226,7 +264,7 @@ export const AddPropertyScreenTwo = ({
                   {"Enter a valid price"}
                 </FormHelperText>
               )}
-              {invalidPrice && (
+              {invalidDuration && (
                 <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                   {"Select duration"}
                 </FormHelperText>
@@ -250,7 +288,7 @@ export const AddPropertyScreenTwo = ({
             Previous
           </Btn>
           <Btn
-            onClick={next}
+            onClick={nextFn}
             my={"20px"}
             border={"1px solid var(--primaryBase)"}
             display={"flex"}

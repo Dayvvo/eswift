@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { ChangeEvent } from "react";
 import { IoIosArrowForward } from "react-icons/io";
+import useToast from "@/hooks/useToast";
 
 interface AddPropertyScreenOneProps {
   onClick: () => void;
@@ -29,6 +30,10 @@ interface AddPropertyScreenOneProps {
   invalidTitle: boolean | null;
   invalidType: boolean | null;
   invalidDescription: boolean | null;
+  validCategory: boolean;
+  validTitle: boolean;
+  validType: boolean;
+  validDescription: boolean;
   onBlurTitle: any;
   onBlurType: any;
   onBlurCategory: any;
@@ -46,6 +51,10 @@ export const AddPropertyScreenOne = ({
   invalidCategory,
   invalidTitle,
   invalidDescription,
+  validCategory,
+  validTitle,
+  validDescription,
+  validType,
   onBlurTitle,
   onBlurDescription,
   onBlurType,
@@ -53,6 +62,7 @@ export const AddPropertyScreenOne = ({
   invalidType,
   onChangeDescription,
 }: AddPropertyScreenOneProps) => {
+  const { toast } = useToast();
   const subs: any[] = [
     {
       id: 1,
@@ -79,6 +89,40 @@ export const AddPropertyScreenOne = ({
       text: "var(--sub600)",
     },
   ];
+
+  const validate = () => {
+    if (!validTitle) {
+      onBlurTitle();
+      return false;
+    } else if (!validType) {
+      onBlurType();
+      return false;
+    } else if (!validCategory) {
+      onBlurCategory();
+      return false;
+    } else if (!validDescription) {
+      onBlurDescription();
+      return false;
+    }
+
+    return true;
+  };
+
+  const nextFn = () => {
+    const isFormValid = validate();
+
+    if (!isFormValid) {
+      toast({
+        status: "error",
+        description: "Validation failed",
+        title: "Failed",
+        position: "top",
+        duration: 1500,
+      });
+      return;
+    }
+    onClick();
+  };
 
   return (
     <>
@@ -274,7 +318,7 @@ export const AddPropertyScreenOne = ({
           </FormControl>
         </Flex>
         <Btn
-          onClick={onClick}
+          onClick={nextFn}
           my={"20px"}
           border={"1px solid var(--primaryBase)"}
           display={"flex"}
@@ -284,13 +328,13 @@ export const AddPropertyScreenOne = ({
           bg={"#FFFFFF"}
           borderRadius={"10px"}
           textColor={"var(--primaryBase)"}
-          disabled={
-            invalidCategory ||
-            invalidCategory ||
-            invalidTitle ||
-            invalidType ||
-            invalidDescription
-          }
+          // disabled={
+          //   invalidCategory ||
+          //   invalidCategory ||
+          //   invalidTitle ||
+          //   invalidType ||
+          //   invalidDescription
+          // }
         >
           Next
         </Btn>
