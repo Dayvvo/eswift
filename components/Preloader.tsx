@@ -1,4 +1,4 @@
-import { Image, Text, Modal, ModalOverlay, ModalContent, Center, Flex, Box } from "@chakra-ui/react"
+import { Image, Text, Modal, ModalOverlay, ModalContent, Flex, Box } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 
 const Preloader = () => {
@@ -7,15 +7,15 @@ const Preloader = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsOpen(false)
-        }, 2500)
+        }, 3500)
         return () => clearTimeout(timer)
     }, []);
 
     return (
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
+        <Modal motionPreset="slideInTop" size={'full'} isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
             <ModalOverlay />
-            <ModalContent bg="transparent" boxShadow="none" maxW={'1078px'} h={{base:'100vh',lg:'700px'}}>
-                <Flex alignItems={'center'} justifyContent={'center'} w={'100%'} h={'100%'}>
+            <ModalContent>
+                <Flex className="flexx" alignItems={'center'} justifyContent={'center'} w='100%' height='100vh'>
                     <Box w={'100%'}
                         h='100%'
                         borderRadius={'8px'}
@@ -43,7 +43,7 @@ const Preloader = () => {
                                 </Flex>
                             </Flex>
                             <Flex w={'100%'} height={'100%'} alignItems={'center'} justifyContent={'center'}>    
-                                <Image src={"/Company.gif"} alt="/" width={116} height={114} />
+                                <Image src={"/Company.gif"} alt="/" width={180} height={154} />
                             </Flex>
                             <Text fontSize={"14px"} fontWeight={400} textColor={"var(--sub600)"}>
                                 © {new Date().getFullYear()} e-Swift Property Mart
