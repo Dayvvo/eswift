@@ -18,6 +18,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import React from "react";
 import Btn from "@/components/Btn";
 import Link from "next/link";
+import { AuthBackground } from "./authBackground";
 
 export const ResetPasswordScreen = () => {
   return (
@@ -32,6 +33,7 @@ export const ResetPasswordScreen = () => {
       py={"24px"}
       className="robotoF"
     >
+      <AuthBackground/>
       <Box h={"fit-content"}>
         <Image width={200} height={100} src={"/logo.svg"} alt={"e-Swift"} />
       </Box>
