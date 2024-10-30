@@ -4,8 +4,7 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 const OAuth2 = google.auth.OAuth2
 
-const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, REFRESH_TOKEN, SENDING_MAIL } =
-  process.env
+const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, REFRESH_TOKEN, SENDING_MAIL } = process.env
 
 const oauth2Client = new OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
 oauth2Client.setCredentials({
