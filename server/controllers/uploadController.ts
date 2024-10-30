@@ -21,12 +21,11 @@ class UploadController {
 
   //this uploads to digital ocean as opposed to cloudinary. All we have to do is replace uploadFile with uploadToDigital Ocean
   async uploadToDigitalOcean(file: Express.Multer.File): Promise<string> {
-    const fileName = `${new Date().toUTCString()}-${file.originalname}`
-
     const uploadParams: PutObjectRequest = {
       Bucket: BUCKET_NAME,
       ContentType: file.mimetype,
-      Key: fileName,
+      Key: `uploads/${Date.now()}_${file.originalname}`,
+      ACL: 'public-read',
       Body: file.buffer as any,
     }
 
@@ -35,9 +34,10 @@ class UploadController {
       await space.send(command)
 
       //this has to be verified
-      return `https://${BUCKET_NAME}/${fileName}`
+      return `${process.env.DO_SPACES_ENDPOINT}/${BUCKET_NAME}/${uploadParams.Key}`
     } catch (error: any) {
-      throw new Error(`File upload failed: ${error.message}`)
+      console.error('Error uploading file:', error)
+      throw new Error('Failed to upload file')
     }
   }
 
@@ -50,7 +50,7 @@ class UploadController {
           .json({ statusCode: 400, message: `Bad Request, No file selected` })
       }
 
-      const secureUrl = await uploadController.uploadFile(file)
+      const secureUrl = await uploadController.uploadToDigitalOcean(file)
 
       return res.json({
         statusCode: 200,
@@ -71,7 +71,7 @@ class UploadController {
         const files = req.files as Express.Multer.File[]
         let urls: Array<string> = []
         for (const file of files) {
-          urls.push(await uploadController.uploadFile(file))
+          urls.push(await uploadController.uploadToDigitalOcean(file))
         }
 
         return res.json({ statusCode: 200, message: `Success`, data: urls })
