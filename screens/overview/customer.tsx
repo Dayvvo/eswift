@@ -76,7 +76,7 @@ const OverviewScreen = () => {
                                     textColor={'white'}
                                     className="robotoF"
                                     flexDir={'column'} alignItems={'center'}
-                                    _hover={{bg:'#3170A690'}}
+                                    // _hover={{bg:'#3170A690'}}
                                 >
                                     <Flex w={'100%'} justifyContent={'end'}>
                                         <Link href={item?.navigate}>

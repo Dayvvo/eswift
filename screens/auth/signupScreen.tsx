@@ -26,6 +26,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { Background } from "../home/Background";
+import { AuthBackground } from "./authBackground";
 
 export const SignUpcreen = () => {
   const navigate = useRouter();
@@ -118,9 +119,10 @@ export const SignUpcreen = () => {
       w={"100%"}
       minH={"100vh"}
       px={{ base: "16px", lg: "44px" }}
+      py={'24px'}
       className="robotoF"
     >
-      <Background />
+      <AuthBackground/>
       <Box h={"fit-content"}>
         <Image width={200} height={100} src={"/Logo.svg"} alt={"e-Swift"} />
       </Box>
@@ -280,33 +282,33 @@ export const SignUpcreen = () => {
                 </InputGroup>
               </FormControl>
               {/* <FormControl w={'100%'}>
-                                <FormLabel
-                                    fontWeight={500} fontSize={'14px'}
-                                    textColor={'var(--strong950)'}
-                                >
-                                    Residential Address
-                                </FormLabel>
-                                <InputGroup onFocus={()=> setEmailValidation(false)}
-                                    display={'flex'} justifyContent={'center'} alignItems={'center'}
-                                    border={'1px'} borderRadius={'10px'} 
-                                    borderColor={'var(--soft200)'}
-                                    cursor={'text'}
-                                    fontSize={14} textColor={'var--(sub600)'}
-                                    w='100%' h='40px'
-                                    _placeholder={{textColor:'var--(soft400)', fontSize:{base:8,lg:12}}}
-                                >
-                                    <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
-                                        <MdOutlineEmail className="formicon"/>
-                                    </InputLeftElement>
-                                    <Input 
-                                        w={'100%'} h={'100%'}
-                                        type='text' 
-                                        placeholder='Enter your address'  
-                                        name="address"
-                                        onChange={handleInput}          
-                                    />
-                                </InputGroup>
-                            </FormControl> */}
+                    <FormLabel
+                        fontWeight={500} fontSize={'14px'}
+                        textColor={'var(--strong950)'}
+                    >
+                        Residential Address
+                    </FormLabel>
+                    <InputGroup onFocus={()=> setEmailValidation(false)}
+                        display={'flex'} justifyContent={'center'} alignItems={'center'}
+                        border={'1px'} borderRadius={'10px'} 
+                        borderColor={'var(--soft200)'}
+                        cursor={'text'}
+                        fontSize={14} textColor={'var--(sub600)'}
+                        w='100%' h='40px'
+                        _placeholder={{textColor:'var--(soft400)', fontSize:{base:8,lg:12}}}
+                    >
+                        <InputLeftElement pointerEvents='none' color={'var(--soft400)'}>
+                            <MdOutlineEmail className="formicon"/>
+                        </InputLeftElement>
+                        <Input 
+                            w={'100%'} h={'100%'}
+                            type='text' 
+                            placeholder='Enter your address'  
+                            name="address"
+                            onChange={handleInput}          
+                        />
+                    </InputGroup>
+                </FormControl> */}
               <FormControl w={"100%"}>
                 <FormLabel
                   fontWeight={500}
