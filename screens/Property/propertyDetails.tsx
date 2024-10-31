@@ -292,7 +292,7 @@ export const PropertyDetails = ({
         isOpen={showModal}
       >
         <ModalOverlay />
-        <ModalContent width={"440px"}>
+        <ModalContent >
           <VerifyState
             toggleModal={toggleModal}
             verifyPropertyFn={verifyPropertyFn}
@@ -308,7 +308,7 @@ export const PropertyDetails = ({
         isOpen={showDeclineModal}
       >
         <ModalOverlay />
-        <ModalContent width={"440px"}>
+        <ModalContent>
           <DeclineState
             toggleModal={toggleDeclineModal}
             verifyPropertyFn={verifyPropertyFn}
@@ -324,7 +324,7 @@ export const PropertyDetails = ({
         isOpen={showSuspendModal}
       >
         <ModalOverlay />
-        <ModalContent width={"440px"}>
+        <ModalContent>
           <SuspendState
             verifyPropertyFn={verifyPropertyFn}
             isVerifying={isVerifying}
@@ -340,7 +340,7 @@ export const PropertyDetails = ({
         isOpen={showDeleteModal}
       >
         <ModalOverlay />
-        <ModalContent width={"440px"}>
+        <ModalContent>
           <DeleteProperty
             deletePropertyFn={deletePropertyFn}
             isVerifying={isVerifying}
@@ -348,6 +348,8 @@ export const PropertyDetails = ({
           />
         </ModalContent>
       </Modal>
+
+      
       <Box bg={"#FFF"} w={"100%"}>
         <Flex w={"100%"} my={my || "24px"} pos={"relative"}>
           <Grid

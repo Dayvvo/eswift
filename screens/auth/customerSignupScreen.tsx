@@ -1,20 +1,16 @@
 import {
   Box,
+  Flex,
   Text,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { AuthHeaderProps } from "./authheader";
-import { MdOutlineEmail } from "react-icons/md";
-import { RiLockPasswordLine } from "react-icons/ri";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
-import React, { ChangeEvent, useEffect } from "react";
+import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import Btn from "@/components/Btn";
 import Link from "next/link";
 import axios from "axios";
-import { useState } from "react";
 import { useRouter } from "next/router";
-import { Background } from "../home/Background";
 import { AuthBackground } from "./authBackground";
 
 export const CustomerSignUpcreen = () => {
