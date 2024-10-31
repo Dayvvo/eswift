@@ -90,7 +90,7 @@ class UserController {
         role,
       })
 
-      await mailGenMails.updatePassword(firstName, email, password)
+      await mailGenMails.updatePassword(firstName, email, password,true);
 
       return res.status(201).json({
         _id: user._id,

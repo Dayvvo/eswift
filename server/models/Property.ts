@@ -31,7 +31,7 @@ const PropertySchema = new mongoose.Schema<IProperty>(
       type: String,
     },
     images: {
-      type: [String],
+      type: [],
     },
     duration: {
       type: String,

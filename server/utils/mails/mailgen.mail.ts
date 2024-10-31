@@ -2,7 +2,7 @@ import { mailTransport } from '../config/google0athMail.config'
 import { mailGenerator } from '../config/mailgen.config'
 
 class MailgenMails {
-  async updatePassword(name: string, email: string, password: string) {
+  async updatePassword(name: string, email: string, password: string,smtpConfig?:boolean) {
     const html = {
       body: {
         name,
@@ -13,14 +13,18 @@ class MailgenMails {
     }
 
     const template = mailGenerator.generate(html)
-
     await mailTransport(
       `Eswift<${process.env.SENDING_MAIL}>`,
       email,
       'Eswift Password Update',
-      template
-    )
+      template,
+      {
+        smtpConfig
+      }
+    );
   }
+
+  
 }
 
 export const mailGenMails = new MailgenMails()

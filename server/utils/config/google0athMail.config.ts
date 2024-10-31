@@ -16,13 +16,19 @@ export const mailTransport = async (
   to: string,
   subject: string,
   html: any,
-  attachments?: any
+  optional?:{
+    attachments?: any,
+    smtpConfig?:boolean  
+  }
 ) => {
   const accessToken = await oauth2Client.getAccessToken()
-
+  const {attachments,smtpConfig} = optional || {};
   const smtpTransportOptions: SMTPTransport.Options = {
     service: 'gmail',
-    auth: {
+    auth: smtpConfig? {
+      user: SENDING_MAIL,
+      pass: process.env.PASS,
+    }:{
       type: 'OAuth2',
       user: SENDING_MAIL,
       clientId: CLIENT_ID,
