@@ -4,12 +4,31 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 const OAuth2 = google.auth.OAuth2
 
-const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, REFRESH_TOKEN, SENDING_MAIL } = process.env
+const { PASS, SENDING_MAIL } = process.env
 
-const oauth2Client = new OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
-oauth2Client.setCredentials({
-  refresh_token: REFRESH_TOKEN,
-})
+
+const getOauthCreds = async()=>{
+  const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, REFRESH_TOKEN } = process.env
+
+  const oauth2Client = new OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
+
+  oauth2Client.setCredentials({
+    refresh_token: REFRESH_TOKEN,
+  })
+
+  const accessToken = await oauth2Client.getAccessToken()
+  const clientId=CLIENT_ID;
+  const clientSecret= CLIENT_SECRET;
+  const refreshToken= REFRESH_TOKEN;
+
+  return {
+    clientId,
+    clientSecret,
+    refreshToken,
+    accessToken: accessToken.token!,
+  };
+
+};
 
 export const mailTransport = async (
   from: string,
@@ -21,20 +40,16 @@ export const mailTransport = async (
     smtpConfig?:boolean  
   }
 ) => {
-  const accessToken = await oauth2Client.getAccessToken()
   const {attachments,smtpConfig} = optional || {};
   const smtpTransportOptions: SMTPTransport.Options = {
     service: 'gmail',
     auth: smtpConfig? {
       user: SENDING_MAIL,
-      pass: process.env.PASS,
+      pass: PASS,
     }:{
       type: 'OAuth2',
       user: SENDING_MAIL,
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-      refreshToken: REFRESH_TOKEN,
-      accessToken: accessToken.token!,
+      ...await getOauthCreds()
     },
     tls: {
       rejectUnauthorized: false,
