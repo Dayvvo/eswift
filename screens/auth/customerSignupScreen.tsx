@@ -1,16 +1,5 @@
 import {
   Box,
-  Checkbox,
-  Flex,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  InputLeftElement,
-  InputRightElement,
-  Stack,
   Text,
 } from "@chakra-ui/react";
 import Image from "next/image";

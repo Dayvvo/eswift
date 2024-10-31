@@ -1,8 +1,13 @@
+import { useAppContext } from "@/context";
 import { Image, Text, Modal, ModalOverlay, ModalContent, Flex, Box } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 const Preloader = () => {
     const [isOpen, setIsOpen] = useState(true);
+
+    const isWindow =  typeof window !== 'undefined';
+
+    const {setGlobalContext} = useAppContext();
 
     useEffect(() => {
         const timer = setTimeout(() => {

@@ -81,7 +81,7 @@ const AddUser = ({close}:{close: ()=>void}) => {
   //   };
   //   return isError;
   // }
-
+  
   const validateRequired = ()=>{
     let isErr = false;
     let keys = Object.keys(userData);
