@@ -1,4 +1,4 @@
-import { UserRole } from "../interfaces";
+import { IDocument, UserRole } from "../interfaces";
 
 export interface ILoginValidation {
   email: string;
@@ -18,8 +18,8 @@ export interface IAddPropertyValidation {
   address: string;
   price: string;
   category: string;
-  duration: string;
   description: string;
   features: Array<string>;
   images: Array<string>;
+  documents: Array<IDocument>
 }
