@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import httpClient from "./useApi";
+import { R } from "@/utils/types";
 
 interface PropertyObj {
   title: string;
@@ -12,7 +13,7 @@ interface PropertyObj {
   features: string[];
   images: string[];
   name: string;
-  property: [{}]
+  documents:R[]
 }
 
 interface PropertyResponse {

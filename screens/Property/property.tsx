@@ -35,6 +35,7 @@ import {
 } from "@/components/svg";
 import { PropertyCard } from "./propertyCard";
 import { DocumentTypes, R } from "@/utils/types";
+import useUpload from "@/hooks/useUpload";
 
 interface MyData {
   _id: any;
@@ -178,6 +179,8 @@ export const PropertyScreen = () => {
 
   const { addProperty, getAdminProperty } = useProperty();
 
+  const { uploadSingle, uploadMultiple } = useUpload();
+
   const propertyData = {
     title,
     type: typeOfProperty,
@@ -187,39 +190,82 @@ export const PropertyScreen = () => {
     duration,
     description,
     features: ["nice", "cheap", "open spaces"],
-    images: [
-      "https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    ],
+    images,
     name: fileName,
-    file: "https://res.cloudinary.com/demo/image/upload/example_pdf.pdf",
     documents,
   };
 
-  const addPropertyFn = async () => {
-    const { documents, images, features, ...rest } = propertyData;
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
 
-    const payload: R = {
-      ...documents,
-      images,
-      features,
-      ...rest,
-    };
+  const resetFields = ()=>{
+    titleReset();
+    categoryReset();
+    descriptionReset();
+    durationReset();
+    imageReset();
+    fileNameReset();
+    priceReset();
+    typeReset();
+    addressReset();
+    setShowScreen(1);
 
-    const data = new FormData();
+  };
 
+  const uploadPropertyFiles = async(images:File[], documents: Documents)=>{
+    try{
+      type validDocs = keyof typeof documents
+      const uploadImages = await uploadMultiple(images) as string[];
+      
+      const uploadedDocuments = Object.keys(documents);
+      
+      let documentPayload: R[] = []
 
-    Object.keys(payload).map((key) => {
-      if (Array.isArray(payload[key])) {
-        let arr = payload[key];
-        arr.map((val) => data.append(key, val));
-      } else {
-        data.append(key, payload[key]);
+      for (const key in uploadedDocuments) {
+        if (Object.prototype.hasOwnProperty.call(documents, key)) {
+          const uploadImg = await uploadSingle( documents[key as validDocs] as File );
+          console.log('uploaded doc for',key, uploadImg)
+          if(uploadImg){
+            documentPayload.push({
+              type: key,
+              document: uploadImg
+            })
+          }
+        }
       }
-    });
-    console.log("data", data);
+
+      return {
+        images: uploadImages,
+        documents: documentPayload
+      }
+      
+    }
+    catch(err){
+      Promise.reject(err);
+    }
+  }
+
+  const addPropertyFn = async () => {
+    const { documents,images,...rest } = propertyData;
+
+
     try {
-      const req = await addProperty(data); // If no error occurs, the following code runs
+      const uploadedFiles = await uploadPropertyFiles(images, documents) || {
+        images:[],
+        documents:[]
+      };
+      
+      const payload = {
+        ...rest,
+        ...uploadedFiles
+      };
+      
+      const req = await addProperty(payload); // If no error occurs, the following code runs
+
       setShowModal(false);
+
+      resetFields();
 
       toast({
         status: "success",
@@ -229,18 +275,7 @@ export const PropertyScreen = () => {
         duration: 5000,
       });
 
-      titleReset();
-      categoryReset();
-      descriptionReset();
-      durationReset();
-      imageReset();
-      fileNameReset();
-      priceReset();
-      typeReset();
-      addressReset();
-      setShowScreen(1);
     } catch (err) {
-      // In case of error, this block will handle it and show the error toast
       toast({
         status: "error",
         description: "Failed to create property",
@@ -248,12 +283,21 @@ export const PropertyScreen = () => {
         position: "top",
         duration: 5000,
       });
-      // console.log("err", err);
     }
   };
 
-  const toggleModal = () => {
-    setShowModal((prevState) => !prevState);
+  const getPropertyFunction = async () => {
+    setLoading(true);
+    try {
+      setLoading(false);
+      const getAllProperties = await getAdminProperty(inputValue, page);
+      setGetProperty(getAllProperties?.data?.data);
+      // console.log(getAllProperties?.data?.data);
+      setTotalPages(getAllProperties.data?.pagination.pages);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -270,20 +314,6 @@ export const PropertyScreen = () => {
 
     fetchData();
   }, []);
-
-  const getPropertyFunction = async () => {
-    setLoading(true);
-    try {
-      setLoading(false);
-      const getAllProperties = await getAdminProperty(inputValue, page);
-      setGetProperty(getAllProperties?.data?.data);
-      // console.log(getAllProperties?.data?.data);
-      setTotalPages(getAllProperties.data?.pagination.pages);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     getPropertyFunction();
