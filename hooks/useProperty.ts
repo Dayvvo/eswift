@@ -10,9 +10,9 @@ interface PropertyObj {
   duration: string;
   category: string;
   features: string[];
-  images: any;
+  images: string[];
   name: string;
-  file: any;
+  property: [{}]
 }
 
 interface PropertyResponse {
@@ -47,13 +47,9 @@ const useProperty = () => {
   } = httpClient({ token });
 
   const addProperty = useCallback(
-    async (data: FormData) => {
+    async (data: PropertyObj) => {
       try {
-        const res = await post(`/property`, data,{
-          headers:{
-            "Content-Type":'multipart/form-data'
-          }
-        });
+        const res = await post(`/property`, data);
         return res;
       } catch (err: any) {
         throw new err();

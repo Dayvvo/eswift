@@ -207,9 +207,6 @@ export const PropertyScreen = () => {
 
     const data = new FormData();
 
-    console.log("payload", payload);
-
-    console.log("object keys", Object.keys(payload));
 
     Object.keys(payload).map((key) => {
       if (Array.isArray(payload[key])) {

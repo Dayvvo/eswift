@@ -1,7 +1,6 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-import Image from "next/image";
 import Btn from "@/components/Btn";
 import useToast from "@/hooks/useToast";
 import useProperty from "@/hooks/useProperty";
@@ -10,7 +9,7 @@ import { useState } from "react";
 
 type PropertyCardProps = {
   id?: string;
-  image?: any;
+  image: string[];
   count?: number;
   cardWidth?: any;
   title?: string;
@@ -89,6 +88,10 @@ export const PropertyCard = ({
     }
   };
 
+  const [image1]= image; 
+
+  console.log('image', image,image1);
+
   return (
     <Box
       className="RobotoF"
@@ -117,8 +120,7 @@ export const PropertyCard = ({
         <Image
           width={1000}
           height={1000}
-          layout="responsive"
-          src={`${image}`}
+          src={`${image1}`}
           alt={"property"}
         />
         {/* <Img
