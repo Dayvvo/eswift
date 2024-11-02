@@ -112,13 +112,11 @@ function httpClient({ token }: { token?: string }) {
 export function useApiUrl() {
   const userFromLocalStorage = window.localStorage.getItem("userData");
 
-  const token = userFromLocalStorage
-    ? JSON.parse(userFromLocalStorage)?.token
-    : "";
+  const token = userFromLocalStorage? JSON.parse(userFromLocalStorage)?.token: "";
 
-  const client = useCallback(() => httpClient({ token }), [token]);
+  const apiClient = useCallback(() => client({ token }), [token]);
 
-  return client();
+  return apiClient();
 }
 
 export default httpClient;

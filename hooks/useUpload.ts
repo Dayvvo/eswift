@@ -1,7 +1,7 @@
 
 
 import { useCallback, useEffect, useState } from "react";
-import httpClient from "./useApi";
+import httpClient, { useApiUrl } from "./useApi";
 
 const useUpload = () => {
   const [token, setToken] = useState("");
@@ -18,21 +18,31 @@ const useUpload = () => {
 
   }, []);
 
-  const { post } = httpClient({ token });
+  const {post} = useApiUrl()
 
   const uploadSingle = useCallback(
-    async (file: File) => {
-        const res = await post(`/upload/images`, {file});
-        return res;
+    async (file: FormData) => {
+            const res = await post(`/upload/images`, file,{
+                headers:{
+                    "Content-Type":'multipart/form-data'
+                }
+            });
+            return res;
+
       // return res
     },
     [token]
   );
-  
+
   const uploadMultiple = useCallback(
-    async (files:File[]) => {
-        const res = await post(`/upload/images`, {files});
-      return res
+    async (files:FormData) => {
+        const res = await post(`/upload/images`, files,{
+            headers:{
+                "Content-Type":'multipart/form-data'
+            }
+        });
+        return res
+
     },
     [token]
   );

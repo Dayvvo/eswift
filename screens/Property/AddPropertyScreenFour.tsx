@@ -142,22 +142,20 @@ export const AddPropertyScreenFour = ({
     { val: "GovConsent", name: "Gov Consent" },
   ];
 
-  const validateDocuments = () => {
-    const missingDocs = Object.entries(documents).filter(([key, doc]) => !doc);
-    if (missingDocs.length > 0) {
-      toast({
-        title: "Error",
-        description: `Please upload all required documents: ${missingDocs
-          .map(([key]) => key)
-          .join(", ")}`,
-        status: "error",
-        position: "top",
-        duration: 1500,
-      });
-      return false;
-    }
-    return true;
-  };
+  // const validateDocuments = () => {
+  //   const missingDocs = Object.entries(documents).filter(([key, doc]) => !doc);
+  //   if (missingDocs.length === 8) {
+  //     toast({
+  //       title: "Error",
+  //       description: `You must upload at least one document`,
+  //       status: "error",
+  //       position: "top",
+  //       duration: 1500,
+  //     });
+  //     return false;
+  //   }
+  //   return true;
+  // };
 
   return (
     <>
@@ -235,9 +233,7 @@ export const AddPropertyScreenFour = ({
           </Btn>
           <Btn
             onClick={() => {
-              if (validateDocuments()) {
                 next();
-              }
             }}
             my={"20px"}
             border={"1px solid var(--primaryBase)"}

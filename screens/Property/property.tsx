@@ -215,34 +215,41 @@ export const PropertyScreen = () => {
 
   const uploadPropertyFiles = async(images:File[], documents: Documents)=>{
     try{
-      type validDocs = keyof typeof documents
-      const uploadImages = await uploadMultiple(images) as string[];
+      console.log('images', images);
+
+      const imagesFormData = new FormData();
+      images.map(img=>imagesFormData.append('files', img));
+
+      const {data:uploadImages} = await uploadMultiple(imagesFormData);
       
       const uploadedDocuments = Object.keys(documents);
       
-      let documentPayload: R[] = []
+      let documentPayload: R[] = [];
+
+      type validDocs = keyof typeof documents;
 
       for (const key in uploadedDocuments) {
         if (Object.prototype.hasOwnProperty.call(documents, key)) {
-          const uploadImg = await uploadSingle( documents[key as validDocs] as File );
-          console.log('uploaded doc for',key, uploadImg)
+          const singleFormData = new FormData();
+          singleFormData.append('file', documents[key as validDocs] as File )
+          const {data:uploadImg} = await uploadSingle(singleFormData);
           if(uploadImg){
             documentPayload.push({
               type: key,
-              document: uploadImg
+              document: uploadImg?.data
             })
           }
         }
       }
 
       return {
-        images: uploadImages,
+        images: uploadImages?.data,
         documents: documentPayload
       }
       
     }
     catch(err){
-      Promise.reject(err);
+      console.log('err',err)
     }
   }
 
@@ -255,13 +262,14 @@ export const PropertyScreen = () => {
         images:[],
         documents:[]
       };
+    
       
       const payload = {
         ...rest,
         ...uploadedFiles
       };
       
-      const req = await addProperty(payload); // If no error occurs, the following code runs
+      const req = uploadedFiles &&  await addProperty(payload); // If no error occurs, the following code runs
 
       setShowModal(false);
 
@@ -303,7 +311,7 @@ export const PropertyScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: AxiosResponse<{ data: User[] }> = await client.query(
+        const response: AxiosResponse<{ data: User[] }> = await client.get(
           `/user/users`
         );
         setUsers(response.data.data);

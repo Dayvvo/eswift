@@ -21,14 +21,14 @@ class UploadController {
 
   //this uploads to digital ocean as opposed to cloudinary. All we have to do is replace uploadFile with uploadToDigital Ocean
   async uploadToDigitalOcean(file: Express.Multer.File): Promise<string> {
+    console.log('file creds', file.originalname, file.mimetype)
     const uploadParams: PutObjectRequest = {
       Bucket: BUCKET_NAME,
       ContentType: file.mimetype,
-      Key: `uploads/${Date.now()}_${file.originalname}`,
+      Key: `uploads/${Date.now()}_${file.originalname.replace(/(\s)/, "\\ ")}`,
       ACL: 'public-read',
       Body: file.buffer as any,
     }
-
     try {
       const command = new PutObjectCommand(uploadParams)
       await space.send(command)
