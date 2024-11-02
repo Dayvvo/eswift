@@ -6,11 +6,17 @@ const useProfile = () => {
   const client = useApiUrl();
 
   const getProfile = useCallback(() => {
-    // const req = client.query()
+    try {
+      const req = client.query('/user-detail/profile');
+      return req;
+    }
+    catch (err) {
+      console.log('err', err);
+    }
   }, [])
   
   return {
-    
+    getProfile,
   }
 }
 

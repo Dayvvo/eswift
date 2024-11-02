@@ -17,6 +17,7 @@ import { FiHome, FiUser } from "react-icons/fi";
 import { NextRouter, useRouter } from "next/router";
 import axios from "axios";
 import useAuth from "@/hooks/useAuth";
+import useProfile from "@/hooks/useProfile";
 
 const Header = ({ casedPath }: { casedPath: string }) => {
   return (
@@ -110,6 +111,8 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   const [path, setPath] = useState("");
   const [user, setUser] = useState({ firstName: "", lastName: "", email: "" });
 
+  const { getProfile } = useProfile();
+
   useEffect(() => {
     if (isWindow) {
       setRoute(window.location.href);
@@ -141,6 +144,20 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
       }
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const getProfileFn = async () => {
+      try {
+        const res = await getProfile();
+        console.log('res', res);
+      }
+      catch (err) {
+        console.log('err', err);
+      }
+    }
+
+    getProfileFn();
+  }, [])
 
   const logout =()=> {
     localStorage.removeItem('token');
