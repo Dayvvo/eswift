@@ -6,7 +6,7 @@ import {
 } from '../interfaces/interface.validation'
 import { MailType } from '../interfaces/mailtype.interface'
 import { ProfileInterface } from '../interfaces/profile.interface'
-import { UserRole } from '../interfaces'
+import { PaymentMode, UserRole } from '../interfaces'
 import { PropertyDocuments } from '../interfaces/types'
 
 export const validateLoginData = (login: ILoginValidation) => {
@@ -74,10 +74,20 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
     document: Joi.string().required(),
   })
 
+  const priceSchema = Joi.object({
+    mode: Joi.string()
+      .valid(...Object.values(PaymentMode))
+      .required(),
+
+    amount: Joi.string()
+      .pattern(/^\d+(\.\d{1,2})?$/)
+      .required(),
+  })
+
   const propertySchema = Joi.object({
     title: Joi.string().required(),
     address: Joi.string().required(),
-    price: Joi.string().required(),
+    price: priceSchema.required(),
     category: Joi.string().required(),
     description: Joi.string().required(),
     features: Joi.array().items(Joi.string().min(2).max(50)).min(1).required(),
