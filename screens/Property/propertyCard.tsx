@@ -7,28 +7,32 @@ import useProperty from "@/hooks/useProperty";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-type PropertyCardProps = {
-  id?: string;
-  image: string[];
+export type PropertyCardProps = {
+  _id?: string;
+  images: string[];
   count?: number;
   cardWidth?: any;
   title?: string;
-  pricing?: string;
-  location?: string;
+  price?: {
+    mode?:string,
+    amount?:string
+  };
+  address?: string;
   email?: string;
   user?: string;
   userImage?: string;
   onClick?: () => void;
   verificationState?: string;
+  creatorID?:string;
 };
 
 export const PropertyCard = ({
-  id,
-  image,
+  _id:id,
+  images:image,
   title,
   count,
-  pricing,
-  location,
+  price:pricing,
+  address:location,
   cardWidth,
   email,
   user,
@@ -154,7 +158,7 @@ export const PropertyCard = ({
             flexWrap={"nowrap"}
           >
             <TbCurrencyNaira />
-            {pricing}
+            {pricing?.amount}
           </Text>
         </Flex>
         <Flex

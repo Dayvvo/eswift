@@ -4,15 +4,15 @@ import { R } from "@/utils/types";
 
 interface PropertyObj {
   title: string;
-  type: string;
   description: string;
   address: string;
-  price: string;
-  duration: string;
+  price: {
+    mode:string,
+    amount:string
+  };
   category: string;
   features: string[];
   images: string[];
-  name: string;
   documents:R[]
 }
 

@@ -22,6 +22,7 @@ export enum PaymentMode {
   WEEKLY = 'weekly',
   MONTHLY = 'monthly',
   ANNUALLY = 'annually',
+  ONE_OFF = 'one_off'
 }
 
 export interface IPrice {

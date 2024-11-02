@@ -33,22 +33,22 @@ import {
   NextBtn,
   PreviousBtn,
 } from "@/components/svg";
-import { PropertyCard } from "./propertyCard";
+import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { DocumentTypes, R } from "@/utils/types";
 import useUpload from "@/hooks/useUpload";
 
-interface MyData {
-  _id: any;
-  title: string;
-  price: string;
-  address: string;
-  email: string;
-  owner: string;
-  userImage: string;
-  verificationState: string;
-  images: any;
-  creatorID: any;
-}
+// interface MyData {
+//   _id: any;
+//   title: string;
+//   price: string;
+//   address: string;
+//   email: string;
+//   owner: string;
+//   userImage: string;
+//   verificationState: string;
+//   images: any;
+//   creatorID: any;
+// }
 
 interface User {
   _id: any;
@@ -64,8 +64,9 @@ export type Documents = {
 };
 
 export const PropertyScreen = () => {
+  
   const [showModal, setShowModal] = useState(false);
-  const [getProperty, setGetProperty] = useState<MyData[]>([]);
+  const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
   const [page, setPage] = useState<any>(1);
   const [totalPages, setTotalPages] = useState<any>(1);
   const [inputValue, setInputValue] = useState<any>("");
@@ -183,15 +184,12 @@ export const PropertyScreen = () => {
 
   const propertyData = {
     title,
-    type: typeOfProperty,
     address,
     price,
     category,
-    duration,
     description,
     features: ["nice", "cheap", "open spaces"],
     images,
-    name: fileName,
     documents,
   };
 
@@ -201,7 +199,7 @@ export const PropertyScreen = () => {
 
   const resetFields = ()=>{
     titleReset();
-    categoryReset();
+    // categoryReset();
     descriptionReset();
     durationReset();
     imageReset();
@@ -215,32 +213,35 @@ export const PropertyScreen = () => {
 
   const uploadPropertyFiles = async(images:File[], documents: Documents)=>{
     try{
-      console.log('images', images);
 
-      const imagesFormData = new FormData();
-      images.map(img=>imagesFormData.append('files', img));
-
-      const {data:uploadImages} = await uploadMultiple(imagesFormData);
+      const imagesFormData = new FormData();   
       
-      const uploadedDocuments = Object.keys(documents);
+      images.map(img=>imagesFormData.append( images?.length > 1? 'files': 'file', img));
+
+      const {data:uploadImages} =  images?.length >1 ? await uploadMultiple(imagesFormData): await uploadSingle(imagesFormData);
+      
+      const uploadedDocuments = Object.keys(documents).filter(val=> documents[val as validDocs] );
       
       let documentPayload: R[] = [];
 
       type validDocs = keyof typeof documents;
 
       for (const key in uploadedDocuments) {
-        if (Object.prototype.hasOwnProperty.call(documents, key)) {
+          let keyVal = uploadedDocuments[key];
           const singleFormData = new FormData();
-          singleFormData.append('file', documents[key as validDocs] as File )
+          const matchingFile = documents[keyVal as validDocs];
+          
+          singleFormData.append('file', matchingFile as File )
+
           const {data:uploadImg} = await uploadSingle(singleFormData);
           if(uploadImg){
             documentPayload.push({
-              type: key,
+              type: keyVal,
               document: uploadImg?.data
             })
           }
-        }
       }
+
 
       return {
         images: uploadImages?.data,
@@ -254,22 +255,25 @@ export const PropertyScreen = () => {
   }
 
   const addPropertyFn = async () => {
-    const { documents,images,...rest } = propertyData;
-
+    const { documents,price,images,...rest } = propertyData;
 
     try {
       const uploadedFiles = await uploadPropertyFiles(images, documents) || {
         images:[],
         documents:[]
       };
-    
-      
+
+          
       const payload = {
         ...rest,
+        price:{
+          mode:'one_off',
+          amount: price
+        },
         ...uploadedFiles
       };
       
-      const req = uploadedFiles &&  await addProperty(payload); // If no error occurs, the following code runs
+      uploadedFiles &&  await addProperty(payload); // If no error occurs, the following code runs
 
       setShowModal(false);
 
@@ -283,7 +287,8 @@ export const PropertyScreen = () => {
         duration: 5000,
       });
 
-    } catch (err) {
+    } 
+    catch (err) {
       toast({
         status: "error",
         description: "Failed to create property",
@@ -350,9 +355,12 @@ export const PropertyScreen = () => {
             <AddPropertyScreenOne
               onChangeTitle={onChangeTitle}
               onChangeCategory={onChangeCategory}
+             
+              // typeOfProperty={typeOfProperty}
+              // validType={validType}
+              // onBlurType={onBlurType}
+
               onChangeDescription={onChangeDescription}
-              typeOfProperty={typeOfProperty}
-              onChangeType={onChangeType}
               description={description}
               title={title}
               category={category}
@@ -362,11 +370,9 @@ export const PropertyScreen = () => {
               invalidDescription={invalidDescription}
               validCategory={validCategory}
               validTitle={validTitle}
-              validType={validType}
               validDescription={validDescription}
               onBlurDescription={onBlurDescription}
               onBlurTitle={onBlurTitle}
-              onBlurType={onBlurType}
               onBlurCategory={onBlurCategory}
               onClick={() => setShowScreen(2)}
             />
@@ -538,11 +544,11 @@ export const PropertyScreen = () => {
                 return (
                   <PropertyCard
                     key={index}
-                    id={property?._id}
-                    image={property?.images}
+                    _id={property?._id}
+                    images={property?.images}
                     title={property?.title}
-                    pricing={property?.price}
-                    location={property?.address}
+                    price={property?.price}
+                    address={property?.address}
                     verificationState={property?.verificationState}
                     userImage={user?.avatar || "/"}
                     email={user?.email}

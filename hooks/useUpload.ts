@@ -22,7 +22,7 @@ const useUpload = () => {
 
   const uploadSingle = useCallback(
     async (file: FormData) => {
-            const res = await post(`/upload/images`, file,{
+            const res = await post(`/upload/image`, file,{
                 headers:{
                     "Content-Type":'multipart/form-data'
                 }
