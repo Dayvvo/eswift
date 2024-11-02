@@ -40,7 +40,7 @@ const PropertySchema = new mongoose.Schema<IProperty>(
       default: PropertyOwner.ESWIFT,
     },
     price: {
-      type: String,
+      type: Object,
     },
     images: {
       type: [String],
