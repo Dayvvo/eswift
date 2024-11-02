@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import cloudinary from '../utils/config/cloudinary.config'
 import { UploadApiResponse } from 'cloudinary'
 import { BUCKET_NAME, space } from '../utils/config/bucket.config'
+import { randomBytes } from 'crypto'
 import {
   PutObjectRequest,
   PutObjectCommand,
@@ -24,7 +25,9 @@ class UploadController {
     const uploadParams: PutObjectRequest = {
       Bucket: BUCKET_NAME,
       ContentType: file.mimetype,
-      Key: `uploads/${Date.now()}_${file.originalname}`,
+      Key: `uploads/${Date.now()}_${randomBytes(4).toString('hex')}.${
+        file.mimetype.split('/')[1]
+      }`,
       ACL: 'public-read',
       Body: file.buffer as any,
     }
