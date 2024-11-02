@@ -22,6 +22,7 @@ export const BlogCard = ({ picture, title, date, details, id}: BlogCardProps) =>
     <>
       <Box onClick={ ()=> navigate.push(`/blogspot/${id}`)}
         className="roboto"
+        cursor={'pointer'}
         bg={"#FFF"}
         maxW={"388px"}
         h={{base:'500px',lg:"650px"}}

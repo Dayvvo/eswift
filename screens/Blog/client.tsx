@@ -31,13 +31,14 @@ const BlogspotScreen = () => {
     section.scrollIntoView({ behavior: "smooth" });
   }
 
+  console.log('blogPost', blogPost);
+
   useEffect(() => {
     const getBlogFn = async () => {
       setLoading(true);
       try {
         const req = await getBlog();
-        setBlogPost(req.data.data);
-        console.log(req.data.data)
+        setBlogPost(req.data);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -76,7 +77,7 @@ const BlogspotScreen = () => {
           templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
           gap={{ base: "24px", lg: "60px" }}
         >
-          {blogPost.map((item) => {
+          {blogPost && blogPost.map((item) => {
             return (
               <BlogCard
                 key={item?._id} id={item?._id}
