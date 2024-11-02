@@ -1,14 +1,17 @@
-import { ObjectId } from 'mongoose';
+import { ObjectId } from 'mongoose'
 
 export enum UserRole {
-  CLIENT = "CLIENT",
-  ADMIN = "ADMIN",
-  GUEST = "GUEST",
+  CLIENT = 'CLIENT',
+  ADMIN = 'ADMIN',
+  AFFILIATE = 'AFFILIATE',
+  AGENT = 'AGENT',
+  GUEST = 'GUEST',
+  STAFF = 'STAFF',
 }
 
 export enum AuthProvider {
-  GOOGLE = "google",
-  EMAIL_SIGNUP = "email_signup",
+  GOOGLE = 'google',
+  EMAIL_SIGNUP = 'email_signup',
 }
 
 export interface IUser {
@@ -24,9 +27,10 @@ export interface IUser {
   hash?: string
   propertyCount: number
   role: UserRole
-  isActive: boolean,
-  referrer: ObjectId,
-  verification: 'pending' | 'verified' | 'rejected',
+  isActive: boolean
+  passwordUpdated: boolean
+  referrer: ObjectId
+  verification: 'pending' | 'verified' | 'rejected'
   matchPassword?: FunctionConstructor
   increasePropertyCount?: FunctionConstructor
   decreasePropertyCount?: FunctionConstructor

@@ -14,7 +14,7 @@ interface CustomButtonProps extends ButtonProps {
   pt?: string;
   pb?: string;
   px?: string;
-  w?: string;
+  w?: string | {};
   size?: string;
   weight?: string;
   disabled?: boolean | any;

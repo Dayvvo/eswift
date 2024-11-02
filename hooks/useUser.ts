@@ -6,7 +6,6 @@ const useUser = () => {
 
   type AddUserProps = {
     email: string,
-    password: string,
     firstName: string,
     lastName: string,
     role: string,

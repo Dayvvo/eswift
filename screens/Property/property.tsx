@@ -1,4 +1,16 @@
-import { Flex, Box,Text, Input, InputGroup, InputLeftElement, Grid, Stack, Skeleton, Card, CardBody} from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Text,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Grid,
+  Stack,
+  Skeleton,
+  Card,
+  CardBody,
+} from "@chakra-ui/react";
 import { RiSearch2Line } from "react-icons/ri";
 import Btn, { PaginationButton } from "@/components/Btn";
 import { IoFilter } from "react-icons/io5";
@@ -15,9 +27,14 @@ import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
 import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
 import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
 import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
-import { DoubleNextBtn, DoublePrevBtn, NextBtn, PreviousBtn } from "@/components/svg";
-import { useRouter } from "next/navigation";
+import {
+  DoubleNextBtn,
+  DoublePrevBtn,
+  NextBtn,
+  PreviousBtn,
+} from "@/components/svg";
 import { PropertyCard } from "./propertyCard";
+import { DocumentTypes, R } from "@/utils/types";
 
 interface MyData {
   _id: any;
@@ -30,7 +47,7 @@ interface MyData {
   verificationState: string;
   images: any;
   creatorID: any;
-};
+}
 
 interface User {
   _id: any;
@@ -39,10 +56,13 @@ interface User {
   email: string;
   phoneNumber: number;
   avatar: any;
+}
+
+export type Documents = {
+  [K in DocumentTypes]: File | null;
 };
 
 export const PropertyScreen = () => {
-
   const [showModal, setShowModal] = useState(false);
   const [getProperty, setGetProperty] = useState<MyData[]>([]);
   const [page, setPage] = useState<any>(1);
@@ -52,64 +72,108 @@ export const PropertyScreen = () => {
   const [showScreen, setShowScreen] = useState(1);
   const [users, setUsers] = useState<User[]>([]);
 
+  const [documents, setDocuments] = useState<Documents>({
+    FamilyReceipt: null,
+    SurveyPlan: null,
+    Layout: null,
+    Affidavit: null,
+    Agreement: null,
+    CofO: null,
+    PowerOfAttorney: null,
+    GovConsent: null,
+  });
+
+  const handleDocumentChange = (name: string, value: File) => {
+    if (value) {
+      setDocuments((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
   const {
     input: title,
     onChangeInput: onChangeTitle,
+    onBlurHandler: onBlurTitle,
+    valueIsInvalid: invalidTitle,
+    valueIsValid: validTitle,
     reset: titleReset,
   } = useInputText((title) => title.length > 2);
- 
+
   const {
     input: category,
     onChangeInput: onChangeCategory,
+    onBlurHandler: onBlurCategory,
+    valueIsInvalid: invlidCategory,
+    valueIsValid: validCategory,
     reset: categoryReset,
   } = useInputText((category) => category !== "");
 
   const {
     input: description,
     onChangeInput: onChangeDescription,
+    onBlurHandler: onBlurDescription,
+    valueIsInvalid: invalidDescription,
+    valueIsValid: validDescription,
     reset: descriptionReset,
   } = useInputText((description) => description.length > 8);
- 
+
   const {
     input: address,
     onChangeInput: onChangeAddress,
+    onBlurHandler: onBlurAddress,
+    valueIsInvalid: invalidAddress,
+    valueIsValid: validAddress,
     reset: addressReset,
   } = useInputText((address) => address.length > 3);
- 
+
   const {
     input: typeOfProperty,
     onChangeInput: onChangeType,
+    onBlurHandler: onBlurType,
+    valueIsInvalid: invlidType,
+    valueIsValid: validType,
     reset: typeReset,
   } = useInputText((typeOfProperty) => typeOfProperty !== "");
 
   const {
     input: duration,
     onChangeInput: onChangeDuration,
+    onBlurHandler: onBlurDuration,
+    valueIsInvalid: invalidDuration,
+    valueIsValid: validDuration,
     reset: durationReset,
   } = useInputText((duration) => duration !== "");
+
   const {
     input: fileName,
     onChangeInput: onChangeFileName,
+    onBlurHandler: onBlurFilename,
+    valueIsInvalid: invalidFilename,
+    valueIsValid: validFilename,
     reset: fileNameReset,
   } = useInputText((fileName) => fileName !== "");
 
   const {
     input: price,
     onChangeInput: onChangePrice,
+    onBlurHandler: onBlurPrice,
+    valueIsInvalid: invalidPrice,
+    valueIsValid: validPrice,
     reset: priceReset,
   } = useInputText((price) => price !== "");
- 
+
   const {
-    image,
+    images,
     onChangeHandler: onChangeImage,
     error: imageError,
+    deleteImage,
     reset: imageReset,
   } = useImage();
 
-  const router = useRouter();
-
   const { toast } = useToast();
- 
+
   const client = useApiUrl();
 
   const { addProperty, getAdminProperty } = useProperty();
@@ -128,12 +192,36 @@ export const PropertyScreen = () => {
     ],
     name: fileName,
     file: "https://res.cloudinary.com/demo/image/upload/example_pdf.pdf",
+    documents,
   };
 
   const addPropertyFn = async () => {
+    const { documents, images, features, ...rest } = propertyData;
+
+    const payload: R = {
+      ...documents,
+      images,
+      features,
+      ...rest,
+    };
+
+    const data = new FormData();
+
+    console.log("payload", payload);
+
+    console.log("object keys", Object.keys(payload));
+
+    Object.keys(payload).map((key) => {
+      if (Array.isArray(payload[key])) {
+        let arr = payload[key];
+        arr.map((val) => data.append(key, val));
+      } else {
+        data.append(key, payload[key]);
+      }
+    });
+    console.log("data", data);
     try {
-      const req = await addProperty(propertyData); // If no error occurs, the following code runs
-      // console.log("response", req);
+      const req = await addProperty(data); // If no error occurs, the following code runs
       setShowModal(false);
 
       toast({
@@ -143,7 +231,6 @@ export const PropertyScreen = () => {
         position: "top",
         duration: 5000,
       });
-      // Reset the form fields after successful creation
 
       titleReset();
       categoryReset();
@@ -193,13 +280,14 @@ export const PropertyScreen = () => {
       setLoading(false);
       const getAllProperties = await getAdminProperty(inputValue, page);
       setGetProperty(getAllProperties?.data?.data);
-      console.log(getAllProperties?.data?.data);
+      // console.log(getAllProperties?.data?.data);
       setTotalPages(getAllProperties.data?.pagination.pages);
     } catch (error) {
       setLoading(false);
       console.log(error);
     }
   };
+
   useEffect(() => {
     getPropertyFunction();
   }, [showModal, loading]);
@@ -220,50 +308,75 @@ export const PropertyScreen = () => {
 
   return (
     <>
-      <Modal onClose={toggleModal} isVisible={showModal}>
-        {/* {currentChildComponent} */}
-        {showScreen === 1 ? (
-          <AddPropertyScreenOne
-            onChangeTitle={onChangeTitle}
-            onChangeCategory={onChangeCategory}
-            onChangeDescription={onChangeDescription}
-            typeOfProperty={typeOfProperty}
-            onChangeType={onChangeType}
-            description={description}
-            title={title}
-            category={category}
-            onClick={() => setShowScreen(2)}
-          />
-        ) : showScreen === 2 ? (
-          <AddPropertyScreenTwo
-            address={address}
-            price={price}
-            duration={duration}
-            onChangeAddress={onChangeAddress}
-            onChangePrice={onChangePrice}
-            onChangeDuration={onChangeDuration}
-            next={() => setShowScreen(3)}
-            previous={() => setShowScreen(1)}
-          />
-        ) : showScreen === 3 ? (
-          <AddPropertyScreenThree
-            next={() => setShowScreen(4)}
-            previous={() => setShowScreen(2)}
-            images={image}
-            onChangeImage={onChangeImage}
-            error={imageError}
-          />
-        ) : showScreen === 4 ? (
-          <AddPropertyScreenFour
-            next={addPropertyFn}
-            previous={() => setShowScreen(3)}
-            fileName={fileName}
-            onChangeFileName={onChangeFileName}
-          />
-        ) : (
-          ""
-        )}
-      </Modal>
+      <form>
+        <Modal onClose={toggleModal} isVisible={showModal}>
+          {/* {currentChildComponent} */}
+          {showScreen === 1 ? (
+            <AddPropertyScreenOne
+              onChangeTitle={onChangeTitle}
+              onChangeCategory={onChangeCategory}
+              onChangeDescription={onChangeDescription}
+              typeOfProperty={typeOfProperty}
+              onChangeType={onChangeType}
+              description={description}
+              title={title}
+              category={category}
+              invalidCategory={invlidCategory}
+              invalidTitle={invalidTitle}
+              invalidType={invlidType}
+              invalidDescription={invalidDescription}
+              validCategory={validCategory}
+              validTitle={validTitle}
+              validType={validType}
+              validDescription={validDescription}
+              onBlurDescription={onBlurDescription}
+              onBlurTitle={onBlurTitle}
+              onBlurType={onBlurType}
+              onBlurCategory={onBlurCategory}
+              onClick={() => setShowScreen(2)}
+            />
+          ) : showScreen === 2 ? (
+            <AddPropertyScreenTwo
+              address={address}
+              price={price}
+              duration={duration}
+              invalidPrice={invalidPrice}
+              invalidDuration={invalidDuration}
+              invalidAddress={invalidAddress}
+              validPrice={validPrice}
+              validDuration={validDuration}
+              validAddress={validAddress}
+              onBlurPrice={onBlurPrice}
+              onBlurAdddress={onBlurAddress}
+              onBlurDuration={onBlurDuration}
+              onChangeAddress={onChangeAddress}
+              onChangePrice={onChangePrice}
+              onChangeDuration={onChangeDuration}
+              next={() => setShowScreen(3)}
+              previous={() => setShowScreen(1)}
+            />
+          ) : showScreen === 3 ? (
+            <AddPropertyScreenThree
+              next={() => setShowScreen(4)}
+              previous={() => setShowScreen(2)}
+              images={images}
+              onChangeImage={onChangeImage}
+              deleteImage={deleteImage}
+              error={imageError}
+            />
+          ) : showScreen === 4 ? (
+            <AddPropertyScreenFour
+              next={addPropertyFn}
+              previous={() => setShowScreen(3)}
+              fileName={fileName}
+              documents={documents}
+              onChangeFileName={handleDocumentChange}
+            />
+          ) : (
+            ""
+          )}
+        </Modal>
+      </form>
       <Box
         className="robotoF"
         px={{ base: "16px", lg: "0" }}
@@ -310,54 +423,56 @@ export const PropertyScreen = () => {
               />
             </InputGroup>
           </Flex>
-          <Btn
-            onClick={toggleModal}
-            display={"flex"}
-            gap={"4px"}
-            alignItems={"center"}
-            bg={"#fff"}
-            h={"100%"}
-            w={"131px"}
-            border={"1px solid var(--soft200)"}
-            borderRadius={"8px"}
-            textColor={"var--(sub600)"}
-            fontWeight={500}
-            fontSize={"14px"}
-            px={"6px"}
-            pt={"0"}
-            pb={"0"}
-            _hover={{
-              bg: "#1A1D66",
-              textColor: "#FFF",
-            }}
-          >
-            <Text fontSize={"14px"}>Add Property</Text>
-            <BsPlus className="icon" />
-          </Btn>
-          <Btn
-            onClick={() => setPage(inputValue)}
-            display={"flex"}
-            gap={"4px"}
-            alignItems={"center"}
-            bg={"#fff"}
-            h={"100%"}
-            w={"80px"}
-            border={"1px solid var(--soft200)"}
-            borderRadius={"8px"}
-            textColor={"var--(sub600)"}
-            fontWeight={500}
-            fontSize={"14px"}
-            px={"6px"}
-            pt={"0"}
-            pb={"0"}
-            _hover={{
-              bg: "#1A1D66",
-              textColor: "#FFF",
-            }}
-          >
-            <IoFilter className="icon" />
-            <Text>Filter</Text>
-          </Btn>
+          <Flex gap={'12px'} flexDir={{base:'column',sm:'row'}} alignItems={'end'}>
+                <Btn
+                    onClick={toggleModal}
+                    display={"flex"}
+                    gap={"4px"}
+                    alignItems={"center"}
+                    bg={"#fff"}
+                    h={"100%"}
+                    w={"131px"}
+                    border={"1px solid var(--soft200)"}
+                    borderRadius={"8px"}
+                    textColor={"var--(sub600)"}
+                    fontWeight={500}
+                    fontSize={"14px"}
+                    px={"6px"}
+                    pt={"0"}
+                    pb={"0"}
+                    _hover={{
+                    bg: "#1A1D66",
+                    textColor: "#FFF",
+                    }}
+                >
+                    <Text fontSize={"14px"}>Add Property</Text>
+                    <BsPlus className="icon" />
+                </Btn>
+                <Btn
+                    onClick={() => setPage(inputValue)}
+                    display={"flex"}
+                    gap={"4px"}
+                    alignItems={"center"}
+                    bg={"#fff"}
+                    h={"100%"}
+                    w={"80px"}
+                    border={"1px solid var(--soft200)"}
+                    borderRadius={"8px"}
+                    textColor={"var--(sub600)"}
+                    fontWeight={500}
+                    fontSize={"14px"}
+                    px={"6px"}
+                    pt={"0"}
+                    pb={"0"}
+                    _hover={{
+                    bg: "#1A1D66",
+                    textColor: "#FFF",
+                    }}
+                >
+                    <IoFilter className="icon" />
+                    <Text>Filter</Text>
+                </Btn>
+            </Flex>
         </Flex>
 
         {/* Scrollable Property Cards Container */}
@@ -376,12 +491,11 @@ export const PropertyScreen = () => {
 
           {!loading && getProperty?.length > 0 && (
             <Grid
-              overflowY={{ base: "scroll" }}
-              maxH={{ base: "100vh", xl: "calc(80vh - 100px)" }}
-              mt={4}
-              templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
-              gap={{ base: "24px", lg: "28px" }}
-              paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
+                mt={4} w={"fit-content"}
+                templateColumns={{base:"repeat(1, 1fr)",md:"repeat(2, 1fr)",xl:"repeat(3, 1fr)"}}
+                gap={{ base: "24px", lg: "28px" }}
+                paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
+                placeItems={'center'}
             >
               {getProperty.map((property, index) => {
                 const user = users.find((u) => u._id === property?.creatorID);

@@ -1,4 +1,6 @@
 import Btn from "@/components/Btn";
+import { DeleteBin } from "@/components/svg";
+import useToast from "@/hooks/useToast";
 import {
   Box,
   Flex,
@@ -12,6 +14,7 @@ import {
   Select,
   Text,
   Textarea,
+  Image,
 } from "@chakra-ui/react";
 import { ChangeEvent, ReactNode, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa";
@@ -24,6 +27,7 @@ interface ButtonFunction {
   images: any;
   error: any;
   onChangeImage: (event: ChangeEvent<HTMLInputElement>) => void;
+  deleteImage: (id: number) => void;
 }
 // export const AddPropertyScreenTwo = ({ next, previous }: ButtonFunction) => {
 
@@ -32,8 +36,10 @@ export const AddPropertyScreenThree = ({
   previous,
   images,
   onChangeImage,
+  deleteImage,
   error,
 }: ButtonFunction) => {
+  const { toast } = useToast();
   const subs: any[] = [
     {
       id: 1,
@@ -70,6 +76,8 @@ export const AddPropertyScreenThree = ({
 
   const [dragging, setDragging] = useState<boolean>(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+  console.log("images", images);
   // const [error, setError] = useState<string | null>(null);
 
   // const validateFile = (File: File): void => {
@@ -130,6 +138,39 @@ export const AddPropertyScreenThree = ({
   //         console.log(err);
   //       });
   //   };
+
+  // const validate = () => {
+  //   if (!images.length) {
+  //     onBlurTitle();
+  //     return false;
+  //   }
+
+  //   return true;
+  // };
+
+  const nextFn = () => {
+    // const isFormValid = validate();
+
+    if (images.length < 1) {
+      toast({
+        status: "error",
+        title: "Image Upload Required",
+        description: "Please upload at least one image to proceed.",
+        position: "top",
+        duration: 1500,
+      });
+      return;
+    } else if (error) {
+      toast({
+        status: "error",
+        title: "Invalid image upload type",
+        description: "Please upload a valid image type.",
+        position: "top",
+        duration: 1500,
+      });
+    }
+    next();
+  };
 
   return (
     <>
@@ -253,6 +294,59 @@ export const AddPropertyScreenThree = ({
             Browse File
           </Btn>
         </Flex>
+        {images.length > 0 && (
+          <Flex
+            gap="15px"
+            overflow="auto"
+            wrap="nowrap"
+            justifyContent={"center"}
+            bgColor={"#E2EDF3"}
+            mt={"20px"}
+            border={"1px solid #262626"}
+            padding="10px"
+            borderRadius={"12px"}
+            css={{
+              "&::-webkit-scrollbar": {
+                height: "4px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                borderRadius: "4px",
+              },
+            }}
+          >
+            {images.map((image: any, index: number) => (
+              <Box
+                key={index}
+                h="74px"
+                borderRadius="6px"
+                flexShrink="0"
+                width="122.22px"
+                position={"relative"}
+                // onClick={() => handleImageClick(index)}
+              >
+                <Image
+                  h="100%"
+                  w="100%"
+                  src={URL.createObjectURL(image)}
+                  alt={image.name}
+                  borderRadius="6px"
+                  objectFit="cover"
+                />
+                <Box
+                  position={"absolute"}
+                  top={"30px"}
+                  left={"50px"}
+                  cursor="pointer"
+                  bgColor={"#999"}
+                  borderRadius={"5px"}
+                  onClick={() => deleteImage(index)}
+                >
+                  <DeleteBin />
+                </Box>
+              </Box>
+            ))}
+          </Flex>
+        )}
         <Flex gap={"2rem"}>
           <Btn
             onClick={previous}
@@ -269,7 +363,7 @@ export const AddPropertyScreenThree = ({
             Previous
           </Btn>
           <Btn
-            onClick={next}
+            onClick={nextFn}
             my={"20px"}
             border={"1px solid var(--primaryBase)"}
             display={"flex"}

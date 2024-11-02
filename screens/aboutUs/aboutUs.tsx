@@ -4,8 +4,9 @@ import { Box, Text, Flex } from "@chakra-ui/react";
 import { Video } from "./video";
 import { Footer } from "@/components/footer";
 import { Background } from "../home/Background";
-import { MoreDetails } from "./MoreDetails";
 import { AboutSection } from "./AboutPageSection";
+import { MoreDetails } from "./MoreDetails";
+
 
 const AboutUsScreen = () => {
   function scrollToSection() {
@@ -19,7 +20,7 @@ const AboutUsScreen = () => {
         <NavBar />
         <HeroPropsVideo
           bg={"#00000070"}
-          header={"The E-Swift Dream"}
+          header={"The e-Swift Dream"}
           details={
             "Explore our story and how we've become a trusted leader in the industry."
           }

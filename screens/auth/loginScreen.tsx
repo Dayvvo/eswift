@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import { Background } from "../home/Background";
 import { useInputText } from "@/hooks/useInput";
 import useToast from "@/hooks/useToast";
+import { AuthBackground } from "./authBackground";
 
 export const LoginScreen = () => {
   const navigate = useRouter();
@@ -119,7 +120,6 @@ export const LoginScreen = () => {
     <Box
       display={"flex"}
       flexDir={"column"}
-      bg={"#FFF"}
       justifyContent={"space-between"}
       w={"100%"}
       h={"100vh"}
@@ -127,14 +127,14 @@ export const LoginScreen = () => {
       py={"24px"}
       className="robotoF"
     >
-      <Background />
+      <AuthBackground/>
       <Box h={"fit-content"}>
-        <Image width={200} height={100} src={"/logo.svg"} alt={"eswift"} />
+        <Image width={200} height={100} src={"/logo.svg"} alt={"e-Swift"} />
       </Box>
       <Flex flexBasis={1} justifyContent={"center"} alignItems={"center"}>
         <Box
           w={{ base: "100%", sm: "440px" }}
-          h={"fit-content"}
+          h={"fit-content"} bg={'#FFF'}
           p={{ base: "16px", md: "32px" }}
           border={"1px solid var(--soft200)"}
           boxShadow={"lg"}
@@ -291,7 +291,7 @@ export const LoginScreen = () => {
         </Box>
       </Flex>
       <Text fontSize={"14px"} fontWeight={400} textColor={"var(--sub600)"}>
-        © {new Date().getFullYear()} E-Swift Property Mart
+        © {new Date().getFullYear()} e-Swift Property Mart
       </Text>
     </Box>
   );

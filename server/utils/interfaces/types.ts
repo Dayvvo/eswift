@@ -3,15 +3,16 @@ import { Request, Response, NextFunction } from 'express';
 export type generalRequestBody = Record<string, any>
 
 export enum PropertyDocuments {
-  FamilyReceipt = 'FamilyReceipt',
-  SurveyPlan = 'SurveyPlan',
-  Layout = 'Layout',
-  Affidavidit = 'Affidavit',
-  Agreement = 'Agreement',
-  CofO = 'CofO',
-  PowerOfAttourney = 'PowerOfAttorney',
-  GovConsent = 'GovConsent',
+  FAMILY_RECEIPT = 'FamilyReceipt',
+  SURVEY_PLAN = 'SurveyPlan',
+  LAYOUT = 'Layout',
+  AFFIDAVIT = 'Affidavit',
+  AGREEMENT = 'Agreement',
+  CERTIFICATE_OF_OCCUPANCY = 'CofO',
+  POWER_OF_ATTORNEY = 'PowerOfAttorney',
+  GOVERNMENT_CONSENT = 'GovConsent',
 }
+
 
 export enum PropertyVerification {
   Pending = 'Pending',

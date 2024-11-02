@@ -20,6 +20,8 @@ const dev = process.env.NODE_ENV !== 'production';
 const hostname = process.env.HOSTName || 'localhost';
 const port = (process.env.PORT || 3000) as number;
 
+console.log('dev mode',process.env['NODE_ENV'])
+
 const nextApp = next({ dev, hostname, port })
 const handle = nextApp.getRequestHandler();
 dotenv.config()

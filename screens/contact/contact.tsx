@@ -39,7 +39,7 @@ const ContactScreen = () => {
     {
       id: 1,
       icon: <FaEnvelope />,
-      title: "Eswiftpropertmart",
+      title: "e-Swiftpropertmart",
       navigate: "mailto:ewiftpropertymart",
     },
     {
@@ -319,7 +319,7 @@ const ContactScreen = () => {
 
           <TextHeader
             Header="Let's Connect"
-            sub="We`re excited to connect with you and learn more about your real estate goals. Use the form below to get in touch with Eswift. Whether you`re a prospetive client, partner, or simply curious about our services, we`re here to answer your questions and provide the assistance you need."
+            sub="We`re excited to connect with you and learn more about your real estate goals. Use the form below to get in touch with e-Swift. Whether you`re a prospetive client, partner, or simply curious about our services, we`re here to answer your questions and provide the assistance you need."
           />
 
           <FormControl

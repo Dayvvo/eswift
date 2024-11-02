@@ -25,8 +25,9 @@ const Header = ({ casedPath }: { casedPath: string }) => {
       justifyContent={"space-between"}
       alignItems={"center"}
       borderBottom={"1px solid #E1E4EA"}
-      padding={"40px 30px 40px 60px"}
-      left={{ base: "20px", lg: "256px" }}
+      // padding={"40px 30px 40px 60px"}
+      px={{base:'12px',lg:'40px'}} py={{base:'20px',lg:'40px'}}
+      left={{ base: "2px", lg: "256px" }}
       maxW={{ base: "full", lg: "80vw" }}
       pos="sticky"
       zIndex={99}
@@ -37,9 +38,9 @@ const Header = ({ casedPath }: { casedPath: string }) => {
           borderRadius={"50%"}
           maxW={"30px"}
           h="30px"
-          align={"center"}
-          justify={"center"}
-          mt="15%"
+          alignItems={"center"}
+          justifyContent={"center"}
+          mt="4%"
         >
           <DashboardIcon />
         </Flex>
@@ -169,11 +170,12 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;
 
   return (
-    <Box py="40px" w="" minH={"100vh"}>
-      <Box>
+    <Box w={'100%'} py="40px" minH={"100vh"} overflowX={'hidden'}>
+      <Box w={'100%'}>
         <Box
           borderRight={"1px solid #E1E4EA"}
-          w="244px"
+          w={"244px"}
+          bg={'white'}
           pos={"fixed"}
           // top={0}
           // left={0}
@@ -276,8 +278,8 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
         <Box
           position={"relative"}
           top={"20px"}
-          left={{ base: "20px", lg: "250px" }}
-          maxW={{ base: "full", lg: "80vw" }}
+          left={{ base: "0px", lg: "250px" }}
+          w={{ base: "full", lg: "80vw" }}
           px="20px"
         >
           {route ? children : <></>}

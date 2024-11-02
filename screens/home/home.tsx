@@ -11,7 +11,6 @@ import { Background } from "./Background";
 import { Video } from "./Video";
 
 
-
 const HomePage =()=> {
 
     function scrollToSection() {

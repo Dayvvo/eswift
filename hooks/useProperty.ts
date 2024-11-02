@@ -25,7 +25,7 @@ const useProperty = () => {
   const baseUrl = "http://localhost:5500/api";
   const [token, setToken] = useState("");
 
-  console.log(token);
+  // console.log(token);
 
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
@@ -47,9 +47,13 @@ const useProperty = () => {
   } = httpClient({ token });
 
   const addProperty = useCallback(
-    async (data: PropertyObj) => {
+    async (data: FormData) => {
       try {
-        const res = await post(`/property`, data);
+        const res = await post(`/property`, data,{
+          headers:{
+            "Content-Type":'multipart/form-data'
+          }
+        });
         return res;
       } catch (err: any) {
         throw new err();
