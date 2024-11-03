@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import cloudinary from '../utils/config/cloudinary.config'
 import { UploadApiResponse } from 'cloudinary'
 import { BUCKET_NAME, space } from '../utils/config/bucket.config'
+import { randomBytes } from 'crypto'
 import {
   PutObjectRequest,
   PutObjectCommand,
@@ -21,23 +22,25 @@ class UploadController {
 
   //this uploads to digital ocean as opposed to cloudinary. All we have to do is replace uploadFile with uploadToDigital Ocean
   async uploadToDigitalOcean(file: Express.Multer.File): Promise<string> {
-    const fileName = `${new Date().toUTCString()}-${file.originalname}`
-
+    console.log('file creds', file.originalname, file.mimetype)
     const uploadParams: PutObjectRequest = {
       Bucket: BUCKET_NAME,
       ContentType: file.mimetype,
-      Key: fileName,
+      Key: `uploads/${Date.now()}_${randomBytes(4).toString('hex')}.${
+        file.mimetype.split('/')[1]
+      }`,
+      ACL: 'public-read',
       Body: file.buffer as any,
     }
-
     try {
       const command = new PutObjectCommand(uploadParams)
       await space.send(command)
 
       //this has to be verified
-      return `https://${BUCKET_NAME}/${fileName}`
+      return `${process.env.DO_SPACES_ENDPOINT}/${BUCKET_NAME}/${uploadParams.Key}`
     } catch (error: any) {
-      throw new Error(`File upload failed: ${error.message}`)
+      console.error('Error uploading file:', error)
+      throw new Error('Failed to upload file')
     }
   }
 
@@ -50,7 +53,7 @@ class UploadController {
           .json({ statusCode: 400, message: `Bad Request, No file selected` })
       }
 
-      const secureUrl = await uploadController.uploadFile(file)
+      const secureUrl = await uploadController.uploadToDigitalOcean(file)
 
       return res.json({
         statusCode: 200,
@@ -71,7 +74,7 @@ class UploadController {
         const files = req.files as Express.Multer.File[]
         let urls: Array<string> = []
         for (const file of files) {
-          urls.push(await uploadController.uploadFile(file))
+          urls.push(await uploadController.uploadToDigitalOcean(file))
         }
 
         return res.json({ statusCode: 200, message: `Success`, data: urls })

@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import { Background } from "../home/Background";
 import { useInputText } from "@/hooks/useInput";
 import useToast from "@/hooks/useToast";
+import { AuthBackground } from "./authBackground";
 
 export const LoginScreen = () => {
   const navigate = useRouter();
@@ -126,7 +127,7 @@ export const LoginScreen = () => {
       py={"24px"}
       className="robotoF"
     >
-      <Background/>
+      <AuthBackground/>
       <Box h={"fit-content"}>
         <Image width={200} height={100} src={"/logo.svg"} alt={"e-Swift"} />
       </Box>

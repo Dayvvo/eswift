@@ -6,7 +6,6 @@ const useUser = () => {
 
   type AddUserProps = {
     email: string,
-    password: string,
     firstName: string,
     lastName: string,
     role: string,
@@ -14,7 +13,7 @@ const useUser = () => {
 
   const getUser = useCallback(() => {
     const req = client
-      .query("/user/users")
+      .get("/user/users")
       .then((res: any) => {
         return res;
       })
@@ -26,7 +25,7 @@ const useUser = () => {
 
   const getUserById = useCallback(async (userId:string) => {
     try {
-      const req = await client.query(`/user/users/${userId}`)
+      const req = await client.get(`/user/users/${userId}`)
       return req;
     }
     catch (err) {

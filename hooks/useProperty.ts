@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import httpClient from "./useApi";
+import { R } from "@/utils/types";
 
 interface PropertyObj {
   title: string;
-  type: string;
   description: string;
   address: string;
-  price: string;
-  duration: string;
+  price: {
+    mode:string,
+    amount:string
+  };
   category: string;
   features: string[];
-  images: any;
-  name: string;
-  file: any;
+  images: string[];
+  documents:R[]
 }
 
 interface PropertyResponse {
@@ -47,13 +48,9 @@ const useProperty = () => {
   } = httpClient({ token });
 
   const addProperty = useCallback(
-    async (data: FormData) => {
+    async (data: PropertyObj) => {
       try {
-        const res = await post(`/property`, data,{
-          headers:{
-            "Content-Type":'multipart/form-data'
-          }
-        });
+        const res = await post(`/property`, data);
         return res;
       } catch (err: any) {
         throw new err();

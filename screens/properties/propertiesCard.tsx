@@ -1,10 +1,10 @@
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { TbCurrencyNaira } from "react-icons/tb";
-import Image from "next/image"
 import router from "next/router";
 import { MdLocationOn } from "react-icons/md";
 import Btn from "@/components/Btn";
 import { properties } from "@/utils/types";
+import { PropertyCardProps } from "../Property/propertyCard";
 
 type PropertiesCardProps = {
     picture?:string;
@@ -16,7 +16,7 @@ type PropertiesCardProps = {
     id:string;
 }
 
-interface propertiesCard extends properties{
+interface propertiesCard extends PropertyCardProps {
     view?:'client' | 'admin'
     onClick?: () => void;
 
@@ -49,10 +49,9 @@ export const PropertiesCard =({
                     overflow={'hidden'}
                 >
                     <Image 
-                        width={1000} height={1000}
-                        layout="responsive"
-                        src={`${images[0]}`} 
-                        alt={'property'}
+                     width={1000} height={1000}
+                     src={`${images[0]}`} 
+                     alt={'property'}
                     />
                 </Flex>
                 <Flex  
@@ -110,7 +109,7 @@ export const PropertiesCard =({
                             fontWeight={600} textColor={'#191919'}
                         >
                             <TbCurrencyNaira /> 
-                            {price}
+                            {price?.amount}
                         </Text>
                     </Flex>
                     <Btn onClick={onClick}

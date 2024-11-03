@@ -1,35 +1,43 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-import Image from "next/image";
 import Btn from "@/components/Btn";
 import useToast from "@/hooks/useToast";
 import useProperty from "@/hooks/useProperty";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-type PropertyCardProps = {
-  id?: string;
-  image?: any;
+
+
+export type PropertyCardProps = {
+  _id?: string;
+  images: string[];
   count?: number;
   cardWidth?: any;
   title?: string;
-  pricing?: string;
-  location?: string;
+  price?: {
+    mode?:string,
+    amount?:string
+  };
+  location?:string;
+  description?: string;
+  address?: string;
   email?: string;
   user?: string;
   userImage?: string;
   onClick?: () => void;
   verificationState?: string;
+  creatorID?:string;
 };
 
+
 export const PropertyCard = ({
-  id,
-  image,
+  _id:id,
+  images:image,
   title,
   count,
-  pricing,
-  location,
+  price:pricing,
+  address:location,
   cardWidth,
   email,
   user,
@@ -37,6 +45,7 @@ export const PropertyCard = ({
   onClick,
   verificationState,
 }: PropertyCardProps) => {
+
   const [verificationStatus, setVerificationStatus] =
     useState(verificationState);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -51,6 +60,8 @@ export const PropertyCard = ({
   const data = {
     verification: "Verified",
   };
+  
+  
   const verifyPropertyFn = async () => {
     if (!id) {
       toast({
@@ -89,6 +100,10 @@ export const PropertyCard = ({
     }
   };
 
+  const [image1]= image || []; 
+
+  console.log('image', image,image1);
+
   return (
     <Box
       className="RobotoF"
@@ -115,10 +130,9 @@ export const PropertyCard = ({
           {count || null} of 3
         </Text>
         <Image
-          width={1000}
-          height={1000}
-          layout="responsive"
-          src={`${image}`}
+          width={'100%'}
+          minWidth={{lg:'500px'}}
+          src={`${image1}`}
           alt={"property"}
         />
         {/* <Img
@@ -152,7 +166,7 @@ export const PropertyCard = ({
             flexWrap={"nowrap"}
           >
             <TbCurrencyNaira />
-            {pricing}
+            {pricing?.amount}
           </Text>
         </Flex>
         <Flex

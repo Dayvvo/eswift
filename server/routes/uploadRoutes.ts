@@ -1,10 +1,7 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
+import uploadController from '../controllers/uploadController'
 import { appConfig } from '../utils/config'
 import multerConfig from '../utils/config/multer.config'
-import cloudinary from '../utils/config/cloudinary.config'
-import { UploadApiResponse } from 'cloudinary'
-import UploadController from '../controllers/uploadController'
-import uploadController from '../controllers/uploadController'
 
 const router = express.Router()
 const config = new appConfig()

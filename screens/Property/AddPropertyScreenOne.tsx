@@ -21,8 +21,7 @@ interface AddPropertyScreenOneProps {
   title: string;
   category: string;
   description: string;
-  typeOfProperty: string;
-  onChangeType: (event: ChangeEvent<HTMLSelectElement>) => void;
+  // onChangeType: (event: ChangeEvent<HTMLSelectElement>) => void;
   onChangeDescription: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeCategory: (event: ChangeEvent<HTMLSelectElement>) => void;
@@ -32,10 +31,10 @@ interface AddPropertyScreenOneProps {
   invalidDescription: boolean | null;
   validCategory: boolean;
   validTitle: boolean;
-  validType: boolean;
+  // validType: boolean;
   validDescription: boolean;
   onBlurTitle: any;
-  onBlurType: any;
+  // onBlurType: any;
   onBlurCategory: any;
   onBlurDescription: any;
 }
@@ -45,8 +44,7 @@ export const AddPropertyScreenOne = ({
   onChangeTitle,
   category,
   onChangeCategory,
-  typeOfProperty,
-  onChangeType,
+  // onChangeType,
   description,
   invalidCategory,
   invalidTitle,
@@ -54,10 +52,8 @@ export const AddPropertyScreenOne = ({
   validCategory,
   validTitle,
   validDescription,
-  validType,
   onBlurTitle,
   onBlurDescription,
-  onBlurType,
   onBlurCategory,
   invalidType,
   onChangeDescription,
@@ -94,10 +90,8 @@ export const AddPropertyScreenOne = ({
     if (!validTitle) {
       onBlurTitle();
       return false;
-    } else if (!validType) {
-      onBlurType();
-      return false;
-    } else if (!validCategory) {
+    } 
+    else if (!validCategory) {
       onBlurCategory();
       return false;
     } else if (!validDescription) {
@@ -223,9 +217,9 @@ export const AddPropertyScreenOne = ({
               textColor={"var--(sub600)"}
               _placeholder={{ textColor: "var--(soft400)" }}
               placeholder="Type of property"
-              onBlur={onBlurType}
-              value={typeOfProperty}
-              onChange={onChangeType}
+              onBlur={onBlurCategory}
+              value={category}
+              onChange={onChangeCategory}
             >
               {["Land", "House"].map((entry) => (
                 <option value={`${entry}`} key={entry}>
@@ -240,7 +234,7 @@ export const AddPropertyScreenOne = ({
             )}
           </FormControl>
 
-          {typeOfProperty && (
+          {/* {typeOfProperty && (
             <FormControl w={"100%"}>
               <FormLabel
                 fontWeight={500}
@@ -285,7 +279,7 @@ export const AddPropertyScreenOne = ({
                 </FormHelperText>
               )}
             </FormControl>
-          )}
+          )} */}
 
           <FormControl w={"100%"}>
             <FormLabel
