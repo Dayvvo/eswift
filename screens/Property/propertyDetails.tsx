@@ -41,6 +41,7 @@ export const PropertyDetails = ({
   p?: string;
   cardWidth?: any;
 }) => {
+  
   const Features: any[] = [
     {
       id: 1,
@@ -67,6 +68,7 @@ export const PropertyDetails = ({
       key: "Spacious living area with ample natural light",
     },
   ];
+
   const Documents: any[] = [
     {
       id: 1,
@@ -89,40 +91,9 @@ export const PropertyDetails = ({
       doc: "/",
     },
   ];
-  const properties: any[] = [
-    {
-      id: 1,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      id: 2,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      id: 3,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-  ];
 
   const { globalContext } = useAppContext();
+  
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -132,19 +103,21 @@ export const PropertyDetails = ({
     propertyCount: 0,
   });
 
-  const [detailsData, setDetailsData] = useState<any>(null);
+  const [detailsData, setDetailsData] = useState<PropertyCardProps | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalType, seModalType] = useState<'suspend' | 'decline' | 'gallery'>();
   const [showDeclineModal, setShowDeclineModal] = useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
-  const { toast } = useToast();
-  const router = useRouter();
-
   const [verificationStatus, setVerificationStatus] = useState(
     detailsData?.verification
   );
+
+  const { toast } = useToast();
+  const router = useRouter();
+
   const {
     getPropertyDetails,
     propertyCreator,
@@ -182,6 +155,7 @@ export const PropertyDetails = ({
       console.log(error);
     }
   };
+  
   useEffect(() => {
     getPropertyFunction();
   }, [showModal, isVerifying]);
@@ -189,6 +163,7 @@ export const PropertyDetails = ({
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
+  
   const toggleDeclineModal = () => {
     setShowDeclineModal((prevState) => !prevState);
   };
@@ -269,9 +244,10 @@ export const PropertyDetails = ({
   useEffect(() => {
     getPropertyDetailFn();
   }, [id, showModal, isVerifying]);
-
+  
   return (
     <>
+      
       <Modal
         closeOnOverlayClick={true}
         onClose={() => {
@@ -288,6 +264,7 @@ export const PropertyDetails = ({
           />
         </ModalContent>
       </Modal>
+
       <Modal
         closeOnOverlayClick={true}
         onClose={() => {
@@ -304,6 +281,7 @@ export const PropertyDetails = ({
           />
         </ModalContent>
       </Modal>
+
       <Modal
         closeOnOverlayClick={true}
         onClose={() => {
@@ -319,7 +297,9 @@ export const PropertyDetails = ({
             toggleModal={toggleSuspendModal}
           />
         </ModalContent>
+  
       </Modal>
+
       <Modal
         closeOnOverlayClick={true}
         onClose={() => {
@@ -337,7 +317,6 @@ export const PropertyDetails = ({
         </ModalContent>
       </Modal>
 
-      
       <Box bg={"#FFF"} w={"100%"}>
         <Flex w={"100%"} my={my || "24px"} pos={"relative"}>
           <Grid
@@ -431,7 +410,7 @@ export const PropertyDetails = ({
               </Text>
               <Box fontSize={"18px"} fontWeight={300} textColor={"#626871"}>
                 <Text>Key Features</Text>
-                {detailsData?.features.map((feature: string, index: number) => {
+                {detailsData?.features?.map((feature: string, index: number) => {
                   return (
                     <Flex key={index} alignItems={"center"} gap={"4px"}>
                       <BsDot />
@@ -460,10 +439,10 @@ export const PropertyDetails = ({
                 </Text>
               </Flex>
               <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
-                {Documents.map((document) => {
+                {detailsData?.documents?.map((document,key) => {
                   return (
                     <Flex
-                      key={document?.id}
+                      key={(String(document?.type) + key)}
                       alignItems={"center"}
                       position={"relative"}
                       borderRadius={"8.5px"}
@@ -472,6 +451,7 @@ export const PropertyDetails = ({
                       w={"100%"}
                       h={"52px"}
                     >
+                      <Box fontSize={'12px'}> {document?.type} </Box>
                       <Btn
                         pos={"absolute"}
                         bg={"transparent"}
@@ -501,7 +481,7 @@ export const PropertyDetails = ({
               className="robotoF"
             >
               {user.role === "ADMIN" ? (
-                verificationStatus === "verified" ? (
+                verificationStatus === "Pending" ? (
                   <Flex gap={"16px"} direction={"column"}>
                     <Btn
                       bg={"transparent"}
@@ -532,9 +512,9 @@ export const PropertyDetails = ({
                       Delete
                     </Btn>
                   </Flex>
-                ) : verificationStatus === "suspend" ? (
+                ) :  (
                   <Flex gap={"16px"} direction={"column"}>
-                    <Btn
+                    {/* <Btn
                       bg={"transparent"}
                       display={"flex"}
                       justifyContent={"center"}
@@ -547,7 +527,7 @@ export const PropertyDetails = ({
                       onClick={toggleModal}
                     >
                       Resume
-                    </Btn>
+                    </Btn> */}
                     <Btn
                       bg={"transparent"}
                       display={"flex"}
@@ -563,38 +543,40 @@ export const PropertyDetails = ({
                       Delete
                     </Btn>
                   </Flex>
-                ) : (
-                  <Flex gap={"16px"} direction={"column"}>
-                    <Btn
-                      bg={"transparent"}
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                      w="100%"
-                      border="1px solid var(--primaryBase)"
-                      borderRadius={"10px"}
-                      h={"40px"}
-                      textColor={"var(--primaryBase)"}
-                      onClick={toggleModal}
-                    >
-                      Verify
-                    </Btn>
-                    <Btn
-                      bg={"transparent"}
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                      w="100%"
-                      border="1px solid var(--errorBase)"
-                      borderRadius={"10px"}
-                      h={"40px"}
-                      textColor={"var(--errorBase)"}
-                      onClick={toggleDeclineModal}
-                    >
-                      Decline
-                    </Btn>
-                  </Flex>
-                )
+                ) 
+                
+                // : (
+                //   <Flex gap={"16px"} direction={"column"}>
+                //     <Btn
+                //       bg={"transparent"}
+                //       display={"flex"}
+                //       justifyContent={"center"}
+                //       alignItems={"center"}
+                //       w="100%"
+                //       border="1px solid var(--primaryBase)"
+                //       borderRadius={"10px"}
+                //       h={"40px"}
+                //       textColor={"var(--primaryBase)"}
+                //       onClick={toggleModal}
+                //     >
+                //       Verify
+                //     </Btn>
+                //     <Btn
+                //       bg={"transparent"}
+                //       display={"flex"}
+                //       justifyContent={"center"}
+                //       alignItems={"center"}
+                //       w="100%"
+                //       border="1px solid var(--errorBase)"
+                //       borderRadius={"10px"}
+                //       h={"40px"}
+                //       textColor={"var(--errorBase)"}
+                //       onClick={toggleDeclineModal}
+                //     >
+                //       Decline
+                //     </Btn>
+                //   </Flex>
+                // )
               ) : (
                 <></>
               )}
@@ -706,6 +688,7 @@ export const PropertyDetails = ({
           })}
         </Flex>
       </Box>
+
     </>
   );
 };

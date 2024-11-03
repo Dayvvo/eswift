@@ -19,13 +19,7 @@ export const CustomerSignUpcreen = () => {
   const HandleGoogleSubmit = async () => {
     let requestId = "";
     const allowedOrigin = "https://accounts.google.com";
-    // axios.get('/api/auth/google')
-    //     .then((res)=>{
-    //         console.log(res.data)
-    //     })
-    //     .catch((err) => {
-    //         console.log(err)
-    //     })
+
 
     const authWindow = window.open(
       `/api/auth/google`,
@@ -63,6 +57,8 @@ export const CustomerSignUpcreen = () => {
     });
   };
 
+  const router  = useRouter();
+
   return (
     <Box
       display={"flex"}
@@ -97,7 +93,7 @@ export const CustomerSignUpcreen = () => {
           <Box w={"100%"} border={"1px solid var(--soft200)"} my={"24px"} />
             
             <Btn
-              onClick={HandleGoogleSubmit}
+              onClick={()=>router.push('/api/auth/google')}
               bg={"transparent"}
               my={2}
               borderColor={"#D0DDD5"}
@@ -111,7 +107,7 @@ export const CustomerSignUpcreen = () => {
               fontSize={{ base: "12px", lg: "14px" }}
               gap={"4px"}
             >
-              Sign up with Google <FcGoogle />
+              Sign in with Google <FcGoogle />
             </Btn>
             <Flex w="100%" my={"10px"} justifyContent={"space-between"}>
               <Text

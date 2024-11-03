@@ -29,8 +29,11 @@ import useToast from "@/hooks/useToast";
 import { AuthBackground } from "./authBackground";
 
 export const LoginScreen = () => {
+ 
   const navigate = useRouter();
+ 
   const [show, setShow] = React.useState<boolean>(false);
+  
   const {
     input: email,
     onChangeInput: onChangeEmail,
@@ -42,6 +45,7 @@ export const LoginScreen = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   });
+
   const {
     input: password,
     onChangeInput: onChangePassword,
@@ -52,11 +56,11 @@ export const LoginScreen = () => {
   } = useInputText((password) => password.trim().length > 7);
 
   const [loading, setLoading] = useState(false);
+
   const { toast } = useToast();
-  const isLogin = {
-    email,
-    password,
-  };
+
+  const isLogin = { email, password};
+
   const validate = () => {
     if (!validEmail) {
       onBlurEmail();
@@ -104,17 +108,9 @@ export const LoginScreen = () => {
 
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
-    if (!storedData) {
-      navigate.push("/login");
-    } else {
-      try {
-        const parsedUserData = JSON.parse(storedData);
-        console.log(parsedUserData);
-      } catch (err) {
-        navigate.push("/login");
-      }
-    }
+    storedData && navigate.push('/dashboard')
   }, [navigate]);
+
 
   return (
     <Box
@@ -291,7 +287,7 @@ export const LoginScreen = () => {
         </Box>
       </Flex>
       <Text fontSize={"14px"} fontWeight={400} textColor={"var(--sub600)"}>
-        © {new Date().getFullYear()} e-Swift Property Mart
+        ©{new Date().getFullYear()} e-Swift Property Mart
       </Text>
     </Box>
   );

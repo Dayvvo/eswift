@@ -92,11 +92,6 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
       icon: (color: string) => <BlogIcon color={color} />,
       url: "/blog",
     },
-    // {
-    //   label: "Team",
-    //   icon: (color: string) => <FiUser size={"1rem"} color={color} />,
-    //   url: "/team",
-    // },
     {
       label: "Settings",
       icon: (color: string) => <SettingsIcon color={color} />,
@@ -120,9 +115,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (route) {
       const fullPath = new URL(route).pathname;
-
       const pathSegments = fullPath.split("/").filter((segment) => segment);
-
       if (pathSegments.length > 0) {
         setPath(pathSegments[0]); // Always picks the first segment after the domain
       }
@@ -132,23 +125,19 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (!storedData) {
-      navigate.push("/login");
-    } else {
-      try {
-        const parsedUserData = JSON.parse(storedData);
-        setUser(parsedUserData);
-      } catch (err) {
-        navigate.push("/login");
-      }
-    }
+      navigate.push("/auth");
+    } 
+    else {
+      const parsedUserData = JSON.parse(storedData);
+      setUser(parsedUserData);
+    };
   }, [navigate]);
 
   const logout =()=> {
     localStorage.removeItem('token');
-    localStorage.removeItem('userData')
-    navigate.push('/login')
+    localStorage.removeItem('userData');
+    navigate.push('/login');
   }
-
 
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;
 

@@ -228,12 +228,13 @@ export const PropertyScreen = () => {
 
       for (const key in uploadedDocuments) {
           let keyVal = uploadedDocuments[key];
+
           const singleFormData = new FormData();
+
           const matchingFile = documents[keyVal as validDocs];
-          
-          singleFormData.append('file', matchingFile as File )
 
           const {data:uploadImg} = await uploadSingle(singleFormData);
+
           if(uploadImg){
             documentPayload.push({
               type: keyVal,

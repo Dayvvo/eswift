@@ -19,6 +19,9 @@ export type PropertyCardProps = {
     mode?:string,
     amount?:string
   };
+  verification?: 'Pending' | 'Verified' | 'Rejected';
+  features?: string[]
+  documents?: {type:string, document:string}[];
   location?:string;
   description?: string;
   address?: string;
@@ -29,6 +32,8 @@ export type PropertyCardProps = {
   verificationState?: string;
   creatorID?:string;
 };
+
+
 
 
 export const PropertyCard = ({

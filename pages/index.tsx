@@ -23,7 +23,6 @@ export default function Home() {
 
     try {
       const myCookie = getCookie('auth-cookie') as string;
-      console.log('my cookie',JSON.parse(myCookie))      
     } catch (error) {
       console.error("Error parsing JSON:", error);
     }
