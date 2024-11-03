@@ -533,10 +533,9 @@ export const PropertyScreen = () => {
           {!loading && getProperty?.length > 0 && (
             <Grid
                 mt={4} w={"fit-content"}
-                templateColumns={{base:"repeat(1, 1fr)",md:"repeat(2, 1fr)",xl:"repeat(3, 1fr)"}}
+                templateColumns={{base:"repeat(1, 1fr)",md:"repeat(2, 1fr)",lg:"repeat(3, 1fr)"}}
                 gap={{ base: "24px", lg: "28px" }}
                 paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
-                placeItems={'center'}
             >
               {getProperty.map((property, index) => {
                 const user = users.find((u) => u._id === property?.creatorID);

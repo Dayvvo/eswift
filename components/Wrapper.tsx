@@ -15,7 +15,7 @@ import {
 } from "./svg";
 import { FiHome, FiUser } from "react-icons/fi";
 import { NextRouter, useRouter } from "next/router";
-import axios from "axios";
+// import axios from "axios";
 import useAuth from "@/hooks/useAuth";
 import useProfile from "@/hooks/useProfile";
 

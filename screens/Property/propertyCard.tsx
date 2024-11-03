@@ -7,6 +7,8 @@ import useProperty from "@/hooks/useProperty";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+
+
 export type PropertyCardProps = {
   _id?: string;
   images: string[];
@@ -17,6 +19,8 @@ export type PropertyCardProps = {
     mode?:string,
     amount?:string
   };
+  location?:string;
+  description?: string;
   address?: string;
   email?: string;
   user?: string;
@@ -25,6 +29,7 @@ export type PropertyCardProps = {
   verificationState?: string;
   creatorID?:string;
 };
+
 
 export const PropertyCard = ({
   _id:id,
@@ -40,6 +45,7 @@ export const PropertyCard = ({
   onClick,
   verificationState,
 }: PropertyCardProps) => {
+
   const [verificationStatus, setVerificationStatus] =
     useState(verificationState);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -54,6 +60,8 @@ export const PropertyCard = ({
   const data = {
     verification: "Verified",
   };
+  
+  
   const verifyPropertyFn = async () => {
     if (!id) {
       toast({
@@ -92,7 +100,7 @@ export const PropertyCard = ({
     }
   };
 
-  const [image1]= image; 
+  const [image1]= image || []; 
 
   console.log('image', image,image1);
 
@@ -122,8 +130,8 @@ export const PropertyCard = ({
           {count || null} of 3
         </Text>
         <Image
-          width={1000}
-          height={1000}
+          width={'100%'}
+          minWidth={{lg:'500px'}}
           src={`${image1}`}
           alt={"property"}
         />

@@ -21,7 +21,7 @@ import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
-import { PropertyCard } from "./propertyCard";
+import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { useRouter } from "next/router";
 import {
   DeclineState,
@@ -31,18 +31,6 @@ import {
 } from "./VerificationState";
 import useToast from "@/hooks/useToast";
 
-interface MyData {
-  _id: any;
-  title: string;
-  price: string;
-  address: string;
-  email: string;
-  owner: string;
-  userImage: string;
-  verificationState: string;
-  images: any;
-  creatorID: any;
-}
 
 export const PropertyDetails = ({
   my,
@@ -150,7 +138,7 @@ export const PropertyDetails = ({
   const [showSuspendModal, setShowSuspendModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
-  const [getProperty, setGetProperty] = useState<MyData[]>([]);
+  const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -412,7 +400,7 @@ export const PropertyDetails = ({
             <Text fontSize={"40px"}>{detailsData?.title}</Text>
             <Text fontWeight={500} display={"flex"} alignItems={"center"}>
               <TbCurrencyNaira />
-              <Text as={"span"}>{detailsData?.price}</Text>
+              <Text as={"span"}>{detailsData?.price?.amount}</Text>
             </Text>
           </Flex>
           <Flex
@@ -703,10 +691,10 @@ export const PropertyDetails = ({
             return (
               <PropertyCard
                 key={index}
-                id={property?._id}
-                image={property?.images}
+                _id={property?._id}
+                images={property?.images}
                 title={property?.title}
-                pricing={property?.price}
+                price={property?.price}
                 location={property?.address}
                 verificationState={property?.verificationState}
                 userImage={user?.avatar || "/"}

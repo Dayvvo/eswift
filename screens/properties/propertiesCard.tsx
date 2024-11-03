@@ -4,6 +4,7 @@ import router from "next/router";
 import { MdLocationOn } from "react-icons/md";
 import Btn from "@/components/Btn";
 import { properties } from "@/utils/types";
+import { PropertyCardProps } from "../Property/propertyCard";
 
 type PropertiesCardProps = {
     picture?:string;
@@ -15,7 +16,7 @@ type PropertiesCardProps = {
     id:string;
 }
 
-interface propertiesCard extends properties{
+interface propertiesCard extends PropertyCardProps {
     view?:'client' | 'admin'
     onClick?: () => void;
 
@@ -108,7 +109,7 @@ export const PropertiesCard =({
                             fontWeight={600} textColor={'#191919'}
                         >
                             <TbCurrencyNaira /> 
-                            {price}
+                            {price?.amount}
                         </Text>
                     </Flex>
                     <Btn onClick={onClick}

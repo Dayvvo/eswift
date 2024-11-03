@@ -37,8 +37,10 @@ const BlogspotScreen = () => {
     const getBlogFn = async () => {
       setLoading(true);
       try {
+
         const req = await getBlog();
-        setBlogPost(req.data);
+
+        setBlogPost(req?.data);
         setLoading(false);
       } catch (error) {
         setLoading(false);

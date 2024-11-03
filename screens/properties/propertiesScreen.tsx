@@ -11,13 +11,14 @@ import Btn from "@/components/Btn";
 import { Background } from "../home/Background";
 import { TextHeader } from "../home/textHeader";
 import { properties } from "@/utils/types";
+import { PropertyCardProps } from "../Property/propertyCard";
 
 
 const PropertiesScreen =()=> {
 
     const [inputValue, setInputValue] = useState<string>('');
 
-    const [fetchData, setFetchData] = useState<properties[]>([]);
+    const [fetchData, setFetchData] = useState<PropertyCardProps[]>([]);
 
     const [isLoading, setLoading] = useState<boolean>(false);
 
