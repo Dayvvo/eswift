@@ -7,7 +7,6 @@ import { RiSearch2Line } from "react-icons/ri";
 import { PropertiesCard } from "./propertiesCard";
 import { Footer } from "@/components/footer";
 import axios from "axios";
-import { LoadMore } from "@/components/LoadMore";
 import Btn from "@/components/Btn";
 import { Background } from "../home/Background";
 import { TextHeader } from "../home/textHeader";

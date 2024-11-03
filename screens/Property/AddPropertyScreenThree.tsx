@@ -78,24 +78,6 @@ export const AddPropertyScreenThree = ({
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   console.log("images", images);
-  // const [error, setError] = useState<string | null>(null);
-
-  // const validateFile = (File: File): void => {
-  //   if (!validfileTypes.includes(File.type)) {
-  //     setError(
-  //       `Invalid file type. ${validfileTypes.join(",")} are supported, only`
-  //     );
-  //     return;
-  //   }
-
-  //   if (File.size > maxFileSize) {
-  //     setError(`File exceeds maximum size of ${maxFileSize}MB`);
-  //     return;
-  //   }
-
-  //   setUploadedFile(File);
-  //   setError(null);
-  // };
 
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const handleImageClickHadler = () => {
@@ -127,26 +109,6 @@ export const AddPropertyScreenThree = ({
       const file: File = e.target.files[0];
     });
   };
-
-  //   const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-  //     axios
-  //       .post("", handleUpload)
-  //       .then((res) => {
-  //         onClick();
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   };
-
-  // const validate = () => {
-  //   if (!images.length) {
-  //     onBlurTitle();
-  //     return false;
-  //   }
-
-  //   return true;
-  // };
 
   const nextFn = () => {
     // const isFormValid = validate();

@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import cloudinary from '../utils/config/cloudinary.config'
 import { UploadApiResponse } from 'cloudinary'
 import { BUCKET_NAME, space } from '../utils/config/bucket.config'
+import { randomBytes } from 'crypto'
 import {
   PutObjectRequest,
   PutObjectCommand,
@@ -21,14 +22,16 @@ class UploadController {
 
   //this uploads to digital ocean as opposed to cloudinary. All we have to do is replace uploadFile with uploadToDigital Ocean
   async uploadToDigitalOcean(file: Express.Multer.File): Promise<string> {
+    console.log('file creds', file.originalname, file.mimetype)
     const uploadParams: PutObjectRequest = {
       Bucket: BUCKET_NAME,
       ContentType: file.mimetype,
-      Key: `uploads/${Date.now()}_${file.originalname}`,
+      Key: `uploads/${Date.now()}_${randomBytes(4).toString('hex')}.${
+        file.mimetype.split('/')[1]
+      }`,
       ACL: 'public-read',
       Body: file.buffer as any,
     }
-
     try {
       const command = new PutObjectCommand(uploadParams)
       await space.send(command)

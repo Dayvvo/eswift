@@ -13,6 +13,8 @@ import { HttpStatusCode } from 'axios'
 class PropertyController {
   //TODO: finish function
   createProperty = async (req: Request, res: Response) => {
+
+    console.log('request body',req.body)
     const validate = ValidateAddProperty(req.body)
     const { value, error } = validate
 
