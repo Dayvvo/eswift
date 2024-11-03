@@ -22,41 +22,41 @@ import { IoIosArrowForward } from "react-icons/io";
 interface ButtonFunction {
   next: () => void;
   previous: () => void;
-  duration: string;
+  // duration: string;
   price: any;
   address: string;
   onChangeAddress: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangePrice: (event: ChangeEvent<HTMLInputElement>) => void;
-  onChangeDuration: (event: ChangeEvent<HTMLSelectElement>) => void;
+  // onChangeDuration: (event: ChangeEvent<HTMLSelectElement>) => void;
   invalidPrice: boolean | null;
-  invalidDuration: boolean | null;
+  // invalidDuration: boolean | null;
   invalidAddress: boolean | null;
   validPrice: boolean;
-  validDuration: boolean;
+  // validDuration: boolean;
   validAddress: boolean;
   onBlurPrice: any;
   onBlurAdddress: any;
-  onBlurDuration: any;
+  // onBlurDuration: any;
 }
 export const AddPropertyScreenTwo = ({
   next,
   previous,
-  duration,
-  onChangeDuration,
+  // duration,
+  // onChangeDuration,
   price,
   onChangePrice,
   address,
   onChangeAddress,
   invalidPrice,
-  invalidDuration,
+  // invalidDuration,
   invalidAddress,
   validPrice,
-  validDuration,
+  // validDuration,
   validAddress,
   onBlurPrice,
   onBlurAdddress,
-  onBlurDuration,
-}: ButtonFunction) => {
+}: // onBlurDuration,
+ButtonFunction) => {
   const { toast } = useToast();
   const subs: any[] = [
     {
@@ -96,10 +96,11 @@ export const AddPropertyScreenTwo = ({
     } else if (!validPrice) {
       onBlurPrice();
       return false;
-    } else if (!validDuration) {
-      onBlurDuration();
-      return false;
     }
+    // } else if (!validDuration) {
+    //   onBlurDuration();
+    //   return false;
+    // }
     return true;
   };
 
@@ -212,11 +213,11 @@ export const AddPropertyScreenTwo = ({
               </Text>
             </FormLabel>
             <InputGroup
-              display={"flex"}
+              // display={"flex"}
               alignItems={"center"}
-              border={"1px"}
+              // border={"1px"}
               borderRadius={"10px"}
-              borderColor={"var(--soft200)"}
+              // borderColor={"var(--soft200)"}
               cursor={"text"}
               fontSize={14}
               textColor={"var(--sub600)"}
@@ -225,10 +226,13 @@ export const AddPropertyScreenTwo = ({
               _placeholder={{ textColor: "var(--soft400)" }}
             >
               <Input
-                w={"90%"}
+                border={
+                  invalidPrice
+                    ? "1px solid var(--errorBase)"
+                    : "1px solid var(--soft200)"
+                }
+                w={"100%"}
                 h={"100%"}
-                borderRight={"1px solid var(--soft400)"}
-                borderRightRadius={"0"}
                 type="number"
                 placeholder="₦ 0.00"
                 name="price"
@@ -236,7 +240,7 @@ export const AddPropertyScreenTwo = ({
                 onBlur={onBlurPrice}
                 onChange={onChangePrice}
               />
-              <Select
+              {/* <Select
                 cursor={"pointer"}
                 border={"0px solid #FFFFFF"}
                 borderLeftRadius={"0px"}
@@ -256,20 +260,18 @@ export const AddPropertyScreenTwo = ({
                     {entry}
                   </option>
                 ))}
-              </Select>
+              </Select> */}
             </InputGroup>
-            <Flex justifyContent={"space-between"}>
-              {invalidPrice && (
-                <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
-                  {"Enter a valid price"}
-                </FormHelperText>
-              )}
-              {invalidDuration && (
+            {invalidPrice && (
+              <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                {"Enter a valid price"}
+              </FormHelperText>
+            )}
+            {/* {invalidDuration && (
                 <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                   {"Select duration"}
                 </FormHelperText>
-              )}
-            </Flex>
+              )} */}
           </FormControl>
         </Flex>
         <Flex gap={"2rem"}>
@@ -284,6 +286,10 @@ export const AddPropertyScreenTwo = ({
             bg={"#FFFFFF"}
             borderRadius={"10px"}
             textColor={"var(--primaryBase)"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
           >
             Previous
           </Btn>
@@ -298,6 +304,10 @@ export const AddPropertyScreenTwo = ({
             bg={"#FFFFFF"}
             borderRadius={"10px"}
             textColor={"var(--primaryBase)"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
           >
             Next
           </Btn>
