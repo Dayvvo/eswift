@@ -58,7 +58,7 @@ const TeamScreen = () => {
     {
       id: 7,
       person: "Jumoke Orimoloye",
-      title: "Sales representative",
+      title: "Front desk officer",
       department: "Front desk officer",
       picture: "/sales-rep.png",
     },
@@ -182,6 +182,7 @@ const TeamScreen = () => {
                       fontSize={"18px"}
                       textColor={"#000"}
                       className="antic"
+          
                     >
                       {item?.department}
                     </Text>
@@ -247,7 +248,7 @@ const TeamScreen = () => {
                         textAlign={"center"}
                         fontWeight={400}
                         fontSize={"18px"}
-                        textColor={"#000"}
+                        textColor={`${item?.title === item?.department ?'transparent' :'#000'}`}
                         className="antic"
                       >
                         {item?.department}
