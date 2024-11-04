@@ -43,7 +43,7 @@ import { HiOutlineHome } from "react-icons/hi2";
 import { LuUser2, LuUsers2 } from "react-icons/lu";
 import { useRouter } from "next/router";
 import users from "@/pages/users";
-import { PropertyCard } from "../Property/propertyCard";
+import { PropertyCard, PropertyCardProps } from "../Property/propertyCard";
 import useProperty from "@/hooks/useProperty";
   
 interface MyData {
@@ -70,104 +70,104 @@ interface User {
   const DashboardScreen = () => {
     const navigate = useRouter()
     
-  const [getProperty, setGetProperty] = useState<MyData[]>([]);
+  const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
   const [users, setUsers] = useState<User[]>([]);
-    const [page, setPage] = useState<any>(1);
+  const [page, setPage] = useState<any>(1);
   const [totalPages, setTotalPages] = useState<any>(1);
   const [inputValue, setInputValue] = useState<any>("");
   const [showScreen, setShowScreen] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const [table, setTable] = useState<any>(null);
-    const [userEl, setUserEl] = useState({});
-    const [showModal, setShowModal] = useState(false);
-    const [userData, setUserData] = useState({
+  const [loading, setLoading] = useState(false);
+  const [table, setTable] = useState<any>(null);
+  const [userEl, setUserEl] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [userData, setUserData] = useState({
       email: "",
       password: "",
       firstName: "",
       lastName: "",
       role: "CLIENT",
-    });
-    const { addUser } = useUser()
+  });
+ 
+  const { addUser } = useUser()
   
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const { name, value } = e.target;
-    
-      if (name) {
-        setUserData((prevDetails) => ({
-          ...prevDetails,
-          [name]: value,  // Use the name from the target as the key
-        }));
-      }
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
   
-    const createUser = async () => {
-      try {
-        setUserData({
-          email: "",
-          password: "",
-          firstName: "",
-          lastName: "",
-          role: "CLIENT",
-        });
-        const res = await addUser(userData);
-        return res;
-      }
-      catch (err) {
-        console.log('err', err)
-      }
-      
+    if (name) {
+      setUserData((prevDetails) => ({
+        ...prevDetails,
+        [name]: value,  // Use the name from the target as the key
+      }));
     }
-  
-    const { getUser, getUserById } = useUser();
-    console.log("userEl", userEl);
-  
-    const getUserFn = async () => {
-      const res: any = await getUser();
-      setTable(res?.data?.data);
-    };
-  
-    useEffect(() => {
-      getUserFn();
-    }, []);
-  
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const btnRef = React.useRef();
-  
-    const openDrawer = async (userId: string) => {
-      onOpen();
-      const res: any = await getUserById(userId);
-      console.log("res", res);
-      setUserEl(res?.data?.data);
-    };
-  
-    const toggleModal = () => {
-      setShowModal((prevState) => !prevState);
-    };
+  };
 
+  const createUser = async () => {
+    try {
+      setUserData({
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+        role: "CLIENT",
+      });
+      const res = await addUser(userData);
+      return res;
+    }
+    catch (err) {
+      console.log('err', err)
+    }
+    
+  }
+
+  const { getUser, getUserById } = useUser();
+  console.log("userEl", userEl);
+
+  const getUserFn = async () => {
+    const res: any = await getUser();
+    setTable(res?.data?.data);
+  };
+
+  useEffect(() => {
+    getUserFn();
+  }, []);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
+
+  const openDrawer = async (userId: string) => {
+    onOpen();
+    const res: any = await getUserById(userId);
+    console.log("res", res);
+    setUserEl(res?.data?.data);
+  };
+
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
     
   const { addProperty, getAdminProperty } = useProperty();
 
-    const getPropertyFunction = async () => {
-        setLoading(true);
-        try {
-          setLoading(false);
-          const getAllProperties = await getAdminProperty(inputValue, page);
-          setGetProperty(getAllProperties?.data?.data);
-          console.log(getAllProperties?.data?.data);
-          setTotalPages(getAllProperties.data?.pagination.pages);
-        } catch (error) {
-          setLoading(false);
-          console.log(error);
-        }
-    };
+  const getPropertyFunction = async () => {
+      setLoading(true);
+      try {
+        setLoading(false);
+        const getAllProperties = await getAdminProperty(inputValue, page);
+        setGetProperty(getAllProperties?.data?.data);
+        console.log(getAllProperties?.data?.data);
+        setTotalPages(getAllProperties.data?.pagination.pages);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+  };
 
-    useEffect(() => {
-        getPropertyFunction();
-    }, [showModal, loading]);
-    
-    let PropertiesCount = 100
-    let UsersCount = 20
-    let AffiliatesCount = 3000
+  useEffect(() => {
+      getPropertyFunction();
+  }, [showModal, loading]);
+  
+  let PropertiesCount = 100;
+  let UsersCount = 20;
+  let AffiliatesCount = 3000;
 
     return (
       <Box w={'100%'}>
@@ -463,10 +463,10 @@ interface User {
                         return (
                         <PropertyCard
                             key={index}
-                            id={property?._id}
-                            image={property?.images}
+                            _id={property?._id}
+                            images={property?.images}
                             title={property?.title}
-                            pricing={property?.price}
+                            price={property?.price}
                             location={property?.address}
                             verificationState={property?.verificationState}
                             userImage={user?.avatar || "/"}

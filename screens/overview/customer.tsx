@@ -3,10 +3,12 @@ import Link from "next/link";
 import { FaMoneyBills } from "react-icons/fa6";
 import { HiMiniBuildingStorefront } from "react-icons/hi2";
 import { IoStatsChart } from "react-icons/io5";
-import { MdArrowOutward, MdLightMode } from "react-icons/md";
+import { MdArrowOutward} from "react-icons/md";
 import { PiBuildingOfficeFill } from "react-icons/pi";
 import { PropertiesCard } from "../properties/propertiesCard";
 import Btn from "@/components/Btn";
+import { useState } from "react";
+import { PropertyCardProps } from "../Property/propertyCard";
 
 
 
@@ -48,6 +50,9 @@ const OverviewScreen = () => {
     }
 
     const copies = 3
+
+
+    const [propertyList,setPropertyList] = useState<PropertyCardProps[]>([]);
 
     return ( 
         <Box
@@ -136,13 +141,16 @@ const OverviewScreen = () => {
                             gap={'20px'} placeContent={'center'}
                         >
                             {
-                                Array(copies).fill(Property).map((entry)=>(
-                                    <PropertiesCard key={entry}
-                                    images={entry?.picture}
-                                    title={entry?.title}
-                                    price={entry?.price}
-                                    description={entry?.description}
-                                    address={entry?.address} _id={""} duration={null}                                    />
+                                propertyList.map((entry,key)=>(
+                                    <PropertiesCard 
+                                     key={key}
+                                     images={entry?.images}
+                                     title={entry?.title}
+                                     price={entry?.price}
+                                     description={entry?.description}
+                                     address={entry?.address} 
+                                     _id={entry._id}                                   
+                                    />
                                 ))
                             }
                         </Grid>
