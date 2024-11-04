@@ -140,7 +140,7 @@ const NavBar = () => {
             display={'flex'} gap={{lg:'14px',xl:'24px'}}
             w={'fit-content'} h={'fit-content'}
           >
-            <Link href={'/login'}>
+            <Link href={'/auth'}>
               <Btn
                 display={'flex'} alignItems={'center'} justifyContent={'center'}
                 bg={'#3170A6'} borderRadius={'99px'} w={'160px'} h={'48px'}
@@ -150,7 +150,7 @@ const NavBar = () => {
                 Sign In
               </Btn>
             </Link>
-            <Link href={'/signup'}>
+            <Link href={'/auth'}>
               <Btn
                 display={'flex'} alignItems={'center'} justifyContent={'center'}
                 bg={'#3170A6'} borderRadius={'99px'} w={'160px'} h={'48px'}

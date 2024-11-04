@@ -90,8 +90,7 @@ export const AddPropertyScreenOne = ({
     if (!validTitle) {
       onBlurTitle();
       return false;
-    } 
-    else if (!validCategory) {
+    } else if (!validCategory) {
       onBlurCategory();
       return false;
     } else if (!validDescription) {
@@ -306,7 +305,7 @@ export const AddPropertyScreenOne = ({
             />
             {invalidDescription && (
               <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
-                {"Write valid property description"}
+                {"Description must be at least 10 characters long"}
               </FormHelperText>
             )}
           </FormControl>
@@ -322,13 +321,10 @@ export const AddPropertyScreenOne = ({
           bg={"#FFFFFF"}
           borderRadius={"10px"}
           textColor={"var(--primaryBase)"}
-          // disabled={
-          //   invalidCategory ||
-          //   invalidCategory ||
-          //   invalidTitle ||
-          //   invalidType ||
-          //   invalidDescription
-          // }
+          _hover={{
+            bg: "#1A1D66",
+            textColor: "#FFF",
+          }}
         >
           Next
         </Btn>

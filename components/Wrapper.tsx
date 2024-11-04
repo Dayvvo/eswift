@@ -19,7 +19,7 @@ import { NextRouter, useRouter } from "next/router";
 import useAuth from "@/hooks/useAuth";
 import useProfile from "@/hooks/useProfile";
 
-const Header = ({ casedPath }: { casedPath: string }) => {
+const Header = ({ casedPath, }: { casedPath: string }) => {
   return (
     <Flex
       justifyContent={"space-between"}
@@ -64,14 +64,14 @@ const Header = ({ casedPath }: { casedPath: string }) => {
         </Flex>
       </Grid>
       <Flex gap={"20px"} alignItems={"center"}>
-        <SearchIcon />
-        <NotifIcon />
+        {/* <SearchIcon />
+        <NotifIcon /> */}
       </Flex>
     </Flex>
   );
 };
 
-const Wrapper = ({ children }: { children: ReactNode }) => {
+const Wrapper = ({ children, noPadding }: { children: ReactNode, noPadding?:boolean }) => {
   const navData = [
     {
       label: "Dashboard",
@@ -93,11 +93,6 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
       icon: (color: string) => <BlogIcon color={color} />,
       url: "/blog",
     },
-    // {
-    //   label: "Team",
-    //   icon: (color: string) => <FiUser size={"1rem"} color={color} />,
-    //   url: "/team",
-    // },
     {
       label: "Settings",
       icon: (color: string) => <SettingsIcon color={color} />,
@@ -123,9 +118,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (route) {
       const fullPath = new URL(route).pathname;
-
       const pathSegments = fullPath.split("/").filter((segment) => segment);
-
       if (pathSegments.length > 0) {
         setPath(pathSegments[0]); // Always picks the first segment after the domain
       }
@@ -135,15 +128,12 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (!storedData) {
-      navigate.push("/login");
-    } else {
-      try {
-        const parsedUserData = JSON.parse(storedData);
-        setUser(parsedUserData);
-      } catch (err) {
-        navigate.push("/login");
-      }
-    }
+      navigate.push("/auth");
+    } 
+    else {
+      const parsedUserData = JSON.parse(storedData);
+      setUser(parsedUserData);
+    };
   }, [navigate]);
 
   useEffect(() => {
@@ -162,10 +152,9 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
 
   const logout =()=> {
     localStorage.removeItem('token');
-    localStorage.removeItem('userData')
-    navigate.push('/login')
+    localStorage.removeItem('userData');
+    navigate.push('/login');
   }
-
 
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;
 
@@ -280,7 +269,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
           top={"20px"}
           left={{ base: "0px", lg: "250px" }}
           w={{ base: "full", lg: "80vw" }}
-          px="20px"
+          {...noPadding? {}: {px:'20px'}}
         >
           {route ? children : <></>}
         </Box>

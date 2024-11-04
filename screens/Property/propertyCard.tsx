@@ -19,6 +19,10 @@ export type PropertyCardProps = {
     mode?:string,
     amount?:string
   };
+  category?:string;
+  verification?: 'Pending' | 'Verified' | 'Rejected';
+  features?: string[]
+  documents?: {type:string, document:string}[];
   location?:string;
   description?: string;
   address?: string;
@@ -29,6 +33,8 @@ export type PropertyCardProps = {
   verificationState?: string;
   creatorID?:string;
 };
+
+
 
 
 export const PropertyCard = ({
@@ -101,8 +107,6 @@ export const PropertyCard = ({
   };
 
   const [image1]= image || []; 
-
-  console.log('image', image,image1);
 
   return (
     <Box

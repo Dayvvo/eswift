@@ -24,10 +24,8 @@ import { R } from "@/utils/types";
 import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { useRouter } from "next/router";
 import {
-  DeclineState,
-  DeleteProperty,
   SuspendState,
-  VerifyState,
+  DeleteProperty,
 } from "./VerificationState";
 import useToast from "@/hooks/useToast";
 
@@ -41,88 +39,11 @@ export const PropertyDetails = ({
   p?: string;
   cardWidth?: any;
 }) => {
-  const Features: any[] = [
-    {
-      id: 1,
-      key: "Spacious living area with ample natural light",
-    },
-    {
-      id: 2,
-      key: "Modern kitchen with stainless steel appliances",
-    },
-    {
-      id: 3,
-      key: "3 generously sized bedrooms",
-    },
-    {
-      id: 4,
-      key: "2 well-appointed bathrooms.",
-    },
-    {
-      id: 5,
-      key: "Spacious living area with ample natural light",
-    },
-    {
-      id: 6,
-      key: "Spacious living area with ample natural light",
-    },
-  ];
-  const Documents: any[] = [
-    {
-      id: 1,
-      doc: "/",
-    },
-    {
-      id: 2,
-      doc: "/",
-    },
-    {
-      id: 3,
-      doc: "/",
-    },
-    {
-      id: 4,
-      doc: "/",
-    },
-    {
-      id: 5,
-      doc: "/",
-    },
-  ];
-  const properties: any[] = [
-    {
-      id: 1,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      id: 2,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      id: 3,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-  ];
 
+  type activeModalType = 'suspend' | 'delete' | 'gallery' | 'documents';
+  
   const { globalContext } = useAppContext();
+  
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -132,19 +53,21 @@ export const PropertyDetails = ({
     propertyCount: 0,
   });
 
-  const [detailsData, setDetailsData] = useState<any>(null);
+  const [detailsData, setDetailsData] = useState<PropertyCardProps | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [showDeclineModal, setShowDeclineModal] = useState<boolean>(false);
-  const [showSuspendModal, setShowSuspendModal] = useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [modalType, setModalType] = useState< activeModalType | null>(null);
+  const [activeModal, setActiveModal] = useState(false);
+  const [itemIdInModal, setItemIdInModal] = useState('');
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
-  const { toast } = useToast();
-  const router = useRouter();
 
   const [verificationStatus, setVerificationStatus] = useState(
     detailsData?.verification
   );
+
+  const { toast } = useToast();
+  const router = useRouter();
+
   const {
     getPropertyDetails,
     propertyCreator,
@@ -182,22 +105,21 @@ export const PropertyDetails = ({
       console.log(error);
     }
   };
+  
   useEffect(() => {
     getPropertyFunction();
   }, [showModal, isVerifying]);
 
   const toggleModal = () => {
-    setShowModal((prevState) => !prevState);
+    setActiveModal((prevState) => !prevState);
   };
-  const toggleDeclineModal = () => {
-    setShowDeclineModal((prevState) => !prevState);
+
+  const openModal = (state: activeModalType, id?:string)=>{
+    id && setItemIdInModal(id);
+    toggleModal();
+    setModalType(state);
   };
-  const toggleSuspendModal = () => {
-    setShowSuspendModal((prevState) => !prevState);
-  };
-  const toggleDeleteModal = () => {
-    setShowDeleteModal((prevState) => !prevState);
-  };
+
 
   const verifyPropertyFn = async (status: string) => {
     if (!id) {
@@ -225,9 +147,6 @@ export const PropertyDetails = ({
           position: "top",
           duration: 1000,
         });
-        setShowDeclineModal(false);
-        setShowModal(false);
-        setShowSuspendModal(false);
       }
     } catch (err) {
       toast({
@@ -241,7 +160,7 @@ export const PropertyDetails = ({
       setIsVerifying(false);
     }
   };
-
+ 
   const deletePropertyFn = async () => {
     try {
       const req = await deleteProperty(id); // If no error occurs, the following code runs
@@ -269,75 +188,45 @@ export const PropertyDetails = ({
   useEffect(() => {
     getPropertyDetailFn();
   }, [id, showModal, isVerifying]);
-
+  
   return (
     <>
+      
       <Modal
         closeOnOverlayClick={true}
-        onClose={() => {
-          setShowModal(false);
-        }}
-        isOpen={showModal}
-      >
-        <ModalOverlay />
-        <ModalContent >
-          <VerifyState
-            toggleModal={toggleModal}
-            verifyPropertyFn={verifyPropertyFn}
-            isVerifying={isVerifying}
-          />
-        </ModalContent>
-      </Modal>
-      <Modal
-        closeOnOverlayClick={true}
-        onClose={() => {
-          setShowDeclineModal(false);
-        }}
-        isOpen={showDeclineModal}
+        onClose={toggleModal}
+        isOpen={activeModal}
       >
         <ModalOverlay />
         <ModalContent>
-          <DeclineState
-            toggleModal={toggleDeclineModal}
-            verifyPropertyFn={verifyPropertyFn}
-            isVerifying={isVerifying}
-          />
+          {
+
+            modalType === 'suspend'?
+            <SuspendState
+             verifyPropertyFn={verifyPropertyFn}
+             isVerifying={isVerifying}
+             toggleModal={toggleModal}
+            />:
+
+            modalType ==='delete'?
+            <DeleteProperty
+             toggleModal={toggleModal}
+             isVerifying={isVerifying}
+             deletePropertyFn={deletePropertyFn}
+            />:
+            
+            modalType ==='documents' && detailsData?.documents?
+            <embed src={detailsData?.documents?.find(item=>item.document)?.document} width="400px" height="600px" type="application/pdf"/>
+            : 
+            <></>
+          
+          }
+
         </ModalContent>
-      </Modal>
-      <Modal
-        closeOnOverlayClick={true}
-        onClose={() => {
-          setShowSuspendModal(false);
-        }}
-        isOpen={showSuspendModal}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <SuspendState
-            verifyPropertyFn={verifyPropertyFn}
-            isVerifying={isVerifying}
-            toggleModal={toggleSuspendModal}
-          />
-        </ModalContent>
-      </Modal>
-      <Modal
-        closeOnOverlayClick={true}
-        onClose={() => {
-          setShowDeleteModal(false);
-        }}
-        isOpen={showDeleteModal}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <DeleteProperty
-            deletePropertyFn={deletePropertyFn}
-            isVerifying={isVerifying}
-            toggleModal={toggleDeleteModal}
-          />
-        </ModalContent>
+  
       </Modal>
 
-      
+
       <Box bg={"#FFF"} w={"100%"}>
         <Flex w={"100%"} my={my || "24px"} pos={"relative"}>
           <Grid
@@ -431,7 +320,7 @@ export const PropertyDetails = ({
               </Text>
               <Box fontSize={"18px"} fontWeight={300} textColor={"#626871"}>
                 <Text>Key Features</Text>
-                {detailsData?.features.map((feature: string, index: number) => {
+                {detailsData?.features?.map((feature: string, index: number) => {
                   return (
                     <Flex key={index} alignItems={"center"} gap={"4px"}>
                       <BsDot />
@@ -460,10 +349,10 @@ export const PropertyDetails = ({
                 </Text>
               </Flex>
               <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
-                {Documents.map((document) => {
+                {detailsData?.documents?.map((document,key) => {
                   return (
                     <Flex
-                      key={document?.id}
+                      key={(String(document?.type) + key)}
                       alignItems={"center"}
                       position={"relative"}
                       borderRadius={"8.5px"}
@@ -472,6 +361,7 @@ export const PropertyDetails = ({
                       w={"100%"}
                       h={"52px"}
                     >
+                      <Box fontSize={'12px'}> {document?.type} </Box>
                       <Btn
                         pos={"absolute"}
                         bg={"transparent"}
@@ -486,6 +376,7 @@ export const PropertyDetails = ({
                         fontSize={"10px"}
                         fontWeight={500}
                         insetEnd={4}
+                        onClick={()=>{openModal('documents',document.document)}}
                       >
                         View
                       </Btn>
@@ -501,7 +392,7 @@ export const PropertyDetails = ({
               className="robotoF"
             >
               {user.role === "ADMIN" ? (
-                verificationStatus === "verified" ? (
+                verificationStatus === "Pending" ? (
                   <Flex gap={"16px"} direction={"column"}>
                     <Btn
                       bg={"transparent"}
@@ -513,7 +404,7 @@ export const PropertyDetails = ({
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--primaryBase)"}
-                      onClick={toggleSuspendModal}
+                      onClick={()=>openModal('suspend') }
                     >
                       Suspend
                     </Btn>
@@ -527,14 +418,14 @@ export const PropertyDetails = ({
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--errorBase)"}
-                      onClick={toggleDeleteModal}
+                      onClick={()=>openModal('delete')}
                     >
                       Delete
                     </Btn>
                   </Flex>
-                ) : verificationStatus === "suspend" ? (
+                ) :  (
                   <Flex gap={"16px"} direction={"column"}>
-                    <Btn
+                    {/* <Btn
                       bg={"transparent"}
                       display={"flex"}
                       justifyContent={"center"}
@@ -547,7 +438,7 @@ export const PropertyDetails = ({
                       onClick={toggleModal}
                     >
                       Resume
-                    </Btn>
+                    </Btn> */}
                     <Btn
                       bg={"transparent"}
                       display={"flex"}
@@ -558,43 +449,45 @@ export const PropertyDetails = ({
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--errorBase)"}
-                      onClick={toggleDeleteModal}
+                      onClick={()=> openModal('delete')}
                     >
                       Delete
                     </Btn>
                   </Flex>
-                ) : (
-                  <Flex gap={"16px"} direction={"column"}>
-                    <Btn
-                      bg={"transparent"}
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                      w="100%"
-                      border="1px solid var(--primaryBase)"
-                      borderRadius={"10px"}
-                      h={"40px"}
-                      textColor={"var(--primaryBase)"}
-                      onClick={toggleModal}
-                    >
-                      Verify
-                    </Btn>
-                    <Btn
-                      bg={"transparent"}
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                      w="100%"
-                      border="1px solid var(--errorBase)"
-                      borderRadius={"10px"}
-                      h={"40px"}
-                      textColor={"var(--errorBase)"}
-                      onClick={toggleDeclineModal}
-                    >
-                      Decline
-                    </Btn>
-                  </Flex>
-                )
+                ) 
+                
+                // : (
+                //   <Flex gap={"16px"} direction={"column"}>
+                //     <Btn
+                //       bg={"transparent"}
+                //       display={"flex"}
+                //       justifyContent={"center"}
+                //       alignItems={"center"}
+                //       w="100%"
+                //       border="1px solid var(--primaryBase)"
+                //       borderRadius={"10px"}
+                //       h={"40px"}
+                //       textColor={"var(--primaryBase)"}
+                //       onClick={toggleModal}
+                //     >
+                //       Verify
+                //     </Btn>
+                //     <Btn
+                //       bg={"transparent"}
+                //       display={"flex"}
+                //       justifyContent={"center"}
+                //       alignItems={"center"}
+                //       w="100%"
+                //       border="1px solid var(--errorBase)"
+                //       borderRadius={"10px"}
+                //       h={"40px"}
+                //       textColor={"var(--errorBase)"}
+                //       onClick={toggleDeclineModal}
+                //     >
+                //       Decline
+                //     </Btn>
+                //   </Flex>
+                // )
               ) : (
                 <></>
               )}
@@ -706,6 +599,7 @@ export const PropertyDetails = ({
           })}
         </Flex>
       </Box>
+
     </>
   );
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import propertyController from "../controllers/propertyController";
 import { isAdmin, isAuth } from "../utils/middleware";
+import favouritePropertyController from "../controllers/favouriteController";
 
 const router = express.Router();
 
@@ -8,6 +9,14 @@ router
   .route("/")
   .post(isAuth, propertyController.createProperty)
   .get(propertyController.getCreatedProperties);
+router
+  .route("/favourite/:propertyId")
+  .post(isAuth, favouritePropertyController.addToFavourites);
+router.get("/favourite", favouritePropertyController.getAllFavouriteProperty);
+router.delete(
+  "/favourite/:id",
+  favouritePropertyController.removeFromFavouriteProperty
+);
 
 router.get("/props", propertyController.getPropertyDocs);
 
