@@ -7,7 +7,6 @@ import {
   PutObjectRequest,
   PutObjectCommand,
 } from '@aws-sdk/client-s3'
-import { uploadDestination } from '../utils/interfaces/types'
 class UploadController {
   async uploadFile(file: Express.Multer.File): Promise<string> {
     try {
@@ -24,6 +23,13 @@ class UploadController {
   async uploadToDigitalOcean(file: Express.Multer.File): Promise<string> {
 
     const folderRoute = process.env.NODE_ENV !=='production' ? 'uploads' : 'prod';
+
+    console.log('digital ocean creds',
+      process.env.DO_SPACES_ENDPOINT,
+      process.env.DO_SPACES_KEY!,
+      process.env.DO_SPACES_SECRET!,
+      BUCKET_NAME,
+    )
 
     const uploadParams: PutObjectRequest = {
       Bucket: BUCKET_NAME,
