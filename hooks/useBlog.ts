@@ -37,7 +37,7 @@ const useBlog = () => {
     // console.log("storedToken", userData);
   }, []);
 
-  const { query, post, delete: deleteRequest } = httpClient({ token });
+  const { query, post, delete: deleteRequest, putMutation: put } = httpClient({ token });
 
   const addBlog = useCallback(
     async (data: BlogObj) => {
@@ -53,6 +53,16 @@ const useBlog = () => {
     },
     [token]
   );
+
+  const updateBlog = useCallback(async (blogPostId:string, data: any) => {
+    try {
+      const res = await put(`${baseUrl}//blog/post/${blogPostId}`, data);
+      return res;
+    }
+    catch (err: any) {
+      throw new err();
+    }
+  }, [])
  
   const contactUsFn = async (data: MailType) => {
     try {
@@ -105,6 +115,7 @@ const useBlog = () => {
     getBlog,
     contactApi: contactUsFn,
     getBlogByID,
+    updateBlog,
   };
 };
 
