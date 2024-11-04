@@ -16,7 +16,7 @@ export enum PropertyDocuments {
 
 export enum PropertyVerification {
   Pending = 'Pending',
-  Verified = 'Verfied',
+  Verified = 'Verified',
   Rejected = 'Rejected'
 }
 

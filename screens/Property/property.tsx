@@ -231,6 +231,7 @@ export const PropertyScreen = () => {
       type validDocs = keyof typeof documents;
 
       for (const key in uploadedDocuments) {
+
         let keyVal = uploadedDocuments[key];
         const singleFormData = new FormData();
         const matchingFile = documents[keyVal as validDocs];
