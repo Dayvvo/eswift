@@ -1,5 +1,5 @@
 import Btn from "../../components/Btn";
-import React from "react";
+import React, { KeyboardEvent, KeyboardEventHandler, useState } from "react";
 import {
   Box,
   Flex,
@@ -8,6 +8,7 @@ import {
   FormLabel,
   Input,
   InputGroup,
+  InputRightElement,
   Select,
   Text,
   Textarea,
@@ -15,6 +16,8 @@ import {
 import { ChangeEvent } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import useToast from "@/hooks/useToast";
+import { BsPlus } from "react-icons/bs";
+import { IoCloseOutline } from "react-icons/io5";
 
 interface AddPropertyScreenOneProps {
   onClick: () => void;
@@ -37,6 +40,7 @@ interface AddPropertyScreenOneProps {
   // onBlurType: any;
   onBlurCategory: any;
   onBlurDescription: any;
+  
 }
 export const AddPropertyScreenOne = ({
   onClick,
@@ -59,6 +63,9 @@ export const AddPropertyScreenOne = ({
   onChangeDescription,
 }: AddPropertyScreenOneProps) => {
   const { toast } = useToast();
+  const [tags, setTags] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
+
   const subs: any[] = [
     {
       id: 1,
@@ -117,6 +124,24 @@ export const AddPropertyScreenOne = ({
     onClick();
   };
 
+  const handleAddTag = () => {
+    const newTag:string = inputValue.trim();
+    if(newTag && !tags.includes(newTag)){
+      setTags([...tags, newTag])
+      setInputValue('')
+    }
+  };
+
+  const handleRemoveTag =(index: number)=> {
+    setTags(tags.filter((tag, i) => i !== index));
+  }
+
+  const handleKeyPress = (e:KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleAddTag();
+    }
+  };
+
   return (
     <>
       <Box w={"100%"} px={"20px"} className="inter">
@@ -148,7 +173,7 @@ export const AddPropertyScreenOne = ({
                 <Text
                   fontWeight={400}
                   textColor={"var(--strong950)"}
-                  fontSize={"14px"}
+                  fontSize={"12px"}
                 >
                   {sub?.title}
                 </Text>
@@ -308,6 +333,62 @@ export const AddPropertyScreenOne = ({
                 {"Description must be at least 10 characters long"}
               </FormHelperText>
             )}
+          </FormControl>
+          <FormControl w={"100%"}>
+            <FormLabel
+              fontWeight={500}
+              fontSize={"14px"}
+              textColor={"var(--strong950)"}
+            >
+            </FormLabel>
+            <Flex w={'100%'} p={'16px'}
+              alignItems={'start'} justifyContent={'space-between'}
+              border="1px solid var(--soft200)" gap={'8px'}
+              borderRadius={'10px'}
+            >
+              <Flex
+                gap={'8px'} w={'100%'}
+                flexDir={'column'}
+                alignItems={'start'}
+              >
+                <InputGroup
+                  cursor={"text"}
+                  fontSize={14}
+                  textColor={"var--(sub600)"}
+                >
+                    <Input
+                      type={'text'}
+                      _placeholder={{ textColor: "var--(soft400)" }}
+
+                      border={'1px solid var(--soft200)'} borderRadius={'10px'}
+                      value={inputValue}
+                      onChange={(e)=> setInputValue(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                    />
+                </InputGroup>
+                <Flex flexWrap={'wrap'} gap={'8px'}>
+                  { 
+                    tags.map((tag,index)=>(
+                      <Flex gap="8px" key={index} alignItems={'center'} fontSize={'14px'}
+                        bg={'var(--soft200)'} px={'8px'} py={'2px'} borderRadius={'10px'}
+                      >
+                        {tag} 
+                        <Flex onClick={()=> handleRemoveTag(index)} fontSize={'14px'}>
+                          <IoCloseOutline />
+                        </Flex>
+                      </Flex>
+                    ))
+                  }
+                </Flex>
+              </Flex>
+              
+              <Flex w={'24px'} h={'24px'} fontSize={'36px'} 
+                borderRadius={'10'} justifyContent={'center'} alignItems={'center'}
+                onClick={handleAddTag}
+              >
+                <BsPlus/>
+              </Flex>
+            </Flex>
           </FormControl>
         </Flex>
         <Btn
