@@ -519,8 +519,8 @@ export const PropertyScreen = () => {
 
         {/* Scrollable Property Cards Container */}
         <Box
-        // overflowY={{ xl: "scroll" }}
-        // height={{ xl: "calc(80vh - 100px)" }}
+          overflowY={{ xl: "scroll" }}
+          height={{ xl: "500px" }}
         // mt={4}
         >
           {loading && (
