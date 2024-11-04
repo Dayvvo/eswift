@@ -15,6 +15,7 @@ interface ButtonFunction {
   onChangeFileName: (name: string, value: File) => void;
   fileName: string;
   documents: Documents;
+  loading: boolean;
 }
 
 const FileInputComponent = ({
@@ -97,6 +98,7 @@ export const AddPropertyScreenFour = ({
   next,
   previous,
   onChangeFileName,
+  loading,
   documents,
 }: ButtonFunction) => {
   const { toast } = useToast();
@@ -141,7 +143,7 @@ export const AddPropertyScreenFour = ({
     { val: "PowerOfAttorney", name: "Power of attorney" },
     { val: "GovConsent", name: "Gov Consent" },
   ];
-
+  console.log(loading);
   // const validateDocuments = () => {
   //   const missingDocs = Object.entries(documents).filter(([key, doc]) => !doc);
   //   if (missingDocs.length === 8) {
@@ -228,12 +230,16 @@ export const AddPropertyScreenFour = ({
             bg={"#FFFFFF"}
             borderRadius={"10px"}
             textColor={"var(--primaryBase)"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
           >
             Previous
           </Btn>
           <Btn
             onClick={() => {
-                next();
+              next();
             }}
             my={"20px"}
             border={"1px solid var(--primaryBase)"}
@@ -244,25 +250,17 @@ export const AddPropertyScreenFour = ({
             bg={"#FFFFFF"}
             borderRadius={"10px"}
             textColor={"var(--primaryBase)"}
+            isLoading={loading}
+            loadingText="Submitting..."
+            disabled={loading}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
           >
-            Completed
+            Submit
           </Btn>
         </Flex>
-
-        {/* <Btn
-          onClick={handleUpload}
-          my={"20px"}
-          border={"1px solid var(--primaryBase)"}
-          display={"flex"}
-          alignItems={"center"}
-          w={"100%"}
-          h={"40px"}
-          bg={"#FFFFFF"}
-          borderRadius={"10px"}
-          textColor={"var(--primaryBase)"}
-        >
-          Completed
-        </Btn> */}
       </Box>
     </>
   );

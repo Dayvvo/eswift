@@ -321,6 +321,10 @@ export const AddPropertyScreenThree = ({
             bg={"#FFFFFF"}
             borderRadius={"10px"}
             textColor={"var(--primaryBase)"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
           >
             Previous
           </Btn>
@@ -335,6 +339,10 @@ export const AddPropertyScreenThree = ({
             bg={"#FFFFFF"}
             borderRadius={"10px"}
             textColor={"var(--primaryBase)"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
           >
             Next
           </Btn>
