@@ -84,13 +84,11 @@ export const PropertyScreen = () => {
     GovConsent: null,
   });
 
-  const handleDocumentChange = (name: string, value: File) => {
-    if (value) {
-      setDocuments((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+  const handleDocumentChange = (name: string, value: File | null) => {
+    setDocuments((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const {
@@ -222,6 +220,8 @@ export const PropertyScreen = () => {
           ? await uploadMultiple(imagesFormData)
           : await uploadSingle(imagesFormData);
 
+      const resolveImagesInArray = !(images?.length > 1) ? [uploadImages?.data]:  uploadImages?.data
+
       const uploadedDocuments = Object.keys(documents).filter(
         (val) => documents[val as validDocs]
       );
@@ -248,7 +248,7 @@ export const PropertyScreen = () => {
       }
 
       return {
-        images: uploadImages?.data,
+        images: resolveImagesInArray,
         documents: documentPayload,
       };
     } catch (err) {
@@ -274,12 +274,14 @@ export const PropertyScreen = () => {
         },
         ...uploadedFiles,
       };
-      setLoading(false);
+
       uploadedFiles && (await addProperty(payload)); // If no error occurs, the following code runs
 
       setShowModal(false);
 
       resetFields();
+
+      setLoading(false);
 
       toast({
         status: "success",
@@ -288,7 +290,8 @@ export const PropertyScreen = () => {
         position: "top",
         duration: 5000,
       });
-    } catch (err) {
+    } 
+    catch (err) {
       toast({
         status: "error",
         description: "Failed to create property",
@@ -331,7 +334,7 @@ export const PropertyScreen = () => {
 
   useEffect(() => {
     getPropertyFunction();
-  }, [showModal, loading]);
+  }, [showModal]);
 
   const goToNextPage = () => {
     if (page < totalPages) setPage(page + 1);
@@ -421,9 +424,9 @@ export const PropertyScreen = () => {
       </form>
       <Box
         className="robotoF"
-        px={{ base: "16px", lg: "0" }}
+        px={{ base: "16px", lg: "20px" }}
         height={{ base: "70vh", md: "78vh", lg: "60vh", xl: "65vh" }}
-        overflowY="hidden"
+        overflowY="scroll"
       >
         <Flex
           mb={"24px"}
@@ -435,6 +438,7 @@ export const PropertyScreen = () => {
           top="0"
           zIndex="10"
           bg="white"
+          mt='2em'
         >
           <Flex w={"100%"}>
             <InputGroup
@@ -494,7 +498,8 @@ export const PropertyScreen = () => {
               <Text fontSize={"14px"}>Add Property</Text>
               <BsPlus className="icon" />
             </Btn>
-            <Btn
+
+            {/* <Btn
               onClick={() => setPage(inputValue)}
               display={"flex"}
               gap={"4px"}
@@ -517,7 +522,8 @@ export const PropertyScreen = () => {
             >
               <IoFilter className="icon" />
               <Text>Filter</Text>
-            </Btn>
+            </Btn> */}
+
           </Flex>
         </Flex>
 
@@ -543,6 +549,7 @@ export const PropertyScreen = () => {
                 base: "repeat(1, 1fr)",
                 md: "repeat(2, 1fr)",
                 lg: "repeat(3, 1fr)",
+                xl: "repeat(4, 1fr)"
               }}
               gap={{ base: "24px", lg: "28px" }}
               paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}

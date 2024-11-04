@@ -40,3 +40,5 @@ export type fnRequest = (
   req: Request,
   res: Response,
 ) => Promise<any>;
+
+export type uploadDestination = 'prod/property' | 'upload/property' | 'prod/profile' | 'upload/profile' | 'prod/blog' | ''

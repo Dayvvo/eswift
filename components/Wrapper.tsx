@@ -18,7 +18,7 @@ import { NextRouter, useRouter } from "next/router";
 import axios from "axios";
 import useAuth from "@/hooks/useAuth";
 
-const Header = ({ casedPath }: { casedPath: string }) => {
+const Header = ({ casedPath, }: { casedPath: string }) => {
   return (
     <Flex
       justifyContent={"space-between"}
@@ -63,14 +63,14 @@ const Header = ({ casedPath }: { casedPath: string }) => {
         </Flex>
       </Grid>
       <Flex gap={"20px"} alignItems={"center"}>
-        <SearchIcon />
-        <NotifIcon />
+        {/* <SearchIcon />
+        <NotifIcon /> */}
       </Flex>
     </Flex>
   );
 };
 
-const Wrapper = ({ children }: { children: ReactNode }) => {
+const Wrapper = ({ children, noPadding }: { children: ReactNode, noPadding?:boolean }) => {
   const navData = [
     {
       label: "Dashboard",
@@ -252,7 +252,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
           top={"20px"}
           left={{ base: "0px", lg: "250px" }}
           w={{ base: "full", lg: "80vw" }}
-          px="20px"
+          {...noPadding? {}: {px:'20px'}}
         >
           {route ? children : <></>}
         </Box>

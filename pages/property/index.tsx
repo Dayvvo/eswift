@@ -4,7 +4,7 @@ import { PropertyScreen } from "../../screens/Property/property";
 
 const Property =()=> {
     return (
-        <Wrapper>
+        <Wrapper noPadding>
             <PropertyScreen/>
         </Wrapper>
     )
