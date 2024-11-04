@@ -24,10 +24,8 @@ import { R } from "@/utils/types";
 import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { useRouter } from "next/router";
 import {
-  DeclineState,
-  DeleteProperty,
   SuspendState,
-  VerifyState,
+  DeleteProperty,
 } from "./VerificationState";
 import useToast from "@/hooks/useToast";
 
@@ -41,57 +39,9 @@ export const PropertyDetails = ({
   p?: string;
   cardWidth?: any;
 }) => {
+
+  type activeModalType = 'suspend' | 'delete' | 'gallery' | 'documents';
   
-  const Features: any[] = [
-    {
-      id: 1,
-      key: "Spacious living area with ample natural light",
-    },
-    {
-      id: 2,
-      key: "Modern kitchen with stainless steel appliances",
-    },
-    {
-      id: 3,
-      key: "3 generously sized bedrooms",
-    },
-    {
-      id: 4,
-      key: "2 well-appointed bathrooms.",
-    },
-    {
-      id: 5,
-      key: "Spacious living area with ample natural light",
-    },
-    {
-      id: 6,
-      key: "Spacious living area with ample natural light",
-    },
-  ];
-
-  const Documents: any[] = [
-    {
-      id: 1,
-      doc: "/",
-    },
-    {
-      id: 2,
-      doc: "/",
-    },
-    {
-      id: 3,
-      doc: "/",
-    },
-    {
-      id: 4,
-      doc: "/",
-    },
-    {
-      id: 5,
-      doc: "/",
-    },
-  ];
-
   const { globalContext } = useAppContext();
   
   const [user, setUser] = useState({
@@ -105,12 +55,12 @@ export const PropertyDetails = ({
 
   const [detailsData, setDetailsData] = useState<PropertyCardProps | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [modalType, seModalType] = useState<'suspend' | 'decline' | 'gallery'>();
-  const [showDeclineModal, setShowDeclineModal] = useState<boolean>(false);
-  const [showSuspendModal, setShowSuspendModal] = useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [modalType, setModalType] = useState< activeModalType | null>(null);
+  const [activeModal, setActiveModal] = useState(false);
+  const [itemIdInModal, setItemIdInModal] = useState('');
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
+
   const [verificationStatus, setVerificationStatus] = useState(
     detailsData?.verification
   );
@@ -161,18 +111,15 @@ export const PropertyDetails = ({
   }, [showModal, isVerifying]);
 
   const toggleModal = () => {
-    setShowModal((prevState) => !prevState);
+    setActiveModal((prevState) => !prevState);
   };
-  
-  const toggleDeclineModal = () => {
-    setShowDeclineModal((prevState) => !prevState);
+
+  const openModal = (state: activeModalType, id?:string)=>{
+    id && setItemIdInModal(id);
+    toggleModal();
+    setModalType(state);
   };
-  const toggleSuspendModal = () => {
-    setShowSuspendModal((prevState) => !prevState);
-  };
-  const toggleDeleteModal = () => {
-    setShowDeleteModal((prevState) => !prevState);
-  };
+
 
   const verifyPropertyFn = async (status: string) => {
     if (!id) {
@@ -200,9 +147,6 @@ export const PropertyDetails = ({
           position: "top",
           duration: 1000,
         });
-        setShowDeclineModal(false);
-        setShowModal(false);
-        setShowSuspendModal(false);
       }
     } catch (err) {
       toast({
@@ -216,7 +160,7 @@ export const PropertyDetails = ({
       setIsVerifying(false);
     }
   };
-
+ 
   const deletePropertyFn = async () => {
     try {
       const req = await deleteProperty(id); // If no error occurs, the following code runs
@@ -250,72 +194,38 @@ export const PropertyDetails = ({
       
       <Modal
         closeOnOverlayClick={true}
-        onClose={() => {
-          setShowModal(false);
-        }}
-        isOpen={showModal}
-      >
-        <ModalOverlay />
-        <ModalContent >
-          <VerifyState
-            toggleModal={toggleModal}
-            verifyPropertyFn={verifyPropertyFn}
-            isVerifying={isVerifying}
-          />
-        </ModalContent>
-      </Modal>
-
-      <Modal
-        closeOnOverlayClick={true}
-        onClose={() => {
-          setShowDeclineModal(false);
-        }}
-        isOpen={showDeclineModal}
+        onClose={toggleModal}
+        isOpen={activeModal}
       >
         <ModalOverlay />
         <ModalContent>
-          <DeclineState
-            toggleModal={toggleDeclineModal}
-            verifyPropertyFn={verifyPropertyFn}
-            isVerifying={isVerifying}
-          />
-        </ModalContent>
-      </Modal>
+          {
 
-      <Modal
-        closeOnOverlayClick={true}
-        onClose={() => {
-          setShowSuspendModal(false);
-        }}
-        isOpen={showSuspendModal}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <SuspendState
-            verifyPropertyFn={verifyPropertyFn}
-            isVerifying={isVerifying}
-            toggleModal={toggleSuspendModal}
-          />
+            modalType === 'suspend'?
+            <SuspendState
+             verifyPropertyFn={verifyPropertyFn}
+             isVerifying={isVerifying}
+             toggleModal={toggleModal}
+            />:
+
+            modalType ==='delete'?
+            <DeleteProperty
+             toggleModal={toggleModal}
+             isVerifying={isVerifying}
+             deletePropertyFn={deletePropertyFn}
+            />:
+            
+            modalType ==='documents' && detailsData?.documents?
+            <embed src={detailsData?.documents?.find(item=>item.document)?.document} width="400px" height="600px" type="application/pdf"/>
+            : 
+            <></>
+          
+          }
+
         </ModalContent>
   
       </Modal>
 
-      <Modal
-        closeOnOverlayClick={true}
-        onClose={() => {
-          setShowDeleteModal(false);
-        }}
-        isOpen={showDeleteModal}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <DeleteProperty
-            deletePropertyFn={deletePropertyFn}
-            isVerifying={isVerifying}
-            toggleModal={toggleDeleteModal}
-          />
-        </ModalContent>
-      </Modal>
 
       <Box bg={"#FFF"} w={"100%"}>
         <Flex w={"100%"} my={my || "24px"} pos={"relative"}>
@@ -466,6 +376,7 @@ export const PropertyDetails = ({
                         fontSize={"10px"}
                         fontWeight={500}
                         insetEnd={4}
+                        onClick={()=>{openModal('documents',document.document)}}
                       >
                         View
                       </Btn>
@@ -493,7 +404,7 @@ export const PropertyDetails = ({
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--primaryBase)"}
-                      onClick={toggleSuspendModal}
+                      onClick={()=>openModal('suspend') }
                     >
                       Suspend
                     </Btn>
@@ -507,7 +418,7 @@ export const PropertyDetails = ({
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--errorBase)"}
-                      onClick={toggleDeleteModal}
+                      onClick={()=>openModal('delete')}
                     >
                       Delete
                     </Btn>
@@ -538,7 +449,7 @@ export const PropertyDetails = ({
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--errorBase)"}
-                      onClick={toggleDeleteModal}
+                      onClick={()=> openModal('delete')}
                     >
                       Delete
                     </Btn>
