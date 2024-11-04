@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { RiSearch2Line } from "react-icons/ri";
 import Btn, { PaginationButton } from "@/components/Btn";
-import { IoFilter } from "react-icons/io5";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "../../components/modal";
@@ -65,7 +64,7 @@ export type Documents = {
 
 export const PropertyScreen = () => {
   const [showModal, setShowModal] = useState(false);
-  const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
+  const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([])
   const [page, setPage] = useState<any>(1);
   const [totalPages, setTotalPages] = useState<any>(1);
   const [inputValue, setInputValue] = useState<any>("");
@@ -307,10 +306,15 @@ export const PropertyScreen = () => {
     setLoading(true);
     try {
       setLoading(false);
-      const getAllProperties = await getAdminProperty(inputValue, page);
-      setGetProperty(getAllProperties?.data?.data);
-      // console.log(getAllProperties?.data?.data);
-      setTotalPages(getAllProperties.data?.pagination.pages);
+      const {data} = await getAdminProperty(inputValue, page);
+
+      const propertiesToAdd = data?.data.filter((prop:PropertyCardProps)=> {
+        return getProperty.findIndex(index=> index._id === prop._id) === -1 
+      });
+ 
+      setGetProperty(prev=>([...prev, ...propertiesToAdd ]));
+
+      setTotalPages(data?.pagination.pages);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -334,7 +338,7 @@ export const PropertyScreen = () => {
 
   useEffect(() => {
     getPropertyFunction();
-  }, [showModal]);
+  }, [page]);
 
   const goToNextPage = () => {
     if (page < totalPages) setPage(page + 1);

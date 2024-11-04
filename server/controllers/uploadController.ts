@@ -6,8 +6,8 @@ import { randomBytes } from 'crypto'
 import {
   PutObjectRequest,
   PutObjectCommand,
-  S3Client,
 } from '@aws-sdk/client-s3'
+import { uploadDestination } from '../utils/interfaces/types'
 class UploadController {
   async uploadFile(file: Express.Multer.File): Promise<string> {
     try {
@@ -22,11 +22,13 @@ class UploadController {
 
   //this uploads to digital ocean as opposed to cloudinary. All we have to do is replace uploadFile with uploadToDigital Ocean
   async uploadToDigitalOcean(file: Express.Multer.File): Promise<string> {
-    console.log('file creds', file.originalname, file.mimetype)
+
+    const folderRoute = process.env.NODE_ENV !=='production' ? 'uploads' : 'prod';
+
     const uploadParams: PutObjectRequest = {
       Bucket: BUCKET_NAME,
       ContentType: file.mimetype,
-      Key: `uploads/${Date.now()}_${randomBytes(4).toString('hex')}.${
+      Key: `${folderRoute}/${Date.now()}_${randomBytes(4).toString('hex')}.${
         file.mimetype.split('/')[1]
       }`,
       ACL: 'public-read',
