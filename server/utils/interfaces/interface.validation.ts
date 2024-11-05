@@ -23,3 +23,7 @@ export interface IAddPropertyValidation {
   images: Array<string>;
   documents: Array<IDocument>
 }
+
+export interface IDeleteFileValidation {
+  url: string
+}
