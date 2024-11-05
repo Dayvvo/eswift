@@ -5,10 +5,10 @@ import { R } from "@/utils/types";
 
 interface BlogObj {
   title: string;
-  header_image: string;
+  header_image: string | null;
   introduction: string;
   body: string;
-  body_image: string;
+  body_image: string | null;
   // tags: string[];
 }
 interface MailType {

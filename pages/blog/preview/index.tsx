@@ -11,7 +11,9 @@ const PreviewBlog = () => {
   const router = useRouter();
 
   const [headerImage, setHeaderImage] = useState<string | null>(null);
+  const [headerImageFile, setHeaderImageFile] = useState<string | null>(null);
   const [bodyImage, setBodyImage] = useState<string | null>(null);
+  const [bodyImageFile, setBodyImageFile] = useState<string | null>(null);
   const [previewData, setPreviewData] = useState(null) as any;
 
 
@@ -20,9 +22,13 @@ const PreviewBlog = () => {
   useEffect(() => {
     // const parsedImage = localStorage.getItem("headerImage");
     const storedImage = localStorage.getItem("headerImage")?.toString() || null;
+    const storedImageFile = localStorage.getItem("headerImageFile")?.toString() || null;
 
     if (storedImage) {
       setHeaderImage(storedImage);
+    }
+    if (storedImageFile) {
+      setHeaderImageFile(storedImageFile);
     }
   }, []);
 
@@ -36,8 +42,12 @@ const PreviewBlog = () => {
 
   useEffect(() => {
     const storedImage = localStorage.getItem("bodyImage");
+    const storedImageFile = localStorage.getItem("bodyImageFile");
     if (storedImage) {
       setBodyImage(storedImage);
+    }
+    if (storedImageFile) {
+      setBodyImageFile(storedImageFile);
     }
   }, []);
 
@@ -52,12 +62,14 @@ const PreviewBlog = () => {
   // const conclusionTextValue = conclusionValue.replace(/<\/?[^>]+(>|$)/g, "");
   const data = {
     title: articleTitle,
-    header_image:
-      "https://res.cloudinary.com/dk8ielbpn/image/upload/v1728370233/shopify/nsokzb9lxciy9pr0ejf7.png.png",
+    header_image: headerImageFile,
+    // header_image:
+    //   "https://res.cloudinary.com/dk8ielbpn/image/upload/v1728370233/shopify/nsokzb9lxciy9pr0ejf7.png.png",
     introduction: introValue,
     body: bodyValue,
-    body_image:
-      "https://res.cloudinary.com/dk8ielbpn/image/upload/v1728368487/shopify/pexels-divinetechygirl-1181263.jpg.jpg",
+    body_image: bodyImageFile,
+    // body_image:
+    //   "https://res.cloudinary.com/dk8ielbpn/image/upload/v1728368487/shopify/pexels-divinetechygirl-1181263.jpg.jpg",
     // tags: ["mail", "good"],
   };
 
@@ -76,6 +88,8 @@ const PreviewBlog = () => {
         localStorage.removeItem("previewData");
         localStorage.removeItem("bodyImage");
         localStorage.removeItem("headerImage");
+        localStorage.removeItem("headerImageFile");
+        localStorage.removeItem("bodyImageFile");
       }
       // console.log("req", req);
     } catch (err) {

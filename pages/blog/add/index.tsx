@@ -29,10 +29,21 @@ const AddBlog = () => {
   const [articleTitle, setArticleTitle] = useState("");
   const [bodyValue, setBodyValue] = useState("");
   const [conclusionValue, setConclusionValue] = useState("");
+  const [headerImageFile, setHeaderImageFile] = useState("");
+  const [bodyImageFile, setBodyImageFile] = useState("");
 
   const route = useRouter();
 
-  // console.log("headerImage", headerImage);
+  console.log("headerImageFile", headerImageFile);
+  console.log("bodyImageFile", bodyImageFile);
+  useEffect(() => {
+    localStorage.setItem("headerImageFile", headerImageFile);
+  }, [headerImageFile]);
+
+  useEffect(() => {
+    localStorage.setItem("bodyImageFile", bodyImageFile);
+  }, [bodyImageFile]);
+
 
   // const imageChangeHandler = (
   //   e: ChangeEvent<HTMLInputElement>,
@@ -54,7 +65,7 @@ const AddBlog = () => {
   //     }
   //   }
   // };
-
+  
   const previewData = {
     articleTitle: articleTitle,
     introValue: introValue,
@@ -105,7 +116,7 @@ const AddBlog = () => {
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
           Header Image
         </Text>
-        <ImageUpload onImageChange={headerImageChange} />
+        <ImageUpload onImageChange={headerImageChange} setImageFile={setHeaderImageFile} />
       </Flex>
       <Flex align={"center"} justify={"space-between"} mb="20px">
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
@@ -137,7 +148,7 @@ const AddBlog = () => {
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
           Body Image
         </Text>
-        <ImageUpload onImageChange={bodyImageChange} />
+        <ImageUpload onImageChange={bodyImageChange} setImageFile={setBodyImageFile} />
       </Flex>
       <Flex align={"center"} justify={"space-between"} mb="20px">
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
