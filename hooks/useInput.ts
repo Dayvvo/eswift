@@ -1,5 +1,18 @@
 import { useState, ChangeEvent } from "react";
 
+interface UserData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  avatar: string;
+}
+
+type ValidationType = {
+  [key in keyof UserData]: (input: string) => boolean;
+};
+
 export const useInputText = (validation: (input: string) => boolean) => {
   const [input, setInput] = useState("");
   const [isTouch, setIsTouch] = useState<boolean | null>(null);
@@ -125,5 +138,41 @@ export const useImage = () => {
     error,
     reset,
     deleteImage,
+  };
+};
+
+export const useInputSettings = (
+  data: UserData,
+  validation: ValidationType
+) => {
+  const [input, setInput] = useState<UserData>(data);
+  const [touched, setIsTouched] = useState<{
+    [Key in keyof UserData]?: boolean;
+  }>({});
+
+  const validateInput = (name: keyof UserData) => validation[name](input[name]);
+
+  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const onBlurHandler = (name: keyof UserData) => {
+    setIsTouched((prev) => ({ ...prev, [name]: true }));
+  };
+
+  const inputIsvalid = (name: keyof UserData) => validateInput(name);
+  const inputIsinvalid = (name: keyof UserData) =>
+    !inputIsvalid(name) && touched[name];
+  return {
+    input,
+    onChangeHandler,
+    setInput,
+    onBlurHandler,
+    inputIsvalid,
+    inputIsinvalid,
   };
 };
