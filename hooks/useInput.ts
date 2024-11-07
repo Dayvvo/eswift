@@ -1,18 +1,4 @@
 import { useState, ChangeEvent } from "react";
-
-interface UserData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  avatar: string;
-}
-
-type ValidationType = {
-  [key in keyof UserData]: (input: string) => boolean;
-};
-
 export const useInputText = (validation: (input: string) => boolean) => {
   const [input, setInput] = useState("");
   const [isTouch, setIsTouch] = useState<boolean | null>(null);
@@ -141,16 +127,16 @@ export const useImage = () => {
   };
 };
 
-export const useInputSettings = (
-  data: UserData,
-  validation: ValidationType
+export const useInputSettings = <T extends {}>(
+  data: T,
+  validation: { [K in keyof T]: (value: T[K]) => boolean }
 ) => {
-  const [input, setInput] = useState<UserData>(data);
+  const [input, setInput] = useState<T>(data);
   const [touched, setIsTouched] = useState<{
-    [Key in keyof UserData]?: boolean;
+    [K in keyof T]?: boolean;
   }>({});
 
-  const validateInput = (name: keyof UserData) => validation[name](input[name]);
+  const validateInput = (name: keyof T) => validation[name](input[name]);
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -160,12 +146,12 @@ export const useInputSettings = (
     }));
   };
 
-  const onBlurHandler = (name: keyof UserData) => {
+  const onBlurHandler = (name: keyof T) => {
     setIsTouched((prev) => ({ ...prev, [name]: true }));
   };
 
-  const inputIsvalid = (name: keyof UserData) => validateInput(name);
-  const inputIsinvalid = (name: keyof UserData) =>
+  const inputIsvalid = (name: keyof T) => validateInput(name);
+  const inputIsinvalid = (name: keyof T) =>
     !inputIsvalid(name) && touched[name];
   return {
     input,
