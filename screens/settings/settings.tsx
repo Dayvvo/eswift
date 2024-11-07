@@ -4,10 +4,24 @@ import useToast from "@/hooks/useToast";
 import useUser from "@/hooks/useUser";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 
-const validation = {
+interface UserData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  avatar: string;
+}
+
+type ValidationType = {
+  [key in keyof UserData]: (input: string) => boolean;
+};
+
+const validation: ValidationType = {
   firstName: (input: string) => (input ? input.trim().length > 1 : false),
   lastName: (input: string) => (input ? input.trim().length > 1 : false),
   email: (input: string) => (input ? /\S+@\S+\.\S+/.test(input) : false),
@@ -18,6 +32,11 @@ const validation = {
 
 export const SettingsScreen = () => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const navigateToResetPassword = () => {
+    router.push("/reset");
+  };
   const {
     input: user,
     onChangeHandler,
@@ -330,6 +349,12 @@ export const SettingsScreen = () => {
                 fontWeight={500}
                 fontSize={"14px"}
                 border={"1px solid var(--soft200)"}
+                // border={"1px solid var(--primaryBase)"}
+                _hover={{
+                  bg: "#1A1D66",
+                  textColor: "#FFF",
+                }}
+                onClick={navigateToResetPassword}
               >
                 Change Password
               </Btn>
