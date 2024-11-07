@@ -108,6 +108,16 @@ export const createInspectionValidatorSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
+export const resetPasswordValidation = Joi.object({
+  email: Joi.string().email().required(),
+  old_password: Joi.string().required(),
+  new_password: Joi.string().required(),
+  confirm_new_password: Joi.string()
+    .required()
+    .valid(Joi.ref("new_password"))
+    .messages({ "any.one": "Confirm password must match new password" }),
+});
+
 export const getAllInspectionsValidation = Joi.object({
   per_page: Joi.number().optional(),
   page: Joi.number().optional(),
