@@ -1,7 +1,11 @@
 import Btn from "@/components/Btn";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { useInputSettings } from "@/hooks/useInput";
+import useToast from "@/hooks/useToast";
+import useUser from "@/hooks/useUser";
+import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 
 interface UserData {
@@ -10,53 +14,160 @@ interface UserData {
   email: string;
   phoneNumber: string;
   address: string;
+  avatar: string;
 }
 
+type ValidationType = {
+  [key in keyof UserData]: (input: string) => boolean;
+};
+
+const validation: ValidationType = {
+  firstName: (input: string) => (input ? input.trim().length > 1 : false),
+  lastName: (input: string) => (input ? input.trim().length > 1 : false),
+  email: (input: string) => (input ? /\S+@\S+\.\S+/.test(input) : false),
+  phoneNumber: (input: string) => (input ? /^0?\d{10}$/.test(input) : false),
+  address: (input: string) => (input ? input.trim().length > 5 : false),
+  avatar: (input: string) => true,
+};
+
 export const SettingsScreen = () => {
-  const [user, setUser] = useState<UserData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    address: "",
-  });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const navigateToResetPassword = () => {
+    router.push("/reset");
+  };
+  const {
+    input: user,
+    onChangeHandler,
+    setInput: setUser,
+    inputIsinvalid,
+    inputIsvalid,
+    onBlurHandler,
+  } = useInputSettings(
+    {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      address: "",
+      avatar: "",
+    },
+    validation
+  );
+  // const [user, setUser] = useState<UserData>({
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   phoneNumber: "",
+  //   address: "",
+  // });
+
+  // console.log("user", user);
+
   const settings: any[] = [
     {
       id: 1,
-      type: "Full Name",
-      description: "Your name will be visible to your contacts.",
-      info: `${user?.firstName} ${user.lastName}`,
+      type: "First Name",
+      description: "Your first name will be visible to your contacts.",
+      info: `${user?.firstName}`,
+      name: "firstName",
     },
     {
       id: 2,
-      type: "Email Address",
-      description: "Business email address recommended.",
-      info: user.email,
+      type: "Last Name",
+      description: "Your last name will be visible to your contacts.",
+      info: `${user?.lastName}`,
+      name: "lastName",
     },
     {
       id: 3,
-      type: "Phone Number",
-      description: "Business phone number recommended.",
-      info: user.phoneNumber,
+      type: "Email Address",
+      description: "Business email address recommended.",
+      info: user.email,
+      name: "email",
     },
     {
       id: 4,
+      type: "Phone Number",
+      description: "Business phone number recommended.",
+      info: user.phoneNumber,
+      name: "phoneNumber",
+    },
+    {
+      id: 5,
       type: "Legal Address",
       description: "Legal residential address for billing details",
       info: user.address,
+      name: "address",
     },
   ];
 
+  const { updateUser, getUserById } = useUser();
+  const { toast } = useToast();
+
+  const datas = {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    address: user.address,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+  };
+
+  console.log(user.avatar);
+
+  const updateUserFn = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      const user = await updateUser(datas);
+
+      toast({
+        status: "success",
+        description: "profile updated",
+        title: "Success",
+        position: "top",
+        duration: 1000,
+      });
+      setLoading(false);
+    } catch (error) {
+      toast({
+        status: "error",
+        description: "Failed to update profile",
+        title: "Failed",
+        position: "top",
+        duration: 1000,
+      });
+      setLoading(false);
+    }
+  };
+
+  const getUserFn = async (id: string) => {
+    try {
+      const users = await getUserById(id);
+      setUser(users?.data.data);
+    } catch (error) {
+      toast({
+        status: "error",
+        description: "Failed to get user profile",
+        title: "Failed",
+        position: "top",
+        duration: 5000,
+      });
+    }
+  };
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
 
     if (userData) {
       const parsedData = JSON.parse(userData);
-      setUser(parsedData);
+      // console.log(parsedData);
+      getUserFn(parsedData._id);
     }
   }, []);
+
   return (
-    <>
+    <form onSubmit={updateUserFn}>
       <Box w={"100%"}>
         <Flex flexDir={"column"} w={"100%"} className="inter">
           <Flex
@@ -96,7 +207,12 @@ export const SettingsScreen = () => {
                   borderRadius={"999px"}
                   overflow={"hidden"}
                 >
-                  <Image width={56} height={56} src={"/avatar1.png"} alt="/" />
+                  <Image
+                    width={56}
+                    height={56}
+                    src={user.avatar || "/avatar1.png"}
+                    alt="/"
+                  />
                 </Box>
                 <Btn
                   bg={"transparent"}
@@ -106,52 +222,84 @@ export const SettingsScreen = () => {
                   w={"68px"}
                   h={"32px"}
                   borderRadius={"8px"}
-                  textColor={"var(--sub600)"}
+                  textColor={"var(--primaryBase)"}
                   fontWeight={500}
                   fontSize={"14px"}
-                  border={"1px solid var(--soft200)"}
+                  border={"1px solid var(--primaryBase)"}
+                  _hover={{
+                    bg: "#1A1D66",
+                    textColor: "#FFF",
+                  }}
+                  type={"submit"}
+                  isLoading={loading}
+                  // loadingText="submitting"
+                  disabled={loading}
                 >
-                  Upload
+                  Update
                 </Btn>
               </Flex>
             </Flex>
           </Flex>
-          {settings.map((setting) => (
-            <Flex
-              key={setting?.id}
-              w={"100%"}
-              alignItems={"center"}
-              py={"20px"}
-              borderBottom={"1px solid var(--soft200)"}
-            >
-              <Flex w={"100%"} gap={"24px"} justifyContent={"space-between"}>
-                <Box w={"50%"}>
-                  <Text
-                    fontWeight={500}
-                    fontSize={"14px"}
-                    textColor={"var(--strong950)"}
-                    mb={"6px"}
-                  >
-                    {setting?.type}
-                  </Text>
-                  <Text
-                    fontWeight={400}
-                    fontSize={"12px"}
-                    textColor={"var(--sub600)"}
-                  >
-                    {setting?.description}
-                  </Text>
-                </Box>
-                <Flex flexDir="column" gap={"12px"} w={"40%"}>
-                  <Text
+          {settings.map((setting) => {
+            return (
+              <Flex
+                key={setting?.id}
+                w={"100%"}
+                alignItems={"center"}
+                py={"20px"}
+                borderBottom={"1px solid var(--soft200)"}
+              >
+                <Flex w={"100%"} gap={"24px"} justifyContent={"space-between"}>
+                  <Box w={"50%"}>
+                    <Text
+                      fontWeight={500}
+                      fontSize={"14px"}
+                      textColor={"var(--strong950)"}
+                      mb={"6px"}
+                    >
+                      {setting?.type}
+                    </Text>
+                    <Text
+                      fontWeight={400}
+                      fontSize={"12px"}
+                      textColor={"var(--sub600)"}
+                    >
+                      {setting?.description}
+                    </Text>
+                  </Box>
+                  <Flex flexDir="column" gap={"12px"} w={"40%"}>
+                    {/* <Text
                     fontWeight={500}
                     fontSize={"14px"}
                     textColor={"var(--strong950)"}
                     maxW={"180px"}
                   >
                     {setting?.info}
-                  </Text>
-                  <Text
+                  </Text> */}
+                    <Input
+                      type="text"
+                      name={setting?.name}
+                      width={"100%"}
+                      value={setting?.info}
+                      border={
+                        inputIsinvalid(setting.name)
+                          ? "1px solid var(--errorBase)"
+                          : "1px solid #262626"
+                      }
+                      focusBorderColor={
+                        inputIsinvalid(setting.name)
+                          ? "1px solid var(--errorBase)"
+                          : "1px solid #262626"
+                      }
+                      onBlur={() => onBlurHandler(setting.name)}
+                      onChange={onChangeHandler}
+                    />
+                    {inputIsinvalid(setting.name) && (
+                      <Text color="red.500" fontSize="12px">
+                        {setting?.name} is invalid.
+                      </Text>
+                    )}
+                    {/* <Text
                     display={"flex"}
                     alignItems={"center"}
                     fontWeight={500}
@@ -159,11 +307,12 @@ export const SettingsScreen = () => {
                     textColor={"var(--primaryBase)"}
                   >
                     Edit <IoIosArrowForward />
-                  </Text>
+                  </Text> */}
+                  </Flex>
                 </Flex>
               </Flex>
-            </Flex>
-          ))}
+            );
+          })}
           <Flex w={"100%"} alignItems={"center"} py={"20px"}>
             <Flex
               w={"100%"}
@@ -200,6 +349,12 @@ export const SettingsScreen = () => {
                 fontWeight={500}
                 fontSize={"14px"}
                 border={"1px solid var(--soft200)"}
+                // border={"1px solid var(--primaryBase)"}
+                _hover={{
+                  bg: "#1A1D66",
+                  textColor: "#FFF",
+                }}
+                onClick={navigateToResetPassword}
               >
                 Change Password
               </Btn>
@@ -207,6 +362,6 @@ export const SettingsScreen = () => {
           </Flex>
         </Flex>
       </Box>
-    </>
+    </form>
   );
 };

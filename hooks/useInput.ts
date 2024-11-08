@@ -1,5 +1,4 @@
 import { useState, ChangeEvent } from "react";
-
 export const useInputText = (validation: (input: string) => boolean) => {
   const [input, setInput] = useState("");
   const [isTouch, setIsTouch] = useState<boolean | null>(null);
@@ -125,5 +124,41 @@ export const useImage = () => {
     error,
     reset,
     deleteImage,
+  };
+};
+
+export const useInputSettings = <T extends {}>(
+  data: T,
+  validation: { [K in keyof T]: (value: T[K]) => boolean }
+) => {
+  const [input, setInput] = useState<T>(data);
+  const [touched, setIsTouched] = useState<{
+    [K in keyof T]?: boolean;
+  }>({});
+
+  const validateInput = (name: keyof T) => validation[name](input[name]);
+
+  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const onBlurHandler = (name: keyof T) => {
+    setIsTouched((prev) => ({ ...prev, [name]: true }));
+  };
+
+  const inputIsvalid = (name: keyof T) => validateInput(name);
+  const inputIsinvalid = (name: keyof T) =>
+    !inputIsvalid(name) && touched[name];
+  return {
+    input,
+    onChangeHandler,
+    setInput,
+    onBlurHandler,
+    inputIsvalid,
+    inputIsinvalid,
   };
 };

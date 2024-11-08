@@ -1,8 +1,8 @@
-import { Schema, model } from 'mongoose'
-import * as argon from 'argon2'
-import { AuthProvider, IUser, UserRole } from '../utils/interfaces'
-import { generateRefCode } from '../utils/helperFunctions/generateRefCode'
-import { required } from 'joi';
+import { Schema, model } from "mongoose";
+import * as argon from "argon2";
+import { AuthProvider, IUser, UserRole } from "../utils/interfaces";
+import { generateRefCode } from "../utils/helperFunctions/generateRefCode";
+import { required } from "joi";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -33,6 +33,11 @@ const UserSchema = new Schema<IUser>(
       type: String,
       lowercase: true,
     },
+    address: {
+      type: String,
+      default: "",
+      lowercase: true,
+    },
     propertyCount: {
       type: Number,
       default: 0,
@@ -45,11 +50,11 @@ const UserSchema = new Schema<IUser>(
     passwordUpdated: {
       type: Boolean,
       default: false,
-      required: false
+      required: false,
     },
-    referrer:{
+    referrer: {
       type: Schema.Types.ObjectId,
-      ref:'user'
+      ref: "user",
     },
     refCode: {
       type: String,
@@ -65,6 +70,10 @@ const UserSchema = new Schema<IUser>(
     verification: {
       type: String,
       default: "pending",
+    },
+    phoneNumber: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }
@@ -92,9 +101,9 @@ UserSchema.pre("save", async function (next) {
   if (!this.isModified("hash")) {
     next();
   }
-  this.hash = await argon.hash(this.hash as string)
+  this.hash = await argon.hash(this.hash as string);
 
-  this.refCode = generateRefCode(8)
-})
+  this.refCode = generateRefCode(8);
+});
 
 export default model("user", UserSchema);
