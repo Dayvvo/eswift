@@ -208,11 +208,13 @@ const BlogScreen = () => {
                         bgColor="#6AFFB0"
                         borderRadius={"50px"}
                         className="robotoF"
+                        cursor={'pointer'}
                         fontWeight={400}
                         fontSize={".937rem"}
                         w="144px"
                         h="28px"
-                      >
+                        onClick={() => route.push(`/blog/edit?blogId=${item._id}`)}
+            >
                         Edit
                       </Btn>
                       <Btn

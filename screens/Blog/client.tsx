@@ -31,6 +31,8 @@ const BlogspotScreen = () => {
     section.scrollIntoView({ behavior: "smooth" });
   }
 
+  console.log('blogPost', blogPost);
+
   useEffect(() => {
     const getBlogFn = async () => {
       setLoading(true);
@@ -77,7 +79,7 @@ const BlogspotScreen = () => {
           templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
           gap={{ base: "24px", lg: "60px" }}
         >
-          {blogPost.map((item) => {
+          {blogPost && blogPost.map((item) => {
             return (
               <BlogCard
                 key={item?._id} id={item?._id}

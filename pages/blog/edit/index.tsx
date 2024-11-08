@@ -3,6 +3,7 @@ import ImageUpload, { ImageData } from "@/components/ImageUpload";
 import { PlusIcon, UploadIcon } from "@/components/svg";
 import Wrapper from "@/components/Wrapper";
 import useBlog from "@/hooks/useBlog";
+import useToast from "@/hooks/useToast";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -22,69 +23,89 @@ const modules = {
   ],
 };
 
-const AddBlog = () => {
+const EditBlog = () => {
   const [headerImage, setHeaderImage] = useState<File | undefined>();
   const [bodyImage, setBodyImage] = useState<File | undefined>();
-  const [introValue, setIntroValue] = useState("");
-  const [articleTitle, setArticleTitle] = useState("");
-  const [bodyValue, setBodyValue] = useState("");
-  const [conclusionValue, setConclusionValue] = useState("");
-  const [headerImageFile, setHeaderImageFile] = useState("");
-  const [bodyImageFile, setBodyImageFile] = useState("");
+  const [blogDetails, setBlogDetails] = useState<any>({});
+  const [introValue, setIntroValue] = useState(blogDetails?.introduction ?? "");
+  const [articleTitle, setArticleTitle] = useState(blogDetails?.title || "");
+  const [bodyValue, setBodyValue] = useState(blogDetails?.body || "");
+  const [conclusionValue, setConclusionValue] = useState(blogDetails?.conclusion || "");
+  const [loading, setLoading] = useState(false);
+
+  const { getBlogByID, updateBlog } = useBlog();
+  const { toast } = useToast();
 
   const route = useRouter();
 
-  console.log("headerImageFile", headerImageFile);
-  console.log("bodyImageFile", bodyImageFile);
-  useEffect(() => {
-    localStorage.setItem("headerImageFile", headerImageFile);
-  }, [headerImageFile]);
+  const { blogId } = route.query;
+
+  const blogData = {
+    title: articleTitle,
+    introduction: introValue,
+    body: bodyValue,
+    // conclusion: conclusionValue,
+    header_image: "https://example.com/image.jpg",
+    body_image: "https://example.com/image.jpg",
+  }
+
+  const newBlogId = blogId as string
+
+  console.log('blogDetails', blogDetails);
 
   useEffect(() => {
-    localStorage.setItem("bodyImageFile", bodyImageFile);
-  }, [bodyImageFile]);
+    const getBlogByIdFn = async () => {
+      try {
+        const req:any = await getBlogByID(newBlogId);
+        console.log('req', req);
+        setBlogDetails(req?.data);
+      }
+      catch (err) {
+        console.log('err', err);
+      }
+    }
+
+    getBlogByIdFn();
+  }, [blogId])
+
+  const EditBlog = async () => {
+    try {
+      setLoading(true);
+      const req = await updateBlog(blogDetails._id, blogData);
+      console.log('req', req);
+      toast({
+        status: "success",
+        title: "Edit successful"
+      });
+      route.push('/blog');
+    }
+    catch (err) {
+      console.log('err', err);
+    }
+    finally {
+      setLoading(false);
+    }
+  }
 
 
-  // const imageChangeHandler = (
-  //   e: ChangeEvent<HTMLInputElement>,
-  //   setImage: any
-  // ) => {
-  //   if (e.target.files && e.target.files.length > 0) {
-  //     const file = e.target.files[0];
 
-  //     console.log('file', file)
-  //     setImage(file);
+  console.log('articleTitle', articleTitle);
+  console.log('bodyValue', bodyValue);
+  console.log('introValue', introValue);
+  console.log('conclusionValue', conclusionValue);
 
-  //     if (file) {
-  //       const reader = new FileReader();
-  //       reader.onload = (event: ProgressEvent<FileReader>) => {
-  //         const dataUrl = event.target?.result as string;
-  //         localStorage.setItem("headerImage", dataUrl);
-  //       };
-  //       reader.readAsDataURL(file);
-  //     }
-  //   }
+  // const toPreview = () => {
+  //   localStorage.setItem("previewData", JSON.stringify(previewData));
+  //   route.push('/blog/preview');
+  // }
+
+  // const headerImageChange = (image: any) => {
+  //   localStorage.setItem("headerImage", image?.dataUrl);
   // };
-  
-  const previewData = {
-    articleTitle: articleTitle,
-    introValue: introValue,
-    bodyValue: bodyValue,
-    conclusionValue: conclusionValue,
-  }
 
-  const toPreview = () => {
-    localStorage.setItem("previewData", JSON.stringify(previewData));
-    route.push('/blog/preview');
-  }
-
-  const headerImageChange = (image: any) => {
-    localStorage.setItem("headerImage", image?.dataUrl);
-  };
-
-  const bodyImageChange = (image: any) => {
-    localStorage.setItem("bodyImage", image?.dataUrl);
-  };
+  // const bodyImageChange = (image: any) => {
+  //   localStorage.setItem("bodyImage", image?.dataUrl);
+  // };
 
   return (
     <>
@@ -99,7 +120,7 @@ const AddBlog = () => {
           py="15px"
           borderRadius={"7px"}
           className="mulish"
-          value={articleTitle}
+          value={articleTitle || blogDetails?.title}
           onChange={(e) => setArticleTitle(e.target.value)}
           bgColor={"#F5F7FA"}
           border={0}
@@ -116,7 +137,7 @@ const AddBlog = () => {
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
           Header Image
         </Text>
-        <ImageUpload onImageChange={headerImageChange} setImageFile={setHeaderImageFile} />
+        {/* <ImageUpload onImageChange={headerImageChange} /> */}
       </Flex>
       <Flex align={"center"} justify={"space-between"} mb="20px">
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
@@ -124,7 +145,7 @@ const AddBlog = () => {
         </Text>
         <Box pos={"relative"} mb="20px" w="700px">
           <ReactQuill
-            value={introValue}
+            value={introValue || blogDetails?.introduction}
             onChange={setIntroValue}
             modules={modules}
             className="quill-style"
@@ -137,7 +158,7 @@ const AddBlog = () => {
         </Text>
         <Box pos={"relative"} mb="20px" w="700px">
           <ReactQuill
-            value={bodyValue}
+            value={bodyValue || blogDetails?.body}
             onChange={setBodyValue}
             modules={modules}
             className="quill-style"
@@ -148,7 +169,7 @@ const AddBlog = () => {
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
           Body Image
         </Text>
-        <ImageUpload onImageChange={bodyImageChange} setImageFile={setBodyImageFile} />
+        {/* <ImageUpload onImageChange={bodyImageChange} /> */}
       </Flex>
       <Flex align={"center"} justify={"space-between"} mb="20px">
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
@@ -156,7 +177,7 @@ const AddBlog = () => {
         </Text>
         <Box pos={"relative"} mb="20px" w="700px">
           <ReactQuill
-            value={conclusionValue}
+            value={conclusionValue || blogDetails?.conclusion}
             onChange={setConclusionValue}
             modules={modules}
             className="quill-style"
@@ -174,9 +195,10 @@ const AddBlog = () => {
             fontSize={".875rem"}
             fontWeight={500}
             className="inter"
-            onClick={toPreview}
+            onClick={EditBlog}
+            isLoading={loading}
           >
-            Preview
+            Edit
           </Btn>
         </Flex>
       </Flex>
@@ -187,7 +209,7 @@ const AddBlog = () => {
 const index = () => {
   return (
     <Wrapper>
-      <AddBlog />
+      <EditBlog />
     </Wrapper>
   );
 };
