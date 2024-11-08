@@ -1,6 +1,6 @@
 import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
-import { Box, Text, Flex } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { Video } from "./video";
 import { Footer } from "@/components/footer";
 import { Background } from "../home/Background";
@@ -9,10 +9,11 @@ import { MoreDetails } from "./MoreDetails";
 
 
 const AboutUsScreen = () => {
+
   function scrollToSection() {
     const section = document.querySelector("#main") as HTMLElement;
     section.scrollIntoView({ behavior: "smooth" });
-  }
+  };
 
   return (
     <>
