@@ -53,6 +53,8 @@ const useBlog = () => {
     },
     [token]
   );
+
+
  
   const contactUsFn = async (data: MailType) => {
     try {
@@ -82,8 +84,8 @@ const useBlog = () => {
     },
     [token]
   );
-
-  const getBlog = async () =>  (await query(`${baseUrl}/blog/post`)).data as R; 
+  
+  const getBlog = async (search:string) =>  (await query(`${baseUrl}/blog/post?keyword=${search}`)).data as R; 
 
   const getBlogByID = async(id:string)=>{
     try {
