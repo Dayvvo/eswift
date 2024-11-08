@@ -6,7 +6,10 @@ import { randomBytes } from 'crypto'
 import {
   PutObjectRequest,
   PutObjectCommand,
+  DeleteObjectCommand,
+  DeleteObjectRequest,
 } from '@aws-sdk/client-s3'
+import { validateDeleteFIle } from '../utils/validation'
 class UploadController {
   async uploadFile(file: Express.Multer.File): Promise<string> {
     try {
@@ -21,15 +24,8 @@ class UploadController {
 
   //this uploads to digital ocean as opposed to cloudinary. All we have to do is replace uploadFile with uploadToDigital Ocean
   async uploadToDigitalOcean(file: Express.Multer.File): Promise<string> {
-
-    const folderRoute = process.env.NODE_ENV !=='production' ? 'uploads' : 'prod';
-
-    console.log('digital ocean creds',
-      process.env.DO_SPACES_ENDPOINT,
-      process.env.DO_SPACES_KEY!,
-      process.env.DO_SPACES_SECRET!,
-      BUCKET_NAME,
-    )
+    const folderRoute =
+      process.env.NODE_ENV === 'production' ? 'prod' : 'uploads'
 
     const uploadParams: PutObjectRequest = {
       Bucket: BUCKET_NAME,
@@ -49,6 +45,47 @@ class UploadController {
     } catch (error: any) {
       console.error('Error uploading file:', error)
       throw new Error('Failed to upload file')
+    }
+  }
+
+  async deleteFromDigitalOcean(publicUrl: string): Promise<void> {
+    console.log('deleteCalled')
+    try {
+      const key = publicUrl.split(`${BUCKET_NAME}/`)[1]
+
+      const deleteParams: DeleteObjectRequest = {
+        Bucket: BUCKET_NAME,
+        Key: key,
+      }
+
+      const command = new DeleteObjectCommand(deleteParams)
+      console.log({ res: await space.send(command) })
+    } catch (error: any) {
+      console.error('Error deleting file:', error)
+      throw new Error('Failed to delete file')
+    }
+  }
+
+  async deleteFile(req: Request, res: Response) {
+    const validate = validateDeleteFIle(req.body)
+    const { value, error } = validate
+
+    if (error) {
+      return res.status(400).json(error.details[0])
+    }
+
+    try {
+      await uploadController.deleteFromDigitalOcean(value['url'])
+      return res.json({
+        statusCode: 200,
+        message: `Image deleted Successfully`,
+      })
+    } catch (error: any) {
+      console.log(error)
+      return res.status(500).json({
+        statusCode: 500,
+        message: `Internal Server Error: ${error.message}`,
+      })
     }
   }
 

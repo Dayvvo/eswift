@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import {
   IAddPropertyValidation,
+  IDeleteFileValidation,
   ILoginValidation,
   ISignupValidation,
 } from '../interfaces/interface.validation'
@@ -98,6 +99,38 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
   return propertySchema.validate(property)
 }
 
+export const ValidateEditProperty = (property: IAddPropertyValidation) => {
+  const documentSchema = Joi.object({
+    type: Joi.string()
+      .valid(...Object.values(PropertyDocuments))
+      .required(),
+    document: Joi.string().required(),
+  })
+
+  const priceSchema = Joi.object({
+    mode: Joi.string()
+      .valid(...Object.values(PaymentMode))
+      .required(),
+
+    amount: Joi.string()
+      .pattern(/^\d+(\.\d{1,2})?$/)
+      .required(),
+  })
+
+  const propertySchema = Joi.object({
+    title: Joi.string().optional(),
+    address: Joi.string().optional(),
+    price: priceSchema.optional(),
+    category: Joi.string().optional(),
+    description: Joi.string().optional(),
+    features: Joi.array().items(Joi.string().min(2).max(50)).min(1).optional(),
+    images: Joi.array().items(Joi.string().uri()).min(1).optional(),
+    documents: Joi.array().items(documentSchema).optional(),
+  })
+
+  return propertySchema.validate(property)
+}
+
 export const createInspectionValidatorSchema = Joi.object({
   first_name: Joi.string().required(),
   last_name: Joi.string().required(),
@@ -166,4 +199,12 @@ export const validateProfile = (userProfile: ProfileInterface) => {
     currentOccupation: Joi.string().required(),
   })
   return profileSchema.validate(userProfile)
+}
+
+export const validateDeleteFIle = (file: IDeleteFileValidation) => {
+  const fileSchema = Joi.object({
+    url: Joi.string().uri().required(),
+  })
+
+  return fileSchema.validate(file)
 }
