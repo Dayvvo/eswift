@@ -36,6 +36,7 @@ import {
 import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { DocumentTypes, R } from "@/utils/types";
 import useUpload from "@/hooks/useUpload";
+import { IoFilter } from "react-icons/io5";
 
 // interface MyData {
 //   _id: any;
@@ -346,11 +347,7 @@ export const PropertyScreen = () => {
 
   useEffect(() => {
     getPropertyFunction();
-<<<<<<< HEAD
-  }, [showModal, loading, inputValue]);
-=======
-  }, [page]);
->>>>>>> 7cc4fc9d9c8c750f13e19fcd02a6c32250e08c2d
+  }, [showModal, loading, inputValue, page]);
 
   const goToNextPage = () => {
     if (page < totalPages) setPage(page + 1);
@@ -486,7 +483,6 @@ export const PropertyScreen = () => {
               />
             </InputGroup>
           </Flex>
-<<<<<<< HEAD
           <Flex gap={'12px'} flexDir={{base:'column',sm:'row'}} alignItems={'end'}>
                 <Btn
                   onClick={toggleModal}
@@ -537,64 +533,6 @@ export const PropertyScreen = () => {
                     <Text>Filter</Text>
                 </Btn>
             </Flex>
-=======
-          <Flex
-            gap={"12px"}
-            flexDir={{ base: "column", sm: "row" }}
-            alignItems={"end"}
-          >
-            <Btn
-              onClick={toggleModal}
-              display={"flex"}
-              gap={"4px"}
-              alignItems={"center"}
-              bg={"#fff"}
-              h={"100%"}
-              w={"131px"}
-              border={"1px solid var(--soft200)"}
-              borderRadius={"8px"}
-              textColor={"var--(sub600)"}
-              fontWeight={500}
-              fontSize={"14px"}
-              px={"6px"}
-              pt={"0"}
-              pb={"0"}
-              _hover={{
-                bg: "#1A1D66",
-                textColor: "#FFF",
-              }}
-            >
-              <Text fontSize={"14px"}>Add Property</Text>
-              <BsPlus className="icon" />
-            </Btn>
-
-            {/* <Btn
-              onClick={() => setPage(inputValue)}
-              display={"flex"}
-              gap={"4px"}
-              alignItems={"center"}
-              bg={"#fff"}
-              h={"100%"}
-              w={"80px"}
-              border={"1px solid var(--soft200)"}
-              borderRadius={"8px"}
-              textColor={"var--(sub600)"}
-              fontWeight={500}
-              fontSize={"14px"}
-              px={"6px"}
-              pt={"0"}
-              pb={"0"}
-              _hover={{
-                bg: "#1A1D66",
-                textColor: "#FFF",
-              }}
-            >
-              <IoFilter className="icon" />
-              <Text>Filter</Text>
-            </Btn> */}
-
-          </Flex>
->>>>>>> 7cc4fc9d9c8c750f13e19fcd02a6c32250e08c2d
         </Flex>
 
         {/* Scrollable Property Cards Container */}
