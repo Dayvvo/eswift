@@ -132,7 +132,7 @@ const UserComponent = () => {
   const client = useApiUrl();
   
   useEffect(()=>{
-    client.query('/user/users') 
+    client.get('/user/users') 
       .then(
         (res:AxiosResponse<unknown, any>) => {
           console.log(res?.data)

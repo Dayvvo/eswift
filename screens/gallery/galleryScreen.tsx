@@ -8,32 +8,34 @@ import { LoadMore } from "@/components/LoadMore";
 import { Background } from "../home/Background";
 import { TextHeader } from "../home/textHeader";
 import { PropertiesCard } from "../properties/propertiesCard";
+import { PropertyCardProps } from "../Property/propertyCard";
 
 
 const GalleryScreen =( )=> {
 
     const [inputValue, setInputValue] = useState<string>('')
-    const [page, setPage] = useState<number>(0)
+    const [page, setPage] = useState<number>(0);
+    const [projects, setProjects] = useState<PropertyCardProps[]>([]);
 
-    const projects = [
+    // const projects = [
 
-        {
-            id:'1',
-            title:'Oluyole estate',
-            description:'Korem ipsum dolor sit celex dor divorless',
-            images:['/properties-dummy.png'],
-            price:'120000'
-        },
-        {
-            id:'2',
-            title:'Oluyole estate',
-            description:'Korem ipsum dolor sit celex dor divorless',
-            images:['/properties-dummy.png'],
-            price:'120000'
-        },
+    //     {
+    //         id:'1',
+    //         title:'Oluyole estate',
+    //         description:'Korem ipsum dolor sit celex dor divorless',
+    //         images:['/properties-dummy.png'],
+    //         price:'120000'
+    //     },
+    //     {
+    //         id:'2',
+    //         title:'Oluyole estate',
+    //         description:'Korem ipsum dolor sit celex dor divorless',
+    //         images:['/properties-dummy.png'],
+    //         price:'120000'
+    //     },
         
         
-    ]
+    // ]
 
     function scrollToSection() {
         const section = document.querySelector('#main') as HTMLElement;
@@ -67,14 +69,12 @@ const GalleryScreen =( )=> {
                         {
                             projects.map((item)=>{
                                 return(
-                                    <PropertiesCard key={item?.id}
-                                        images={item?.images} 
-                                        title={item?.title} 
-                                        price={item?.price} 
-                                        description={item?.description}
-                                        _id={item?.id}
-                                        address=""
-                                        duration={'20'}
+                                    <PropertiesCard key={item?._id}
+                                     images={item?.images} 
+                                     title={item?.title} 
+                                     // price={item?.price} 
+                                     description={item?.description}
+                                     _id={item?._id}
                                     />
                                 )
                             })

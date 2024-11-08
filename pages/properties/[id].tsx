@@ -1,7 +1,6 @@
 import { Footer } from "@/components/footer";
 import NavBar from "@/components/navBar";
-import { PropertyDetails } from "@/components/PropertyDetails";
-import { appBodyPosition } from "@/utils/modules";
+import { PropertyDetails } from "@/screens/properties/PropertyDetails";
 import { Center, Box } from "@chakra-ui/react";
 
 const PropertiesDetailScreen = () => (

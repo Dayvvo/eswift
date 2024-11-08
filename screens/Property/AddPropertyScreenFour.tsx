@@ -1,7 +1,7 @@
 import Btn from "@/components/Btn";
 import { Box, Flex, Input, Stack, Text } from "@chakra-ui/react";
 import { ChangeEvent } from "react";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaTrashAlt } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { FaFilePdf } from "react-icons/fa6";
@@ -12,28 +12,52 @@ import useToast from "@/hooks/useToast";
 interface ButtonFunction {
   next: () => void;
   previous: () => void;
-  onChangeFileName: (name: string, value: File) => void;
+  onChangeFileName: (name: string, value: File | null) => void;
   fileName: string;
   documents: Documents;
+  loading: boolean;
 }
 
 const FileInputComponent = ({
   title,
-  value,
+  name,
   onChange,
   uploaded,
 }: {
   title: string;
-  value: string;
-  onChange: (name: string, value: File) => void;
+  name: string;
+  onChange: (name: string, value: File | null) => void;
   uploaded: File;
 }) => {
+
+  const toast = useToast();
   const onFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     let fileList = e.target.files;
-    let file: File | null = null;
+
+    let file: File | null = null;  
+
+    const isValidFile = (file:File)=>{
+      let validationErr = '';
+      console.log('file type', file.type);
+      if (file.type !== 'application/pdf'){
+        validationErr = 'Invalid File type';
+      }
+      else if((file.size/(1024 * 1024)) > 6 ){
+        validationErr ='File is too large';
+      }
+
+      validationErr && toast.toast({
+        status:'error',
+        title:'Error uploading file',
+        description: validationErr
+      })
+
+      return validationErr
+    }
+    
     if (fileList?.length) {
-      file = fileList[0];
-      onChange(value, file);
+      file = fileList[0] as File;
+      !isValidFile(file) && onChange(name, file);
     }
   };
 
@@ -87,6 +111,8 @@ const FileInputComponent = ({
               </Text>
             </Stack>
           </Flex>
+
+          <FaTrashAlt cursor={'pointer'} fontSize={'25px'} onClick={()=>{ onChange(name,null) }}  />
         </Flex>
       )}
     </Box>
@@ -97,6 +123,7 @@ export const AddPropertyScreenFour = ({
   next,
   previous,
   onChangeFileName,
+  loading,
   documents,
 }: ButtonFunction) => {
   const { toast } = useToast();
@@ -141,7 +168,6 @@ export const AddPropertyScreenFour = ({
     { val: "PowerOfAttorney", name: "Power of attorney" },
     { val: "GovConsent", name: "Gov Consent" },
   ];
-
   // const validateDocuments = () => {
   //   const missingDocs = Object.entries(documents).filter(([key, doc]) => !doc);
   //   if (missingDocs.length === 8) {
@@ -156,6 +182,8 @@ export const AddPropertyScreenFour = ({
   //   }
   //   return true;
   // };
+
+  console.log('fine app',loading)
 
   return (
     <>
@@ -210,7 +238,7 @@ export const AddPropertyScreenFour = ({
               key={key}
               uploaded={documents[object.val as DocumentTypes] as File}
               onChange={onChangeFileName}
-              value={object.val}
+              name={object.val}
               title={object.name}
             />
           ))}
@@ -228,12 +256,16 @@ export const AddPropertyScreenFour = ({
             bg={"#FFFFFF"}
             borderRadius={"10px"}
             textColor={"var(--primaryBase)"}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
           >
             Previous
           </Btn>
           <Btn
             onClick={() => {
-                next();
+              next();
             }}
             my={"20px"}
             border={"1px solid var(--primaryBase)"}
@@ -244,25 +276,17 @@ export const AddPropertyScreenFour = ({
             bg={"#FFFFFF"}
             borderRadius={"10px"}
             textColor={"var(--primaryBase)"}
+            isLoading={loading}
+            loadingText="Submitting..."
+            disabled={loading}
+            _hover={{
+              bg: "#1A1D66",
+              textColor: "#FFF",
+            }}
           >
-            Completed
+            Submit
           </Btn>
         </Flex>
-
-        {/* <Btn
-          onClick={handleUpload}
-          my={"20px"}
-          border={"1px solid var(--primaryBase)"}
-          display={"flex"}
-          alignItems={"center"}
-          w={"100%"}
-          h={"40px"}
-          bg={"#FFFFFF"}
-          borderRadius={"10px"}
-          textColor={"var(--primaryBase)"}
-        >
-          Completed
-        </Btn> */}
       </Box>
     </>
   );

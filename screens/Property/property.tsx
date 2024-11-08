@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { RiSearch2Line } from "react-icons/ri";
 import Btn, { PaginationButton } from "@/components/Btn";
-import { IoFilter } from "react-icons/io5";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "../../components/modal";
@@ -65,9 +64,8 @@ export type Documents = {
 };
 
 export const PropertyScreen = () => {
-  
   const [showModal, setShowModal] = useState(false);
-  const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
+  const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([])
   const [page, setPage] = useState<any>(1);
   const [totalPages, setTotalPages] = useState<any>(1);
   const [inputValue, setInputValue] = useState<any>("");
@@ -86,13 +84,11 @@ export const PropertyScreen = () => {
     GovConsent: null,
   });
 
-  const handleDocumentChange = (name: string, value: File) => {
-    if (value) {
-      setDocuments((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+  const handleDocumentChange = (name: string, value: File | null) => {
+    setDocuments((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const {
@@ -120,7 +116,7 @@ export const PropertyScreen = () => {
     valueIsInvalid: invalidDescription,
     valueIsValid: validDescription,
     reset: descriptionReset,
-  } = useInputText((description) => description.length > 8);
+  } = useInputText((description) => description.length > 10);
 
   const {
     input: address,
@@ -140,14 +136,14 @@ export const PropertyScreen = () => {
     reset: typeReset,
   } = useInputText((typeOfProperty) => typeOfProperty !== "");
 
-  const {
-    input: duration,
-    onChangeInput: onChangeDuration,
-    onBlurHandler: onBlurDuration,
-    valueIsInvalid: invalidDuration,
-    valueIsValid: validDuration,
-    reset: durationReset,
-  } = useInputText((duration) => duration !== "");
+  // const {
+  //   input: duration,
+  //   onChangeInput: onChangeDuration,
+  //   onBlurHandler: onBlurDuration,
+  //   valueIsInvalid: invalidDuration,
+  //   valueIsValid: validDuration,
+  //   reset: durationReset,
+  // } = useInputText((duration) => duration !== "");
 
   const {
     input: fileName,
@@ -198,89 +194,95 @@ export const PropertyScreen = () => {
     setShowModal((prevState) => !prevState);
   };
 
-  const resetFields = ()=>{
+  const resetFields = () => {
     titleReset();
     // categoryReset();
     descriptionReset();
-    durationReset();
+    // durationReset();
     imageReset();
     fileNameReset();
     priceReset();
     typeReset();
     addressReset();
     setShowScreen(1);
-
   };
 
-  const uploadPropertyFiles = async(images:File[], documents: Documents)=>{
-    try{
+  const uploadPropertyFiles = async (images: File[], documents: Documents) => {
+    try {
+      const imagesFormData = new FormData();
 
-      const imagesFormData = new FormData();   
-      
-      images.map(img=>imagesFormData.append( images?.length > 1? 'files': 'file', img));
+      images.map((img) =>
+        imagesFormData.append(images?.length > 1 ? "files" : "file", img)
+      );
 
-      const {data:uploadImages} =  images?.length >1 ? await uploadMultiple(imagesFormData): await uploadSingle(imagesFormData);
-      
-      const uploadedDocuments = Object.keys(documents).filter(val=> documents[val as validDocs] );
-      
+      const { data: uploadImages } =
+        images?.length > 1
+          ? await uploadMultiple(imagesFormData)
+          : await uploadSingle(imagesFormData);
+
+      const resolveImagesInArray = !(images?.length > 1) ? [uploadImages?.data]:  uploadImages?.data
+
+      const uploadedDocuments = Object.keys(documents).filter(
+        (val) => documents[val as validDocs]
+      );
+
       let documentPayload: R[] = [];
 
       type validDocs = keyof typeof documents;
 
       for (const key in uploadedDocuments) {
-          let keyVal = uploadedDocuments[key];
 
-          const singleFormData = new FormData();
+        let keyVal = uploadedDocuments[key];
+        const singleFormData = new FormData();
+        const matchingFile = documents[keyVal as validDocs];
 
-          const matchingFile = documents[keyVal as validDocs];
+        singleFormData.append("file", matchingFile as File);
 
-          const {data:uploadImg} = await uploadSingle(singleFormData);
-
-          if(uploadImg){
-            documentPayload.push({
-              type: keyVal,
-              document: uploadImg?.data
-            })
-          }
+        const { data: uploadImg } = await uploadSingle(singleFormData);
+        if (uploadImg) {
+          documentPayload.push({
+            type: keyVal,
+            document: uploadImg?.data,
+          });
+        }
       }
-
 
       return {
-        images: uploadImages?.data,
-        documents: documentPayload
-      }
-      
+        images: resolveImagesInArray,
+        documents: documentPayload,
+      };
+    } catch (err) {
+      console.log("err", err);
     }
-    catch(err){
-      console.log('err',err)
-    }
-  }
+  };
 
   const addPropertyFn = async () => {
-    const { documents,price,images,...rest } = propertyData;
+    setLoading(true);
+    const { documents, price, images, ...rest } = propertyData;
 
     try {
-      const uploadedFiles = await uploadPropertyFiles(images, documents) || {
-        images:[],
-        documents:[]
+      const uploadedFiles = (await uploadPropertyFiles(images, documents)) || {
+        images: [],
+        documents: [],
       };
 
-          
       const payload = {
         ...rest,
-        price:{
-          mode:'one_off',
-          amount: price
+        price: {
+          mode: "one_off",
+          amount: price,
         },
         features:[],
-        ...uploadedFiles
+        ...uploadedFiles,
       };
-      
-      uploadedFiles &&  await addProperty(payload); // If no error occurs, the following code runs
+
+      uploadedFiles && (await addProperty(payload)); // If no error occurs, the following code runs
 
       setShowModal(false);
 
       resetFields();
+
+      setLoading(false);
 
       toast({
         status: "success",
@@ -289,7 +291,6 @@ export const PropertyScreen = () => {
         position: "top",
         duration: 5000,
       });
-
     } 
     catch (err) {
       toast({
@@ -299,6 +300,7 @@ export const PropertyScreen = () => {
         position: "top",
         duration: 5000,
       });
+      setLoading(false);
     }
   };
 
@@ -306,10 +308,15 @@ export const PropertyScreen = () => {
     setLoading(true);
     try {
       setLoading(false);
-      const getAllProperties = await getAdminProperty(inputValue, page);
-      setGetProperty(getAllProperties?.data?.data);
-      // console.log(getAllProperties?.data?.data);
-      setTotalPages(getAllProperties.data?.pagination.pages);
+      const {data} = await getAdminProperty(inputValue, page);
+
+      const propertiesToAdd = data?.data.filter((prop:PropertyCardProps)=> {
+        return getProperty.findIndex(index=> index._id === prop._id) === -1 
+      });
+ 
+      setGetProperty(prev=>([...prev, ...propertiesToAdd ]));
+
+      setTotalPages(data?.pagination.pages);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -339,7 +346,11 @@ export const PropertyScreen = () => {
 
   useEffect(() => {
     getPropertyFunction();
+<<<<<<< HEAD
   }, [showModal, loading, inputValue]);
+=======
+  }, [page]);
+>>>>>>> 7cc4fc9d9c8c750f13e19fcd02a6c32250e08c2d
 
   const goToNextPage = () => {
     if (page < totalPages) setPage(page + 1);
@@ -364,7 +375,6 @@ export const PropertyScreen = () => {
             <AddPropertyScreenOne
               onChangeTitle={onChangeTitle}
               onChangeCategory={onChangeCategory}
-             
               // typeOfProperty={typeOfProperty}
               // validType={validType}
               // onBlurType={onBlurType}
@@ -389,19 +399,19 @@ export const PropertyScreen = () => {
             <AddPropertyScreenTwo
               address={address}
               price={price}
-              duration={duration}
+              // duration={duration}
               invalidPrice={invalidPrice}
-              invalidDuration={invalidDuration}
+              // invalidDuration={invalidDuration}
               invalidAddress={invalidAddress}
               validPrice={validPrice}
-              validDuration={validDuration}
+              // validDuration={validDuration}
               validAddress={validAddress}
               onBlurPrice={onBlurPrice}
               onBlurAdddress={onBlurAddress}
-              onBlurDuration={onBlurDuration}
+              // onBlurDuration={onBlurDuration}
               onChangeAddress={onChangeAddress}
               onChangePrice={onChangePrice}
-              onChangeDuration={onChangeDuration}
+              // onChangeDuration={onChangeDuration}
               next={() => setShowScreen(3)}
               previous={() => setShowScreen(1)}
             />
@@ -421,6 +431,7 @@ export const PropertyScreen = () => {
               fileName={fileName}
               documents={documents}
               onChangeFileName={handleDocumentChange}
+              loading={loading}
             />
           ) : (
             ""
@@ -429,9 +440,9 @@ export const PropertyScreen = () => {
       </form>
       <Box
         className="robotoF"
-        px={{ base: "16px", lg: "0" }}
+        px={{ base: "16px", lg: "20px" }}
         height={{ base: "70vh", md: "78vh", lg: "60vh", xl: "65vh" }}
-        overflowY="hidden"
+        overflowY="scroll"
       >
         <Flex
           mb={"24px"}
@@ -443,6 +454,7 @@ export const PropertyScreen = () => {
           top="0"
           zIndex="10"
           bg="white"
+          mt='2em'
         >
           <Flex w={"100%"}>
             <InputGroup
@@ -474,6 +486,7 @@ export const PropertyScreen = () => {
               />
             </InputGroup>
           </Flex>
+<<<<<<< HEAD
           <Flex gap={'12px'} flexDir={{base:'column',sm:'row'}} alignItems={'end'}>
                 <Btn
                   onClick={toggleModal}
@@ -524,6 +537,64 @@ export const PropertyScreen = () => {
                     <Text>Filter</Text>
                 </Btn>
             </Flex>
+=======
+          <Flex
+            gap={"12px"}
+            flexDir={{ base: "column", sm: "row" }}
+            alignItems={"end"}
+          >
+            <Btn
+              onClick={toggleModal}
+              display={"flex"}
+              gap={"4px"}
+              alignItems={"center"}
+              bg={"#fff"}
+              h={"100%"}
+              w={"131px"}
+              border={"1px solid var(--soft200)"}
+              borderRadius={"8px"}
+              textColor={"var--(sub600)"}
+              fontWeight={500}
+              fontSize={"14px"}
+              px={"6px"}
+              pt={"0"}
+              pb={"0"}
+              _hover={{
+                bg: "#1A1D66",
+                textColor: "#FFF",
+              }}
+            >
+              <Text fontSize={"14px"}>Add Property</Text>
+              <BsPlus className="icon" />
+            </Btn>
+
+            {/* <Btn
+              onClick={() => setPage(inputValue)}
+              display={"flex"}
+              gap={"4px"}
+              alignItems={"center"}
+              bg={"#fff"}
+              h={"100%"}
+              w={"80px"}
+              border={"1px solid var(--soft200)"}
+              borderRadius={"8px"}
+              textColor={"var--(sub600)"}
+              fontWeight={500}
+              fontSize={"14px"}
+              px={"6px"}
+              pt={"0"}
+              pb={"0"}
+              _hover={{
+                bg: "#1A1D66",
+                textColor: "#FFF",
+              }}
+            >
+              <IoFilter className="icon" />
+              <Text>Filter</Text>
+            </Btn> */}
+
+          </Flex>
+>>>>>>> 7cc4fc9d9c8c750f13e19fcd02a6c32250e08c2d
         </Flex>
 
         {/* Scrollable Property Cards Container */}
@@ -542,10 +613,16 @@ export const PropertyScreen = () => {
 
           {!loading && getProperty?.length > 0 && (
             <Grid
-                mt={4} w={"fit-content"}
-                templateColumns={{base:"repeat(1, 1fr)",md:"repeat(2, 1fr)",lg:"repeat(3, 1fr)"}}
-                gap={{ base: "24px", lg: "28px" }}
-                paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
+              mt={4}
+              w={"fit-content"}
+              templateColumns={{
+                base: "repeat(1, 1fr)",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(3, 1fr)",
+                xl: "repeat(4, 1fr)"
+              }}
+              gap={{ base: "24px", lg: "28px" }}
+              paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
             >
               {getProperty.map((property, index) => {
                 const user = users.find((u) => u._id === property?.creatorID);

@@ -60,7 +60,7 @@ class PropertyController {
         statusCode: 200,
         message: 'Property List',
         data: properties,
-        pagination: { page, pages: Math.ceil(count / pageSize) },
+        pagination: { page, pages: Math.ceil(count / pageSize), count },
       })
     } catch (err: any) {
       console.log('Error in email login', err)
@@ -94,7 +94,7 @@ class PropertyController {
         statusCode: 200,
         message: 'Property List',
         data: properties,
-        pagination: { page, pages: Math.ceil(count / pageSize) },
+        pagination: { page, pages: Math.ceil(count / pageSize), count },
       })
     } catch (err: any) {
       console.error(err?.message)

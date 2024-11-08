@@ -4,25 +4,24 @@ import Btn from "@/components/Btn";
 import {
   Box,
   Flex,
-  Grid,
-  GridItem,
-  SimpleGrid,
+  // Grid,
+  // GridItem,
+  // SimpleGrid,
   Text,
   Image,
-  Heading,
+  // Heading,
 } from "@chakra-ui/react";
-import { BsDot } from "react-icons/bs";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import { FaRegImages } from "react-icons/fa";
+// import { BsDot } from "react-icons/bs";
+// import { HiOutlineLocationMarker } from "react-icons/hi";
+// import { FaRegImages } from "react-icons/fa";
 import useProperty from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
-import { PropertyCard } from "../screens/Property/propertyCard";
+import {  PropertyCardProps } from "../Property/propertyCard";
 import { useRouter } from "next/router";
 import { MdLocationOn } from "react-icons/md";
-import { BedroomsIcon, BathroomsIcon, AreaIcon, ZigiZagaIcon } from "./svg";
-import { Footer } from "./footer";
+import {  ZigiZagaIcon } from "../../components/svg";
 
 export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
   const Images: string[] = [
@@ -126,7 +125,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
 
   const { user } = globalContext;
 
-  const [detailsData, setDetailsData] = useState<any>(null);
+  const [detailsData, setDetailsData] = useState<PropertyCardProps | null>(null);
 
   const { getPropertyDetails } = useProperty();
 
@@ -157,12 +156,12 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
           <Text
             className="urbanist"
             fontWeight="600"
-            fontSize="24px"
+            fontSize="40px"
             whiteSpace="nowrap"
           >
             {detailsData?.title}
           </Text>
-          <Flex
+          {/* <Flex
             w={"100%"}
             h={"37px"}
             alignItems={"center"}
@@ -187,25 +186,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               {detailsData?.address}
             </Text>
           </Flex>
-        </Flex>
-        <Flex flexDir={"column"}>
-          <Text
-            className="urbanist"
-            color={"#999999"}
-            fontSize={"14px"}
-            fontWeight={"500"}
-          >
-            Price
-          </Text>
-
-          <Text
-            className="urbanist"
-            fontSize={"20px"}
-            fontWeight={600}
-            color={"#000"}
-          >
-            {detailsData?.price}
-          </Text>
+      */}
         </Flex>
       </Flex>
       <Flex
@@ -227,7 +208,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
           },
         }}
       >
-        {Images.map((image, index) => (
+        {detailsData?.images.map((image, index) => (
           <Box
             key={index}
             h="74px"
@@ -265,7 +246,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
             <Image
               w={"100%"}
               h={"100%"}
-              src={Images[selectedImageIndex]}
+              src={detailsData?.images[selectedImageIndex]}
               alt={``}
               borderRadius={"10px"}
             />
@@ -276,8 +257,8 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               h={"100%"}
               src={
                 selectedImageIndex - 1 >= 0
-                  ? Images[selectedImageIndex - 1]
-                  : Images[selectedImageIndex + 1]
+                  ? detailsData?.images[selectedImageIndex - 1]
+                  : detailsData?.images[selectedImageIndex + 1]
               }
               alt={``}
               borderRadius={"10px"}
@@ -295,6 +276,28 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
           w="630px"
           h={"514px"}
         >
+
+          <Box flex={"1"}>
+            <Text
+              as={"h2"}
+              fontWeight={"600"}
+              fontSize={"20px"}
+              className="robotoF"
+              color={"#000"}
+            >
+              Property Type
+            </Text>
+            <Text
+              mt={"6px"}
+              color="#999999"
+              className="robotoF"
+              fontWeight={"500"}
+              fontSize={"16px"}
+            >
+              {detailsData?.category}
+            </Text>
+          </Box>
+
           <Box flex={"1"}>
             <Text
               as={"h2"}
@@ -315,7 +318,55 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               {detailsData?.description}
             </Text>
           </Box>
-          <Flex
+
+          <Box flex={"1"}>
+            <Text
+              as={"h2"}
+              fontWeight={"600"}
+              fontSize={"20px"}
+              className="robotoF"
+              color={"#000"}
+            >
+              Location
+            </Text>
+            <Flex>
+              <MdLocationOn />
+              <Text
+                fontSize="14px"
+                maxW={"90%"}
+                overflow={"hidden"}
+                textOverflow={"ellipsis"}
+                className="urbanist"
+                whiteSpace={"nowrap"}
+              >
+                {detailsData?.address}
+              </Text>
+            </Flex>
+          </Box>
+
+          <Box flex={'1'}>
+            <Text
+              as={"h2"}
+              fontWeight={"600"}
+              fontSize={"20px"}
+              className="robotoF"
+              color={"#000"}
+            >
+              Price
+            </Text>
+
+            <Text
+              className="urbanist"
+              fontSize={"20px"}
+              fontWeight={600}
+              color={"#000"}
+            >
+              {detailsData?.price?.amount}
+            </Text>
+          </Box>
+          
+
+          {/* <Flex
             borderTop={"1px solid #262626"}
             justifyContent={"space-between"}
             pt={"10px"}
@@ -383,7 +434,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
                 2,500 Square Feet
               </Text>
             </Box>
-          </Flex>
+          </Flex> */}
           <Flex gap={"8px"} mt={"20px"}>
             <Btn
               border="1px solid #335CFF"
@@ -408,6 +459,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               Add to favourite
             </Btn>
           </Flex>
+ 
         </Box>
         <Box
           borderRadius={"10px"}
