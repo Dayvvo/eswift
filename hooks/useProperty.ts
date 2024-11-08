@@ -23,7 +23,6 @@ interface VerificationProps {
   verification: string;
 }
 const useProperty = () => {
-  const baseUrl = "http://localhost:5500/api";
   const [token, setToken] = useState("");
 
   // console.log(token);
@@ -33,11 +32,9 @@ const useProperty = () => {
 
     if (userData) {
       const parsedData = JSON.parse(userData);
-      // console.log(parsedData);
       setToken(parsedData.token);
     }
 
-    // console.log("storedToken", userData);
   }, []);
 
   const {
@@ -86,7 +83,7 @@ const useProperty = () => {
   const getAdminProperty = async (inputValue: string, page: any) => {
     try {
       const res = await query(
-        `${baseUrl}/property/admin?keyword=${inputValue}&pageNumber=${page}`
+        `/property/admin?keyword=${inputValue}&pageNumber=${page}`
       );
       return res as PropertyResponse;
     } catch (err: any) {
@@ -97,7 +94,7 @@ const useProperty = () => {
   const propertyCreator = useCallback(
     async (userId: string) => {
       try {
-        const res = await query(`${baseUrl}/user/users/${userId}`);
+        const res = await query(`/user/users/${userId}`);
         return res as any;
       } catch (err: any) {
         throw new err();
