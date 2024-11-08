@@ -40,7 +40,6 @@ interface AddPropertyScreenOneProps {
   // onBlurType: any;
   onBlurCategory: any;
   onBlurDescription: any;
-  
 }
 export const AddPropertyScreenOne = ({
   onClick,
@@ -63,7 +62,7 @@ export const AddPropertyScreenOne = ({
   onChangeDescription,
 }: AddPropertyScreenOneProps) => {
   const { toast } = useToast();
-  const [tags, setTags] = useState<string[]>([]);
+  const [features, setFeatures] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
   const subs: any[] = [
@@ -104,7 +103,9 @@ export const AddPropertyScreenOne = ({
       onBlurDescription();
       return false;
     }
-
+    else if (!features){
+      return false;
+    }
     return true;
   };
 
@@ -125,15 +126,15 @@ export const AddPropertyScreenOne = ({
   };
 
   const handleAddTag = () => {
-    const newTag:string = inputValue.trim();
-    if(newTag && !tags.includes(newTag)){
-      setTags([...tags, newTag])
+    const newFeatures:string = inputValue.trim();
+    if(newFeatures && !features.includes(newFeatures)){
+      setFeatures([...features, newFeatures])
       setInputValue('')
     }
   };
 
   const handleRemoveTag =(index: number)=> {
-    setTags(tags.filter((tag, i) => i !== index));
+    setFeatures(features.filter((features, i) => i !== index));
   }
 
   const handleKeyPress = (e:KeyboardEvent<HTMLInputElement>) => {
@@ -340,14 +341,21 @@ export const AddPropertyScreenOne = ({
               fontSize={"14px"}
               textColor={"var(--strong950)"}
             >
+                Features
             </FormLabel>
-            <Flex w={'100%'} p={'16px'}
-              alignItems={'start'} justifyContent={'space-between'}
-              border="1px solid var(--soft200)" gap={'8px'}
+            <Flex w={'100%'} px={'16px'} py={'2px'}  h={'fit-content'}
+              alignItems={'center'} justifyContent={'space-between'}
+              border={
+                invalidType
+                  ? "1px solid var(--errorBase)"
+                  : "1px solid var(--soft200)"
+              }
+              gap={'8px'}
               borderRadius={'10px'}
             >
               <Flex
                 gap={'8px'} w={'100%'}
+                h={'fit-content'}
                 flexDir={'column'}
                 alignItems={'start'}
               >
@@ -355,12 +363,14 @@ export const AddPropertyScreenOne = ({
                   cursor={"text"}
                   fontSize={14}
                   textColor={"var--(sub600)"}
+                  h={'40px'}
                 >
                     <Input
                       type={'text'}
+                      height={'100%'}
                       _placeholder={{ textColor: "var--(soft400)" }}
-
-                      border={'1px solid var(--soft200)'} borderRadius={'10px'}
+                      border={'1px solid transparent'}
+                       borderRadius={'4px'}
                       value={inputValue}
                       onChange={(e)=> setInputValue(e.target.value)}
                       onKeyDown={handleKeyPress}
@@ -368,11 +378,11 @@ export const AddPropertyScreenOne = ({
                 </InputGroup>
                 <Flex flexWrap={'wrap'} gap={'8px'}>
                   { 
-                    tags.map((tag,index)=>(
+                    features.map((feature,index)=>(
                       <Flex gap="8px" key={index} alignItems={'center'} fontSize={'14px'}
                         bg={'var(--soft200)'} px={'8px'} py={'2px'} borderRadius={'10px'}
                       >
-                        {tag} 
+                        {feature} 
                         <Flex onClick={()=> handleRemoveTag(index)} fontSize={'14px'}>
                           <IoCloseOutline />
                         </Flex>
@@ -381,7 +391,6 @@ export const AddPropertyScreenOne = ({
                   }
                 </Flex>
               </Flex>
-              
               <Flex w={'24px'} h={'24px'} fontSize={'36px'} 
                 borderRadius={'10'} justifyContent={'center'} alignItems={'center'}
                 onClick={handleAddTag}
@@ -389,6 +398,11 @@ export const AddPropertyScreenOne = ({
                 <BsPlus/>
               </Flex>
             </Flex>
+            {invalidDescription && (
+              <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+                {"Enter a key value"}
+              </FormHelperText>
+            )}
           </FormControl>
         </Flex>
         <Btn

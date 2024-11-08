@@ -46,7 +46,7 @@ export const CustomerSignUpcreen = () => {
           console.error("Error verifying Google auth code:", err);
         } finally {
           authWindow.close();
-          navigate.push("/");
+          navigate.push("/dashboard");
         }
       }
     });

@@ -17,6 +17,7 @@ import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "../../components/modal";
 import { BsPlus } from "react-icons/bs";
+import { PlusIcon, SearchIcon } from "../../components/svg";
 
 import useProperty from "@/hooks/useProperty";
 import { useImage, useInputText } from "../../hooks/useInput";
@@ -35,6 +36,7 @@ import {
 import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { DocumentTypes, R } from "@/utils/types";
 import useUpload from "@/hooks/useUpload";
+import { IoFilter } from "react-icons/io5";
 
 // interface MyData {
 //   _id: any;
@@ -184,7 +186,7 @@ export const PropertyScreen = () => {
     price,
     category,
     description,
-    features: ["nice", "cheap", "open spaces"],
+    features:[],
     images,
     documents,
   };
@@ -271,6 +273,7 @@ export const PropertyScreen = () => {
           mode: "one_off",
           amount: price,
         },
+        features:[],
         ...uploadedFiles,
       };
 
@@ -321,6 +324,12 @@ export const PropertyScreen = () => {
     }
   };
 
+  const handleKeyPress =(e:React.KeyboardEvent<HTMLInputElement>)=> {
+    if (e.key === 'Enter') {
+      getPropertyFunction();
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -338,7 +347,7 @@ export const PropertyScreen = () => {
 
   useEffect(() => {
     getPropertyFunction();
-  }, [page]);
+  }, [showModal, loading, inputValue, page]);
 
   const goToNextPage = () => {
     if (page < totalPages) setPage(page + 1);
@@ -437,7 +446,7 @@ export const PropertyScreen = () => {
           // mt={"10px"}
           gap={"12px"}
           w={"100%"}
-          h={"36px"}
+          h={{base:'fit-content',md:'36px'}}
           position="sticky"
           top="0"
           zIndex="10"
@@ -455,12 +464,12 @@ export const PropertyScreen = () => {
               fontSize={14}
               textColor={"var--(sub600)"}
               w="100%"
-              h="100%"
+              h={{base:'36px',md:'100%'}}
               _placeholder={{ textColor: "var--(soft400)" }}
             >
-              <InputLeftElement color={"var(--soft400)"}>
+              <InputLeftElement color={"var(--soft400)"} h="100%" display={'flex'} alignItems={'center'}>
                 <Box onClick={getPropertyFunction}>
-                  <RiSearch2Line />
+                  <SearchIcon />
                 </Box>
               </InputLeftElement>
               <Input
@@ -470,65 +479,60 @@ export const PropertyScreen = () => {
                 placeholder="Search..."
                 value={inputValue}
                 onChange={(e: any) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyPress}
               />
             </InputGroup>
           </Flex>
-          <Flex
-            gap={"12px"}
-            flexDir={{ base: "column", sm: "row" }}
-            alignItems={"end"}
-          >
-            <Btn
-              onClick={toggleModal}
-              display={"flex"}
-              gap={"4px"}
-              alignItems={"center"}
-              bg={"#fff"}
-              h={"100%"}
-              w={"131px"}
-              border={"1px solid var(--soft200)"}
-              borderRadius={"8px"}
-              textColor={"var--(sub600)"}
-              fontWeight={500}
-              fontSize={"14px"}
-              px={"6px"}
-              pt={"0"}
-              pb={"0"}
-              _hover={{
-                bg: "#1A1D66",
-                textColor: "#FFF",
-              }}
-            >
-              <Text fontSize={"14px"}>Add Property</Text>
-              <BsPlus className="icon" />
-            </Btn>
-
-            {/* <Btn
-              onClick={() => setPage(inputValue)}
-              display={"flex"}
-              gap={"4px"}
-              alignItems={"center"}
-              bg={"#fff"}
-              h={"100%"}
-              w={"80px"}
-              border={"1px solid var(--soft200)"}
-              borderRadius={"8px"}
-              textColor={"var--(sub600)"}
-              fontWeight={500}
-              fontSize={"14px"}
-              px={"6px"}
-              pt={"0"}
-              pb={"0"}
-              _hover={{
-                bg: "#1A1D66",
-                textColor: "#FFF",
-              }}
-            >
-              <IoFilter className="icon" />
-              <Text>Filter</Text>
-            </Btn> */}
-
-          </Flex>
+          <Flex gap={'12px'} flexDir={{base:'column',sm:'row'}} alignItems={'end'}>
+                <Btn
+                  onClick={toggleModal}
+                  display={"flex"}
+                  gap={"4px"}
+                  alignItems={"center"}
+                  bg={"#fff"}
+                  h={{base:'36px',md:'100%'}}
+                  w={"131px"}
+                  border={"1px solid var(--soft200)"}
+                  borderRadius={"8px"}
+                  textColor={"var--(sub600)"}
+                  fontWeight={500}
+                  fontSize={"14px"}
+                  px={"6px"}
+                  pt={"0"}
+                  pb={"0"}
+                  _hover={{
+                  bg: "#1A1D66",
+                  textColor: "#FFF",
+                  }}
+                >
+                    <Text fontSize={"14px"}>Add Property</Text>
+                    <BsPlus className="icon" />
+                </Btn>
+                <Btn
+                    onClick={() => setPage(inputValue)}
+                    display={"flex"}
+                    gap={"4px"}
+                    alignItems={"center"}
+                    bg={"#fff"}
+                    h={{base:'36px',md:'100%'}}
+                    w={"80px"}
+                    border={"1px solid var(--soft200)"}
+                    borderRadius={"8px"}
+                    textColor={"var--(sub600)"}
+                    fontWeight={500}
+                    fontSize={"14px"}
+                    px={"6px"}
+                    pt={"0"}
+                    pb={"0"}
+                    _hover={{
+                    bg: "#1A1D66",
+                    textColor: "#FFF",
+                    }}
+                >
+                    <IoFilter className="icon" />
+                    <Text>Filter</Text>
+                </Btn>
+            </Flex>
         </Flex>
 
         {/* Scrollable Property Cards Container */}
