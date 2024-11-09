@@ -5,55 +5,17 @@ import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import Btn from "@/components/Btn";
 import Link from "next/link";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { AuthBackground } from "./authBackground";
 
 export const CustomerSignUpcreen = () => {
-  const navigate = useRouter();
-
-  const HandleGoogleSubmit = async () => {
-    let requestId = "";
-    const allowedOrigin = "https://accounts.google.com";
-
-    const authWindow = window.open(
-      `/api/auth/google`,
-      "_blank",
-      "width=500, height=500"
-    );
-
-    if (!authWindow || !authWindow.focus) {
-      console.error(`Can't access server at the moment`);
-      return;
-    }
-
-    window.addEventListener("message", async (event) => {
-      if (event.origin !== allowedOrigin) {
-        return console.log("not from google");
-      }
-
-      if (
-        event.data &&
-        event.data.type === "googleAuthCode" &&
-        event.data.requestId === requestId
-      ) {
-        const googleAuthCode = event.data.code;
-
-        try {
-          const response = await axios.get("api/auth/google", googleAuthCode);
-          console.log(response.data);
-        } catch (err) {
-          console.error("Error verifying Google auth code:", err);
-        } finally {
-          authWindow.close();
-          navigate.push("/dashboard");
-        }
-      }
-    });
-  };
-
+  
   const router = useRouter();
 
+  const {query} = router;
+
+  const refCode = query?.refCode as string;
+  
   return (
     <Box
       display={"flex"}
@@ -88,7 +50,7 @@ export const CustomerSignUpcreen = () => {
           <Box w={"100%"} border={"1px solid var(--soft200)"} my={"24px"} />
 
           <Btn
-            onClick={() => router.push("/api/auth/google")}
+            onClick={() => router.push(`/api/auth/google${refCode?`?state=${refCode}`:''}` )}
             bg={"transparent"}
             my={2}
             borderColor={"#D0DDD5"}

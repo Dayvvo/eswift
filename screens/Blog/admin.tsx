@@ -69,10 +69,6 @@ const BlogScreen = () => {
     }
   }
 
-  
-
-  
-
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
 
@@ -252,7 +248,7 @@ const BlogScreen = () => {
         </SimpleGrid>
       )}
       {!loading && blogPost.length === 0 && (
-        <Card>
+        <Card mt='1em'>
           <CardBody>
             <Text>No blog post available please wait</Text>
           </CardBody>
