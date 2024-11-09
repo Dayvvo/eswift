@@ -32,6 +32,11 @@ const EditBlog = () => {
   const [bodyValue, setBodyValue] = useState(blogDetails?.body || "");
   const [conclusionValue, setConclusionValue] = useState(blogDetails?.conclusion || "");
   const [loading, setLoading] = useState(false);
+  const [headerImageFile, setHeaderImageFile] = useState("");
+  const [bodyImageFile, setBodyImageFile] = useState("");
+
+  console.log("headerImageFile", headerImageFile);
+  console.log("bodyImageFile", bodyImageFile);
 
   const { getBlogByID, updateBlog } = useBlog();
   const { toast } = useToast();
@@ -41,12 +46,12 @@ const EditBlog = () => {
   const { blogId } = route.query;
 
   const blogData = {
-    title: articleTitle,
-    introduction: introValue,
-    body: bodyValue,
+    title: articleTitle || blogDetails?.title,
+    introduction: introValue || blogDetails?.introduction,
+    body: bodyValue || blogDetails?.body,
     // conclusion: conclusionValue,
-    header_image: "https://example.com/image.jpg",
-    body_image: "https://example.com/image.jpg",
+    header_image: headerImageFile || blogDetails?.header_image,
+    body_image: bodyImageFile || blogDetails?.body_image,
   }
 
   const newBlogId = blogId as string
@@ -87,7 +92,19 @@ const EditBlog = () => {
     }
   }
 
+  const handleHeaderImageChange = (url: string) => {
+    setBlogDetails({
+      ...blogDetails,
+      header_image: url,
+    });
+  };
 
+  const handleBodyImageChange = (url: string) => {
+    setBlogDetails({
+      ...blogDetails,
+      body_image: url,
+    });
+  };
 
   console.log('articleTitle', articleTitle);
   console.log('bodyValue', bodyValue);
@@ -137,7 +154,10 @@ const EditBlog = () => {
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
           Header Image
         </Text>
-        {/* <ImageUpload onImageChange={headerImageChange} /> */}
+        <ImageUpload
+        initialImageUrl={blogDetails?.header_image}
+        setImageFile={setHeaderImageFile}
+      />
       </Flex>
       <Flex align={"center"} justify={"space-between"} mb="20px">
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
@@ -169,7 +189,10 @@ const EditBlog = () => {
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
           Body Image
         </Text>
-        {/* <ImageUpload onImageChange={bodyImageChange} /> */}
+        <ImageUpload
+        initialImageUrl={blogDetails?.body_image}
+        setImageFile={setBodyImageFile}
+      />
       </Flex>
       <Flex align={"center"} justify={"space-between"} mb="20px">
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
