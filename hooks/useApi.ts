@@ -110,7 +110,7 @@ function httpClient({ token }: { token?: string }) {
 }
 
 export function useApiUrl() {
-  const userFromLocalStorage = window.localStorage.getItem("userData");
+  const userFromLocalStorage = typeof window !=='undefined'? window?.localStorage.getItem("userData"):null;
 
   const token = userFromLocalStorage? JSON.parse(userFromLocalStorage)?.token: "";
 

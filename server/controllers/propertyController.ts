@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import {
   ValidateAddProperty,
+  ValidateEditProperty,
   validateLoginData,
 } from '../utils/validation/index'
 import Property from '../models/Property'
@@ -13,8 +14,7 @@ import { HttpStatusCode } from 'axios'
 class PropertyController {
   //TODO: finish function
   createProperty = async (req: Request, res: Response) => {
-
-    console.log('request body',req.body)
+    console.log('request body', req.body)
     const validate = ValidateAddProperty(req.body)
     const { value, error } = validate
 
@@ -32,6 +32,46 @@ class PropertyController {
         statusCode: 200,
         message: 'Property created',
         data: newProperty,
+      })
+    } catch (error: any) {
+      console.error(error?.message)
+      return res.status(500).send('An Error ocurred while retrieving data')
+    }
+  }
+
+  updateProperty = async (req: Request, res: Response) => {
+    const id = req.params.id
+
+    if (!isValidObjectId(id))
+      return res.status(400).json({
+        statusCode: 400,
+        message: 'Invalid ObjectId',
+      })
+    const validate = ValidateEditProperty(req.body)
+    const { value, error } = validate
+
+    if (error) {
+      return res.status(400).json(error.details[0])
+    }
+
+    try {
+      const property = await Property.findById(id)
+      if (!property)
+        return res.status(404).json({
+          statusCode: 404,
+          message: `Property with id ${id} not found`,
+        })
+
+      const updatedProperty = await Property.findByIdAndUpdate(
+        id,
+        { ...value },
+        { new: true }
+      )
+
+      return res.status(HttpStatusCode.Created).json({
+        statusCode: 200,
+        message: 'Property created',
+        data: updatedProperty,
       })
     } catch (error: any) {
       console.error(error?.message)
@@ -60,7 +100,7 @@ class PropertyController {
         statusCode: 200,
         message: 'Property List',
         data: properties,
-        pagination: { page, pages: Math.ceil(count / pageSize) },
+        pagination: { page, pages: Math.ceil(count / pageSize), count },
       })
     } catch (err: any) {
       console.log('Error in email login', err)
@@ -94,7 +134,7 @@ class PropertyController {
         statusCode: 200,
         message: 'Property List',
         data: properties,
-        pagination: { page, pages: Math.ceil(count / pageSize) },
+        pagination: { page, pages: Math.ceil(count / pageSize), count },
       })
     } catch (err: any) {
       console.error(err?.message)

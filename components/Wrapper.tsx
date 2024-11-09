@@ -19,14 +19,15 @@ import { NextRouter, useRouter } from "next/router";
 import useAuth from "@/hooks/useAuth";
 import useProfile from "@/hooks/useProfile";
 
-const Header = ({ casedPath, }: { casedPath: string }) => {
+const Header = ({ casedPath }: { casedPath: string }) => {
   return (
     <Flex
       justifyContent={"space-between"}
       alignItems={"center"}
       borderBottom={"1px solid #E1E4EA"}
       // padding={"40px 30px 40px 60px"}
-      px={{base:'12px',lg:'40px'}} py={{base:'20px',lg:'40px'}}
+      px={{ base: "12px", lg: "40px" }}
+      py={{ base: "20px", lg: "40px" }}
       left={{ base: "2px", lg: "256px" }}
       maxW={{ base: "full", lg: "80vw" }}
       pos="sticky"
@@ -71,7 +72,13 @@ const Header = ({ casedPath, }: { casedPath: string }) => {
   );
 };
 
-const Wrapper = ({ children, noPadding }: { children: ReactNode, noPadding?:boolean }) => {
+const Wrapper = ({
+  children,
+  noPadding,
+}: {
+  children: ReactNode;
+  noPadding?: boolean;
+}) => {
   const navData = [
     {
       label: "Dashboard",
@@ -129,11 +136,10 @@ const Wrapper = ({ children, noPadding }: { children: ReactNode, noPadding?:bool
     const storedData = localStorage.getItem("userData");
     if (!storedData) {
       navigate.push("/auth");
-    } 
-    else {
+    } else {
       const parsedUserData = JSON.parse(storedData);
       setUser(parsedUserData);
-    };
+    }
   }, [navigate]);
 
   useEffect(() => {
@@ -159,12 +165,12 @@ const Wrapper = ({ children, noPadding }: { children: ReactNode, noPadding?:bool
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;
 
   return (
-    <Box w={'100%'} py="40px" minH={"100vh"} overflowX={'hidden'}>
-      <Box w={'100%'}>
+    <Box w={"100%"} py="40px" minH={"100vh"} overflowX={"hidden"}>
+      <Box w={"100%"}>
         <Box
           borderRight={"1px solid #E1E4EA"}
           w={"244px"}
-          bg={'white'}
+          bg={"white"}
           pos={"fixed"}
           // top={0}
           // left={0}
@@ -249,7 +255,8 @@ const Wrapper = ({ children, noPadding }: { children: ReactNode, noPadding?:bool
                   {`${user.email}`}
                 </Text>
               </Flex>
-              <Btn onClick={logout}
+              <Btn
+                onClick={logout}
                 color="#fff"
                 bgColor="#FF3B30BF"
                 w="100%"
@@ -269,7 +276,7 @@ const Wrapper = ({ children, noPadding }: { children: ReactNode, noPadding?:bool
           top={"20px"}
           left={{ base: "0px", lg: "250px" }}
           w={{ base: "full", lg: "80vw" }}
-          {...noPadding? {}: {px:'20px'}}
+          {...(noPadding ? {} : { px: "20px" })}
         >
           {route ? children : <></>}
         </Box>

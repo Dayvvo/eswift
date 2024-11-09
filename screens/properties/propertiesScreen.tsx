@@ -12,6 +12,7 @@ import { Background } from "../home/Background";
 import { TextHeader } from "../home/textHeader";
 import { properties } from "@/utils/types";
 import { PropertyCardProps } from "../Property/propertyCard";
+import { useDebounce } from "@/hooks/useDebounce";
 
 
 const PropertiesScreen =()=> {
@@ -24,6 +25,7 @@ const PropertiesScreen =()=> {
 
     const [page, setPage] = useState<number>(0);
 
+    const debouce = useDebounce()
 
     useEffect(()=> {
         const getPropertyFunction = async () => {
@@ -37,7 +39,8 @@ const PropertiesScreen =()=> {
                 console.log(error);
             };
         };
-        getPropertyFunction();
+
+        debouce(()=>getPropertyFunction())
     },[page, inputValue]);
 
     function scrollToSection() {
@@ -45,15 +48,6 @@ const PropertiesScreen =()=> {
         section.scrollIntoView({ behavior: 'smooth' });
     };
 
-
-    const onSubmit = async()=>{
-        try{
-            const fetchData = await axios.get(`/api/property?keyword=${inputValue}&PageNumber={${page}}`);
-        }
-        catch(err){
-
-        }
-    }
 
 
     return (

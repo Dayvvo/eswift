@@ -10,6 +10,7 @@ export interface ISignupValidation {
   firstName: string;
   lastName: string;
   role: UserRole;
+  phoneNumber: string;
 }
 
 export interface IAddPropertyValidation {
@@ -21,5 +22,9 @@ export interface IAddPropertyValidation {
   description: string;
   features: Array<string>;
   images: Array<string>;
-  documents: Array<IDocument>
+  documents: Array<IDocument>;
+}
+
+export interface IDeleteFileValidation {
+  url: string
 }

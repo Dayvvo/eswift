@@ -1,20 +1,34 @@
 import { useAppContext } from "@/context";
 import { Image, Text, Modal, ModalOverlay, ModalContent, Flex, Box } from "@chakra-ui/react"
+import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react"
 
 const Preloader = () => {
+    const navigate = useRouter()
+    const pathname = navigate.pathname
     const [isOpen, setIsOpen] = useState(true);
 
     const isWindow =  typeof window !== 'undefined';
 
     const {setGlobalContext} = useAppContext();
 
+
     useEffect(() => {
-        const timer = setTimeout(() => {
+        const storedValue = sessionStorage.getItem('isOpen')
+        
+        if (storedValue === 'true' && pathname === "/"){
+            const timer = setTimeout(() => {
+                setIsOpen(false)
+                sessionStorage.setItem('isOpen','false')
+            }, 4500);
+           
+            return () => clearTimeout(timer)
+        } else {
             setIsOpen(false)
-        }, 3500)
-        return () => clearTimeout(timer)
-    }, []);
+        }
+        console.log(sessionStorage)
+        
+    }, [pathname]);
 
     return (
         <Modal motionPreset="slideInTop" size={'full'} isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>

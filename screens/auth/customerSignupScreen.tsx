@@ -1,64 +1,21 @@
-import {
-  Box,
-  Flex,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { AuthHeaderProps } from "./authheader";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import Btn from "@/components/Btn";
 import Link from "next/link";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { AuthBackground } from "./authBackground";
 
 export const CustomerSignUpcreen = () => {
-  const navigate = useRouter();
+  
+  const router = useRouter();
 
-  const HandleGoogleSubmit = async () => {
-    let requestId = "";
-    const allowedOrigin = "https://accounts.google.com";
+  const {query} = router;
 
-
-    const authWindow = window.open(
-      `/api/auth/google`,
-      "_blank",
-      "width=500, height=500"
-    );
-
-    if (!authWindow || !authWindow.focus) {
-      console.error(`Can't access server at the moment`);
-      return;
-    }
-
-    window.addEventListener("message", async (event) => {
-      if (event.origin !== allowedOrigin) {
-        return console.log("not from google");
-      }
-
-      if (
-        event.data &&
-        event.data.type === "googleAuthCode" &&
-        event.data.requestId === requestId
-      ) {
-        const googleAuthCode = event.data.code;
-
-        try {
-          const response = await axios.get("api/auth/google", googleAuthCode);
-          console.log(response.data);
-        } catch (err) {
-          console.error("Error verifying Google auth code:", err);
-        } finally {
-          authWindow.close();
-          navigate.push("/");
-        }
-      }
-    });
-  };
-
-  const router  = useRouter();
-
+  const refCode = query?.refCode as string;
+  
   return (
     <Box
       display={"flex"}
@@ -68,7 +25,7 @@ export const CustomerSignUpcreen = () => {
       w={"100%"}
       minH={"100vh"}
       px={{ base: "16px", lg: "44px" }}
-      py={'24px'}
+      py={"24px"}
       className="robotoF"
     >
       <AuthBackground />
@@ -91,43 +48,43 @@ export const CustomerSignUpcreen = () => {
             description=""
           />
           <Box w={"100%"} border={"1px solid var(--soft200)"} my={"24px"} />
-            
-            <Btn
-              onClick={()=>router.push('/api/auth/google')}
-              bg={"transparent"}
-              my={2}
-              borderColor={"#D0DDD5"}
-              display={"flex"}
-              alignItems={"center"}
-              w={"100%"}
-              h={"40px"}
-              border={"1px"}
-              borderRadius={"10px"}
-              textColor={"#667085"}
-              fontSize={{ base: "12px", lg: "14px" }}
-              gap={"4px"}
+
+          <Btn
+            onClick={() => router.push(`/api/auth/google${refCode?`?state=${refCode}`:''}` )}
+            bg={"transparent"}
+            my={2}
+            borderColor={"#D0DDD5"}
+            display={"flex"}
+            alignItems={"center"}
+            w={"100%"}
+            h={"40px"}
+            border={"1px"}
+            borderRadius={"10px"}
+            textColor={"#667085"}
+            fontSize={{ base: "12px", lg: "14px" }}
+            gap={"4px"}
+          >
+            Sign in with Google <FcGoogle />
+          </Btn>
+          <Flex w="100%" my={"10px"} justifyContent={"space-between"}>
+            <Text
+              fontWeight={400}
+              fontSize={{ base: "10px", lg: "14px" }}
+              textColor={"var(--strong950)"}
             >
-              Sign in with Google <FcGoogle />
-            </Btn>
-            <Flex w="100%" my={"10px"} justifyContent={"space-between"}>
+              Already have an account?
+            </Text>
+            <Link href={"/admin"}>
               <Text
-                fontWeight={400}
-                fontSize={{ base: "10px", lg: "14px" }}
-                textColor={"var(--strong950)"}
+                fontWeight={500}
+                fontSize={"14px"}
+                textColor={"var(--sub600)"}
+                textDecor={"underline"}
               >
-                Already have an account?
+                Log In
               </Text>
-              <Link href={"/login"}>
-                <Text
-                  fontWeight={500}
-                  fontSize={"14px"}
-                  textColor={"var(--sub600)"}
-                  textDecor={"underline"}
-                >
-                  Log In
-                </Text>
-              </Link>
-            </Flex>
+            </Link>
+          </Flex>
         </Box>
       </Flex>
       <Text fontSize={"14px"} fontWeight={400} textColor={"var(--sub600)"}>

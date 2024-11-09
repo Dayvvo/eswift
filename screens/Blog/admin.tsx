@@ -36,6 +36,7 @@ const BlogScreen = () => {
   const [blogPost, setBlogPost] = useState<BlogPostProps[]>([]);
   const [isAdmin, setIsAdmin] = useState("");
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState<string>('');
   const { toast } = useToast();
 
   // const { check } = useAppContext();
@@ -44,24 +45,30 @@ const BlogScreen = () => {
 
   const { deleteBlog, getBlog } = useBlog();
 
+  const getBlogFn = async () => {
+    setLoading(true);
+    try {
+      const req = await getBlog(search);
+      let data = req?.data as BlogPostProps[]
+      setBlogPost(data);
+      setLoading(false);
+    } 
+    catch (error) {
+      setLoading(false);
+    }
+    // console.log("req", req?.data);
+  };
+
   useEffect(() => {
-    const getBlogFn = async () => {
-      setLoading(true);
-      try {
-        const req = await getBlog();
-        let data = req?.data as BlogPostProps[]
-        setBlogPost(data);
-        setLoading(false);
-      } 
-      catch (error) {
-        setLoading(false);
-      }
-
-      // console.log("req", req?.data);
-    };
-
     getBlogFn();
-  }, []);
+  }, [search]);
+
+  const handleKeyPress =(e:React.KeyboardEvent<HTMLInputElement>)=> {
+    if (e.key === 'Enter') {
+      getBlogFn();
+    }
+  }
+
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
 
@@ -107,13 +114,16 @@ const BlogScreen = () => {
     <>
       <Flex gap={"20px"}>
         <InputGroup>
-          <InputLeftElement>
+          <InputLeftElement onClick={getBlogFn}>
             <SearchIcon />
           </InputLeftElement>
           <Input
             type="text"
             placeholder="Search..."
             border={"1px solid #E1E4EA"}
+            value={search}
+            onChange={(e:any) => setSearch(e.target.value)}
+            onKeyDown={handleKeyPress}
           />
         </InputGroup>
         <Box>
@@ -238,7 +248,7 @@ const BlogScreen = () => {
         </SimpleGrid>
       )}
       {!loading && blogPost.length === 0 && (
-        <Card>
+        <Card mt='1em'>
           <CardBody>
             <Text>No blog post available please wait</Text>
           </CardBody>

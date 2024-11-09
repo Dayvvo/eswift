@@ -131,7 +131,7 @@ export const PropertyCard = ({
           fontWeight={700}
           textColor={"#FFF"}
         >
-          {count || null} of 3
+          {/* {count || null} of 3 */}
         </Text>
         <Image
           width={'100%'}
