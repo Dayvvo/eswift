@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [building, setBuilding] = useState<boolean>(false);
+  // const [cookie, setCookie] = useState("")
 
   const navigate = useRouter();
 
@@ -26,6 +27,7 @@ export default function Home() {
     try {
       const myCookie = getCookie('auth-cookie') as string;
       localStorage.setItem("userData", myCookie);
+      // setCookie(myCookie)
       navigate.push("/dashboard");
     } catch (error) {
       console.error("Error parsing JSON:", error);
