@@ -68,6 +68,7 @@ const useProperty = () => {
     },
     [token]
   );
+  
   const deleteProperty = useCallback(
     async (id: string) => {
       try {
@@ -80,6 +81,7 @@ const useProperty = () => {
     },
     [token]
   );
+  
   const getAdminProperty = async (inputValue: string, page: any) => {
     try {
       const res = await query(
@@ -91,6 +93,7 @@ const useProperty = () => {
     }
     // return res
   };
+  
   const propertyCreator = useCallback(
     async (userId: string) => {
       try {
@@ -103,19 +106,31 @@ const useProperty = () => {
     },
     [token]
   );
+  
   const getPropertyDetails = useCallback(async (id: string) => {
     const res = await query(`/property/${id}`);
     return res;
   }, []);
 
+  const getFavorites = async()=>  await query(`/property/favorite`);
+
+  const addToFavorites = async(id:string)=>  await post(`/property/favorite/${id}`,{}) ;
+
+  const deleteFromFavorites = async(id:string)=>  await delProperty(`/property/favorite/${id}`);
+
   return {
     propertyCreator,
     verifyProperty,
     addProperty,
+    deleteFromFavorites,
     getAdminProperty,
     getPropertyDetails,
     deleteProperty,
+    getFavorites,
+    addToFavorites
   };
+
+
 };
 
 export default useProperty;

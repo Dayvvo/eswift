@@ -11,7 +11,6 @@ import {
   Card,
   CardBody,
 } from "@chakra-ui/react";
-import { RiSearch2Line } from "react-icons/ri";
 import Btn, { PaginationButton } from "@/components/Btn";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
@@ -606,7 +605,12 @@ export const PropertyScreen = () => {
             color={"#525866"}
             className="inter"
           >{`page ${page} of ${totalPages}`}</Text>
-          <Box
+
+          <Box>
+            
+          </Box>
+
+          {/* <Box
             display={"flex"}
             alignItems={"center"}
             gap={"20px"}
@@ -636,7 +640,8 @@ export const PropertyScreen = () => {
             <Box>
               <DoubleNextBtn />
             </Box>
-          </Box>
+          </Box> */}
+
         </Box>
       )}
     </>

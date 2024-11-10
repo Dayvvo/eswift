@@ -265,7 +265,7 @@ const AddUser = ({close}:{close: ()=>void}) => {
           onChange={handleChange}
         >
           <option value="CLIENT">ADMIN</option>
-          <option value="GUEST">AFFILIATE</option>
+          <option value="AFFILIATE">AFFILIATE</option>
         </Select>
       </Box>
       <Btn

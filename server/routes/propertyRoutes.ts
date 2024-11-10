@@ -9,10 +9,13 @@ router
   .route('/')
   .post(isAuth, propertyController.createProperty)
   .get(propertyController.getCreatedProperties)
+
 router
   .route('/favourite/:propertyId')
   .post(isAuth, favouritePropertyController.addToFavourites)
+
 router.get('/favourite', favouritePropertyController.getAllFavouriteProperty)
+
 router.delete(
   '/favourite/:id',
   favouritePropertyController.removeFromFavouriteProperty

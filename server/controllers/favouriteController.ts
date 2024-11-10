@@ -85,6 +85,7 @@ class FavouritePropertyController {
       res.status(500).send("An Error ocurred removing favourite properties");
     }
   };
+  
 }
 
 let favouritePropertyController = new FavouritePropertyController();

@@ -7,13 +7,10 @@ import Btn from "./Btn";
 import {
   BlogIcon,
   DashboardIcon,
-  NotifIcon,
-  ProjectIcon,
-  SearchIcon,
   SettingsIcon,
   UserIcon,
 } from "./svg";
-import { FiHome, FiUser } from "react-icons/fi";
+import { FiHome } from "react-icons/fi";
 import { NextRouter, useRouter } from "next/router";
 // import axios from "axios";
 import useAuth from "@/hooks/useAuth";
@@ -152,14 +149,15 @@ const Wrapper = ({
         console.log('err', err);
       }
     }
-
+  
     getProfileFn();
+  
   }, [])
 
   const logout =()=> {
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
-    navigate.push('/login');
+    navigate.push('/auth');
   }
 
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;

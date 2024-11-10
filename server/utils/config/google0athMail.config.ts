@@ -65,6 +65,7 @@ export const mailTransport = async (
     html,
     attachments,
   };
+  console.log('mail options',mailOptions);
 
   try {
     const info = await smtpTransport.sendMail(mailOptions);

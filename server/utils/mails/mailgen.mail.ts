@@ -24,6 +24,32 @@ class MailgenMails {
     );
   }
 
+  async contactEswiftTemplate(name:string,email:string,phone:string,reason:string,contactMode:string,detail:string){
+    const html = {
+      body: {
+        name,
+        intro: `
+          <div> Name: ${name} </div>
+          <div> Phone: ${phone} </div>
+          <div> Reason for inquiry: ${reason} </div>
+          <div> How they first heard about eswift: ${contactMode} </>
+        `,
+          
+        outro: detail,
+      },
+    };
+
+    const template = mailGenerator.generate(html)
+    await mailTransport(
+      `Eswift<${process.env.SENDING_MAIL}>`,
+      `${process.env['SENDING_MAIL']}`,
+      `You were contacted from e-swiftproperties.com`,
+      html,
+      {smtpConfig:true}
+    );
+
+  }
+
   
 }
 

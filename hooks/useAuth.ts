@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 interface User {
   id: number;
@@ -15,9 +16,9 @@ interface AuthContextType {
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
 
 const useAuth = () => {
+  
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,19 +26,20 @@ const useAuth = () => {
 
   const isWindow = typeof window !== "undefined";
 
-  useEffect(() => {
-    if (isWindow) {
-      const userFromLocalStorage = window.localStorage.getItem("userData");
-      userFromLocalStorage && setToken(JSON.parse(userFromLocalStorage)?.token);
-    }
-  }, [isWindow]);
+  const {push} = useRouter()
+
 
   useEffect(() => {
     if (isWindow) {
       const userFromLocalStorage = window.localStorage.getItem("userData");
-      userFromLocalStorage && setUser(JSON.parse(userFromLocalStorage)?.user);
+      if (userFromLocalStorage){ 
+        const {user,token} = JSON.parse(userFromLocalStorage);
+        setToken(token);
+        setUser(user);
+      };
     }
   }, [isWindow]);
+
 
   const login = async (credentials: { email: string; password: string }) => {
     try {
@@ -47,12 +49,9 @@ const useAuth = () => {
 
       localStorage.setItem("token", token);
 
-      // localStorage.setItem('userData', JSON.stringify('userData', JSON.stringify(userData)));
-
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
       setUser(userData);
-    } catch (err) {
+    } 
+    catch (err) {
       if (err) {
         console.log(err);
       }
@@ -80,7 +79,17 @@ const useAuth = () => {
     }
   };
 
-  return { user, loading, error, isWindow, login, logout, token, reset };
+  const authProtectedFn = (fn:(args?:any)=> unknown,route:string)=>{
+    if(token){
+      fn();
+    }
+    else{
+      window.sessionStorage.setItem('authRoute',route);
+      push('/auth');
+    }
+  }
+
+  return { user, loading, error, isWindow, login, logout, token, reset,authProtectedFn };
 };
 
 export default useAuth;

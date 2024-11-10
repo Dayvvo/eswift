@@ -3,8 +3,14 @@ import { TbCurrencyNaira } from "react-icons/tb";
 import router from "next/router";
 import { MdLocationOn } from "react-icons/md";
 import Btn from "@/components/Btn";
-import { properties } from "@/utils/types";
+import useToast from "../../hooks/useToast";
 import { PropertyCardProps } from "../Property/propertyCard";
+import { IoIosHeartEmpty, IoIosHeartDislike } from "react-icons/io";
+import useAuth from "@/hooks/useAuth";
+import useProperty from "@/hooks/useProperty";
+import { useState } from "react";
+import { AxiosError, AxiosResponse } from "axios";
+
 
 type PropertiesCardProps = {
     picture?:string;
@@ -17,25 +23,55 @@ type PropertiesCardProps = {
 }
 
 interface propertiesCard extends PropertyCardProps {
-    view?:'client' | 'admin'
+    view?: 'client' | 'admin',
+    isFavorite?: boolean;
     onClick?: () => void;
-
 }
 
-export const PropertiesCard =({
-    images, title, price, description, address, _id, onClick, view
-}:propertiesCard) => {
+export const PropertiesCard =({images, title, price, description, address, _id, onClick, view, isFavorite}:propertiesCard) => {
+
+    const toast = useToast();
+
+    const {  authProtectedFn } = useAuth();
+
+    const { addToFavorites, deleteFromFavorites } = useProperty();
+
+    const [isInFavorites, setIsInFavorites] = useState(false);
 
     const Navigate = () => {
+        onClick && onClick();
         router.push(`/properties/${_id}`)
     }
 
+    const pathName = router.pathname;
+
+    const addToFave = async(id:string)=>{
+        try{
+            const {data} = await addToFavorites(id)  as AxiosResponse ; 
+            if(data){
+                setIsInFavorites(true);
+                toast.toast({
+                    title:'Request successful',
+                    description:'Property added to favoriites'
+                })
+            };
+        }
+        catch(err){
+            let error = err as AxiosError;
+            if(error?.response){
+                toast.toast({
+                    title:'Request successful',
+                    description:'Failed to add property added to favoriites'
+                })
+            }   
+        }
+    }
 
     return(
         <>
-            <Box onClick={view==='client'? Navigate: onClick}
+            <Box 
                 className="roboto"
-                bg={'#FFF'}
+                bg={'#f3dfdf'}
                 maxW={'400px'} h={'fit-content'}
                 p={{base:'14px',sm:'20px'}} borderRadius={'12px'}
                 border={'1px solid #262626'} 
@@ -112,20 +148,33 @@ export const PropertiesCard =({
                             {price?.amount}
                         </Text>
                     </Flex>
-                    <Btn onClick={onClick}
-                        display={'flex'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        maxW={'208px'}
-                        h="48px"
-                        bg={'#3170A6'}
-                        borderRadius={'8px'}
-                        textColor={'white'}
-                        className="robotoF" fontSize={{base:'10px', xl:'14px'}} fontWeight={500}
-                    >
-                        View Properties Details
-                    </Btn>
 
+                    <Flex gap='1em' align={'center'}>
+                        {
+                            !isFavorite?
+                                <IoIosHeartEmpty onClick={()=>authProtectedFn(()=> addToFave(_id as string), pathName )} cursor={'pointer'} className="empty"  fontSize={'30px'} color='#3170A6' />
+                            :
+                               <IoIosHeartDislike cursor={'pointer'} className="dislike" fontSize={'30px'} color='#3170A6'/>
+               
+
+                        }
+
+
+                         
+                        <Btn onClick={Navigate}
+                            display={'flex'}
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            maxW={'208px'}
+                            h="48px"
+                            bg={'#3170A6'}
+                            borderRadius={'8px'}
+                            textColor={'white'}
+                            className="robotoF" fontSize={{base:'10px', xl:'14px'}} fontWeight={500}
+                        >
+                            View Details
+                        </Btn>
+                    </Flex>
                 </Flex>
                         
             </Box>
