@@ -16,18 +16,15 @@ class AuthController {
   };
 
   jwtSignAndRedirect = (res: Response, user: generalRequestBody) => {
-    const payload = {
-      user: {
-        id: user._id,
-      },
-    };
+    // const payload = {
+    //   user: {
+    //     id: user._id,
+    //   },
+    // };
     const payloadStringified = JSON.stringify({
-      token: jwt.sign(payload, process.env.JWT_SECRET as string, {
-        expiresIn: 60 * 2400,
-      }),
+      token: generateToken(user?._id),
       user,
     });
-    console.log("payload stringified", payloadStringified);
     //set user information to cookie
     res.cookie("auth-cookie", payloadStringified);
     res.redirect("/");
@@ -63,10 +60,12 @@ class AuthController {
           message: "Successful",
           data: {
             _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            role: user.role,
+            user:{
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              role: user.role,  
+            }, 
             token: generateToken(user._id),
           },
         });

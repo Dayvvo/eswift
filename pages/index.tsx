@@ -10,31 +10,35 @@ export default function Home() {
 
   const navigate = useRouter();
 
+  const isWidow = typeof window !== 'undefined';
+
   useEffect(()=>{
-    const getCookie = (name:string) => {
-      if(window?.document?.cookie){
-        const windowCookie = window.document.cookie
-        const value = `; ${windowCookie}`;
-        const parts = value.split(`; ${name}=`);
-        
-        if (parts.length === 2) {
-          let uriEncodedValue = parts.pop()?.split(';').shift() as string;
-          return decodeURIComponent(uriEncodedValue);
-        };
+    if(isWidow){
+      const getCookie = (name:string) => {
+        if(window?.document?.cookie){
+          const windowCookie = window.document.cookie
+          const value = `; ${windowCookie}`;
+          const parts = value.split(`; ${name}=`);
+          
+          if (parts.length === 2) {
+            let uriEncodedValue = parts.pop()?.split(';').shift() as string;
+            return decodeURIComponent(uriEncodedValue);
+          };
+        }
+      };
+      try {
+        const myCookie = getCookie('auth-cookie') as string;
+        myCookie && localStorage.setItem("userData", myCookie);
+        console.log('old cookie',myCookie);
+        const authRoute = sessionStorage.getItem('authRoute');
+        authRoute && navigate.push(authRoute);
+      } 
+      catch (error) {
+        console.error("Error parsing JSON:", error);
       }
     };
-
-    try {
-      const myCookie = getCookie('auth-cookie') as string;
-      localStorage.setItem("userData", myCookie);
-      // setCookie(myCookie)
-      navigate.push("/dashboard");
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-    }
-
-
-  },[])
+    return ()=> localStorage.removeItem('authRoute');
+  },[isWidow])
 
   return (
       <>

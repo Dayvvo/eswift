@@ -51,7 +51,8 @@ class FavouritePropertyController {
 
   getAllFavouriteProperty = async (req: Request, res: Response) => {
     try {
-      const properties = await FavouriteProperty.find();
+      console.log('matching user', req?.user)
+      const properties = await FavouriteProperty.find({user: req.user }).populate('property');
       return res.status(200).json({
         statusCode: 200,
         message: "Favourite properties",

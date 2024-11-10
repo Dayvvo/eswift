@@ -41,7 +41,7 @@ const client = ({
   return axios.create({
     baseURL,
     headers: {
-      ...(token && { Authorization: `Bearer ${token}` }),
+      ...(token && { Authorization: `${token}` }),
       "Content-Type": "application/json",
     },
     withCredentials,
@@ -50,6 +50,7 @@ const client = ({
 };
 
 function httpClient({ token }: { token?: string }) {
+  
   return {
     query: async <T extends any>(q: string, headers?: AxiosRequestConfig) => {
       try {

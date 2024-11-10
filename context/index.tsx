@@ -1,5 +1,6 @@
 "use client";
 
+import { Favourite } from "@/hooks/useProperty";
 import { R } from "@/utils/types";
 import {
   createContext,
@@ -14,13 +15,15 @@ import {
 interface IGlobalContext {
   user: R,
   token:string,
-  properties: R
+  properties: R,
+  favourites: Favourite[]
 };
 
 const defaultContextState = {
   user:{},
   token:'',
   properties: {},
+  favourites: []
 };
 
 const AppContext = createContext<{globalContext:IGlobalContext,setGlobalContext?:Dispatch<SetStateAction<IGlobalContext>> }>({globalContext:defaultContextState});

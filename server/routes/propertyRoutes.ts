@@ -14,7 +14,7 @@ router
   .route('/favourite/:propertyId')
   .post(isAuth, favouritePropertyController.addToFavourites)
 
-router.get('/favourite', favouritePropertyController.getAllFavouriteProperty)
+router.get('/favourite', isAuth, favouritePropertyController.getAllFavouriteProperty)
 
 router.delete(
   '/favourite/:id',

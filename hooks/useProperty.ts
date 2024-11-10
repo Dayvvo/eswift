@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import httpClient from "./useApi";
+import { useCallback } from "react";
+import  { useApiUrl } from "./useApi";
 import { R } from "@/utils/types";
+import useAuth from "./useAuth";
+import { PropertyCardProps } from "@/screens/Property/propertyCard";
 
 interface PropertyObj {
   title: string;
@@ -16,6 +18,10 @@ interface PropertyObj {
   documents:R[]
 }
 
+export interface Favourite extends PropertyCardProps{
+  favoriteId:string
+}
+
 interface PropertyResponse {
   data: any;
 }
@@ -23,26 +29,16 @@ interface VerificationProps {
   verification: string;
 }
 const useProperty = () => {
-  const [token, setToken] = useState("");
 
   // console.log(token);
-
-  useEffect(() => {
-    const userData = localStorage.getItem("userData") || null;
-
-    if (userData) {
-      const parsedData = JSON.parse(userData);
-      setToken(parsedData.token);
-    }
-
-  }, []);
-
+  const {token} = useAuth(); 
   const {
-    query,
+    get:query,
     post,
-    putMutation,
+    put:putMutation,
     delete: delProperty,
-  } = httpClient({ token });
+  } = useApiUrl();
+
 
   const addProperty = useCallback(
     async (data: PropertyObj) => {
@@ -112,9 +108,9 @@ const useProperty = () => {
     return res;
   }, []);
 
-  const getFavorites = async()=>  await query(`/property/favorite`);
+  const getFavorites = async()=>  await query(`/property/favourite`);
 
-  const addToFavorites = async(id:string)=>  await post(`/property/favorite/${id}`,{}) ;
+  const addToFavorites = async(id:string)=>  await post(`/property/favourite/${id}`,{}) ;
 
   const deleteFromFavorites = async(id:string)=>  await delProperty(`/property/favorite/${id}`);
 

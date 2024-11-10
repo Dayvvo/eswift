@@ -11,13 +11,14 @@ export const isAuth = async (
   let token = "";
   if (req.headers.authorization) {
     try {
-      token = req.headers.authorization.split(" ")[1];
+      token = req.headers.authorization;
+      console.log('auth token in middleware',token)
       const decoded = jwt.verify(
         token,
         process.env["JWT_SECRET"] as string
       ) as any;
+      console.log('decoded id',decoded);
       const userFound = await User.findById(decoded?.id).select("-hash");
-
       req.user = userFound ? userFound : undefined;
       if (!req.user) {
         return res

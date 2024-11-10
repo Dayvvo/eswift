@@ -1,25 +1,34 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { UserRole, AuthProvider } from "@/server/utils/interfaces";
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+
 
 interface AuthContextType {
-  user: User | null;
+  user: IUser | null;
   loading: boolean;
   error: string | null;
   login: (credentials: { email: string; password: string }) => Promise<void>;
   logout: () => void;
 }
 
+export interface IUser {
+  _id: string;
+  email: string;
+  avatar: string;
+  provider: AuthProvider;
+  lastName: string;
+  firstName: string;
+  refCode: string;
+  refCount: number;
+  propertyCount: number;
+  role: UserRole;
+}
 
 const useAuth = () => {
-  
-  const [user, setUser] = useState<User | null>(null);
+
+  const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState("");
@@ -31,9 +40,9 @@ const useAuth = () => {
 
   useEffect(() => {
     if (isWindow) {
-      const userFromLocalStorage = window.localStorage.getItem("userData");
+      const userFromLocalStorage = localStorage.getItem("userData");
       if (userFromLocalStorage){ 
-        const {user,token} = JSON.parse(userFromLocalStorage);
+        const {token,user} = JSON.parse(userFromLocalStorage )  ;
         setToken(token);
         setUser(user);
       };

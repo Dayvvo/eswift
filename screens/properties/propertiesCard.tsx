@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, Tooltip } from "@chakra-ui/react";
 import { TbCurrencyNaira } from "react-icons/tb";
 import router from "next/router";
 import { MdLocationOn } from "react-icons/md";
@@ -152,9 +152,13 @@ export const PropertiesCard =({images, title, price, description, address, _id, 
                     <Flex gap='1em' align={'center'}>
                         {
                             !isFavorite?
-                                <IoIosHeartEmpty onClick={()=>authProtectedFn(()=> addToFave(_id as string), pathName )} cursor={'pointer'} className="empty"  fontSize={'30px'} color='#3170A6' />
+                                <Tooltip content='add to favorites' >
+                                    <IoIosHeartEmpty onClick={()=>authProtectedFn(()=> addToFave(_id as string), pathName )} cursor={'pointer'} className="empty"  fontSize={'30px'} color='#3170A6' />
+                                </Tooltip>
                             :
-                               <IoIosHeartDislike cursor={'pointer'} className="dislike" fontSize={'30px'} color='#3170A6'/>
+                                <Tooltip content='remove from favorites'>
+                                   <IoIosHeartDislike cursor={'pointer'} className="dislike" fontSize={'30px'} color='#3170A6'/>
+                               </Tooltip>
                
 
                         }

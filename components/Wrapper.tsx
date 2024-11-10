@@ -15,6 +15,7 @@ import { NextRouter, useRouter } from "next/router";
 // import axios from "axios";
 import useAuth from "@/hooks/useAuth";
 import useProfile from "@/hooks/useProfile";
+import { token } from "morgan";
 
 const Header = ({ casedPath }: { casedPath: string }) => {
   return (
@@ -76,42 +77,55 @@ const Wrapper = ({
   children: ReactNode;
   noPadding?: boolean;
 }) => {
+
+  const [route, setRoute] = useState("");
+  const [path, setPath] = useState("");
+
+  const { isWindow, user } = useAuth();
+  const { getProfile } = useProfile();
+  const navigate = useRouter() as NextRouter;
+
+
   const navData = [
-    {
-      label: "Dashboard",
-      icon: (color: string) => <DashboardIcon color={color} />,
-      url: "/dashboard",
-    },
-    {
-      label: "Users",
-      icon: (color: string) => <UserIcon color={color} />,
-      url: "/users",
-    },
-    {
-      label: "Property",
-      icon: (color: string) => <FiHome size={"1rem"} color={color} />,
-      url: "/property",
-    },
-    {
-      label: "Blog",
-      icon: (color: string) => <BlogIcon color={color} />,
-      url: "/blog",
-    },
+    ...user?.role ==='ADMIN'? [ 
+      {
+        label: "Dashboard",
+        icon: (color: string) => <DashboardIcon color={color} />,
+        url: "/dashboard",
+      },
+      {
+        label: "Users",
+        icon: (color: string) => <UserIcon color={color} />,
+        url: "/users",
+      },
+      {
+        label: "Property",
+        icon: (color: string) => <FiHome size={"1rem"} color={color} />,
+        url: "/property",
+      },
+      {
+        label: "Blog",
+        icon: (color: string) => <BlogIcon color={color} />,
+        url: "/blog",
+      },
+    ]:[
+      {
+        label: "Favorites",
+        icon: (color: string) => <DashboardIcon color={color} />,
+        url: "/favourites",
+      },
+      {
+        label: "Browse",
+        icon: (color: string) => <FiHome size={"1rem"} color={color} />,
+        url: "/property",
+      },
+    ],
     {
       label: "Settings",
       icon: (color: string) => <SettingsIcon color={color} />,
       url: "/settings",
     },
   ];
-
-  const { isWindow } = useAuth();
-  const navigate = useRouter() as NextRouter;
-
-  const [route, setRoute] = useState("");
-  const [path, setPath] = useState("");
-  const [user, setUser] = useState({ firstName: "", lastName: "", email: "" });
-
-  const { getProfile } = useProfile();
 
   useEffect(() => {
     if (isWindow) {
@@ -130,16 +144,6 @@ const Wrapper = ({
   }, [route]);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("userData");
-    if (!storedData) {
-      navigate.push("/auth");
-    } else {
-      const parsedUserData = JSON.parse(storedData);
-      setUser(parsedUserData);
-    }
-  }, [navigate]);
-
-  useEffect(() => {
     const getProfileFn = async () => {
       try {
         const res = await getProfile();
@@ -152,16 +156,20 @@ const Wrapper = ({
   
     getProfileFn();
   
-  }, [])
-
+  }, []);
   const logout =()=> {
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
     navigate.push('/auth');
-  }
+  };
 
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;
 
+  console.log('user',user);
+
+  if(!token){
+    return <></>
+  }
   return (
     <Box w={"100%"} py="40px" minH={"100vh"} overflowX={"hidden"}>
       <Box w={"100%"}>
@@ -242,7 +250,7 @@ const Wrapper = ({
                   fontSize={"0.875rem"}
                   fontWeight={500}
                 >
-                  {`${user.firstName} ${user.lastName}`}
+                  {`${user?.firstName} ${user?.lastName}`}
                 </Text>
                 <Text
                   color="#525866"
@@ -250,7 +258,7 @@ const Wrapper = ({
                   fontSize={"0.75rem"}
                   fontWeight={400}
                 >
-                  {`${user.email}`}
+                  {`${user?.email}`}
                 </Text>
               </Flex>
               <Btn

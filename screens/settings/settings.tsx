@@ -1,9 +1,9 @@
 import Btn from "@/components/Btn";
+import useAuth from "@/hooks/useAuth";
 import { useInputSettings } from "@/hooks/useInput";
 import useToast from "@/hooks/useToast";
 import useUser from "@/hooks/useUser";
-import { Box, Flex, Input, Text } from "@chakra-ui/react";
-import Image from "next/image";
+import { Box, Flex, Input, Text, Image } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
@@ -106,6 +106,9 @@ export const SettingsScreen = () => {
   const { updateUser, getUserById } = useUser();
   const { toast } = useToast();
 
+
+  const {user:profile} = useAuth()
+
   const datas = {
     firstName: user.firstName,
     lastName: user.lastName,
@@ -114,7 +117,6 @@ export const SettingsScreen = () => {
     phoneNumber: user.phoneNumber,
   };
 
-  console.log(user.avatar);
 
   const updateUserFn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -157,14 +159,11 @@ export const SettingsScreen = () => {
     }
   };
   useEffect(() => {
-    const userData = localStorage.getItem("userData") || null;
 
-    if (userData) {
-      const parsedData = JSON.parse(userData);
-      // console.log(parsedData);
-      getUserFn(parsedData._id);
+    if (profile) {
+      getUserFn(profile._id);
     }
-  }, []);
+  }, [profile]);
 
   return (
     <form onSubmit={updateUserFn}>
