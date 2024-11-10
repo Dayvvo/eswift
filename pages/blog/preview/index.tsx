@@ -63,14 +63,9 @@ const PreviewBlog = () => {
   const data = {
     title: articleTitle,
     header_image: headerImageFile,
-    // header_image:
-    //   "https://res.cloudinary.com/dk8ielbpn/image/upload/v1728370233/shopify/nsokzb9lxciy9pr0ejf7.png.png",
     introduction: introValue,
     body: bodyValue,
     body_image: bodyImageFile,
-    // body_image:
-    //   "https://res.cloudinary.com/dk8ielbpn/image/upload/v1728368487/shopify/pexels-divinetechygirl-1181263.jpg.jpg",
-    // tags: ["mail", "good"],
   };
 
   const addBlogFn = async () => {

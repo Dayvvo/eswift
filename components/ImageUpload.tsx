@@ -11,12 +11,19 @@ export interface ImageData {
 const ImageUpload = ({
   onImageChange,
   setImageFile,
+  // setImageUrl,
+  initialImageUrl,
 }: {
-  onImageChange: (image: ImageData) => void;
-  setImageFile: any;
+  onImageChange?: (image: ImageData) => void;
+  setImageFile?: any;
+  // setImageUrl?: (url: string) => void;
+  initialImageUrl?: string;
 }) => {
   const [image, setImage] = useState<ImageData | null>(null);
   const { uploadSingle } = useUpload();
+
+  console.log('initialImageUrl', initialImageUrl);
+  console.log('image', image);
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -45,12 +52,17 @@ const ImageUpload = ({
         const uploadImage = async () => {
           try {
             const req = await uploadSingle(formData);
-            // console.log("image req", req);
+            console.log('image req', req);
             setImageFile(req?.data?.data);
+      
+            // Check if setImageUrl is defined before calling it
+            // if (setImageUrl) {
+            //   setImageUrl(req?.data?.data);
+            // }
           } catch (err) {
             console.log("err", err);
           }
-        }
+        };
 
         uploadImage();
 
@@ -77,7 +89,9 @@ const ImageUpload = ({
         }}
       >
         {image ? (
-          <img src={image.dataUrl} alt="header-img" style={{ width: "100%" }} />
+          <img src={ image?.dataUrl } alt="header-img" style={{ width: "100%" }} />
+        ) : initialImageUrl ? (
+          <img src={ initialImageUrl } alt="header-img" style={{ width: "100%" }} />
         ) : (
           <div
             // "
