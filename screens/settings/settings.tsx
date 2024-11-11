@@ -1,12 +1,11 @@
 import Btn from "@/components/Btn";
-import useAuth from "@/hooks/useAuth";
+import useAuth, { IUser } from "@/hooks/useAuth";
 import { useInputSettings } from "@/hooks/useInput";
 import useToast from "@/hooks/useToast";
 import useUser from "@/hooks/useUser";
 import { Box, Flex, Input, Text, Image } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import { IoIosArrowForward } from "react-icons/io";
 
 interface UserData {
   firstName: string;
@@ -18,7 +17,7 @@ interface UserData {
 }
 
 type ValidationType = {
-  [key in keyof UserData]: (input: string) => boolean;
+  [key in keyof IUser]: (input: string) => boolean;
 };
 
 const validation: ValidationType = {
@@ -28,15 +27,18 @@ const validation: ValidationType = {
   phoneNumber: (input: string) => (input ? /^0?\d{10}$/.test(input) : false),
   address: (input: string) => (input ? input.trim().length > 5 : false),
   avatar: (input: string) => true,
+  role:(input: string) => input ==='GUEST' || input !=='ADMIN'
 };
 
 export const SettingsScreen = () => {
   const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
   const navigateToResetPassword = () => {
     router.push("/reset");
   };
+ 
   const {
     input: user,
     onChangeHandler,
@@ -52,18 +54,10 @@ export const SettingsScreen = () => {
       phoneNumber: "",
       address: "",
       avatar: "",
+      role:'CLIENT'
     },
     validation
   );
-  // const [user, setUser] = useState<UserData>({
-  //   firstName: "",
-  //   lastName: "",
-  //   email: "",
-  //   phoneNumber: "",
-  //   address: "",
-  // });
-
-  // console.log("user", user);
 
   const settings: any[] = [
     {
@@ -144,24 +138,13 @@ export const SettingsScreen = () => {
     }
   };
 
-  const getUserFn = async (id: string) => {
-    try {
-      const users = await getUserById(id);
-      setUser(users?.data.data);
-    } catch (error) {
-      toast({
-        status: "error",
-        description: "Failed to get user profile",
-        title: "Failed",
-        position: "top",
-        duration: 5000,
-      });
-    }
+  const getUserFn = async () => {
+    setUser(profile as any);
   };
+ 
   useEffect(() => {
-
     if (profile) {
-      getUserFn(profile._id);
+      getUserFn();
     }
   }, [profile]);
 
@@ -169,6 +152,10 @@ export const SettingsScreen = () => {
     <form onSubmit={updateUserFn}>
       <Box w={"100%"}>
         <Flex flexDir={"column"} w={"100%"} className="inter">
+          <Flex w={"100%"} justify={'flex-end'} alignItems={"center"} py={"20px"}>
+            <Btn p='1.5em 3em' bg='#3170A6' >Update Profile</Btn>
+          </Flex>
+
           <Flex
             w={"100%"}
             alignItems={"center"}
@@ -207,8 +194,9 @@ export const SettingsScreen = () => {
                   overflow={"hidden"}
                 >
                   <Image
-                    width={56}
-                    height={56}
+                    width={40}
+                    height={40}
+                    borderRadius={'50%'}
                     src={user.avatar || "/avatar1.png"}
                     alt="/"
                   />
@@ -312,53 +300,60 @@ export const SettingsScreen = () => {
               </Flex>
             );
           })}
-          <Flex w={"100%"} alignItems={"center"} py={"20px"}>
-            <Flex
-              w={"100%"}
-              flexDir={{ base: "column", lg: "row" }}
-              justifyContent={"space-between"}
-              gap={"24px"}
-            >
-              <Box>
-                <Text
+          {
+            user?.role ==='ADMIN' ?
+            <Flex w={"100%"} alignItems={"center"} py={"20px"}>
+              <Flex
+                w={"100%"}
+                flexDir={{ base: "column", lg: "row" }}
+                justifyContent={"space-between"}
+                gap={"24px"}
+              >
+                <Box>
+                  <Text
+                    fontWeight={500}
+                    fontSize={"14px"}
+                    textColor={"var(--strong950)"}
+                    mb={"6px"}
+                  >
+                    Change Password
+                  </Text>
+                  <Text
+                    fontWeight={400}
+                    fontSize={"12px"}
+                    textColor={"var(--sub600)"}
+                  >
+                    Update password for enhanced account security.
+                  </Text>
+                </Box>
+                <Btn
+                  bg={"transparent"}
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  w={"148px"}
+                  h={"40px"}
+                  borderRadius={"8px"}
+                  textColor={"var(--sub600)"}
                   fontWeight={500}
                   fontSize={"14px"}
-                  textColor={"var(--strong950)"}
-                  mb={"6px"}
+                  border={"1px solid var(--soft200)"}
+                  // border={"1px solid var(--primaryBase)"}
+                  _hover={{
+                    bg: "#1A1D66",
+                    textColor: "#FFF",
+                  }}
+                  onClick={navigateToResetPassword}
                 >
                   Change Password
-                </Text>
-                <Text
-                  fontWeight={400}
-                  fontSize={"12px"}
-                  textColor={"var(--sub600)"}
-                >
-                  Update password for enhanced account security.
-                </Text>
-              </Box>
-              <Btn
-                bg={"transparent"}
-                display={"flex"}
-                alignItems={"center"}
-                justifyContent={"center"}
-                w={"148px"}
-                h={"40px"}
-                borderRadius={"8px"}
-                textColor={"var(--sub600)"}
-                fontWeight={500}
-                fontSize={"14px"}
-                border={"1px solid var(--soft200)"}
-                // border={"1px solid var(--primaryBase)"}
-                _hover={{
-                  bg: "#1A1D66",
-                  textColor: "#FFF",
-                }}
-                onClick={navigateToResetPassword}
-              >
-                Change Password
-              </Btn>
+                </Btn>
+              </Flex>
             </Flex>
-          </Flex>
+            :<></>
+
+          }
+
+
         </Flex>
       </Box>
     </form>

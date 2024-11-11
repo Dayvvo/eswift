@@ -14,15 +14,17 @@ interface AuthContextType {
 }
 
 export interface IUser {
-  _id: string;
+  _id?: string;
   email: string;
   avatar: string;
-  provider: AuthProvider;
+  provider?: AuthProvider;
   lastName: string;
   firstName: string;
-  refCode: string;
-  refCount: number;
-  propertyCount: number;
+  address:string;
+  phoneNumber:string;
+  refCode?: string;
+  refCount?: number;
+  propertyCount?: number;
   role: UserRole;
 }
 
@@ -70,8 +72,9 @@ const useAuth = () => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userData");
-    axios.defaults.headers.common["Authorization"] = "";
     setUser(null);
+    setToken("");
+    push('/auth')
   };
 
   const reset = async (credentials: {

@@ -95,7 +95,7 @@ export const PropertyCard = ({
       }
     } catch (err) {
       toast({
-        status: "error",
+        status: 'error',
         description: "Failed to verify property",
         title: "Failed",
         position: "top",

@@ -117,7 +117,7 @@ const Wrapper = ({
       {
         label: "Browse",
         icon: (color: string) => <FiHome size={"1rem"} color={color} />,
-        url: "/property",
+        url: "/properties",
       },
     ],
     {

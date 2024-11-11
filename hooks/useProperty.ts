@@ -112,7 +112,7 @@ const useProperty = () => {
 
   const addToFavorites = async(id:string)=>  await post(`/property/favourite/${id}`,{}) ;
 
-  const deleteFromFavorites = async(id:string)=>  await delProperty(`/property/favorite/${id}`);
+  const deleteFromFavorites = async(id:string)=>  await delProperty(`/property/favourite/${id}`);
 
   return {
     propertyCreator,

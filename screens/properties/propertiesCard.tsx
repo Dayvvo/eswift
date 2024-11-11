@@ -7,36 +7,28 @@ import useToast from "../../hooks/useToast";
 import { PropertyCardProps } from "../Property/propertyCard";
 import { IoIosHeartEmpty, IoIosHeartDislike } from "react-icons/io";
 import useAuth from "@/hooks/useAuth";
-import useProperty from "@/hooks/useProperty";
-import { useState } from "react";
+import useProperty, { Favourite } from "@/hooks/useProperty";
 import { AxiosError, AxiosResponse } from "axios";
+import { useAppContext } from "@/context";
 
-
-type PropertiesCardProps = {
-    picture?:string;
-    title?:string;
-    pricing?:string;
-    location?:string;
-    details?:string;
-    address:string;
-    id:string;
-}
 
 interface propertiesCard extends PropertyCardProps {
     view?: 'client' | 'admin',
     isFavorite?: boolean;
     onClick?: () => void;
+    favoriteId?: string;
 }
 
-export const PropertiesCard =({images, title, price, description, address, _id, onClick, view, isFavorite}:propertiesCard) => {
+export const PropertiesCard =({images, title, price, description, address, _id, onClick, view, favoriteId,isFavorite}:propertiesCard) => {
 
     const toast = useToast();
+
+    const  {setGlobalContext} = useAppContext()
+
 
     const {  authProtectedFn } = useAuth();
 
     const { addToFavorites, deleteFromFavorites } = useProperty();
-
-    const [isInFavorites, setIsInFavorites] = useState(false);
 
     const Navigate = () => {
         onClick && onClick();
@@ -49,11 +41,44 @@ export const PropertiesCard =({images, title, price, description, address, _id, 
         try{
             const {data} = await addToFavorites(id)  as AxiosResponse ; 
             if(data){
-                setIsInFavorites(true);
                 toast.toast({
                     title:'Request successful',
+                    status:'success',
                     description:'Property added to favoriites'
+                });
+                setGlobalContext && setGlobalContext(prev=>({
+                    ...prev,
+                    favourites: [...prev.favourites, data as Favourite] 
+                }))
+                
+            };
+        }
+        catch(err){
+            let error = err as AxiosError;
+            if(error?.response){
+                toast.toast({
+                    status:'error',
+                    title:'Request successful',
+                    description:'Failed to add property added to favoriites'
                 })
+            }   
+        }
+    }
+
+    const deleteFromFave = async(id:string)=>{
+        try{
+            const {data} = await deleteFromFavorites(id)  as AxiosResponse ; 
+            if(data){
+                toast.toast({
+                    title:'Request successful',
+                    status:'success',
+                    description:'Property removed from favoriites'
+                });
+                setGlobalContext && setGlobalContext(prev=>({
+                    ...prev,
+                    favourites: prev.favourites.filter(prop=> prop?.favoriteId !==id) 
+                }))
+                
             };
         }
         catch(err){
@@ -61,7 +86,7 @@ export const PropertiesCard =({images, title, price, description, address, _id, 
             if(error?.response){
                 toast.toast({
                     title:'Request successful',
-                    description:'Failed to add property added to favoriites'
+                    description:'Failed to remove property from favoriites'
                 })
             }   
         }
@@ -157,7 +182,7 @@ export const PropertiesCard =({images, title, price, description, address, _id, 
                                 </Tooltip>
                             :
                                 <Tooltip content='remove from favorites'>
-                                   <IoIosHeartDislike cursor={'pointer'} className="dislike" fontSize={'30px'} color='#3170A6'/>
+                                   <IoIosHeartDislike onClick={()=>deleteFromFave(favoriteId as string)} cursor={'pointer'} className="dislike" fontSize={'30px'} color='#3170A6'/>
                                </Tooltip>
                
 

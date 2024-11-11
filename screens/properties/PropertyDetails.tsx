@@ -24,6 +24,7 @@ import { MdLocationOn } from "react-icons/md";
 import {  ZigiZagaIcon } from "../../components/svg";
 
 export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
+  
   const Images: string[] = [
     "/Grid-1.png",
     "/Grid-2.png",
@@ -35,7 +36,9 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
     "/Grid-2.png",
     "/Grid-1.png",
   ];
+  
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  
   const Features: any[] = [
     {
       id: 1,
@@ -62,6 +65,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
       key: "Spacious living area with ample natural light",
     },
   ];
+  
   const Documents: any[] = [
     {
       id: 1,
@@ -84,6 +88,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
       doc: "/",
     },
   ];
+  
   const properties: any[] = [
     {
       id: 1,
@@ -447,6 +452,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
             >
               Contact
             </Btn>
+            
             <Btn
               border="1px solid #FB3748"
               borderRadius={"10px"}
@@ -458,6 +464,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
             >
               Add to favourite
             </Btn>
+      
           </Flex>
  
         </Box>

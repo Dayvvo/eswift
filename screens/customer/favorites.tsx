@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import Wrapper from "../../components/Wrapper"
-import { PropertyCardProps } from "@/screens/Property/propertyCard"
 import { PropertiesCard } from "@/screens/properties/propertiesCard";
 import { Grid } from "@chakra-ui/react";
 import useProperty, { Favourite } from "@/hooks/useProperty";
 import { R } from "@/utils/types";
+import { useAppContext } from "@/context";
 
 
 const FavouriteScreen = ()=>{
 
-    const [favourites,setFavourites] = useState<Favourite[]>([]);
+    // const [favourites,setFavourites] = useState<Favourite[]>([]);
 
     const { getFavorites } = useProperty()
+
+    const { globalContext, setGlobalContext} = useAppContext()
+
+    const { favourites } = globalContext;
 
     useEffect(()=>{
         (async()=>{
@@ -28,7 +32,10 @@ const FavouriteScreen = ()=>{
                     } as Favourite))
                 }
 
-                setFavourites(favorites?.data)
+                setGlobalContext &&  setGlobalContext(prev=>({
+                    ...prev,
+                    favourites:favorites?.data
+                }))
             }
             catch(err){
                 console.log('err',err);

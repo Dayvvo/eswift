@@ -15,6 +15,7 @@ import Link from "next/link";
 import Btn from "./Btn";
 import { Logo } from "./logo";
 import { Background } from "@/screens/home/Background";
+import useAuth from "@/hooks/useAuth";
 
 
 const NavBar = () => {
@@ -25,21 +26,22 @@ const NavBar = () => {
 
   const [isScrolled, setIsScrolled] = useState(false);
 
-    useEffect(() => {
+  useEffect(() => {
 
-      const handleScroll =()=> {
-        if( pathname === '/'){
-          setIsScrolled(window.scrollY > 100);
-        } else {
-          setIsScrolled(window.scrollY >= 0);
-        }
-      };
+    const handleScroll =()=> {
+      if( pathname === '/'){
+        setIsScrolled(window.scrollY > 100);
+      } else {
+        setIsScrolled(window.scrollY >= 0);
+      }
+    };
 
-      window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
-      return () => window.removeEventListener('scroll', handleScroll);
-    },[]);
+    return () => window.removeEventListener('scroll', handleScroll);
+  },[]);
 
+  const {token, logout} = useAuth()
   
   const NavLink = [
     {
@@ -139,26 +141,45 @@ const NavBar = () => {
             display={'flex'} gap={{lg:'14px',xl:'24px'}}
             w={'fit-content'} h={'fit-content'}
           >
-            <Link href={'/auth'}>
-              <Btn
-                display={'flex'} alignItems={'center'} justifyContent={'center'}
-                bg={'#3170A6'} borderRadius={'99px'} w={'160px'} h={'48px'}
-                textColor={'#FFF'} fontWeight={500} className="roboto"
-                fontSize={'16px'}
-              >
-                Sign In
-              </Btn>
-            </Link>
-            <Link href={'/auth'}>
-              <Btn
-                display={'flex'} alignItems={'center'} justifyContent={'center'}
-                bg={'#3170A6'} borderRadius={'99px'} w={'160px'} h={'48px'}
-                textColor={'#FFF'} fontWeight={500} className="roboto"
-                fontSize={'16px'}
-              >
-                Join Us
-              </Btn>
-            </Link>
+            {
+              token?
+              <>
+                <Btn cursor={'pointer'}  fontSize={'18px'} color='#3170A6' backgroundColor={'transparent'} >
+                  <Link href={'/dashboard'}>
+                    Dashboard
+                  </Link>
+                </Btn>
+
+                <Btn cursor={'pointer'} onClick={logout} fontSize={'18px'} color='#000' backgroundColor={'transparent'} >
+                  Logout
+                </Btn>
+
+                
+              </>
+              :<>
+                <Link href={'/auth'}>
+                  <Btn
+                    display={'flex'} alignItems={'center'} justifyContent={'center'}
+                    bg={'#3170A6'} borderRadius={'99px'} w={'160px'} h={'48px'}
+                    textColor={'#FFF'} fontWeight={500} className="roboto"
+                    fontSize={'16px'}
+                  >
+                    Sign In
+                  </Btn>
+                </Link>
+                <Link href={'/auth'}>
+                  <Btn
+                    display={'flex'} alignItems={'center'} justifyContent={'center'}
+                    bg={'#3170A6'} borderRadius={'99px'} w={'160px'} h={'48px'}
+                    textColor={'#FFF'} fontWeight={500} className="roboto"
+                    fontSize={'16px'}
+                  >
+                    Join Us
+                  </Btn>
+                </Link>
+              </>              
+            }
+
           </Box>
         </Box>
 
