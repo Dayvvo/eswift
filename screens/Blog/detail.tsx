@@ -1,11 +1,22 @@
+"use client"
 import NavBar from "@/components/navBar";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, TextProps } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Btn from "@/components/Btn";
 import useBlog from "@/hooks/useBlog";
 import DOMPurify from "dompurify";
+import parse from "html-react-parser";
+
+interface BlogContentProps extends TextProps {
+  richText: string | Node
+}
+const BlogContent = ({ richText, ...rest }:BlogContentProps) => {
+
+  const domPurify = typeof window !== 'undefined'? DOMPurify(window).sanitize(richText)  :  '' ;
+  return <Text {...rest}>{parse(domPurify)}</Text>;
+};
 
 type blog = {
   id?: string | number;
@@ -79,13 +90,11 @@ export const BlogDetailScreen = () => {
             >
               Inroduction:
             </Text>
-            <Text
+            <BlogContent
               fontWeight={400}
               fontSize={{ base: "14px", lg: "16px" }}
               textColor={"#4D4D4D"}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(blog?.introduction),
-              }}
+              richText={ blog?.introduction}
             />
           </Box>
           <Image
@@ -96,14 +105,12 @@ export const BlogDetailScreen = () => {
             layout="responsive"
           />
           <Box w={"100%"} mt={{ base: "40px", lg: "80px" }}>
-          <Text
-              fontWeight={400}
-              fontSize={{ base: "14px", lg: "16px" }}
-              textColor={"#4D4D4D"}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(blog?.body),
-              }}
-            />
+          <BlogContent
+            fontWeight={400}
+            fontSize={{ base: "14px", lg: "16px" }}
+            textColor={"#4D4D4D"}
+            richText={blog?.body}
+          />
           </Box>
         </Box>
         <Btn

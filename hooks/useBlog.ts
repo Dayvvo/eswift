@@ -93,7 +93,7 @@ const useBlog = () => {
     [token]
   );
   
-  const getBlog = async (search:string) =>  (await query(`${baseUrl}/blog/post?keyword=${search}`)).data as R; 
+  const getBlog = async (search?:string) =>  (await query(`${baseUrl}/blog/post?keyword=${search}`)).data as R; 
 
   const getBlogByID = async(id:string)=>{
     try {
