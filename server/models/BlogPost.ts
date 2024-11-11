@@ -20,6 +20,10 @@ const BlogPostSchema = new mongoose.Schema(
       type: String, //possibly a json string
       required: true,
     },
+    conclusion: {
+      type: String, //possibly a json string
+      required: true,
+    },
     body_image: {
       type: String, //possibly a json string
       required: true,
