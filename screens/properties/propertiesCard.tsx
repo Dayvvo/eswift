@@ -96,7 +96,7 @@ export const PropertiesCard =({images, title, price, description, address, _id, 
         <>
             <Box 
                 className="roboto"
-                bg={'#f3dfdf'}
+                bg={'#fff'}
                 maxW={'400px'} h={'fit-content'}
                 p={{base:'14px',sm:'20px'}} borderRadius={'12px'}
                 border={'1px solid #262626'} 

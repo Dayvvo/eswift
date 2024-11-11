@@ -7,12 +7,24 @@ import { MdArrowOutward} from "react-icons/md";
 import { PiBuildingOfficeFill } from "react-icons/pi";
 import { PropertiesCard } from "../properties/propertiesCard";
 import Btn from "@/components/Btn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PropertyCardProps } from "../Property/propertyCard";
+import { useRouter } from "next/router";
+import useProperty from "@/hooks/useProperty";
+import axios from "axios";
+import { useDebounce } from "@/hooks/useDebounce";
 
 
 
 const OverviewScreen = () => {
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const [fetchData, setFetchData] = useState<PropertyCardProps[]>([]);
+    const [page , setPage] = useState<number | null>();
+    const [inputValue, setInputValue] = useState<any>("");
+    
+    const debouce = useDebounce()
+
 
     const card = [
         {
@@ -41,18 +53,29 @@ const OverviewScreen = () => {
         }
     ]
 
-    const Property = {
-        picture:"/",
-        title:"Seaside Serenity Villa",
-        price:"1,250,00",
-        description:"Wake up to the soothing melody of waves. This beachfront villa offers",
-        address:"Oluyole Estate - 3, Gbagada medina estate"
-    }
+    
 
     const copies = 3
 
 
     const [propertyList,setPropertyList] = useState<PropertyCardProps[]>([]);
+
+    const getPropertyFunction = async()=> {
+        setLoading(true);
+        try {
+          setLoading(false);
+          const fetchData = await axios.get(`/api/property?keyword=${inputValue}&PageNumber={${page}}`);
+          setFetchData(fetchData?.data?.data);
+        } catch (error) {
+          setLoading(false);
+          console.log(error);
+        }
+        
+    }
+
+    useEffect(() => {
+        debouce(()=>getPropertyFunction())
+    },[])
 
     return ( 
         <Box
@@ -64,7 +87,7 @@ const OverviewScreen = () => {
                 flexDir={'column'}
                 w={'100%'} h={'100%'}
             >
-                    <Flex
+                    {/* <Flex
                         w={'fit-content'}
                         bg={'#FFF'}
                         flexWrap={'wrap'}
@@ -105,8 +128,8 @@ const OverviewScreen = () => {
                                 </Flex>
                             ))
                         }
-                    </Flex>
-                    <Flex w={'100%'} my={'60px'} flexDir={'column'} alignItems={'center'}>
+                    </Flex> */}
+                    <Flex w={'100%'} mb={'60px'} flexDir={'column'} alignItems={'center'}>
                         <Flex w="100%" 
                             justifyContent={'space-between'}
                             alignItems={'center'}
@@ -117,17 +140,17 @@ const OverviewScreen = () => {
                                     textColor={'var(--strong950)'}
                                     fontSize={{base:'14px',lg:'18px'}}
                                 >
-                                    Recently viewed properties
+                                    Properties you might like...
                                 </Text>
                                 <Text 
                                     fontWeight={400}
                                     textColor={'var(--sub600)'}
                                     fontSize={{base:'10px',lg:'14px'}}
                                 >
-                                    These properties were viewed recently by you.
+                                    A Glimpse of the properties we have for you.
                                 </Text>
                             </Box>
-                            <Btn 
+                            <Btn onClick={()=> router.push('/properties')}
                                 w="68px" h="36px" bg={'white'}
                                 border="1px solid var(--soft200)"
                                 borderRadius={'8px'} textColor="(var--sub600)"
@@ -141,15 +164,11 @@ const OverviewScreen = () => {
                             gap={'20px'} placeContent={'center'}
                         >
                             {
-                                propertyList.map((entry,key)=>(
-                                    <PropertiesCard 
-                                     key={key}
-                                     images={entry?.images}
-                                     title={entry?.title}
-                                     price={entry?.price}
-                                     description={entry?.description}
-                                     address={entry?.address} 
-                                     _id={entry._id}                                   
+                                fetchData.slice(0,3).map((item)=>(
+                                    <PropertiesCard key={item?._id}
+                                        {...item}
+                                        _id={item?._id}  
+                                        view="client"                                 
                                     />
                                 ))
                             }

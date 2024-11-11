@@ -34,7 +34,7 @@ export const AboutSection = () => {
 
   return (
     <>
-      <Box id="main" width={"100%"} className="robotoF" overflow={"clip"}>
+      <Box width={"100%"} className="robotoF" overflow={"clip"}>
         <Flex
           bg={"transparent"}
           flexDir="column"
