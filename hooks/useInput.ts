@@ -146,6 +146,11 @@ export const useInputSettings = <T extends {}>(
     }));
   };
 
+  const reset = () => {
+    // setInput({});
+    setIsTouched({});
+  };
+
   const onBlurHandler = (name: keyof T) => {
     setIsTouched((prev) => ({ ...prev, [name]: true }));
   };
@@ -160,5 +165,6 @@ export const useInputSettings = <T extends {}>(
     onBlurHandler,
     inputIsvalid,
     inputIsinvalid,
+    reset,
   };
 };
