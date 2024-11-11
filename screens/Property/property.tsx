@@ -84,6 +84,10 @@ export const PropertyScreen = () => {
     GovConsent: null,
   });
 
+  const [features,setFeatures] = useState<string[]>([])
+
+
+
   const handleDocumentChange = (name: string, value: File | null) => {
     setDocuments((prev) => ({
       ...prev,
@@ -126,6 +130,8 @@ export const PropertyScreen = () => {
     valueIsValid: validAddress,
     reset: addressReset,
   } = useInputText((address) => address.length > 3);
+
+
 
   const {
     input: typeOfProperty,
@@ -272,7 +278,7 @@ export const PropertyScreen = () => {
           mode: "one_off",
           amount: price,
         },
-        features:[],
+        features,
         ...uploadedFiles,
       };
 
@@ -374,7 +380,8 @@ export const PropertyScreen = () => {
               // typeOfProperty={typeOfProperty}
               // validType={validType}
               // onBlurType={onBlurType}
-
+              features={features}
+              setFeatures={setFeatures}
               onChangeDescription={onChangeDescription}
               description={description}
               title={title}
