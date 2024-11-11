@@ -52,20 +52,21 @@ class AuthController {
       const { email, password } = body;
       const user = await User.findOne({ email });
 
-      console.log("backend user", user);
-
       if (user && user.matchPassword && (await user?.matchPassword(password))) {
         res.json({
           statusCode: 200,
           message: "Successful",
           data: {
             _id: user._id,
-            user:{
+            user: {
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
-              role: user.role,  
-            }, 
+              role: user.role,
+              phoneNumber: user.phoneNumber,
+              address: user.address,
+              avartar: user.avatar,
+            },
             token: generateToken(user._id),
           },
         });
