@@ -32,11 +32,10 @@ interface BlogPostProps {
 }
 
 const BlogScreen = () => {
-  
   const [blogPost, setBlogPost] = useState<BlogPostProps[]>([]);
   const [isAdmin, setIsAdmin] = useState("");
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>("");
   const { toast } = useToast();
 
   // const { check } = useAppContext();
@@ -49,11 +48,10 @@ const BlogScreen = () => {
     setLoading(true);
     try {
       const req = await getBlog(search);
-      let data = req?.data as BlogPostProps[]
+      let data = req?.data as BlogPostProps[];
       setBlogPost(data);
       setLoading(false);
-    } 
-    catch (error) {
+    } catch (error) {
       setLoading(false);
     }
     // console.log("req", req?.data);
@@ -63,18 +61,19 @@ const BlogScreen = () => {
     getBlogFn();
   }, [search]);
 
-  const handleKeyPress =(e:React.KeyboardEvent<HTMLInputElement>)=> {
-    if (e.key === 'Enter') {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
       getBlogFn();
     }
-  }
+  };
 
+  console.log(isAdmin);
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
 
     if (userData) {
       const parsedData = JSON.parse(userData);
-      setIsAdmin(parsedData.role);
+      setIsAdmin(parsedData.user.role);
     }
   }, []);
 
@@ -122,7 +121,7 @@ const BlogScreen = () => {
             placeholder="Search..."
             border={"1px solid #E1E4EA"}
             value={search}
-            onChange={(e:any) => setSearch(e.target.value)}
+            onChange={(e: any) => setSearch(e.target.value)}
             onKeyDown={handleKeyPress}
           />
         </InputGroup>
@@ -218,13 +217,15 @@ const BlogScreen = () => {
                         bgColor="#6AFFB0"
                         borderRadius={"50px"}
                         className="robotoF"
-                        cursor={'pointer'}
+                        cursor={"pointer"}
                         fontWeight={400}
                         fontSize={".937rem"}
                         w="144px"
                         h="28px"
-                        onClick={() => route.push(`/blog/edit?blogId=${item._id}`)}
-            >
+                        onClick={() =>
+                          route.push(`/blog/edit?blogId=${item._id}`)
+                        }
+                      >
                         Edit
                       </Btn>
                       <Btn
@@ -248,7 +249,7 @@ const BlogScreen = () => {
         </SimpleGrid>
       )}
       {!loading && blogPost.length === 0 && (
-        <Card mt='1em'>
+        <Card mt="1em">
           <CardBody>
             <Text>No blog post available please wait</Text>
           </CardBody>
