@@ -8,6 +8,8 @@ import Property from '../models/Property'
 import { IUser, IUserInRequest } from '../utils/interfaces'
 import { isValidObjectId, ObjectId } from 'mongoose'
 import PropertyDocs from '../models/PropertyDocs'
+import Favourite from '../models/FavouriteProperty'
+
 import mongoose from 'mongoose'
 import { HttpStatusCode } from 'axios'
 
@@ -151,6 +153,9 @@ class PropertyController {
       })
     try {
       const property = await Property.findById(id)
+        // Check if the property is in the user's favorites
+      const isFavorite = await Favourite.exists({ user: id, property: id });
+
       if (!property)
         return res.status(404).json({
           statusCode: 404,

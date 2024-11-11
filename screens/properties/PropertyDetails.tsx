@@ -14,7 +14,7 @@ import {
 // import { BsDot } from "react-icons/bs";
 // import { HiOutlineLocationMarker } from "react-icons/hi";
 // import { FaRegImages } from "react-icons/fa";
-import useProperty from "@/hooks/useProperty";
+import useProperty, { Favourite } from "@/hooks/useProperty";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
@@ -22,119 +22,86 @@ import {  PropertyCardProps } from "../Property/propertyCard";
 import { useRouter } from "next/router";
 import { MdLocationOn } from "react-icons/md";
 import {  ZigiZagaIcon } from "../../components/svg";
+import { AxiosError, AxiosResponse } from "axios";
+import useToast from "@/hooks/useToast";
 
 export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
   
-  const Images: string[] = [
-    "/Grid-1.png",
-    "/Grid-2.png",
-    "/Grid-1.png",
-    "/Grid-2.png",
-    "/Grid-1.png",
-    "/Grid-2.png",
-    "/Grid-1.png",
-    "/Grid-2.png",
-    "/Grid-1.png",
-  ];
   
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   
-  const Features: any[] = [
-    {
-      id: 1,
-      key: "Spacious living area with ample natural light",
-    },
-    {
-      id: 2,
-      key: "Modern kitchen with stainless steel appliances",
-    },
-    {
-      id: 3,
-      key: "3 generously sized bedrooms",
-    },
-    {
-      id: 4,
-      key: "2 well-appointed bathrooms.",
-    },
-    {
-      id: 5,
-      key: "Spacious living area with ample natural light",
-    },
-    {
-      id: 6,
-      key: "Spacious living area with ample natural light",
-    },
-  ];
-  
-  const Documents: any[] = [
-    {
-      id: 1,
-      doc: "/",
-    },
-    {
-      id: 2,
-      doc: "/",
-    },
-    {
-      id: 3,
-      doc: "/",
-    },
-    {
-      id: 4,
-      doc: "/",
-    },
-    {
-      id: 5,
-      doc: "/",
-    },
-  ];
-  
-  const properties: any[] = [
-    {
-      id: 1,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      id: 2,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-    {
-      id: 3,
-      title: "3 bedroom flat",
-      pricing: "2,000,000",
-      location: "12, Osinowo estate Gbagada, Lagos, Nigeria",
-      email: "Dominic@gmail.com",
-      user: "Miss Dominic Tromp",
-      userImage: "/userImage.png",
-      image: "/prop-img.png",
-    },
-  ];
-
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
   };
 
-  const { globalContext } = useAppContext();
+  const [loadingBtn, setLoadingBtn] = useState<boolean>(false);
+
+  const { globalContext, setGlobalContext } = useAppContext();
+
+  const toast = useToast()
 
   const { user } = globalContext;
 
   const [detailsData, setDetailsData] = useState<PropertyCardProps | null>(null);
 
-  const { getPropertyDetails } = useProperty();
+  const { getPropertyDetails, addToFavorites, deleteFromFavorites } = useProperty();
 
   const { query, isReady } = useRouter();
+
+  const addToFave = async(id:string)=>{
+    try{
+        const {data} = await addToFavorites(id)  as AxiosResponse ; 
+        if(data){
+            toast.toast({
+                title:'Request successful',
+                status:'success',
+                description:'Property added to favoriites'
+            });
+            setGlobalContext && setGlobalContext(prev=>({
+                ...prev,
+                favourites: [...prev.favourites, data as Favourite] 
+            }))
+            
+        };
+    }
+    catch(err){
+        let error = err as AxiosError;
+        if(error?.response){
+            toast.toast({
+                status:'error',
+                title:'Request successful',
+                description:'Failed to add property added to favoriites'
+            })
+        }   
+    }
+  }
+
+  const deleteFromFave = async(id:string)=>{
+      try{
+          const {data} = await deleteFromFavorites(id)  as AxiosResponse ; 
+          if(data){
+              toast.toast({
+                  title:'Request successful',
+                  status:'success',
+                  description:'Property removed from favoriites'
+              });
+              setGlobalContext && setGlobalContext(prev=>({
+                  ...prev,
+                  favourites: prev.favourites.filter(prop=> prop?.favoriteId !==id) 
+              }))
+              
+          };
+      }
+      catch(err){
+          let error = err as AxiosError;
+          if(error?.response){
+              toast.toast({
+                  title:'Request successful',
+                  description:'Failed to remove property from favoriites'
+              })
+          }   
+      }
+  }
 
   useEffect(() => {
     if (isReady) {
@@ -150,7 +117,6 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
     }
   }, [isReady]);
 
-  // console.log('property details', query?.id );
 
   const isAdmin = user?.role === "Admin";
 
@@ -453,17 +419,39 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               Contact
             </Btn>
             
-            <Btn
-              border="1px solid #FB3748"
-              borderRadius={"10px"}
-              padding={"10px"}
-              color="#FB3748"
-              className="robotoF"
-              bgColor="transparent"
-              w="100%"
-            >
-              Add to favourite
-            </Btn>
+            
+              {
+                detailsData?.isFavorite? 
+                
+                <Btn
+                  border="1px solid #FB3748"
+                  borderRadius={"10px"}
+                  padding={"10px"}
+                  color="#FB3748"
+                  className="robotoF"
+                  bgColor="transparent"
+                  w="100%"
+                  onClick={()=>addToFave(detailsData?._id as string)}
+                  isLoading={loadingBtn}
+                >
+                  Add to favorites 
+                </Btn>
+                :
+                <Btn
+                 border="1px solid #FB3748"
+                 borderRadius={"10px"}
+                 padding={"10px"}
+                 color="#FB3748"
+                 className="robotoF"
+                 bgColor="transparent"
+                 w="100%"
+                 isLoading={loadingBtn}
+                 onClick={()=>deleteFromFave(detailsData?.favoriteId as string)}
+                >
+                  Remove from favorites 
+                </Btn>
+              }
+          
       
           </Flex>
  

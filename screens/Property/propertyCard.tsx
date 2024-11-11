@@ -32,6 +32,8 @@ export type PropertyCardProps = {
   onClick?: () => void;
   verificationState?: string;
   creatorID?:string;
+  isFavorite?: boolean;
+  favoriteId?:string
 };
 
 
