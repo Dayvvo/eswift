@@ -208,6 +208,7 @@ const Wrapper = ({
                     className="robotoF"
                     cursor={"pointer"}
                     display={"flex"}
+                    alignItems={'center'}
                     justifyContent={"start"}
                     fontWeight={500}
                     w="196px"

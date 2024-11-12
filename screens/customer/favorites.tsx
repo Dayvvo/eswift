@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import Wrapper from "../../components/Wrapper"
 import { PropertiesCard } from "@/screens/properties/propertiesCard";
-import { Grid } from "@chakra-ui/react";
+import { Box, Grid , Text } from "@chakra-ui/react";
 import useProperty, { Favourite } from "@/hooks/useProperty";
 import { R } from "@/utils/types";
 import { useAppContext } from "@/context";
@@ -44,15 +44,22 @@ const FavouriteScreen = ()=>{
     },[])
 
     return(
-      <Wrapper>
-            <Grid templateColumns={{lg:'repeat(3,1fr)'}} columnGap={{md:'1.2em',lg:'1.5em'}}>
-                {
-                    favourites.map((fave,index)=>
-                        <PropertiesCard key={index} {...fave} />                
-                    )
-                }
-            </Grid>
-        </Wrapper>  
+      <Box>
+            {
+                favourites?.length === 0  ?  
+                <Text fontSize={'16px'}>
+                    No favourites, explore new properties...
+                </Text>
+                : 
+                <Grid templateColumns={{lg:'repeat(3,1fr)'}} columnGap={{md:'1.2em',lg:'1.5em'}}>
+                    {
+                        favourites.map((fave,index)=>
+                            <PropertiesCard key={index} {...fave} />                
+                        )
+                    }
+                </Grid>
+            }
+        </Box>  
     )
 }
 

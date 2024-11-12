@@ -72,6 +72,7 @@ export const PropertyScreen = () => {
   const [loading, setLoading] = useState(false);
   const [showScreen, setShowScreen] = useState(1);
   const [users, setUsers] = useState<User[]>([]);
+  const [features, setFeatures] = useState<string[]>([]);
 
   const [documents, setDocuments] = useState<Documents>({
     FamilyReceipt: null,
@@ -83,10 +84,6 @@ export const PropertyScreen = () => {
     PowerOfAttorney: null,
     GovConsent: null,
   });
-
-  const [features,setFeatures] = useState<string[]>([])
-
-
 
   const handleDocumentChange = (name: string, value: File | null) => {
     setDocuments((prev) => ({
@@ -176,6 +173,7 @@ export const PropertyScreen = () => {
     deleteImage,
     reset: imageReset,
   } = useImage();
+  
 
   const { toast } = useToast();
 
@@ -185,13 +183,17 @@ export const PropertyScreen = () => {
 
   const { uploadSingle, uploadMultiple } = useUpload();
 
+  const onChangeFeatures =(features:string[])=> {
+      setFeatures(features)
+  }
+
   const propertyData = {
     title,
     address,
     price,
     category,
     description,
-    features:[],
+    features:features,
     images,
     documents,
   };
@@ -278,7 +280,7 @@ export const PropertyScreen = () => {
           mode: "one_off",
           amount: price,
         },
-        features,
+        features:features,
         ...uploadedFiles,
       };
 
@@ -377,11 +379,10 @@ export const PropertyScreen = () => {
             <AddPropertyScreenOne
               onChangeTitle={onChangeTitle}
               onChangeCategory={onChangeCategory}
+
               // typeOfProperty={typeOfProperty}
               // validType={validType}
               // onBlurType={onBlurType}
-              features={features}
-              setFeatures={setFeatures}
               onChangeDescription={onChangeDescription}
               description={description}
               title={title}
@@ -396,6 +397,7 @@ export const PropertyScreen = () => {
               onBlurDescription={onBlurDescription}
               onBlurTitle={onBlurTitle}
               onBlurCategory={onBlurCategory}
+              Features={onChangeFeatures}
               onClick={() => setShowScreen(2)}
             />
           ) : showScreen === 2 ? (

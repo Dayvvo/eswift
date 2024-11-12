@@ -66,14 +66,14 @@ const Hero = ({click}:{click:()=> void}) => {
         </Flex>
 
         <Box position={'absolute'} bottom={40} display={'flex'} w={'100%'} justifyContent={'center'} fontSize={'30px'}
-         zIndex={50} opacity={0.4}
+          opacity={0.4}
         >
-          <Box onClick={click}>
-            <Image src="/HeroPulsing.gif" alt="pulsing" w={78} h={78} className="upside"/>
+          <Box zIndex={50}>
+            <Image onClick={click} src="/HeroPulsing.gif" alt="pulsing" w={78} h={78} className="upside"/>
           </Box>
         </Box>
         <Image src="/Underlay.png" alt="" 
-          position={'absolute'} zIndex={50} bottom={0}
+          position={'absolute'} zIndex={40} bottom={0}
           w={'100%'} h={'20%'}
         />
       </Box>

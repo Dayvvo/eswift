@@ -1,5 +1,5 @@
 import Btn from "../../components/Btn";
-import React, { KeyboardEvent, KeyboardEventHandler, useState } from "react";
+import React, { KeyboardEvent, KeyboardEventHandler, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -40,8 +40,7 @@ interface AddPropertyScreenOneProps {
   // onBlurType: any;
   onBlurCategory: any;
   onBlurDescription: any;
-  setFeatures: React.Dispatch<React.SetStateAction<string[]>>,
-  features: string[]
+  Features:(features:string[])=> void;
 }
 export const AddPropertyScreenOne = ({
   onClick,
@@ -62,12 +61,12 @@ export const AddPropertyScreenOne = ({
   onBlurCategory,
   invalidType,
   onChangeDescription,
-  features,
-  setFeatures,
+  Features
+  
 }: AddPropertyScreenOneProps) => {
   const { toast } = useToast();
   const [inputValue, setInputValue] = useState<string>('');
-
+  const [features ,setFeatures] = useState<string[]>([]);
   const subs: any[] = [
     {
       id: 1,
@@ -145,6 +144,17 @@ export const AddPropertyScreenOne = ({
       handleAddTag();
     }
   };
+
+  
+  const handleTagInput =(e:any)=> {
+    setInputValue(e.target.value)
+  }
+
+  useEffect(()=> {
+    Features(features)
+  },[features, Features])
+
+  
 
   return (
     <>
@@ -346,7 +356,7 @@ export const AddPropertyScreenOne = ({
             >
                 Features
             </FormLabel>
-            <Flex w={'100%'} px={'16px'} py={'2px'}  h={'fit-content'}
+            <Flex w={'100%'}  h={'fit-content'}
               alignItems={'center'} justifyContent={'space-between'}
               border={
                 invalidType
@@ -373,37 +383,37 @@ export const AddPropertyScreenOne = ({
                       height={'100%'}
                       _placeholder={{ textColor: "var--(soft400)" }}
                       border={'1px solid transparent'}
-                       borderRadius={'4px'}
+                      borderRadius={'4px'}
                       value={inputValue}
-                      onChange={(e)=> setInputValue(e.target.value)}
+                      onChange={handleTagInput}
                       onKeyDown={handleKeyPress}
                     />
                 </InputGroup>
-                <Flex flexWrap={'wrap'} gap={'8px'}>
-                  { 
-                    features.map((feature,index)=>(
-                      <Flex gap="8px" key={index} alignItems={'center'} fontSize={'14px'}
-                        bg={'var(--soft200)'} px={'8px'} py={'2px'} borderRadius={'10px'}
-                      >
-                        {feature} 
-                        <Flex onClick={()=> handleRemoveTag(index)} fontSize={'14px'}>
-                          <IoCloseOutline />
-                        </Flex>
-                      </Flex>
-                    ))
-                  }
-                </Flex>
               </Flex>
-              <Flex w={'24px'} h={'24px'} fontSize={'36px'} 
+              <Flex w={'24px'} h={'24px'} fontSize={'36px'} px={'4px'}
                 borderRadius={'10'} justifyContent={'center'} alignItems={'center'}
                 onClick={handleAddTag}
               >
                 <BsPlus/>
               </Flex>
             </Flex>
+            <Flex flexWrap={'wrap'} gap={'8px'} mt={'2px'}>
+              { 
+                features.map((feature,index)=>(
+                  <Flex gap="8px" key={index} alignItems={'center'} fontSize={'14px'}
+                    bg={'var(--soft200)'} px={'8px'} py={'2px'} borderRadius={'10px'}
+                  >
+                    {feature} 
+                    <Flex onClick={()=> handleRemoveTag(index)} fontSize={'14px'}>
+                      <IoCloseOutline />
+                    </Flex>
+                  </Flex>
+                ))
+              }
+            </Flex>
             {invalidDescription && (
               <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
-                {"Enter a key value"}
+                {"No Feature listed"}
               </FormHelperText>
             )}
           </FormControl>
