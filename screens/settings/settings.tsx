@@ -7,6 +7,7 @@ import { Box, Flex, Input, Text, Image, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import ResetPasswordModal from "./reset";
+import InformationModal from "@/screens/Property/InfoModal";
 
 interface UserData {
   firstName: string;

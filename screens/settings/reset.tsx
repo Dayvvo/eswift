@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 interface UserData {
   email: string;
@@ -69,8 +69,8 @@ const ResetPasswordModal = ({ isOpen, onClose, email }: ResetPasswordProps) => {
   );
   const { reset, logout } = useAuth();
 
-  const resetPasswordFn = async () => {
-    // event.preventDefault();
+  const resetPasswordFn = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
     try {
       const resp = await reset({ ...input, email: email });
@@ -102,12 +102,12 @@ const ResetPasswordModal = ({ isOpen, onClose, email }: ResetPasswordProps) => {
   };
 
   return (
-    <form onSubmit={resetPasswordFn}>
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent className="robotoF">
-          <ModalHeader className="robotoF">Reset password</ModalHeader>
-          <ModalCloseButton />
+    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent className="robotoF">
+        <ModalHeader className="robotoF">Reset password</ModalHeader>
+        <ModalCloseButton />
+        <form onSubmit={resetPasswordFn}>
           <ModalBody pb={6}>
             <PasswordInput
               label="Old password"
@@ -160,7 +160,6 @@ const ResetPasswordModal = ({ isOpen, onClose, email }: ResetPasswordProps) => {
           </ModalBody>
           <ModalFooter>
             <Btn
-              onClick={resetPasswordFn}
               bg={"transparent"}
               display={"flex"}
               alignItems={"center"}
@@ -170,7 +169,7 @@ const ResetPasswordModal = ({ isOpen, onClose, email }: ResetPasswordProps) => {
               borderRadius={"10px"}
               textColor={"var(--primaryBase)"}
               my={"24px"}
-              // type="submit"
+              type="submit"
               _hover={{
                 bg: "#1A1D66",
                 textColor: "#FFF",
@@ -182,9 +181,9 @@ const ResetPasswordModal = ({ isOpen, onClose, email }: ResetPasswordProps) => {
               submit
             </Btn>
           </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </form>
+        </form>
+      </ModalContent>
+    </Modal>
   );
 };
 
