@@ -10,6 +10,7 @@ import {
   Skeleton,
   Card,
   CardBody,
+  VStack,
 } from "@chakra-ui/react";
 import Btn, { PaginationButton } from "@/components/Btn";
 import { AxiosResponse } from "axios";
@@ -36,6 +37,7 @@ import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { DocumentTypes, R } from "@/utils/types";
 import useUpload from "@/hooks/useUpload";
 import { IoFilter } from "react-icons/io5";
+import Pagination from "@/components/Pagination";
 
 // interface MyData {
 //   _id: any;
@@ -370,6 +372,14 @@ export const PropertyScreen = () => {
     }
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalCount = 8;
+  const lastRowsIndex = currentPage * totalCount;
+  const firstRowsIndex = lastRowsIndex - totalCount;
+  const currentPropertyInView =
+    getProperty && getProperty?.slice(firstRowsIndex, lastRowsIndex);
+  const rowsToShow = 4;
+
   return (
     <>
       <form>
@@ -570,7 +580,7 @@ export const PropertyScreen = () => {
               gap={{ base: "24px", lg: "28px" }}
               paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
             >
-              {getProperty.map((property, index) => {
+              {currentPropertyInView.map((property, index) => {
                 const user = users.find((u) => u._id === property?.creatorID);
 
                 return (
@@ -591,6 +601,20 @@ export const PropertyScreen = () => {
               })}
             </Grid>
           )}
+          {getProperty.length > totalCount && (
+        <VStack align={"start"} gap="15px" mt="10px">
+          <div className="">
+            Showing {firstRowsIndex + 1} to {lastRowsIndex}
+          </div>
+
+          <Pagination
+            rowsPerPage={rowsToShow}
+            totalPostLength={getProperty?.length}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+          />
+        </VStack>
+      )}
           {!loading && getProperty?.length === 0 && (
             <Card>
               <CardBody>
