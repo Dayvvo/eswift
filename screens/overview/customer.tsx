@@ -23,7 +23,7 @@ const OverviewScreen = () => {
     const [page , setPage] = useState<number | null>();
     const [inputValue, setInputValue] = useState<any>("");
     
-    const debouce = useDebounce()
+    const debounce = useDebounce()
 
 
     const card = [
@@ -74,7 +74,7 @@ const OverviewScreen = () => {
     }
 
     useEffect(() => {
-        debouce(()=>getPropertyFunction())
+        debounce(() => getPropertyFunction())
     },[])
 
     return ( 

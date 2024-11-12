@@ -28,6 +28,7 @@ import useAuth from "@/hooks/useAuth";
 import { CiMenuKebab } from "react-icons/ci";
 import { BiLogOutCircle } from "react-icons/bi";
 import { RxDashboard } from "react-icons/rx";
+import { VscSettings } from "react-icons/vsc";
 
 
 const NavBar = () => {
@@ -176,7 +177,14 @@ const NavBar = () => {
                           Dashboard
                         </Link>
                       </Btn>
-
+                      <Btn cursor={'pointer'} fontSize={'18px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
+                        display={'flex'} gap={'4px'} alignItems={'center'} fontWeight={500}
+                      >
+                        <VscSettings />
+                        <Link href={'/settings'}>
+                          Settings
+                        </Link>
+                      </Btn>
                       <Btn cursor={'pointer'} onClick={logout} fontSize={'18px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
                         display={'flex'} gap={'4px'} alignItems={'center'}
                       >
@@ -292,7 +300,15 @@ const NavBar = () => {
               </Box>
 
               {token ? 
-                <Flex w="100%" justifyContent={'center'} mt={8} className="robotoF">
+                <Flex w="100%" flexDir={'column'} alignItems={'center'} mt={8} className="robotoF">
+                  <Flex onClick={onClose} w={'fit-content'} >
+                    <Btn cursor={'pointer'} onClick={logout} fontSize={'14px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
+                      display={'flex'} gap={'4px'} alignItems={'center'} fontWeight={500}
+                    >
+                      <VscSettings />
+                      Settings
+                    </Btn>
+                  </Flex>
                   <Flex onClick={onClose} w={'fit-content'} >
                     <Btn cursor={'pointer'} onClick={logout} fontSize={'14px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
                       display={'flex'} gap={'4px'} alignItems={'center'} fontWeight={500}

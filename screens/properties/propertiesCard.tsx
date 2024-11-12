@@ -111,7 +111,7 @@ export const PropertiesCard =({images, title, price, description, address, _id, 
                 >
                     <Image 
                      width={1000} height={1000}
-                     src={`${images[0]}`} 
+                     src={`${images}`} 
                      alt={'property'}
                     />
                 </Flex>
