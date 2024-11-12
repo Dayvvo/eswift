@@ -1,11 +1,11 @@
-
 import useAuth from "@/hooks/useAuth";
 import HomePage from "@/screens/home/home";
 import { Resdesign } from "@/screens/home/redesign";
 import { useRouter } from "next/router";
-import { useEffect, useState, FormEvent } from "react"
+import { useEffect, useState, FormEvent } from "react";
 import {
   Box,
+  Checkbox,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,11 +13,14 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
 } from "@chakra-ui/react";
-import { SelectInput, TextInput } from "@/components/Inputs";
+import { CheckboxInput, SelectInput, TextInput } from "@/components/Inputs";
 import { useInputSettings } from "@/hooks/useInput";
 import { nigerianStates } from "@/utils/modules";
 import Btn from "@/components/Btn";
+import { HappyIcon } from "@/components/svg";
+import Divider from "@/components/Divider";
 
 type InformationModalProps = {
   isOpen: boolean;
@@ -37,6 +40,8 @@ const validation: ValidationType = {
   property: (input: string) => (input ? input.trim().length > 1 : false),
   location: (input: string) => true,
 };
+
+const PREFERED_PROPERTY_TYPE = ["Apartment", "House", "Condo", "Townhouse"];
 
 const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   const [loading, setLoading] = useState();
@@ -60,13 +65,60 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
     console.log(input);
   };
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+    <Modal
+      isCentered
+      isOpen={isOpen}
+      onClose={onClose}
+      size={"lg"}
+      closeOnOverlayClick={true}
+    >
       <ModalOverlay />
       <ModalContent className="robotoF">
-        <ModalHeader className="robotoF">Property</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader
+          className="robotoF"
+          display={"flex"}
+          flexDir={"column"}
+          alignItems={"center"}
+        >
+          <HappyIcon />
+          <Box>
+            <Text
+              fontWeight={400}
+              fontSize={"24px"}
+              className="robotoF"
+              textAlign={"center"}
+            >
+              Welcome to E-Swift 🏠
+            </Text>
+            <Text
+              fontWeight={400}
+              fontSize={"12px"}
+              color={"#525866"}
+              textAlign={"center"}
+            >
+              Let us help you find your dream property effortlessly using our
+              tailored search options. We’re excited to have you join our
+              community!
+            </Text>
+          </Box>
+        </ModalHeader>
+        {/* <ModalCloseButton /> */}
+        <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+          <Divider w="90%" h={"1px"} color="#E1E4EA" />
+        </Box>
+
         <form onSubmit={submitHandler}>
-          <ModalBody pb={6}>
+          <ModalBody pb={4}>
+            <Box mt={1}>
+              <Text className="inter" fontWeight={700} fontSize={"14px"}>
+                Preferred Property Type
+              </Text>
+              <Box display={"flex"} flexDir={"column"} gap={"10px"}>
+                {PREFERED_PROPERTY_TYPE.map((property, index) => {
+                  return <CheckboxInput key={index} label={property} />;
+                })}
+              </Box>
+            </Box>
             <Box>
               <SelectInput
                 items={nigerianStates}
@@ -133,70 +185,59 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   );
 };
 
-
-
 export default function Home() {
   const [building, setBuilding] = useState<boolean>(false);
   // const [cookie, setCookie] = useState("")
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
 
-  const toggleModal =()=> {
-    setShowModal(prev=>!prev);
-  }
+  const toggleModal = () => {
+    setShowModal((prev) => !prev);
+  };
 
   const navigate = useRouter();
 
-  const isWidow = typeof window !== 'undefined';
+  const isWidow = typeof window !== "undefined";
 
-  const {user} = useAuth()
+  const { user } = useAuth();
 
-  useEffect(()=>{
-    
-    if(user && !user?.onboard){
-      setShowModal(true)
+  useEffect(() => {
+    if (user && !user?.onboard) {
+      setShowModal(true);
     }
+  }, [user]);
 
-  },[user])
-
-  useEffect(()=>{
-    if(isWidow){
-      const getCookie = (name:string) => {
-        if(window?.document?.cookie){
-          const windowCookie = window.document.cookie
+  useEffect(() => {
+    if (isWidow) {
+      const getCookie = (name: string) => {
+        if (window?.document?.cookie) {
+          const windowCookie = window.document.cookie;
           const value = `; ${windowCookie}`;
           const parts = value.split(`; ${name}=`);
-          
+
           if (parts.length === 2) {
-            let uriEncodedValue = parts.pop()?.split(';').shift() as string;
+            let uriEncodedValue = parts.pop()?.split(";").shift() as string;
             return decodeURIComponent(uriEncodedValue);
-          };
+          }
         }
       };
       try {
-        const myCookie = getCookie('auth-cookie') as string;
+        const myCookie = getCookie("auth-cookie") as string;
         myCookie && localStorage.setItem("userData", myCookie);
-        console.log('old cookie',myCookie);
-        const authRoute = sessionStorage.getItem('authRoute');
+        console.log("old cookie", myCookie);
+        const authRoute = sessionStorage.getItem("authRoute");
         authRoute && navigate.push(authRoute);
-      } 
-      catch (error) {
+      } catch (error) {
         console.error("Error parsing JSON:", error);
       }
-    };
-    return ()=> localStorage.removeItem('authRoute');
-  },[isWidow])
-
-
-
-  
+    }
+    return () => localStorage.removeItem("authRoute");
+  }, [isWidow]);
 
   return (
-      <>
-        <OnboardingModal isOpen={showModal} onClose={toggleModal} />
-        
-        {
-          building ?  <Resdesign/>: <HomePage/>
-        }
-      </>
-    )
-};
+    <>
+      <OnboardingModal isOpen={showModal} onClose={toggleModal} />
+
+      {building ? <Resdesign /> : <HomePage />}
+    </>
+  );
+}
