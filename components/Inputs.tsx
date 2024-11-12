@@ -1,10 +1,13 @@
 import {
+  Box,
+  Checkbox,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   Input,
   Select,
+  Text,
 } from "@chakra-ui/react";
 import { ChangeEvent } from "react";
 
@@ -18,6 +21,10 @@ type SelectInputProps = {
   value?: string;
   inputIsinvalid?: boolean;
   errorMessage?: string;
+};
+
+type CheckboxInputProps = {
+  label: string;
 };
 
 type TextInputProps = {
@@ -41,7 +48,7 @@ export const SelectInput = ({
   errorMessage,
 }: SelectInputProps) => {
   return (
-    <FormControl w={"100%"}>
+    <FormControl w={"100%"} display={"flex"} flexDir={"column"} gap={"1px"}>
       <FormLabel
         fontWeight={500}
         fontSize={"14px"}
@@ -125,5 +132,29 @@ export const TextInput = ({
         </FormHelperText>
       )} */}
     </Flex>
+  );
+};
+
+export const CheckboxInput = ({ label }: CheckboxInputProps) => {
+  return (
+    <Box
+      border={"1px solid #E1E4EA"}
+      padding={"10px 10px 10px 12px"}
+      width={"100%"}
+      h={"40px"}
+      display={"flex"}
+      justifyContent={"space-between"}
+      borderRadius={"10px"}
+    >
+      <Text
+        className="inter"
+        fontWeight={500}
+        fontSize={"12px"}
+        color={"#0E121B"}
+      >
+        {label}
+      </Text>
+      <Checkbox />
+    </Box>
   );
 };

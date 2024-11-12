@@ -32,7 +32,7 @@ class AuthController {
   googleAuthController = async (req: Request, res: Response) => {
     try {
       const profile = req?.user as generalRequestBody;
-
+      // console.log("profile", profile);
       this.jwtSignAndRedirect(res, profile);
     } catch (err) {
       console.log("err in google auth callback", err);
@@ -65,6 +65,14 @@ class AuthController {
               phoneNumber: user.phoneNumber,
               address: user.address,
               avartar: user.avatar,
+              propertyInterest: user.propertyInterest,
+              locationInterest: user.locationInterest,
+              passwordUpdated: user.passwordUpdated,
+              state: user.state,
+              isExistingCustomer: user.isExistingCustomer,
+              occupation: user.occupation,
+              agentIdDocument: user.agendIdDocument,
+              idDocument: user.idDocument,
             },
             token: generateToken(user._id),
           },
