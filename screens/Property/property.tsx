@@ -11,7 +11,7 @@ import {
   Card,
   CardBody,
 } from "@chakra-ui/react";
-import Btn, { PaginationButton } from "@/components/Btn";
+import Btn from "@/components/Btn";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "../../components/modal";
