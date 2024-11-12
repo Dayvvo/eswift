@@ -67,6 +67,7 @@ const BlogScreen = () => {
     getBlogFn();
   }, [search]);
 
+<<<<<<< HEAD
   const [currentPage, setCurrentPage] = useState(1);
   const totalCount = 9;
   const lastRowsIndex = currentPage * totalCount;
@@ -74,18 +75,21 @@ const BlogScreen = () => {
   const currentBlogsInView =
     blogPost && blogPost?.slice(firstRowsIndex, lastRowsIndex);
 
+=======
+>>>>>>> 69e687bd50fac9bf2b938e391afe4874e9af8c79
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       getBlogFn();
     }
   };
 
+  console.log(isAdmin);
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
 
     if (userData) {
       const parsedData = JSON.parse(userData);
-      setIsAdmin(parsedData.role);
+      setIsAdmin(parsedData.user.role);
     }
   }, []);
 

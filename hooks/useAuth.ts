@@ -3,8 +3,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { UserRole, AuthProvider } from "@/server/utils/interfaces";
 
-
-
 interface AuthContextType {
   user: IUser | null;
   loading: boolean;
@@ -16,12 +14,12 @@ interface AuthContextType {
 export interface IUser {
   _id?: string;
   email: string;
-  avatar: string;
+  avartar: string;
   provider?: AuthProvider;
   lastName: string;
   firstName: string;
-  address:string;
-  phoneNumber:string;
+  address: string;
+  phoneNumber: string;
   refCode?: string;
   refCount?: number;
   propertyCount?: number;
@@ -29,7 +27,6 @@ export interface IUser {
 }
 
 const useAuth = () => {
-
   const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,32 +34,28 @@ const useAuth = () => {
 
   const isWindow = typeof window !== "undefined";
 
-  const {push} = useRouter()
-
+  const { push } = useRouter();
 
   useEffect(() => {
     if (isWindow) {
       const userFromLocalStorage = localStorage.getItem("userData");
-      if (userFromLocalStorage){ 
-        const {token,user} = JSON.parse(userFromLocalStorage )  ;
+      if (userFromLocalStorage) {
+        const { token, user } = JSON.parse(userFromLocalStorage);
         setToken(token);
         setUser(user);
-      };
+      }
     }
   }, [isWindow]);
-
 
   const login = async (credentials: { email: string; password: string }) => {
     try {
       const response = await axios.post("/api/auth/login", credentials);
       const token = response?.data?.token;
       const userData = response?.data?.data;
-
+      console.log("token", token);
       localStorage.setItem("token", token);
-
       setUser(userData);
-    } 
-    catch (err) {
+    } catch (err) {
       if (err) {
         console.log(err);
       }
@@ -74,7 +67,7 @@ const useAuth = () => {
     localStorage.removeItem("userData");
     setUser(null);
     setToken("");
-    push('/auth')
+    push("/auth");
   };
 
   const reset = async (credentials: {
@@ -91,17 +84,26 @@ const useAuth = () => {
     }
   };
 
-  const authProtectedFn = (fn:(args?:any)=> unknown,route:string)=>{
-    if(token){
+  const authProtectedFn = (fn: (args?: any) => unknown, route: string) => {
+    if (token) {
       fn();
+    } else {
+      window.sessionStorage.setItem("authRoute", route);
+      push("/auth");
     }
-    else{
-      window.sessionStorage.setItem('authRoute',route);
-      push('/auth');
-    }
-  }
+  };
 
-  return { user, loading, error, isWindow, login, logout, token, reset,authProtectedFn };
+  return {
+    user,
+    loading,
+    error,
+    isWindow,
+    login,
+    logout,
+    token,
+    reset,
+    authProtectedFn,
+  };
 };
 
 export default useAuth;

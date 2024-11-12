@@ -3,9 +3,11 @@ import useAuth, { IUser } from "@/hooks/useAuth";
 import { useInputSettings } from "@/hooks/useInput";
 import useToast from "@/hooks/useToast";
 import useUser from "@/hooks/useUser";
-import { Box, Flex, Input, Text, Image } from "@chakra-ui/react";
+import { Box, Flex, Input, Text, Image, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import ResetPasswordModal from "./reset";
+import InformationModal from "@/screens/Property/InfoModal";
 
 interface UserData {
   firstName: string;
@@ -13,7 +15,7 @@ interface UserData {
   email: string;
   phoneNumber: string;
   address: string;
-  avatar: string;
+  avartar: string;
 }
 
 type ValidationType = {
@@ -26,19 +28,20 @@ const validation: ValidationType = {
   email: (input: string) => (input ? /\S+@\S+\.\S+/.test(input) : false),
   phoneNumber: (input: string) => (input ? /^0?\d{10}$/.test(input) : false),
   address: (input: string) => (input ? input.trim().length > 5 : false),
-  avatar: (input: string) => true,
-  role:(input: string) => input ==='GUEST' || input !=='ADMIN'
+  avartar: (input: string) => true,
+  role: (input: string) => input === "GUEST" || input !== "ADMIN",
 };
 
 export const SettingsScreen = () => {
   const [loading, setLoading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const router = useRouter();
 
   const navigateToResetPassword = () => {
     router.push("/reset");
   };
- 
+
   const {
     input: user,
     onChangeHandler,
@@ -53,8 +56,8 @@ export const SettingsScreen = () => {
       email: "",
       phoneNumber: "",
       address: "",
-      avatar: "",
-      role:'CLIENT'
+      avartar: "",
+      role: "CLIENT",
     },
     validation
   );
@@ -100,8 +103,7 @@ export const SettingsScreen = () => {
   const { updateUser, getUserById } = useUser();
   const { toast } = useToast();
 
-
-  const {user:profile} = useAuth()
+  const { user: profile } = useAuth();
 
   const datas = {
     firstName: user.firstName,
@@ -111,21 +113,28 @@ export const SettingsScreen = () => {
     phoneNumber: user.phoneNumber,
   };
 
-
   const updateUserFn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     try {
       const user = await updateUser(datas);
-
-      toast({
-        status: "success",
-        description: "profile updated",
-        title: "Success",
-        position: "top",
-        duration: 1000,
-      });
-      setLoading(false);
+      console.log(user.data.data);
+      if (user.status === 200) {
+        const storedData = localStorage.getItem("userData");
+        if (storedData) {
+          const userData = JSON.parse(storedData);
+          userData.user = user.data.data;
+          localStorage.setItem("userData", JSON.stringify(userData));
+        }
+        toast({
+          status: "success",
+          description: "profile updated",
+          title: "Success",
+          position: "top",
+          duration: 1000,
+        });
+        setLoading(false);
+      }
     } catch (error) {
       toast({
         status: "error",
@@ -141,7 +150,7 @@ export const SettingsScreen = () => {
   const getUserFn = async () => {
     setUser(profile as any);
   };
- 
+
   useEffect(() => {
     if (profile) {
       getUserFn();
@@ -149,113 +158,133 @@ export const SettingsScreen = () => {
   }, [profile]);
 
   return (
-    <form onSubmit={updateUserFn}>
-      <Box w={"100%"}>
-        <Flex flexDir={"column"} w={"100%"} className="inter">
-          <Flex w={"100%"} justify={'flex-end'} alignItems={"center"} py={"20px"}>
-            <Btn p='1.5em 3em' bg='#3170A6' >Update Profile</Btn>
-          </Flex>
-
-          <Flex
-            w={"100%"}
-            alignItems={"center"}
-            pt={"24px"}
-            pb={"20px"}
-            borderBottom={"1px solid var(--soft200)"}
-          >
-            <Flex w={"100%"} gap={"24px"} justifyContent={"space-between"}>
-              <Box>
-                <Text
-                  fontWeight={500}
-                  fontSize={"14px"}
-                  textColor={"var(--strong950)"}
-                  mb={"6px"}
-                >
-                  Profile Photo
-                </Text>
-                <Text
-                  fontWeight={400}
-                  fontSize={"12px"}
-                  textColor={"var(--sub600)"}
-                >
-                  Min 400x400px, PNG or JPEG Formats.
-                </Text>
-              </Box>
-              <Flex
-                alignItems={"center"}
-                w={"40%"}
-                gap={"20px"}
-                h={"fit-content"}
+    <>
+      <ResetPasswordModal
+        isOpen={isOpen}
+        onClose={onClose}
+        email={user.email}
+      />
+      <form onSubmit={updateUserFn}>
+        <Box w={"100%"}>
+          <Flex flexDir={"column"} w={"100%"} className="inter">
+            <Flex
+              w={"100%"}
+              justify={"flex-end"}
+              alignItems={"center"}
+              py={"20px"}
+            >
+              <Btn
+                p="1.5em 3em"
+                bg="#3170A6"
+                type={"submit"}
+                isLoading={loading}
+                // loadingText="submitting"
+                disabled={loading}
               >
-                <Box
-                  w={"fit-content"}
-                  h={"fit-content"}
-                  borderRadius={"999px"}
-                  overflow={"hidden"}
-                >
-                  <Image
-                    width={40}
-                    height={40}
-                    borderRadius={'50%'}
-                    src={user.avatar || "/avatar1.png"}
-                    alt="/"
-                  />
+                Update Profile
+              </Btn>
+            </Flex>
+
+            <Flex
+              w={"100%"}
+              alignItems={"center"}
+              pt={"24px"}
+              pb={"20px"}
+              borderBottom={"1px solid var(--soft200)"}
+            >
+              <Flex w={"100%"} gap={"24px"} justifyContent={"space-between"}>
+                <Box>
+                  <Text
+                    fontWeight={500}
+                    fontSize={"14px"}
+                    textColor={"var(--strong950)"}
+                    mb={"6px"}
+                  >
+                    Profile Photo
+                  </Text>
+                  <Text
+                    fontWeight={400}
+                    fontSize={"12px"}
+                    textColor={"var(--sub600)"}
+                  >
+                    Min 400x400px, PNG or JPEG Formats.
+                  </Text>
                 </Box>
-                <Btn
-                  bg={"transparent"}
-                  display={"flex"}
+                <Flex
                   alignItems={"center"}
-                  justifyContent={"center"}
-                  w={"68px"}
-                  h={"32px"}
-                  borderRadius={"8px"}
-                  textColor={"var(--primaryBase)"}
-                  fontWeight={500}
-                  fontSize={"14px"}
-                  border={"1px solid var(--primaryBase)"}
-                  _hover={{
-                    bg: "#1A1D66",
-                    textColor: "#FFF",
-                  }}
-                  type={"submit"}
-                  isLoading={loading}
-                  // loadingText="submitting"
-                  disabled={loading}
+                  w={"40%"}
+                  gap={"20px"}
+                  h={"fit-content"}
                 >
-                  Update
-                </Btn>
+                  <Box
+                    w={"fit-content"}
+                    h={"fit-content"}
+                    borderRadius={"999px"}
+                    overflow={"hidden"}
+                  >
+                    <Image
+                      width={40}
+                      height={40}
+                      borderRadius={"50%"}
+                      src={user.avartar || "/avatar1.png"}
+                      alt="/"
+                    />
+                  </Box>
+                  <Btn
+                    bg={"transparent"}
+                    display={"flex"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    w={"68px"}
+                    h={"32px"}
+                    borderRadius={"8px"}
+                    textColor={"var(--primaryBase)"}
+                    fontWeight={500}
+                    fontSize={"14px"}
+                    border={"1px solid var(--primaryBase)"}
+                    _hover={{
+                      bg: "#1A1D66",
+                      textColor: "#FFF",
+                    }}
+                  >
+                    Update
+                  </Btn>
+                </Flex>
               </Flex>
             </Flex>
-          </Flex>
-          {settings.map((setting) => {
-            return (
-              <Flex
-                key={setting?.id}
-                w={"100%"}
-                alignItems={"center"}
-                py={"20px"}
-                borderBottom={"1px solid var(--soft200)"}
-              >
-                <Flex w={"100%"} gap={"24px"} justifyContent={"space-between"}>
-                  <Box w={"50%"}>
-                    <Text
-                      fontWeight={500}
-                      fontSize={"14px"}
-                      textColor={"var(--strong950)"}
-                      mb={"6px"}
-                    >
-                      {setting?.type}
-                    </Text>
-                    <Text
-                      fontWeight={400}
-                      fontSize={"12px"}
-                      textColor={"var(--sub600)"}
-                    >
-                      {setting?.description}
-                    </Text>
-                  </Box>
-                  <Flex flexDir="column" gap={"12px"} w={"40%"}>
-                    {/* <Text
+            {settings.map((setting) => {
+              return (
+                <Flex
+                  key={setting?.id}
+                  w={"100%"}
+                  alignItems={"center"}
+                  py={"20px"}
+                  borderBottom={"1px solid var(--soft200)"}
+                >
+                  <Flex
+                    w={"100%"}
+                    gap={"24px"}
+                    justifyContent={"space-between"}
+                  >
+                    <Box w={"50%"}>
+                      <Text
+                        fontWeight={500}
+                        fontSize={"14px"}
+                        textColor={"var(--strong950)"}
+                        mb={"6px"}
+                      >
+                        {setting?.type}
+                      </Text>
+                      <Text
+                        fontWeight={400}
+                        fontSize={"12px"}
+                        textColor={"var(--sub600)"}
+                      >
+                        {setting?.description}
+                      </Text>
+                    </Box>
+                    <Flex flexDir="column" gap={"12px"} w={"40%"}>
+                      {/* <Text
                     fontWeight={500}
                     fontSize={"14px"}
                     textColor={"var(--strong950)"}
@@ -263,30 +292,30 @@ export const SettingsScreen = () => {
                   >
                     {setting?.info}
                   </Text> */}
-                    <Input
-                      type="text"
-                      name={setting?.name}
-                      width={"100%"}
-                      value={setting?.info}
-                      border={
-                        inputIsinvalid(setting.name)
-                          ? "1px solid var(--errorBase)"
-                          : "1px solid #262626"
-                      }
-                      focusBorderColor={
-                        inputIsinvalid(setting.name)
-                          ? "1px solid var(--errorBase)"
-                          : "1px solid #262626"
-                      }
-                      onBlur={() => onBlurHandler(setting.name)}
-                      onChange={onChangeHandler}
-                    />
-                    {inputIsinvalid(setting.name) && (
-                      <Text color="red.500" fontSize="12px">
-                        {setting?.name} is invalid.
-                      </Text>
-                    )}
-                    {/* <Text
+                      <Input
+                        type="text"
+                        name={setting?.name}
+                        width={"100%"}
+                        value={setting?.info}
+                        border={
+                          inputIsinvalid(setting.name)
+                            ? "1px solid var(--errorBase)"
+                            : "1px solid #262626"
+                        }
+                        focusBorderColor={
+                          inputIsinvalid(setting.name)
+                            ? "1px solid var(--errorBase)"
+                            : "1px solid #262626"
+                        }
+                        onBlur={() => onBlurHandler(setting.name)}
+                        onChange={onChangeHandler}
+                      />
+                      {inputIsinvalid(setting.name) && (
+                        <Text color="red.500" fontSize="12px">
+                          {setting?.name} is invalid.
+                        </Text>
+                      )}
+                      {/* <Text
                     display={"flex"}
                     alignItems={"center"}
                     fontWeight={500}
@@ -295,67 +324,65 @@ export const SettingsScreen = () => {
                   >
                     Edit <IoIosArrowForward />
                   </Text> */}
+                    </Flex>
                   </Flex>
                 </Flex>
-              </Flex>
-            );
-          })}
-          {
-            user?.role ==='ADMIN' ?
-            <Flex w={"100%"} alignItems={"center"} py={"20px"}>
-              <Flex
-                w={"100%"}
-                flexDir={{ base: "column", lg: "row" }}
-                justifyContent={"space-between"}
-                gap={"24px"}
-              >
-                <Box>
-                  <Text
+              );
+            })}
+            {user?.role === "ADMIN" ? (
+              <Flex w={"100%"} alignItems={"center"} py={"20px"}>
+                <Flex
+                  w={"100%"}
+                  flexDir={{ base: "column", lg: "row" }}
+                  justifyContent={"space-between"}
+                  gap={"24px"}
+                >
+                  <Box>
+                    <Text
+                      fontWeight={500}
+                      fontSize={"14px"}
+                      textColor={"var(--strong950)"}
+                      mb={"6px"}
+                    >
+                      Change Password
+                    </Text>
+                    <Text
+                      fontWeight={400}
+                      fontSize={"12px"}
+                      textColor={"var(--sub600)"}
+                    >
+                      Update password for enhanced account security.
+                    </Text>
+                  </Box>
+                  <Btn
+                    bg={"transparent"}
+                    display={"flex"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    w={"148px"}
+                    h={"40px"}
+                    borderRadius={"8px"}
+                    textColor={"var(--sub600)"}
                     fontWeight={500}
                     fontSize={"14px"}
-                    textColor={"var(--strong950)"}
-                    mb={"6px"}
+                    border={"1px solid var(--soft200)"}
+                    // border={"1px solid var(--primaryBase)"}
+                    _hover={{
+                      bg: "#1A1D66",
+                      textColor: "#FFF",
+                    }}
+                    onClick={onOpen}
                   >
-                    Change Password
-                  </Text>
-                  <Text
-                    fontWeight={400}
-                    fontSize={"12px"}
-                    textColor={"var(--sub600)"}
-                  >
-                    Update password for enhanced account security.
-                  </Text>
-                </Box>
-                <Btn
-                  bg={"transparent"}
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                  w={"148px"}
-                  h={"40px"}
-                  borderRadius={"8px"}
-                  textColor={"var(--sub600)"}
-                  fontWeight={500}
-                  fontSize={"14px"}
-                  border={"1px solid var(--soft200)"}
-                  // border={"1px solid var(--primaryBase)"}
-                  _hover={{
-                    bg: "#1A1D66",
-                    textColor: "#FFF",
-                  }}
-                  onClick={navigateToResetPassword}
-                >
-                  Change Password
-                </Btn>
+                    Reset Password
+                  </Btn>
+                </Flex>
               </Flex>
-            </Flex>
-            :<></>
-
-          }
-
-
-        </Flex>
-      </Box>
-    </form>
+            ) : (
+              <></>
+            )}
+          </Flex>
+        </Box>
+      </form>{" "}
+    </>
   );
 };
