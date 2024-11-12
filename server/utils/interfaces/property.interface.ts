@@ -39,10 +39,13 @@ export interface IProperty {
   duration: string
   features: Array<string>
   price: IPrice
+  state:string
+  lga: string
   owner: PropertyOwner
   images: Array<string>
   documents: Array<IDocument>
   creatorID: ObjectId
   isActive: boolean
-  verification: PropertyVerification
+  verification: PropertyVerification,
+
 }

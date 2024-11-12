@@ -65,9 +65,8 @@ export const AddPropertyScreenOne = ({
   
 }: AddPropertyScreenOneProps) => {
   const { toast } = useToast();
-  const [features, setFeatures] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
-
+  const [features ,setFeatures] = useState<string[]>([]);
   const subs: any[] = [
     {
       id: 1,

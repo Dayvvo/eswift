@@ -31,6 +31,12 @@ const PropertySchema = new mongoose.Schema<IProperty>(
     address: {
       type: String,
     },
+    state:{
+      type: String,
+    },
+    lga:{
+      type: String,
+    },
     features: {
       type: [String],
     },

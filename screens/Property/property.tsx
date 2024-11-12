@@ -128,6 +128,8 @@ export const PropertyScreen = () => {
     reset: addressReset,
   } = useInputText((address) => address.length > 3);
 
+
+
   const {
     input: typeOfProperty,
     onChangeInput: onChangeType,
@@ -381,7 +383,6 @@ export const PropertyScreen = () => {
               // typeOfProperty={typeOfProperty}
               // validType={validType}
               // onBlurType={onBlurType}
-
               onChangeDescription={onChangeDescription}
               description={description}
               title={title}
