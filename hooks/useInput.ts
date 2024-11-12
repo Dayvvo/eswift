@@ -138,7 +138,11 @@ export const useInputSettings = <T extends {}>(
 
   const validateInput = (name: keyof T) => validation[name](input[name]);
 
-  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (
+    event: ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = event.target;
     setInput((prev) => ({
       ...prev,
