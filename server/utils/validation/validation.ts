@@ -72,7 +72,6 @@ export const validateBlogPostData = (data: {
     body_image: Joi.string().uri().required(),
     // tags: Joi.array().items(Joi.string().trim()),
   });
-
   return blogPostSchema.validate(data);
 };
 
@@ -157,6 +156,12 @@ export const resetPasswordValidation = Joi.object({
     .required()
     .valid(Joi.ref("new_password"))
     .messages({ "any.one": "Confirm password must match new password" }),
+});
+
+export const customerOnboard = Joi.object({
+  state: Joi.string().required(),
+  propertyInterest: Joi.array().min(1),
+  locationInterest: Joi.array().min(1),
 });
 
 export const getAllInspectionsValidation = Joi.object({

@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { generalRequestBody } from "../utils/interfaces/types";
 import { Request, Response } from "express";

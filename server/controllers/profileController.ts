@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import Profile from "../models/Profile";
+import Profile from "../models/User";
 import { validateProfile } from "../utils/validation";
-import User from "../models/User";
 import { IUserInRequest } from "../utils/interfaces";
 
 class ProfileController {
@@ -48,7 +47,7 @@ class ProfileController {
       }
 
       const userProfile = await Profile.findOneAndUpdate(
-        { userId },
+        { _id: userId },
         { ...value },
         { new: true }
       );
@@ -74,7 +73,7 @@ class ProfileController {
       if (!userId) {
         return res.status(401).json({ message: "Unauthorized" });
       }
-      const userProfileData = await Profile.findOne({ userId });
+      const userProfileData = await Profile.findById(userId);
       return res.status(200).json({
         statusCode: 200,
         data: userProfileData,

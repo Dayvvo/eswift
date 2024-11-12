@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, createContext } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { UserRole, AuthProvider } from "@/server/utils/interfaces";
+import { R } from "@/utils/types";
 
 interface AuthContextType {
   user: IUser | null;
@@ -24,6 +25,7 @@ export interface IUser {
   refCount?: number;
   propertyCount?: number;
   role: UserRole;
+  onboard?: R
 }
 
 const useAuth = () => {
