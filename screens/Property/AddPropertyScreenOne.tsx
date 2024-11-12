@@ -40,6 +40,8 @@ interface AddPropertyScreenOneProps {
   // onBlurType: any;
   onBlurCategory: any;
   onBlurDescription: any;
+  setFeatures: React.Dispatch<React.SetStateAction<string[]>>,
+  features: string[]
 }
 export const AddPropertyScreenOne = ({
   onClick,
@@ -60,9 +62,10 @@ export const AddPropertyScreenOne = ({
   onBlurCategory,
   invalidType,
   onChangeDescription,
+  features,
+  setFeatures,
 }: AddPropertyScreenOneProps) => {
   const { toast } = useToast();
-  const [features, setFeatures] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
   const subs: any[] = [

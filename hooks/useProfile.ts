@@ -7,7 +7,7 @@ const useProfile = () => {
 
   const getProfile = useCallback(() => {
     try {
-      const req = client.query('/user-detail/profile');
+      const req = client.get('/user-detail/profile');
       return req;
     }
     catch (err) {
