@@ -14,8 +14,12 @@ import { Video } from "./Video";
 const HomePage =()=> {
 
     function scrollToSection() {
-        const section = document.querySelector('#main') as HTMLElement;
-        section.scrollIntoView({ behavior: 'smooth' });
+        const section = document.getElementById('#main') as HTMLElement | null;
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          console.error('Element #main not found');
+        }      
     }
 
     return (

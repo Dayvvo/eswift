@@ -7,7 +7,7 @@ import { HiAcademicCap, HiMiniUserGroup } from "react-icons/hi2";
 export const SectionTwo = () => {
   return (
     <>
-      <Flex
+      <Flex id="main"
         bg={"transparent"}
         flexDir="column"
         py={"80px"}

@@ -7,6 +7,15 @@ import {
   DrawerOverlay,
   Text,
   useDisclosure,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+  Flex,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -16,6 +25,10 @@ import Btn from "./Btn";
 import { Logo } from "./logo";
 import { Background } from "@/screens/home/Background";
 import useAuth from "@/hooks/useAuth";
+import { CiMenuKebab } from "react-icons/ci";
+import { BiLogOutCircle } from "react-icons/bi";
+import { RxDashboard } from "react-icons/rx";
+import { VscSettings } from "react-icons/vsc";
 
 
 const NavBar = () => {
@@ -128,6 +141,7 @@ const NavBar = () => {
                     transition='font-size'
                     transitionDuration='500'
                     transitionTimingFunction={'ease-in-out'}
+                    textOverflow={'no-wrap'}
                     // border={"1px solid var(--TextCol)"}
                   >
                     {Links?.Navigator}
@@ -140,23 +154,49 @@ const NavBar = () => {
           <Box
             display={'flex'} gap={{lg:'14px',xl:'24px'}}
             w={'fit-content'} h={'fit-content'}
+            ml={{xl:'24em'}} className="urbanist" 
           >
             {
               token?
               <>
-                <Btn cursor={'pointer'}  fontSize={'18px'} color='#3170A6' backgroundColor={'transparent'} >
-                  <Link href={'/dashboard'}>
-                    Dashboard
-                  </Link>
-                </Btn>
-
-                <Btn cursor={'pointer'} onClick={logout} fontSize={'18px'} color='#000' backgroundColor={'transparent'} >
-                  Logout
-                </Btn>
-
-                
+                <Menu>
+                  <MenuButton>
+                    <Btn px="8px" py="2px" color="#3170A6" bg={'transparent'} fontSize={'28px'}>
+                      <CiMenuKebab />
+                    </Btn>
+                  </MenuButton>
+                  <MenuList border={'1px solid #E1E4EA'} borderRadius={'8px'} p={'16px'}
+                    width={'220px'} shadow={'md'}
+                  >
+                    <Flex w={'fit-content'} flexDir={'column'} alignItems={'start'} gap={'12px'}>
+                      <Btn cursor={'pointer'}  fontSize={'18px'} color="#000" _hover={{color:'#3170A6'}}backgroundColor={'transparent'} 
+                        display={'flex'} gap={'4px'} alignItems={'center'}
+                      >
+                        <RxDashboard />
+                        <Link href={'/dashboard'}>
+                          Dashboard
+                        </Link>
+                      </Btn>
+                      <Btn cursor={'pointer'} fontSize={'18px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
+                        display={'flex'} gap={'4px'} alignItems={'center'} fontWeight={500}
+                      >
+                        <VscSettings />
+                        <Link href={'/settings'}>
+                          Settings
+                        </Link>
+                      </Btn>
+                      <Btn cursor={'pointer'} onClick={logout} fontSize={'18px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
+                        display={'flex'} gap={'4px'} alignItems={'center'}
+                      >
+                        <BiLogOutCircle />
+                        Logout
+                      </Btn>
+                    </Flex>
+                  </MenuList>
+                </Menu>    
               </>
-              :<>
+              :
+              <>
                 <Link href={'/auth'}>
                   <Btn
                     display={'flex'} alignItems={'center'} justifyContent={'center'}
@@ -231,6 +271,19 @@ const NavBar = () => {
                   />
                 </Box>
 
+                { token ? 
+                      <Btn onClick={onClose} cursor={'pointer'}  fontSize={'14px'} color="#000" _hover={{color:'#3170A6'}}backgroundColor={'transparent'} 
+                        display={'flex'} gap={'4px'} alignItems={'center'} fontWeight={500} className="robotoF"
+                      >
+                        <RxDashboard />
+                        <Link href={'/dashboard'}>
+                          Dashboard
+                        </Link>
+                      </Btn>
+                      :
+                      <></>
+                }
+
                 {NavLink.map((Links)=>(
                     <Box key={Links?.id}
                       onClick={onClose}
@@ -246,31 +299,53 @@ const NavBar = () => {
                 }
               </Box>
 
-              <Box mt={'20px'}
-                display={'flex'} flexDir={'column'} gap={2}
-                w={'fit-content'} h={'fit-content'} width={'100%'} alignItems={'center'}
-              >
-                <Link href={'/login'}>
-                  <Btn
-                    display={'flex'} alignItems={'center'} justifyContent={'center'}
-                    bg={'#3170A6'} borderRadius={'99px'} w={'200px'} h={'42px'}
-                    textColor={'#FFF'} fontWeight={500} className="roboto"
-                    fontSize={'14px'}
-                  >
-                    Sign In
-                  </Btn>
-                </Link>
-                <Link href={'/signup'}>
-                  <Btn
-                    display={'flex'} alignItems={'center'} justifyContent={'center'}
-                    bg={'#3170A6'} borderRadius={'99px'} w={'200px'} h={'42px'}
-                    textColor={'#FFF'} fontWeight={500} className="roboto"
-                    fontSize={'14px'}
-                  >
-                    Join Us
-                  </Btn>
-                </Link>
-              </Box>
+              {token ? 
+                <Flex w="100%" flexDir={'column'} alignItems={'center'} mt={8} className="robotoF">
+                  <Flex onClick={onClose} w={'fit-content'} >
+                    <Btn cursor={'pointer'} onClick={logout} fontSize={'14px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
+                      display={'flex'} gap={'4px'} alignItems={'center'} fontWeight={500}
+                    >
+                      <VscSettings />
+                      Settings
+                    </Btn>
+                  </Flex>
+                  <Flex onClick={onClose} w={'fit-content'} >
+                    <Btn cursor={'pointer'} onClick={logout} fontSize={'14px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
+                      display={'flex'} gap={'4px'} alignItems={'center'} fontWeight={500}
+                    >
+                      <BiLogOutCircle />
+                      Logout
+                    </Btn>
+                  </Flex>
+                </Flex>
+                :
+                <Box mt={'20px'}
+                  display={'flex'} flexDir={'column'} gap={2}
+                  w={'fit-content'} h={'fit-content'} width={'100%'} alignItems={'center'}
+                >
+                  <Link href={'/auth'}>
+                    <Btn
+                      display={'flex'} alignItems={'center'} justifyContent={'center'}
+                      bg={'#3170A6'} borderRadius={'99px'} w={'200px'} h={'42px'}
+                      textColor={'#FFF'} fontWeight={500} className="roboto"
+                      fontSize={'14px'}
+                    >
+                      Sign In
+                    </Btn>
+                  </Link>
+                  <Link href={'/auth'}>
+                    <Btn
+                      display={'flex'} alignItems={'center'} justifyContent={'center'}
+                      bg={'#3170A6'} borderRadius={'99px'} w={'200px'} h={'42px'}
+                      textColor={'#FFF'} fontWeight={500} className="roboto"
+                      fontSize={'14px'}
+                    >
+                      Join Us
+                    </Btn>
+                  </Link>
+                </Box>
+              }
+              
             </DrawerBody>
           </DrawerContent>
         </Drawer>
