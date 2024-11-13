@@ -28,7 +28,7 @@ export interface IUser {
   refCount?: number;
   propertyCount?: number;
   role: UserRole;
-  onboard?: R
+  onboard?: R;
 }
 
 const useAuth = () => {
