@@ -309,8 +309,6 @@ export const PropertyScreen = () => {
 
       resetFields();
 
-      setLoading(false);
-
       toast({
         status: "success",
         description: "Property created",
@@ -318,6 +316,7 @@ export const PropertyScreen = () => {
         position: "top",
         duration: 5000,
       });
+      setLoading(false);
     } catch (err) {
       toast({
         status: "error",

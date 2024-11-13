@@ -159,9 +159,10 @@ export const PropertyDetails = ({
   };
 
   const deletePropertyFn = async () => {
+    setIsVerifying(true);
     try {
       const req = await deleteProperty(id); // If no error occurs, the following code runs
-      // console.log("response", req);
+
       router.push("/property");
       toast({
         status: "success",
@@ -170,6 +171,7 @@ export const PropertyDetails = ({
         position: "top",
         duration: 1000,
       });
+      setIsVerifying(false);
     } catch (err) {
       toast({
         status: "error",
@@ -178,7 +180,8 @@ export const PropertyDetails = ({
         position: "top",
         duration: 1000,
       });
-      // console.log("err", err);
+      setIsVerifying(false);
+      console.log("err", err);
     }
   };
 
