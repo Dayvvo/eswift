@@ -12,15 +12,35 @@ interface AuthContextType {
   logout: () => void;
 }
 
-export interface IUser {
+export interface IUsers {
   _id?: string;
   email: string;
-  avatar?: string;
+  avatar: string;
+  state: string;
   provider?: AuthProvider;
   lastName: string;
   firstName: string;
   address: string;
-  state?:string;
+  // state?: string;
+  propertyInterest?: string[];
+  locationInterest?: string[];
+  phoneNumber: string;
+  refCode?: string;
+  refCount?: number;
+  propertyCount?: number;
+  role: UserRole;
+  onboard?: R;
+}
+export interface IUser {
+  _id?: string;
+  email: string;
+  avatar?: string;
+  state?: string;
+  provider?: AuthProvider;
+  lastName: string;
+  firstName: string;
+  address: string;
+  // state?: string;
   propertyInterest?: string[];
   locationInterest?: string[];
   phoneNumber: string;
