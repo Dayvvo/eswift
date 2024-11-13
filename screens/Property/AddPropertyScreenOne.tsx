@@ -40,7 +40,8 @@ interface AddPropertyScreenOneProps {
   // onBlurType: any;
   onBlurCategory: any;
   onBlurDescription: any;
-  Features:(features:string[])=> void;
+  setFeatures:React.Dispatch<React.SetStateAction<string[]>>;
+  features: string[]
 }
 export const AddPropertyScreenOne = ({
   onClick,
@@ -61,12 +62,11 @@ export const AddPropertyScreenOne = ({
   onBlurCategory,
   invalidType,
   onChangeDescription,
-  Features
-  
+  setFeatures,
+  features,
 }: AddPropertyScreenOneProps) => {
   const { toast } = useToast();
   const [inputValue, setInputValue] = useState<string>('');
-  const [features ,setFeatures] = useState<string[]>([]);
   const subs: any[] = [
     {
       id: 1,
@@ -128,15 +128,17 @@ export const AddPropertyScreenOne = ({
   };
 
   const handleAddTag = () => {
-    const newFeatures:string = inputValue.trim();
-    if(newFeatures && !features.includes(newFeatures)){
-      setFeatures([...features, newFeatures])
+    const newFeature:string = inputValue.trim();
+    console.log('features at change',features);
+    if(newFeature && !features.includes(newFeature)){
+      setFeatures(prev=>[...prev, newFeature])
       setInputValue('')
     }
   };
+  console.log('features',features);
 
   const handleRemoveTag =(index: number)=> {
-    setFeatures(features.filter((features, i) => i !== index));
+    setFeatures(features.filter((_features, i) => i !== index));
   }
 
   const handleKeyPress = (e:KeyboardEvent<HTMLInputElement>) => {
@@ -150,11 +152,6 @@ export const AddPropertyScreenOne = ({
     setInputValue(e.target.value)
   }
 
-  useEffect(()=> {
-    Features(features)
-  },[features, Features])
-
-  
 
   return (
     <>
