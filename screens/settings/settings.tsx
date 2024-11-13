@@ -1,5 +1,5 @@
 import Btn from "@/components/Btn";
-import useAuth, { IUser } from "@/hooks/useAuth";
+import useAuth, { IUsers } from "@/hooks/useAuth";
 import { useInputSettings } from "@/hooks/useInput";
 import useToast from "@/hooks/useToast";
 import useUser from "@/hooks/useUser";
@@ -11,17 +11,8 @@ import InformationModal from "@/screens/Property/InfoModal";
 import { SelectInput } from "@/components/Inputs";
 import { nigerianStates } from "@/utils/modules";
 
-interface UserData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  avatar: string;
-}
-
 type ValidationType = {
-  [key in keyof IUser]: (input: string) => boolean;
+  [key in keyof IUsers]: (input: string) => boolean;
 };
 
 const validation: ValidationType = {
@@ -109,7 +100,6 @@ export const SettingsScreen = () => {
       info: user.address,
       name: "address",
     },
-
   ];
 
   const { updateUser, getUserById } = useUser();
