@@ -269,7 +269,9 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
             </Text>
           </Box>
 
-          <Box flex={"1"}>
+          {
+            detailsData?.lga &&
+            <Box flex={"1"}>
             <Text
               as={"h2"}
               fontWeight={"600"}
@@ -277,7 +279,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               className="robotoF"
               color={"#000"}
             >
-              Description
+              State
             </Text>
             <Text
               mt={"6px"}
@@ -286,33 +288,58 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               fontWeight={"500"}
               fontSize={"16px"}
             >
-              {detailsData?.description}
+              {detailsData?.state}
             </Text>
-          </Box>
+            </Box>
+          }
+          {
+            detailsData?.state &&
+            <Box flex={"1"}>
+              <Text
+                as={"h2"}
+                fontWeight={"600"}
+                fontSize={"20px"}
+                className="robotoF"
+                color={"#000"}
+              >
+                State
+              </Text>
+              <Text
+                mt={"6px"}
+                color="#999999"
+                className="robotoF"
+                fontWeight={"500"}
+                fontSize={"16px"}
+              >
+                {detailsData?.state}
+              </Text>
+            </Box>    
+          }
 
           <Box flex={"1"}>
+          <Text
+            as={"h2"}
+            fontWeight={"600"}
+            fontSize={"20px"}
+            className="robotoF"
+            color={"#000"}
+          >
+            Address
+          </Text>
+          <Flex>
+            <MdLocationOn />
             <Text
-              as={"h2"}
-              fontWeight={"600"}
-              fontSize={"20px"}
-              className="robotoF"
-              color={"#000"}
+              fontSize="14px"
+              maxW={"90%"}
+              overflow={"hidden"}
+              textOverflow={"ellipsis"}
+              className="urbanist"
+              whiteSpace={"nowrap"}
             >
-              Location
+              {detailsData?.address}
             </Text>
-            <Flex>
-              <MdLocationOn />
-              <Text
-                fontSize="14px"
-                maxW={"90%"}
-                overflow={"hidden"}
-                textOverflow={"ellipsis"}
-                className="urbanist"
-                whiteSpace={"nowrap"}
-              >
-                {detailsData?.address}
-              </Text>
-            </Flex>
+          </Flex>
+
           </Box>
 
           <Box flex={'1'}>

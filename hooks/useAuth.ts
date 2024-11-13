@@ -15,11 +15,14 @@ interface AuthContextType {
 export interface IUser {
   _id?: string;
   email: string;
-  avartar: string;
+  avatar?: string;
   provider?: AuthProvider;
   lastName: string;
   firstName: string;
   address: string;
+  state?:string;
+  propertyInterest?: string[];
+  locationInterest?: string[];
   phoneNumber: string;
   refCode?: string;
   refCount?: number;

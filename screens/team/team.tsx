@@ -50,7 +50,7 @@ const TeamScreen = () => {
     },
     {
       id: 6,
-      person: "Ayobami Oluwabusola",
+      person: "Ayobami busayo",
       title: "Sales and Marketing Executive",
       department: "Sales and marketing department",
       picture: "/sales-marketing.png",
@@ -59,7 +59,7 @@ const TeamScreen = () => {
       id: 7,
       person: "Jumoke Orimoloye",
       title: "Front desk officer",
-      department: "Front desk officer",
+      department: "Administrative department",
       picture: "/sales-rep.png",
     },
   ];

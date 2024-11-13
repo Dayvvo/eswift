@@ -188,7 +188,7 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
 export default function Home() {
   const [building, setBuilding] = useState<boolean>(false);
   // const [cookie, setCookie] = useState("")
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
@@ -202,7 +202,7 @@ export default function Home() {
 
   useEffect(() => {
     if (user && !user?.onboard) {
-      setShowModal(true);
+      // setShowModal(true);
     }
   }, [user]);
 

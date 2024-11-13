@@ -44,6 +44,7 @@ export interface IUser {
   idDocument?: string;
   agendIdDocument?: string;
   occupation: string;
+  isOnboarded?: boolean
 }
 
 export interface IUserInRequest extends IUser {

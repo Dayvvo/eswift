@@ -457,7 +457,6 @@ export const PropertyScreen = () => {
         className="robotoF"
         px={{ base: "16px", lg: "20px" }}
         height={{ base: "70vh", md: "78vh", lg: "60vh", xl: "65vh" }}
-        overflowY="scroll"
       >
         <Flex
           mb={"24px"}
@@ -526,7 +525,7 @@ export const PropertyScreen = () => {
                     <Text fontSize={"14px"}>Add Property</Text>
                     <BsPlus className="icon" />
                 </Btn>
-                <Btn
+                {/* <Btn
                     onClick={() => setPage(inputValue)}
                     display={"flex"}
                     gap={"4px"}
@@ -550,6 +549,7 @@ export const PropertyScreen = () => {
                     <IoFilter className="icon" />
                     <Text>Filter</Text>
                 </Btn>
+         */}
             </Flex>
         </Flex>
 

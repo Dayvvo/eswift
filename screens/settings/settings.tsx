@@ -15,7 +15,7 @@ interface UserData {
   email: string;
   phoneNumber: string;
   address: string;
-  avartar: string;
+  avatar: string;
 }
 
 type ValidationType = {
@@ -28,7 +28,7 @@ const validation: ValidationType = {
   email: (input: string) => (input ? /\S+@\S+\.\S+/.test(input) : false),
   phoneNumber: (input: string) => (input ? /^0?\d{10}$/.test(input) : false),
   address: (input: string) => (input ? input.trim().length > 5 : false),
-  avartar: (input: string) => true,
+  avatar: (input: string) => input !==''?true : false,
   role: (input: string) => input === "GUEST" || input !== "ADMIN",
 };
 
@@ -56,7 +56,9 @@ export const SettingsScreen = () => {
       email: "",
       phoneNumber: "",
       address: "",
-      avartar: "",
+      state:[],
+      propertyInterest:[] as string[],
+      avatar: "",
       role: "CLIENT",
     },
     validation
@@ -93,11 +95,19 @@ export const SettingsScreen = () => {
     },
     {
       id: 5,
+      type: "State",
+      description: "State of Residence",
+      info: user?.state,
+      name: "state",
+    },
+    {
+      id: 6,
       type: "Legal Address",
       description: "Legal residential address for billing details",
       info: user.address,
       name: "address",
     },
+
   ];
 
   const { updateUser, getUserById } = useUser();
@@ -226,7 +236,7 @@ export const SettingsScreen = () => {
                       width={40}
                       height={40}
                       borderRadius={"50%"}
-                      src={user.avartar || "/avatar1.png"}
+                      src={user.avatar || "/avatar1.png"}
                       alt="/"
                     />
                   </Box>

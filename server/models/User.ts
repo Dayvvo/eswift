@@ -90,7 +90,11 @@ const UserSchema = new Schema<IUser>(
       required: true,
     },
     agendIdDocument: { type: String, required: true },
-    occupation: { type: String, required: true }
+    occupation: { type: String, required: true },
+    isOnboarded: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );
