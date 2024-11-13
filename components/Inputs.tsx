@@ -21,6 +21,7 @@ type SelectInputProps = {
   value?: string;
   inputIsinvalid?: boolean;
   errorMessage?: string;
+  border?: any;
 };
 
 type CheckboxInputProps = {
@@ -34,6 +35,8 @@ type TextInputProps = {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: any;
   value?: string;
+  inputIsinvalid?: any;
+  errorMessage?: string;
 };
 
 export const SelectInput = ({
@@ -46,6 +49,7 @@ export const SelectInput = ({
   onChange,
   inputIsinvalid,
   errorMessage,
+  border,
 }: SelectInputProps) => {
   return (
     <FormControl w={"100%"} display={"flex"} flexDir={"column"} gap={"1px"}>
@@ -60,7 +64,9 @@ export const SelectInput = ({
         w="100%"
         h="40px"
         border={
-          inputIsinvalid
+          border
+            ? border
+            : inputIsinvalid
             ? "1px solid var(--errorBase)"
             : "1px solid var(--soft200)"
         }
@@ -96,9 +102,11 @@ export const TextInput = ({
   onChange,
   onBlur,
   value,
+  inputIsinvalid,
+  errorMessage,
 }: TextInputProps) => {
   return (
-    <Flex flexDir={"column"} w={{ base: "100%" }}>
+    <FormControl display={"flex"} flexDir={"column"} w={{ base: "100%" }}>
       <FormLabel
         fontWeight={500}
         fontSize={"14px"}
@@ -126,12 +134,12 @@ export const TextInput = ({
         onChange={onChange}
       />
 
-      {/* {invalidLastName && (
+      {inputIsinvalid && (
         <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
-          {"Enter a valid last name"}
+          {errorMessage}
         </FormHelperText>
-      )} */}
-    </Flex>
+      )}
+    </FormControl>
   );
 };
 
