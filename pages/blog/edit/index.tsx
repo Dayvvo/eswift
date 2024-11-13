@@ -30,13 +30,12 @@ const EditBlog = () => {
   const [introValue, setIntroValue] = useState(blogDetails?.introduction ?? "");
   const [articleTitle, setArticleTitle] = useState(blogDetails?.title || "");
   const [bodyValue, setBodyValue] = useState(blogDetails?.body || "");
-  const [conclusionValue, setConclusionValue] = useState(blogDetails?.conclusion || "");
+  const [conclusionValue, setConclusionValue] = useState(
+    blogDetails?.conclusion || ""
+  );
   const [loading, setLoading] = useState(false);
   const [headerImageFile, setHeaderImageFile] = useState("");
   const [bodyImageFile, setBodyImageFile] = useState("");
-
-  console.log("headerImageFile", headerImageFile);
-  console.log("bodyImageFile", bodyImageFile);
 
   const { getBlogByID, updateBlog } = useBlog();
   const { toast } = useToast();
@@ -49,48 +48,49 @@ const EditBlog = () => {
     title: articleTitle || blogDetails?.title,
     introduction: introValue || blogDetails?.introduction,
     body: bodyValue || blogDetails?.body,
-    // conclusion: conclusionValue,
+    conclusion: conclusionValue || blogDetails?.conclusion,
     header_image: headerImageFile || blogDetails?.header_image,
     body_image: bodyImageFile || blogDetails?.body_image,
-  }
+  };
 
-  const newBlogId = blogId as string
+  const newBlogId = blogId as string;
 
-  console.log('blogDetails', blogDetails);
+  console.log("blogDetails", blogDetails);
 
   useEffect(() => {
     const getBlogByIdFn = async () => {
       try {
-        const req:any = await getBlogByID(newBlogId);
-        console.log('req', req);
+        const req: any = await getBlogByID(newBlogId);
+        // console.log('req', req);
         setBlogDetails(req?.data);
+      } catch (err) {
+        console.log("err", err);
       }
-      catch (err) {
-        console.log('err', err);
-      }
-    }
+    };
 
     getBlogByIdFn();
-  }, [blogId])
+  }, [blogId]);
 
   const EditBlog = async () => {
     try {
       setLoading(true);
       const req = await updateBlog(blogDetails._id, blogData);
-      console.log('req', req);
+      // console.log('req', req);
       toast({
         status: "success",
-        title: "Edit successful"
+        title: "Edit successful",
       });
-      route.push('/blog');
-    }
-    catch (err) {
-      console.log('err', err);
-    }
-    finally {
+      route.push("/blog");
+    } catch (err) {
+      // console.log("err", err);
+      toast({
+        status: "error",
+        title: "Edit bog post failed",
+      });
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   const handleHeaderImageChange = (url: string) => {
     setBlogDetails({
@@ -106,10 +106,10 @@ const EditBlog = () => {
     });
   };
 
-  console.log('articleTitle', articleTitle);
-  console.log('bodyValue', bodyValue);
-  console.log('introValue', introValue);
-  console.log('conclusionValue', conclusionValue);
+  // console.log("articleTitle", articleTitle);
+  // console.log("bodyValue", bodyValue);
+  // console.log("introValue", introValue);
+  // console.log("conclusionValue", conclusionValue);
 
   // const toPreview = () => {
   //   localStorage.setItem("previewData", JSON.stringify(previewData));
@@ -155,9 +155,9 @@ const EditBlog = () => {
           Header Image
         </Text>
         <ImageUpload
-        initialImageUrl={blogDetails?.header_image}
-        setImageFile={setHeaderImageFile}
-      />
+          initialImageUrl={blogDetails?.header_image}
+          setImageFile={setHeaderImageFile}
+        />
       </Flex>
       <Flex align={"center"} justify={"space-between"} mb="20px">
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">
@@ -190,9 +190,9 @@ const EditBlog = () => {
           Body Image
         </Text>
         <ImageUpload
-        initialImageUrl={blogDetails?.body_image}
-        setImageFile={setBodyImageFile}
-      />
+          initialImageUrl={blogDetails?.body_image}
+          setImageFile={setBodyImageFile}
+        />
       </Flex>
       <Flex align={"center"} justify={"space-between"} mb="20px">
         <Text fontWeight={500} fontSize={".875rem"} className="mulish">

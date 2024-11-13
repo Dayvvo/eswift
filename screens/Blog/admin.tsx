@@ -11,6 +11,7 @@ import {
   Skeleton,
   Stack,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { PlusIcon, SearchIcon } from "../../components/svg";
@@ -19,6 +20,8 @@ import { useRouter } from "next/router";
 import useBlog from "@/hooks/useBlog";
 import DOMPurify from "dompurify";
 import useToast from "@/hooks/useToast";
+import { useDebounce } from "@/hooks/useDebounce";
+import Pagination from "@/components/Pagination";
 // import { useAppContext } from "@/context";
 
 interface BlogPostProps {
@@ -32,11 +35,10 @@ interface BlogPostProps {
 }
 
 const BlogScreen = () => {
-  
   const [blogPost, setBlogPost] = useState<BlogPostProps[]>([]);
   const [isAdmin, setIsAdmin] = useState("");
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>("");
   const { toast } = useToast();
 
   // const { check } = useAppContext();
@@ -45,36 +47,46 @@ const BlogScreen = () => {
 
   const { deleteBlog, getBlog } = useBlog();
 
+  const debounce = useDebounce();
+
   const getBlogFn = async () => {
     setLoading(true);
     try {
       const req = await getBlog(search);
-      let data = req?.data as BlogPostProps[]
+      let data = req?.data as BlogPostProps[];
       setBlogPost(data);
       setLoading(false);
-    } 
-    catch (error) {
+    } catch (error) {
       setLoading(false);
     }
     // console.log("req", req?.data);
   };
 
   useEffect(() => {
+    // debounce(() => getBlogFn())
     getBlogFn();
   }, [search]);
 
-  const handleKeyPress =(e:React.KeyboardEvent<HTMLInputElement>)=> {
-    if (e.key === 'Enter') {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalCount = 9;
+  const lastRowsIndex = currentPage * totalCount;
+  const firstRowsIndex = lastRowsIndex - totalCount;
+  const currentBlogsInView =
+    blogPost && blogPost?.slice(firstRowsIndex, lastRowsIndex);
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
       getBlogFn();
     }
-  }
+  };
 
+  console.log(isAdmin);
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
 
     if (userData) {
       const parsedData = JSON.parse(userData);
-      setIsAdmin(parsedData.role);
+      setIsAdmin(parsedData.user.role);
     }
   }, []);
 
@@ -122,7 +134,7 @@ const BlogScreen = () => {
             placeholder="Search..."
             border={"1px solid #E1E4EA"}
             value={search}
-            onChange={(e:any) => setSearch(e.target.value)}
+            onChange={(e: any) => setSearch(e.target.value)}
             onKeyDown={handleKeyPress}
           />
         </InputGroup>
@@ -149,7 +161,7 @@ const BlogScreen = () => {
       )}
       {!loading && blogPost.length > 0 && (
         <SimpleGrid columns={3} spacing={5} mt="20px">
-          {blogPost.map((item, index) => {
+          {currentBlogsInView.map((item, index) => {
             const dateString = new Date(item.createdAt);
 
             const formattedDate = dateString.toLocaleDateString("en-US", {
@@ -218,13 +230,15 @@ const BlogScreen = () => {
                         bgColor="#6AFFB0"
                         borderRadius={"50px"}
                         className="robotoF"
-                        cursor={'pointer'}
+                        cursor={"pointer"}
                         fontWeight={400}
                         fontSize={".937rem"}
                         w="144px"
                         h="28px"
-                        onClick={() => route.push(`/blog/edit?blogId=${item._id}`)}
-            >
+                        onClick={() =>
+                          route.push(`/blog/edit?blogId=${item._id}`)
+                        }
+                      >
                         Edit
                       </Btn>
                       <Btn
@@ -247,8 +261,22 @@ const BlogScreen = () => {
           })}
         </SimpleGrid>
       )}
+      {blogPost.length > totalCount && (
+        <VStack align={"start"} gap="15px" mt="10px">
+          <div className="">
+            Showing {firstRowsIndex + 1} to {lastRowsIndex}
+          </div>
+
+          <Pagination
+            rowsPerPage={5}
+            totalPostLength={blogPost?.length}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+          />
+        </VStack>
+      )}
       {!loading && blogPost.length === 0 && (
-        <Card mt='1em'>
+        <Card mt="1em">
           <CardBody>
             <Text>No blog post available please wait</Text>
           </CardBody>

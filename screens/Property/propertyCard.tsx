@@ -28,6 +28,8 @@ export type PropertyCardProps = {
   address?: string;
   email?: string;
   user?: string;
+  state?:string;
+  lga?:string;
   userImage?: string;
   onClick?: () => void;
   verificationState?: string;

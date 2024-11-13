@@ -82,7 +82,7 @@ class PropertyController {
   }
 
   adminGetAllProperties = async (req: Request, res: Response) => {
-    const pageSize = 12
+    const pageSize = 60
     const page = Number(req.query.pageNumber) || 1
 
     const keyword = req.query.keyword as string
@@ -113,7 +113,7 @@ class PropertyController {
 
   //TODO: finish function
   getCreatedProperties = async (req: Request, res: Response) => {
-    const pageSize = 12
+    const pageSize = 60;
     const page = Number(req.params.pageNumber) || 1
 
     const keyword = req.query.keyword as string

@@ -21,7 +21,6 @@ interface MailType {
   howDidYouHear: string;
 }
 
-
 const useBlog = () => {
   const baseUrl = "http://localhost:5500/api";
   const [token, setToken] = useState("");
@@ -37,7 +36,12 @@ const useBlog = () => {
     // console.log("storedToken", userData);
   }, []);
 
-  const { query, post, delete: deleteRequest, putMutation: put } = httpClient({ token });
+  const {
+    query,
+    post,
+    delete: deleteRequest,
+    putMutation: put,
+  } = httpClient({ token });
 
   const addBlog = useCallback(
     async (data: BlogObj) => {
@@ -54,16 +58,18 @@ const useBlog = () => {
     [token]
   );
 
-  const updateBlog = useCallback(async (blogPostId:string, data: any) => {
-    try {
-      const res = await put(`${baseUrl}//blog/post/${blogPostId}`, data);
-      return res;
-    }
-    catch (err: any) {
-      throw new err();
-    }
-  }, [])
- 
+  const updateBlog = useCallback(
+    async (blogPostId: string, data: any) => {
+      try {
+        const res = await put(`${baseUrl}/blog/post/${blogPostId}`, data);
+        return res;
+      } catch (err: any) {
+        throw new err();
+      }
+    },
+    [token]
+  );
+
   const contactUsFn = async (data: MailType) => {
     try {
       const res = await post(`${baseUrl}/contact-us`, data);
@@ -95,18 +101,17 @@ const useBlog = () => {
   
   const getBlog = async (search?:string) =>  (await query(`${baseUrl}/blog/post?keyword=${search}`)).data as R; 
 
-  const getBlogByID = async(id:string)=>{
+  const getBlogByID = async (id: string) => {
     try {
       const res = await query(`${baseUrl}/blog/post/${id}`);
-      return res.data as Record<string,unknown>;
+      return res.data as Record<string, unknown>;
     } catch (err: any) {
       // console.log("error", err);
-      console.log('err occured');
+      console.log("err occured");
       return {
-        message:'error',
-      }
+        message: "error",
+      };
     }
-
   };
 
   return {

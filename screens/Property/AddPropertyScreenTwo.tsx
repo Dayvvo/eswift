@@ -1,5 +1,7 @@
 import Btn from "@/components/Btn";
+import { SelectInput, TextInput } from "@/components/Inputs";
 import useToast from "@/hooks/useToast";
+import { nigerianStates } from "@/utils/modules";
 import {
   Box,
   Flex,
@@ -37,10 +39,22 @@ interface ButtonFunction {
   onBlurPrice: any;
   onBlurAdddress: any;
   // onBlurDuration: any;
+  state: string;
+  lga: string;
+  invalidLga: boolean | null;
+  onChangeLga: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlurLga: any;
+  invalidState: any;
+  onChangeState: (event: ChangeEvent<HTMLSelectElement>) => void;
+  onBlurState: any;
 }
 export const AddPropertyScreenTwo = ({
   next,
   previous,
+  lga,
+  onBlurLga,
+  invalidLga,
+  onChangeLga,
   // duration,
   // onChangeDuration,
   price,
@@ -51,6 +65,10 @@ export const AddPropertyScreenTwo = ({
   // invalidDuration,
   invalidAddress,
   validPrice,
+  state,
+  invalidState,
+  onChangeState,
+  onBlurState,
   // validDuration,
   validAddress,
   onBlurPrice,
@@ -160,6 +178,30 @@ ButtonFunction) => {
             </Flex>
           ))}
         </Flex>
+        <SelectInput
+          items={nigerianStates}
+          label="State"
+          placeholder="select state"
+          name="state"
+          value={state}
+          inputIsinvalid={invalidState}
+          onChange={onChangeState}
+          onBlur={onBlurState}
+          errorMessage="select state!"
+        />
+        <Box mt={3}>
+          <TextInput
+            name="lga"
+            label="Local government"
+            placeholder="Enter a local government"
+            value={lga}
+            inputIsinvalid={invalidLga}
+            onChange={onChangeLga}
+            onBlur={onBlurLga}
+            errorMessage="select local government"
+          />
+        </Box>
+
         <Flex flexDir={"column"} gap={"16px"} w="100%" py={"20px"}>
           <FormControl w={"100%"}>
             <FormLabel
@@ -273,7 +315,6 @@ ButtonFunction) => {
                 </FormHelperText>
               )} */}
           </FormControl>
-
         </Flex>
         <Flex gap={"2rem"}>
           <Btn
