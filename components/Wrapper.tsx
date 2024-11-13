@@ -178,7 +178,7 @@ const Wrapper = ({
     return <></>
   }
   return (
-    <Box w={"100%"} py="10px" minH={"100vh"} overflowX={"hidden"}>
+    <Box w={"100%"} py={{base:'40px',lg:"10px"}} minH={"100vh"} overflowX={"hidden"}>
       <Box w={"100%"}>
         <Box
           borderRight={"1px solid #E1E4EA"}

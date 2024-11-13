@@ -31,7 +31,7 @@ const validation: ValidationType = {
   phoneNumber: (input: string) => (input ? /^0?\d{10}$/.test(input) : false),
   address: (input: string) => (input ? input.trim().length > 5 : false),
   state: (input: string) => (input ? input.trim().length > 1 : false),
-  avartar: (input: string) => true,
+  avatar: (input: string) => true,
   role: (input: string) => input === "GUEST" || input !== "ADMIN",
 };
 
@@ -60,7 +60,7 @@ export const SettingsScreen = () => {
       phoneNumber: "",
       address: "",
       state: "",
-      avartar: "",
+      avatar: "",
       role: "CLIENT",
     },
     validation
@@ -97,13 +97,6 @@ export const SettingsScreen = () => {
     },
     {
       id: 5,
-      type: "State",
-      description: "State of Residence",
-      info: user?.state,
-      name: "state",
-    },
-    {
-      id: 6,
       type: "Legal Address",
       description: "Legal residential address for billing details",
       info: user.address,
@@ -245,7 +238,7 @@ export const SettingsScreen = () => {
                       alt="/"
                     />
                   </Box>
-                  <Btn
+                  {/* <Btn type={SubmitEvent}
                     bg={"transparent"}
                     display={"flex"}
                     alignItems={"center"}
@@ -263,7 +256,7 @@ export const SettingsScreen = () => {
                     }}
                   >
                     Update
-                  </Btn>
+                  </Btn> */}
                 </Flex>
               </Flex>
             </Flex>

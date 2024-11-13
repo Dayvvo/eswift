@@ -51,7 +51,7 @@ const FavouriteScreen = ()=>{
       <Box>
             {
                 favourites?.length === 0  ?  
-                <Flex w={'100%'} alignItems={'end'} justifyContent={'space-between'} className="urbanist">
+                <Flex flexDir={'column'} alignItems={'start'} gap={'16px'} justifyContent={'space-between'} className="urbanist">
                     <Text fontSize={'16px'}>
                         No favourites, explore new properties...
                     </Text>
@@ -69,7 +69,7 @@ const FavouriteScreen = ()=>{
                         _hover={{opacity:0.5}}
                         fontSize={{base:'8px', lg:'14px'}}
                     >
-                        <RiSearch2Line/> Find Property
+                        <RiSearch2Line/> Find Property Now
                     </Btn>
                 </Flex>
                 : 
