@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import ResetPasswordModal from "./reset";
 import InformationModal from "@/screens/Property/InfoModal";
+import { SelectInput } from "@/components/Inputs";
+import { nigerianStates } from "@/utils/modules";
 
 interface UserData {
   firstName: string;
@@ -28,6 +30,7 @@ const validation: ValidationType = {
   email: (input: string) => (input ? /\S+@\S+\.\S+/.test(input) : false),
   phoneNumber: (input: string) => (input ? /^0?\d{10}$/.test(input) : false),
   address: (input: string) => (input ? input.trim().length > 5 : false),
+  state: (input: string) => (input ? input.trim().length > 1 : false),
   avartar: (input: string) => true,
   role: (input: string) => input === "GUEST" || input !== "ADMIN",
 };
@@ -56,6 +59,7 @@ export const SettingsScreen = () => {
       email: "",
       phoneNumber: "",
       address: "",
+      state: "",
       avartar: "",
       role: "CLIENT",
     },
@@ -111,7 +115,10 @@ export const SettingsScreen = () => {
     address: user.address,
     email: user.email,
     phoneNumber: user.phoneNumber,
+    state: user.state,
   };
+
+  console.log("datas", datas);
 
   const updateUserFn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -329,6 +336,56 @@ export const SettingsScreen = () => {
                 </Flex>
               );
             })}
+            <Flex
+              w={"100%"}
+              alignItems={"center"}
+              py={"20px"}
+              borderBottom={"1px solid var(--soft200)"}
+            >
+              <Flex w={"100%"} gap={"24px"} justifyContent={"space-between"}>
+                <Box w={"50%"}>
+                  <Text
+                    fontWeight={500}
+                    fontSize={"14px"}
+                    textColor={"var(--strong950)"}
+                    mb={"6px"}
+                  >
+                    {"State"}
+                  </Text>
+                  <Text
+                    fontWeight={400}
+                    fontSize={"12px"}
+                    textColor={"var(--sub600)"}
+                  >
+                    {"Residential state"}
+                  </Text>
+                </Box>
+                <Flex flexDir="column" gap={"12px"} w={"40%"}>
+                  {/* <Text
+                    fontWeight={500}
+                    fontSize={"14px"}
+                    textColor={"var(--strong950)"}
+                    maxW={"180px"}
+                  >
+                    {setting?.info}
+                  </Text> */}
+                  <SelectInput
+                    items={nigerianStates}
+                    label=""
+                    placeholder="select state"
+                    name="state"
+                    border={"1px solid #262626"}
+                    value={user.state}
+                    onChange={onChangeHandler}
+                    // border={
+                    //   inputIsinvalid(setting.name)
+                    //     ? "1px solid var(--errorBase)"
+                    //     : "1px solid #262626"
+                    // }
+                  />
+                </Flex>
+              </Flex>
+            </Flex>
             {user?.role === "ADMIN" ? (
               <Flex w={"100%"} alignItems={"center"} py={"20px"}>
                 <Flex
