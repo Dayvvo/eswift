@@ -17,7 +17,7 @@ import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "../../components/modal";
 import { BsPlus } from "react-icons/bs";
-import { PlusIcon, SearchIcon } from "../../components/svg";
+import {  SearchIcon } from "../../components/svg";
 import useProperty from "@/hooks/useProperty";
 import { useImage, useInputText } from "../../hooks/useInput";
 import { useApiUrl } from "../../hooks/useApi";
@@ -26,12 +26,12 @@ import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
 import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
 import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
 import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
-import {
-  DoubleNextBtn,
-  DoublePrevBtn,
-  NextBtn,
-  PreviousBtn,
-} from "@/components/svg";
+// import {
+//   DoubleNextBtn,
+//   DoublePrevBtn,
+//   NextBtn,
+//   PreviousBtn,
+// } from "@/components/svg";
 import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { DocumentTypes, R } from "@/utils/types";
 import useUpload from "@/hooks/useUpload";
@@ -137,6 +137,7 @@ export const PropertyScreen = () => {
     valueIsValid: validLga,
     reset: lgaReset,
   } = useInputText((lga) => lga.length > 2);
+ 
   const {
     input: typeOfProperty,
     onChangeInput: onChangeType,
@@ -197,8 +198,8 @@ export const PropertyScreen = () => {
 
   const { uploadSingle, uploadMultiple } = useUpload();
 
-  const onChangeFeatures = (features: string[]) => {
-    setFeatures(features);
+  const onChangeFeatures = () => {
+    return setFeatures;
   };
 
   const propertyData = {
@@ -303,7 +304,7 @@ export const PropertyScreen = () => {
       };
 
       uploadedFiles && (await addProperty(payload)); // If no error occurs, the following code runs
-
+    
       setShowModal(false);
 
       resetFields();
@@ -421,7 +422,8 @@ export const PropertyScreen = () => {
               onBlurDescription={onBlurDescription}
               onBlurTitle={onBlurTitle}
               onBlurCategory={onBlurCategory}
-              Features={onChangeFeatures}
+              features={features}
+              setFeatures={setFeatures}
               onClick={() => setShowScreen(2)}
             />
           ) : showScreen === 2 ? (

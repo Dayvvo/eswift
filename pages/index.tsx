@@ -14,6 +14,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { CheckboxInput, SelectInput, TextInput } from "@/components/Inputs";
 import { useInputSettings } from "@/hooks/useInput";
@@ -21,6 +22,8 @@ import { nigerianStates } from "@/utils/modules";
 import Btn from "@/components/Btn";
 import { HappyIcon } from "@/components/svg";
 import Divider from "@/components/Divider";
+import { useApiUrl } from "@/hooks/useApi";
+import useUser from "@/hooks/useUser";
 
 type InformationModalProps = {
   isOpen: boolean;
@@ -30,21 +33,26 @@ type InformationModalProps = {
 type ValidationType = {
   [key in keyof {
     state: string;
-    property: string;
-    location: string;
+    propertyInterest: string;
+    locationInterest: string;
   }]: (input: string) => boolean;
 };
 
 const validation: ValidationType = {
   state: (input: string) => (input ? input.trim().length > 1 : false),
-  property: (input: string) => (input ? input.trim().length > 1 : false),
-  location: (input: string) => true,
+  propertyInterest: (input: string) => (input ? input.trim().length > 1 : false),
+  locationInterest: (input: string) => true,
 };
 
-const PREFERED_PROPERTY_TYPE = ["Apartment", "House", "Condo", "Townhouse"];
+const PREFERED_PROPERTY_TYPE = ["Land", "House"];
 
 const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
-  const [loading, setLoading] = useState();
+  const client = useApiUrl()
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(false);
+  const { isWindow, user } = useAuth()
+  const email = `${user?.email}`
+
   const {
     input,
     onChangeHandler,
@@ -54,16 +62,36 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   } = useInputSettings(
     {
       state: "",
-      property: "",
-      location: "",
+      propertyInterest:"",
+      locationInterest:"",
     },
     validation
-  );
+  )
+
+  console.log(user)
 
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(input);
+    setLoading(true)
+    try{
+      const req = client.put(`/user/profile?onboarding=true`, { ...input, ...user })
+    }
+    catch (error){
+      toast({
+        status: "error",
+        description: "Failed to set preference",
+        title: "Failed",
+        position: "top",
+        duration: 1000,
+      });
+    }
+   
   };
+
+
+
+
+
   return (
     <Modal
       isCentered
@@ -113,11 +141,24 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
               <Text className="inter" fontWeight={700} fontSize={"14px"}>
                 Preferred Property Type
               </Text>
-              <Box display={"flex"} flexDir={"column"} gap={"10px"}>
+              {/* <Box display={"flex"} flexDir={"column"} gap={"10px"}>
                 {PREFERED_PROPERTY_TYPE.map((property, index) => {
                   return <CheckboxInput key={index} label={property} />;
                 })}
-              </Box>
+              </Box> */}
+            </Box>
+            <Box my={5}>
+              <SelectInput
+                items={["Land", "House", "Both"]}
+                label="What property are you interested in buying"
+                placeholder="Select property"
+                name="propertyInterest"
+                errorMessage="Select property"
+                inputIsinvalid={inputIsinvalid("propertyInterest")}
+                value={input?.propertyInterest}
+                onChange={onChangeHandler}
+                onBlur={() => onBlurHandler("propertyInterest")}
+              />
             </Box>
             <Box>
               <SelectInput
@@ -127,32 +168,20 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
                 name="state"
                 inputIsinvalid={inputIsinvalid("state")}
                 errorMessage="Select state"
-                value={input.state}
+                value={input?.state}
                 onChange={onChangeHandler}
                 onBlur={() => onBlurHandler("state")}
               />
             </Box>
             <Box mt={5}>
-              <SelectInput
-                items={["Land", "House", "or both"]}
-                label="What property are you intrested in buying"
-                placeholder="Select property"
-                name="property"
-                errorMessage="Select property"
-                inputIsinvalid={inputIsinvalid("property")}
-                value={input.property}
-                onChange={onChangeHandler}
-                onBlur={() => onBlurHandler("property")}
-              />
-            </Box>
-            <Box mt={5}>
               <TextInput
                 label="Where are you interested in buying property"
-                name="location"
+                name="locationInterest"
                 placeholder="Enter location"
-                value={input.location}
+                errorMessage="enter your location"
+                value={input?.locationInterest}
                 onChange={onChangeHandler}
-                onBlur={() => onBlurHandler("location")}
+                onBlur={() => onBlurHandler("locationInterest")}
               />
             </Box>
           </ModalBody>
@@ -188,7 +217,7 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
 export default function Home() {
   const [building, setBuilding] = useState<boolean>(false);
   // const [cookie, setCookie] = useState("")
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
