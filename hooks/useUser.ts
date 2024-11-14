@@ -13,9 +13,9 @@ const useUser = () => {
     address?: string;
   };
 
-  const getUser = useCallback(() => {
+  const getUser = useCallback((search?:string) => {
     const req = client
-      .get("/user/users")
+      .get(`/user/users?keyword=${search}`)
       .then((res: any) => {
         return res;
       })
