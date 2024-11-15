@@ -7,7 +7,6 @@ import { Box, Flex, Input, Text, Image, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import ResetPasswordModal from "./reset";
-import InformationModal from "@/screens/Property/InfoModal";
 import { SelectInput } from "@/components/Inputs";
 import { nigerianStates } from "@/utils/modules";
 
@@ -88,13 +87,6 @@ export const SettingsScreen = () => {
     },
     {
       id: 5,
-      type: "State",
-      description: "State of Residence",
-      info: user?.state,
-      name: "state",
-    },
-    {
-      id: 6,
       type: "Legal Address",
       description: "Legal residential address for billing details",
       info: user.address,
@@ -235,7 +227,7 @@ export const SettingsScreen = () => {
                       alt="/"
                     />
                   </Box>
-                  <Btn
+                  {/* <Btn type={SubmitEvent}
                     bg={"transparent"}
                     display={"flex"}
                     alignItems={"center"}
@@ -253,7 +245,7 @@ export const SettingsScreen = () => {
                     }}
                   >
                     Update
-                  </Btn>
+                  </Btn> */}
                 </Flex>
               </Flex>
             </Flex>

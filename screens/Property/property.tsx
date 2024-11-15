@@ -18,7 +18,6 @@ import { useEffect, useState } from "react";
 import { Modal } from "../../components/modal";
 import { BsPlus } from "react-icons/bs";
 import {  SearchIcon } from "../../components/svg";
-
 import useProperty from "@/hooks/useProperty";
 import { useImage, useInputText } from "../../hooks/useInput";
 import { useApiUrl } from "../../hooks/useApi";
