@@ -74,27 +74,27 @@ const UserSchema = new Schema<IUser>(
       type: String,
       default: "",
     },
-    state:{
-      type:String
+    state: {
+      type: String,
     },
     propertyInterest: {
-      type: [String]
+      type: [String],
     },
-    locationInterest:{
-      type: [String]
+    locationInterest: {
+      type: [String],
     },
-    isExistingCustomer: { type: Boolean, required: true },
-    contactMethod: { type: String, required: true },
+    isExistingCustomer: { type: Boolean, required: false },
+    contactMethod: { type: String, required: false },
     idDocument: {
       type: String,
-      required: true,
+      required: false,
     },
-    agendIdDocument: { type: String, required: true },
-    occupation: { type: String, required: true },
+    agendIdDocument: { type: String, required: false },
+    occupation: { type: String, required: false },
     isOnboarded: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   { timestamps: true }
 );

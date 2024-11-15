@@ -411,7 +411,7 @@ export const DeleteProperty = ({
             }}
             onClick={deletePropertyFn}
             isLoading={isVerifying}
-            loadingText="Submiting"
+            loadingText="Deleting"
             disabled={isVerifying}
             // onClick={verifyPropertyFn}
           >

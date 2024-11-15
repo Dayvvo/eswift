@@ -29,32 +29,31 @@ const FileInputComponent = ({
   onChange: (name: string, value: File | null) => void;
   uploaded: File;
 }) => {
-
   const toast = useToast();
   const onFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     let fileList = e.target.files;
 
-    let file: File | null = null;  
+    let file: File | null = null;
 
-    const isValidFile = (file:File)=>{
-      let validationErr = '';
-      console.log('file type', file.type);
-      if (file.type !== 'application/pdf'){
-        validationErr = 'Invalid File type';
+    const isValidFile = (file: File) => {
+      let validationErr = "";
+      console.log("file type", file.type);
+      if (file.type !== "application/pdf") {
+        validationErr = "Invalid File type";
+      } else if (file.size / (1024 * 1024) > 6) {
+        validationErr = "File is too large";
       }
-      else if((file.size/(1024 * 1024)) > 6 ){
-        validationErr ='File is too large';
-      }
 
-      validationErr && toast.toast({
-        status:'error',
-        title:'Error uploading file',
-        description: validationErr
-      })
+      validationErr &&
+        toast.toast({
+          status: "error",
+          title: "Error uploading file",
+          description: validationErr,
+        });
 
-      return validationErr
-    }
-    
+      return validationErr;
+    };
+
     if (fileList?.length) {
       file = fileList[0] as File;
       !isValidFile(file) && onChange(name, file);
@@ -112,7 +111,13 @@ const FileInputComponent = ({
             </Stack>
           </Flex>
 
-          <FaTrashAlt cursor={'pointer'} fontSize={'25px'} onClick={()=>{ onChange(name,null) }}  />
+          <FaTrashAlt
+            cursor={"pointer"}
+            fontSize={"25px"}
+            onClick={() => {
+              onChange(name, null);
+            }}
+          />
         </Flex>
       )}
     </Box>
@@ -183,7 +188,7 @@ export const AddPropertyScreenFour = ({
   //   return true;
   // };
 
-  console.log('fine app',loading)
+  console.log("fine app", loading);
 
   return (
     <>
@@ -277,7 +282,7 @@ export const AddPropertyScreenFour = ({
             borderRadius={"10px"}
             textColor={"var(--primaryBase)"}
             isLoading={loading}
-            loadingText="Submitting..."
+            loadingText="creating"
             disabled={loading}
             _hover={{
               bg: "#1A1D66",

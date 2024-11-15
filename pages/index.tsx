@@ -201,8 +201,8 @@ export default function Home() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user && !user?.onboard) {
-      // setShowModal(true);
+    if (user && !user?.isOnboarded) {
+      setShowModal(true);
     }
   }, [user]);
 
