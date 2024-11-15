@@ -48,10 +48,9 @@ const PREFERED_PROPERTY_TYPE = ["Land", "House"];
 
 const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   const client = useApiUrl()
-  const { toast } = useToast()
+  const { toast }:any = useToast()
   const [loading, setLoading] = useState(false);
   const { isWindow, user } = useAuth()
-  const email = `${user?.email}`
 
   const {
     input,
@@ -70,20 +69,30 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
 
   console.log(user)
 
-  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true)
     try{
-      const req = client.put(`/user/profile?onboarding=true`, { ...input, ...user })
-    }
-    catch (error){
+      const data = await client.put(`/user/profile?onboarding=true`, { ...input, ...user })
+      console.log(data);
       toast({
-        status: "error",
-        description: "Failed to set preference",
-        title: "Failed",
+        status: "success",
+        description: "Preference updated successfully",
+        title: "Onboarding Completed",
         position: "top",
         duration: 1000,
       });
+      setLoading(false)
+    }
+    catch (error){
+      // toast({
+      //   status: "error",
+      //   description: "Failed to set preference, please try again.",
+      //   title: "Onboarding Failed",
+      //   position: "top",
+      //   duration: 1000,
+      // });
+      setLoading(false)
     }
    
   };
