@@ -73,6 +73,7 @@ class AuthController {
               occupation: user.occupation,
               agentIdDocument: user.agendIdDocument,
               idDocument: user.idDocument,
+              isOnboarded: user.isOnboarded,
             },
             token: generateToken(user._id),
           },
