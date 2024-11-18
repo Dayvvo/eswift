@@ -5,10 +5,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState, FormEvent } from "react";
 import {
   Box,
-  Checkbox,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -23,8 +21,9 @@ import Btn from "@/components/Btn";
 import { HappyIcon } from "@/components/svg";
 import Divider from "@/components/Divider";
 import { useApiUrl } from "@/hooks/useApi";
-import useUser from "@/hooks/useUser";
+import Preloader from "@/components/Preloader";
 
+// Onboarding Modal Component
 type InformationModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -47,34 +46,33 @@ const validation: ValidationType = {
 const PREFERED_PROPERTY_TYPE = ["Land", "House"];
 
 const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
-  const client = useApiUrl()
-  const { toast }:any = useToast()
+  const client = useApiUrl();
+  const { toast }: any = useToast();
   const [loading, setLoading] = useState(false);
-  const { isWindow, user } = useAuth()
+  const { user } = useAuth();
 
   const {
     input,
     onChangeHandler,
     inputIsinvalid,
-    inputIsvalid,
     onBlurHandler,
   } = useInputSettings(
     {
       state: "",
-      propertyInterest:"",
-      locationInterest:"",
+      propertyInterest: "",
+      locationInterest: "",
     },
     validation
-  )
-
-  console.log(user)
+  );
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true)
-    try{
-      const data = await client.put(`/user/profile?onboarding=true`, { ...input, ...user })
-      console.log(data);
+    setLoading(true);
+    try {
+      const data = await client.put(`/user/profile?onboarding=true`, {
+        ...input,
+        ...user,
+      });
       toast({
         status: "success",
         description: "Preference updated successfully",
@@ -82,64 +80,27 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
         position: "top",
         duration: 1000,
       });
-      setLoading(false)
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
     }
-    catch (error){
-      // toast({
-      //   status: "error",
-      //   description: "Failed to set preference, please try again.",
-      //   title: "Onboarding Failed",
-      //   position: "top",
-      //   duration: 1000,
-      // });
-      setLoading(false)
-    }
-   
   };
 
-
-
-
-
   return (
-    <Modal
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      size={"lg"}
-      closeOnOverlayClick={true}
-    >
+    <Modal isCentered isOpen={isOpen} onClose={onClose} size={"lg"}>
       <ModalOverlay />
-      <ModalContent className="robotoF">
-        <ModalHeader
-          className="robotoF"
-          display={"flex"}
-          flexDir={"column"}
-          alignItems={"center"}
-        >
+      <ModalContent>
+        <ModalHeader display={"flex"} flexDir={"column"} alignItems={"center"}>
           <HappyIcon />
           <Box>
-            <Text
-              fontWeight={400}
-              fontSize={"24px"}
-              className="robotoF"
-              textAlign={"center"}
-            >
-              Welcome to E-Swift 🏠
+            <Text fontWeight={400} fontSize={"24px"} textAlign={"center"}>
+              Welcome to E-Swift 🏠
             </Text>
-            <Text
-              fontWeight={400}
-              fontSize={"12px"}
-              color={"#525866"}
-              textAlign={"center"}
-            >
-              Let us help you find your dream property effortlessly using our
-              tailored search options. We’re excited to have you join our
-              community!
+            <Text fontWeight={400} fontSize={"12px"} color={"#525866"} textAlign={"center"}>
+              Let us help you find your dream property effortlessly using our tailored search options. We’re excited to have you join our community!
             </Text>
           </Box>
         </ModalHeader>
-        {/* <ModalCloseButton /> */}
         <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
           <Divider w="90%" h={"1px"} color="#E1E4EA" />
         </Box>
@@ -147,14 +108,9 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
         <form onSubmit={submitHandler}>
           <ModalBody pb={4}>
             <Box mt={1}>
-              <Text className="inter" fontWeight={700} fontSize={"14px"}>
+              <Text fontWeight={700} fontSize={"14px"}>
                 Preferred Property Type
               </Text>
-              {/* <Box display={"flex"} flexDir={"column"} gap={"10px"}>
-                {PREFERED_PROPERTY_TYPE.map((property, index) => {
-                  return <CheckboxInput key={index} label={property} />;
-                })}
-              </Box> */}
             </Box>
             <Box my={5}>
               <SelectInput
@@ -175,8 +131,8 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
                 label="State"
                 placeholder="Select state"
                 name="state"
-                inputIsinvalid={inputIsinvalid("state")}
                 errorMessage="Select state"
+                inputIsinvalid={inputIsinvalid("state")}
                 value={input?.state}
                 onChange={onChangeHandler}
                 onBlur={() => onBlurHandler("state")}
@@ -197,8 +153,6 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
           <ModalFooter>
             <Btn
               bg={"transparent"}
-              display={"flex"}
-              alignItems={"center"}
               w={"100%"}
               h={"40px"}
               border={"1px solid var(--primaryBase)"}
@@ -211,10 +165,9 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
                 textColor: "#FFF",
               }}
               isLoading={loading}
-              // loadingText="submitting"
               disabled={loading}
             >
-              submit
+              Submit
             </Btn>
           </ModalFooter>
         </form>
@@ -224,17 +177,10 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
 };
 
 export default function Home() {
-  const [building, setBuilding] = useState<boolean>(false);
-  // const [cookie, setCookie] = useState("")
-  const [showModal, setShowModal] = useState(true);
-
-  const toggleModal = () => {
-    setShowModal((prev) => !prev);
-  };
-
+  const [building, setBuilding] = useState(false);
+  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useRouter();
-
-  const isWidow = typeof window !== "undefined";
 
   const { user } = useAuth();
 
@@ -245,37 +191,56 @@ export default function Home() {
   }, [user]);
 
   useEffect(() => {
-    if (isWidow) {
+    if (typeof window !== "undefined") {
       const getCookie = (name: string) => {
-        if (window?.document?.cookie) {
-          const windowCookie = window.document.cookie;
-          const value = `; ${windowCookie}`;
-          const parts = value.split(`; ${name}=`);
-
-          if (parts.length === 2) {
-            let uriEncodedValue = parts.pop()?.split(";").shift() as string;
-            return decodeURIComponent(uriEncodedValue);
-          }
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+          return decodeURIComponent(parts.pop()?.split(";").shift() || "");
         }
       };
-      try {
-        const myCookie = getCookie("auth-cookie") as string;
-        myCookie && localStorage.setItem("userData", myCookie);
-        console.log("old cookie", myCookie);
+
+      const myCookie = getCookie("auth-cookie");
+      if (myCookie) {
+        localStorage.setItem("userData", myCookie);
         const authRoute = sessionStorage.getItem("authRoute");
-        authRoute && navigate.push(authRoute);
-      } catch (error) {
-        console.error("Error parsing JSON:", error);
+        if (authRoute) {
+          navigate.push(authRoute);
+        }
       }
     }
+
     return () => localStorage.removeItem("authRoute");
-  }, [isWidow]);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoadingScreen(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
-      <OnboardingModal isOpen={showModal} onClose={toggleModal} />
-
-      {building ? <Resdesign /> : <HomePage />}
+      {showLoadingScreen ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            backgroundColor: "#f0f0f0",
+          }}
+        >
+          <Preloader />
+        </div>
+      ) : (
+        <>
+          <OnboardingModal isOpen={showModal} onClose={() => setShowModal(false)} />
+          {building ? <Resdesign /> : <HomePage />}
+        </>
+      )}
     </>
   );
 }

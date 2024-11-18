@@ -27,6 +27,7 @@ const theme = extendTheme({
 });
 
 
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
@@ -36,7 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <meta name="Eswift Property Mart" content="Eswift Property Mart" />
             <link rel="icon" href="/footer.png" />
           </Head>
-          <Preloader/>
+          {/* <Preloader/> */}
           <Component {...pageProps} />
         </AppContextWrapper>
     </ChakraProvider>
