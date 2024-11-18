@@ -2,7 +2,6 @@ import { Schema, model } from "mongoose";
 import * as argon from "argon2";
 import { AuthProvider, IUser, UserRole } from "../utils/interfaces";
 import { generateRefCode } from "../utils/helperFunctions/generateRefCode";
-import { required } from "joi";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -74,6 +73,27 @@ const UserSchema = new Schema<IUser>(
     phoneNumber: {
       type: String,
       default: "",
+    },
+    state: {
+      type: String,
+    },
+    propertyInterest: {
+      type: [String],
+    },
+    locationInterest: {
+      type: [String],
+    },
+    isExistingCustomer: { type: Boolean, required: false },
+    contactMethod: { type: String, required: false },
+    idDocument: {
+      type: String,
+      required: false,
+    },
+    agendIdDocument: { type: String, required: false },
+    occupation: { type: String, required: false },
+    isOnboarded: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

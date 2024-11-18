@@ -12,13 +12,12 @@ import {
   CardBody,
   VStack,
 } from "@chakra-ui/react";
-import Btn, { PaginationButton } from "@/components/Btn";
+import Btn from "@/components/Btn";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "../../components/modal";
 import { BsPlus } from "react-icons/bs";
-import { PlusIcon, SearchIcon } from "../../components/svg";
-
+import {  SearchIcon } from "../../components/svg";
 import useProperty from "@/hooks/useProperty";
 import { useImage, useInputText } from "../../hooks/useInput";
 import { useApiUrl } from "../../hooks/useApi";
@@ -27,12 +26,12 @@ import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
 import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
 import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
 import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
-import {
-  DoubleNextBtn,
-  DoublePrevBtn,
-  NextBtn,
-  PreviousBtn,
-} from "@/components/svg";
+// import {
+//   DoubleNextBtn,
+//   DoublePrevBtn,
+//   NextBtn,
+//   PreviousBtn,
+// } from "@/components/svg";
 import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { DocumentTypes, R } from "@/utils/types";
 import useUpload from "@/hooks/useUpload";
@@ -75,6 +74,7 @@ export const PropertyScreen = () => {
   const [loading, setLoading] = useState(false);
   const [showScreen, setShowScreen] = useState(1);
   const [users, setUsers] = useState<User[]>([]);
+  const [features, setFeatures] = useState<string[]>([]);
 
   console.log('getProperty', getProperty);
   console.log('propertyEl', propertyEl);
@@ -134,6 +134,15 @@ export const PropertyScreen = () => {
   } = useInputText((address) => address.length > 3);
 
   const {
+    input: lga,
+    onChangeInput: onChangeLga,
+    onBlurHandler: onBlurLga,
+    valueIsInvalid: invalidLga,
+    valueIsValid: validLga,
+    reset: lgaReset,
+  } = useInputText((lga) => lga.length > 2);
+ 
+  const {
     input: typeOfProperty,
     onChangeInput: onChangeType,
     onBlurHandler: onBlurType,
@@ -168,6 +177,14 @@ export const PropertyScreen = () => {
     valueIsValid: validPrice,
     reset: priceReset,
   } = useInputText((price) => price !== "");
+  const {
+    input: state,
+    onChangeInput: onChangeState,
+    onBlurHandler: onBlurState,
+    valueIsInvalid: invalidState,
+    valueIsValid: validState,
+    reset: stateReset,
+  } = useInputText((price) => price !== "");
 
   const {
     images,
@@ -185,17 +202,23 @@ export const PropertyScreen = () => {
 
   const { uploadSingle, uploadMultiple } = useUpload();
 
+  const onChangeFeatures = () => {
+    return setFeatures;
+  };
+
   const propertyData = {
     title,
+    lga,
+    state,
     address,
     price,
     category,
     description,
-    features:[],
+    features: features,
     images,
     documents,
   };
-
+  console.log(propertyData);
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
@@ -210,6 +233,7 @@ export const PropertyScreen = () => {
     priceReset();
     typeReset();
     addressReset();
+    stateReset();
     setShowScreen(1);
   };
 
@@ -226,7 +250,9 @@ export const PropertyScreen = () => {
           ? await uploadMultiple(imagesFormData)
           : await uploadSingle(imagesFormData);
 
-      const resolveImagesInArray = !(images?.length > 1) ? [uploadImages?.data]:  uploadImages?.data
+      const resolveImagesInArray = !(images?.length > 1)
+        ? [uploadImages?.data]
+        : uploadImages?.data;
 
       const uploadedDocuments = Object.keys(documents).filter(
         (val) => documents[val as validDocs]
@@ -237,7 +263,6 @@ export const PropertyScreen = () => {
       type validDocs = keyof typeof documents;
 
       for (const key in uploadedDocuments) {
-
         let keyVal = uploadedDocuments[key];
         const singleFormData = new FormData();
         const matchingFile = documents[keyVal as validDocs];
@@ -278,17 +303,15 @@ export const PropertyScreen = () => {
           mode: "one_off",
           amount: price,
         },
-        features:[],
+        features: features,
         ...uploadedFiles,
       };
 
       uploadedFiles && (await addProperty(payload)); // If no error occurs, the following code runs
-
+    
       setShowModal(false);
 
       resetFields();
-
-      setLoading(false);
 
       toast({
         status: "success",
@@ -297,8 +320,8 @@ export const PropertyScreen = () => {
         position: "top",
         duration: 5000,
       });
-    } 
-    catch (err) {
+      setLoading(false);
+    } catch (err) {
       toast({
         status: "error",
         description: "Failed to create property",
@@ -317,8 +340,8 @@ export const PropertyScreen = () => {
       const {data} = await getAdminProperty(inputValue);
       console.log('data.data', data?.data);
 
-      const propertiesToAdd = data?.data.filter((prop:PropertyCardProps)=> {
-        return getProperty.findIndex(index=> index._id === prop._id) === -1 
+      const propertiesToAdd = data?.data.filter((prop: PropertyCardProps) => {
+        return getProperty.findIndex((index) => index._id === prop._id) === -1;
       });
  
       setGetProperty(prev=>([...prev, ...propertiesToAdd ]));
@@ -331,11 +354,11 @@ export const PropertyScreen = () => {
     }
   };
 
-  const handleKeyPress =(e:React.KeyboardEvent<HTMLInputElement>)=> {
-    if (e.key === 'Enter') {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
       getPropertyFunction();
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -370,7 +393,6 @@ export const PropertyScreen = () => {
               // typeOfProperty={typeOfProperty}
               // validType={validType}
               // onBlurType={onBlurType}
-
               onChangeDescription={onChangeDescription}
               description={description}
               title={title}
@@ -385,6 +407,8 @@ export const PropertyScreen = () => {
               onBlurDescription={onBlurDescription}
               onBlurTitle={onBlurTitle}
               onBlurCategory={onBlurCategory}
+              features={features}
+              setFeatures={setFeatures}
               onClick={() => setShowScreen(2)}
             />
           ) : showScreen === 2 ? (
@@ -393,6 +417,14 @@ export const PropertyScreen = () => {
               price={price}
               // duration={duration}
               invalidPrice={invalidPrice}
+              state={state}
+              invalidState={invalidState}
+              onChangeState={onChangeState}
+              onBlurState={onBlurState}
+              lga={lga}
+              onBlurLga={onBlurLga}
+              onChangeLga={onChangeLga}
+              invalidLga={invalidLga}
               // invalidDuration={invalidDuration}
               invalidAddress={invalidAddress}
               validPrice={validPrice}
@@ -434,19 +466,18 @@ export const PropertyScreen = () => {
         className="robotoF"
         px={{ base: "16px", lg: "20px" }}
         height={{ base: "70vh", md: "78vh", lg: "60vh", xl: "65vh" }}
-        overflowY="scroll"
       >
         <Flex
           mb={"24px"}
           // mt={"10px"}
           gap={"12px"}
           w={"100%"}
-          h={{base:'fit-content',md:'36px'}}
+          h={{ base: "fit-content", md: "36px" }}
           position="sticky"
           top="0"
           zIndex="10"
           bg="white"
-          mt='2em'
+          mt="2em"
         >
           <Flex w={"100%"}>
             <InputGroup
@@ -459,10 +490,15 @@ export const PropertyScreen = () => {
               fontSize={14}
               textColor={"var--(sub600)"}
               w="100%"
-              h={{base:'36px',md:'100%'}}
+              h={{ base: "36px", md: "100%" }}
               _placeholder={{ textColor: "var--(soft400)" }}
             >
-              <InputLeftElement color={"var(--soft400)"} h="100%" display={'flex'} alignItems={'center'}>
+              <InputLeftElement
+                color={"var(--soft400)"}
+                h="100%"
+                display={"flex"}
+                alignItems={"center"}
+              >
                 <Box onClick={getPropertyFunction}>
                   <SearchIcon />
                 </Box>
@@ -478,63 +514,67 @@ export const PropertyScreen = () => {
               />
             </InputGroup>
           </Flex>
-          <Flex gap={'12px'} flexDir={{base:'column',sm:'row'}} alignItems={'end'}>
-                <Btn
-                  onClick={toggleModal}
-                  display={"flex"}
-                  gap={"4px"}
-                  alignItems={"center"}
-                  bg={"#fff"}
-                  h={{base:'36px',md:'100%'}}
-                  w={"131px"}
-                  border={"1px solid var(--soft200)"}
-                  borderRadius={"8px"}
-                  textColor={"var--(sub600)"}
-                  fontWeight={500}
-                  fontSize={"14px"}
-                  px={"6px"}
-                  pt={"0"}
-                  pb={"0"}
-                  _hover={{
-                  bg: "#1A1D66",
-                  textColor: "#FFF",
-                  }}
-                >
-                    <Text fontSize={"14px"}>Add Property</Text>
-                    <BsPlus className="icon" />
-                </Btn>
-                <Btn
-                    onClick={() => setPage(inputValue)}
-                    display={"flex"}
-                    gap={"4px"}
-                    alignItems={"center"}
-                    bg={"#fff"}
-                    h={{base:'36px',md:'100%'}}
-                    w={"80px"}
-                    border={"1px solid var(--soft200)"}
-                    borderRadius={"8px"}
-                    textColor={"var--(sub600)"}
-                    fontWeight={500}
-                    fontSize={"14px"}
-                    px={"6px"}
-                    pt={"0"}
-                    pb={"0"}
-                    _hover={{
-                    bg: "#1A1D66",
-                    textColor: "#FFF",
-                    }}
-                >
-                    <IoFilter className="icon" />
-                    <Text>Filter</Text>
-                </Btn>
-            </Flex>
+          <Flex
+            gap={"12px"}
+            flexDir={{ base: "column", sm: "row" }}
+            alignItems={"end"}
+          >
+            <Btn
+              onClick={toggleModal}
+              display={"flex"}
+              gap={"4px"}
+              alignItems={"center"}
+              bg={"#fff"}
+              h={{ base: "36px", md: "100%" }}
+              w={"131px"}
+              border={"1px solid var(--soft200)"}
+              borderRadius={"8px"}
+              textColor={"var--(sub600)"}
+              fontWeight={500}
+              fontSize={"14px"}
+              px={"6px"}
+              pt={"0"}
+              pb={"0"}
+              _hover={{
+                bg: "#1A1D66",
+                textColor: "#FFF",
+              }}
+            >
+              <Text fontSize={"14px"}>Add Property</Text>
+              <BsPlus className="icon" />
+            </Btn>
+            <Btn
+              onClick={() => setPage(inputValue)}
+              display={"flex"}
+              gap={"4px"}
+              alignItems={"center"}
+              bg={"#fff"}
+              h={{ base: "36px", md: "100%" }}
+              w={"80px"}
+              border={"1px solid var(--soft200)"}
+              borderRadius={"8px"}
+              textColor={"var--(sub600)"}
+              fontWeight={500}
+              fontSize={"14px"}
+              px={"6px"}
+              pt={"0"}
+              pb={"0"}
+              _hover={{
+                bg: "#1A1D66",
+                textColor: "#FFF",
+              }}
+            >
+              <IoFilter className="icon" />
+              <Text>Filter</Text>
+            </Btn>
+          </Flex>
         </Flex>
 
         {/* Scrollable Property Cards Container */}
         <Box
           overflowY={{ xl: "scroll" }}
           height={{ xl: "500px" }}
-        // mt={4}
+          // mt={4}
         >
           {loading && (
             <Stack>
@@ -552,7 +592,7 @@ export const PropertyScreen = () => {
                 base: "repeat(1, 1fr)",
                 md: "repeat(2, 1fr)",
                 lg: "repeat(3, 1fr)",
-                xl: "repeat(4, 1fr)"
+                xl: "repeat(4, 1fr)",
               }}
               gap={{ base: "24px", lg: "28px" }}
               paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
@@ -602,9 +642,7 @@ export const PropertyScreen = () => {
             className="inter"
           >{`page ${page} of ${totalPages}`}</Text>
 
-          <Box>
-            
-          </Box>
+          <Box></Box>
 
           {/* <Box
             display={"flex"}
@@ -637,7 +675,6 @@ export const PropertyScreen = () => {
               <DoubleNextBtn />
             </Box>
           </Box> */}
-
         </Box>
       )}
     </>

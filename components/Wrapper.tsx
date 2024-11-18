@@ -18,6 +18,11 @@ import useProfile from "@/hooks/useProfile";
 import { token } from "morgan";
 
 const Header = ({ casedPath }: { casedPath: string }) => {
+  const isUser = "An overview of activities, verify users and properties."
+  const {isWindow,user} = useAuth();
+  if(user?.role === 'ADMIN') {
+    return isUser
+  }
   return (
     <Flex
       justifyContent={"space-between"}
@@ -58,7 +63,9 @@ const Header = ({ casedPath }: { casedPath: string }) => {
             fontSize={".75rem"}
             fontWeight={400}
           >
-            An overview of activities, verify users and properties.
+            {
+              isUser && 'Overview of your favourite properties and profile settings' 
+            }
           </Text>
         </Flex>
       </Grid>
@@ -171,7 +178,7 @@ const Wrapper = ({
     return <></>
   }
   return (
-    <Box w={"100%"} py="40px" minH={"100vh"} overflowX={"hidden"}>
+    <Box w={"100%"} py={{base:'40px',lg:"10px"}} minH={"100vh"} overflowX={"hidden"}>
       <Box w={"100%"}>
         <Box
           borderRight={"1px solid #E1E4EA"}
@@ -184,7 +191,8 @@ const Wrapper = ({
           px="24px"
           py="40px"
           overflowY={"auto"}
-          display={{ base: "none", lg: "block" }}
+          display={{ base: "none", lg: "flex" }}
+          flexDir={'column'}
         >
           <Link href={"/"}>
             <Image src="/logo.svg" width="226px" height="40px" alt="logo" />
@@ -197,6 +205,7 @@ const Wrapper = ({
             flexDir={"column"}
             gap={"1rem"}
             alignItems={"flex-start"}
+            h={'100%'}
           >
             {navData.map((item) => {
               const isActive = path === item.label.toLowerCase();
@@ -208,6 +217,7 @@ const Wrapper = ({
                     className="robotoF"
                     cursor={"pointer"}
                     display={"flex"}
+                    alignItems={'center'}
                     justifyContent={"start"}
                     fontWeight={500}
                     w="196px"

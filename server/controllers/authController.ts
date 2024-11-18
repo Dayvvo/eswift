@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { generalRequestBody } from "../utils/interfaces/types";
 import { Request, Response } from "express";
@@ -33,7 +32,7 @@ class AuthController {
   googleAuthController = async (req: Request, res: Response) => {
     try {
       const profile = req?.user as generalRequestBody;
-
+      // console.log("profile", profile);
       this.jwtSignAndRedirect(res, profile);
     } catch (err) {
       console.log("err in google auth callback", err);
@@ -52,20 +51,30 @@ class AuthController {
       const { email, password } = body;
       const user = await User.findOne({ email });
 
-      console.log("backend user", user);
-
       if (user && user.matchPassword && (await user?.matchPassword(password))) {
         res.json({
           statusCode: 200,
           message: "Successful",
           data: {
             _id: user._id,
-            user:{
+            user: {
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
-              role: user.role,  
-            }, 
+              role: user.role,
+              phoneNumber: user.phoneNumber,
+              address: user.address,
+              avartar: user.avatar,
+              propertyInterest: user.propertyInterest,
+              locationInterest: user.locationInterest,
+              passwordUpdated: user.passwordUpdated,
+              state: user.state,
+              isExistingCustomer: user.isExistingCustomer,
+              occupation: user.occupation,
+              agentIdDocument: user.agendIdDocument,
+              idDocument: user.idDocument,
+              isOnboarded: user.isOnboarded,
+            },
             token: generateToken(user._id),
           },
         });

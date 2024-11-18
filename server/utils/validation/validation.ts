@@ -45,6 +45,7 @@ export const validateBlogPostData = (data: {
   introduction: string;
   body: string;
   body_image: string;
+  conclusion: string;
   // tags: string[];
 }) => {
   const blogPostSchema = Joi.object({
@@ -63,11 +64,14 @@ export const validateBlogPostData = (data: {
     body: Joi.string()
       .required()
       .trim()
-      .error(new Error("Content is required")),
+      .error(new Error("Body content is required")),
+    conclusion: Joi.string()
+      .required()
+      .trim()
+      .error(new Error("Conclusion is required")),
     body_image: Joi.string().uri().required(),
     // tags: Joi.array().items(Joi.string().trim()),
   });
-
   return blogPostSchema.validate(data);
 };
 
@@ -95,12 +99,11 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
     price: priceSchema.required(),
     category: Joi.string().required(),
     description: Joi.string().required(),
-    state: Joi.string().required(),
-    lga: Joi.string().required(),
+    state: Joi.string(),
+    lga: Joi.string(),
     features: Joi.array().items(Joi.string().min(2).max(50)).min(1).required(),
     images: Joi.array().items(Joi.string().uri()).min(1).required(),
     documents: Joi.array().items(documentSchema).required(),
-  
   });
 
   return propertySchema.validate(property);
@@ -112,7 +115,7 @@ export const ValidateEditProperty = (property: IAddPropertyValidation) => {
       .valid(...Object.values(PropertyDocuments))
       .required(),
     document: Joi.string().required(),
-  })
+  });
 
   const priceSchema = Joi.object({
     mode: Joi.string()
@@ -122,7 +125,7 @@ export const ValidateEditProperty = (property: IAddPropertyValidation) => {
     amount: Joi.string()
       .pattern(/^\d+(\.\d{1,2})?$/)
       .required(),
-  })
+  });
 
   const propertySchema = Joi.object({
     title: Joi.string().optional(),
@@ -133,10 +136,10 @@ export const ValidateEditProperty = (property: IAddPropertyValidation) => {
     features: Joi.array().items(Joi.string().min(2).max(50)).min(1).optional(),
     images: Joi.array().items(Joi.string().uri()).min(1).optional(),
     documents: Joi.array().items(documentSchema).optional(),
-  })
+  });
 
-  return propertySchema.validate(property)
-}
+  return propertySchema.validate(property);
+};
 
 export const createInspectionValidatorSchema = Joi.object({
   first_name: Joi.string().required(),
@@ -152,6 +155,12 @@ export const resetPasswordValidation = Joi.object({
     .required()
     .valid(Joi.ref("new_password"))
     .messages({ "any.one": "Confirm password must match new password" }),
+});
+
+export const customerOnboard = Joi.object({
+  state: Joi.string().required(),
+  propertyInterest: Joi.array().min(1),
+  locationInterest: Joi.array().min(1),
 });
 
 export const getAllInspectionsValidation = Joi.object({
@@ -214,14 +223,14 @@ export const validateProfile = (userProfile: ProfileInterface) => {
     passport: Joi.string().required(),
     agentIdProof: Joi.string().required(),
     currentOccupation: Joi.string().required(),
-  })
-  return profileSchema.validate(userProfile)
-}
+  });
+  return profileSchema.validate(userProfile);
+};
 
 export const validateDeleteFIle = (file: IDeleteFileValidation) => {
   const fileSchema = Joi.object({
     url: Joi.string().uri().required(),
-  })
+  });
 
-  return fileSchema.validate(file)
-}
+  return fileSchema.validate(file);
+};

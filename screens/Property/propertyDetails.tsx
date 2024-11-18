@@ -23,12 +23,8 @@ import { useAppContext } from "@/context";
 import { R } from "@/utils/types";
 import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { useRouter } from "next/router";
-import {
-  SuspendState,
-  DeleteProperty,
-} from "./VerificationState";
+import { SuspendState, DeleteProperty } from "./VerificationState";
 import useToast from "@/hooks/useToast";
-
 
 export const PropertyDetails = ({
   my,
@@ -39,11 +35,10 @@ export const PropertyDetails = ({
   p?: string;
   cardWidth?: any;
 }) => {
+  type activeModalType = "suspend" | "delete" | "gallery" | "documents";
 
-  type activeModalType = 'suspend' | 'delete' | 'gallery' | 'documents';
-  
   const { globalContext } = useAppContext();
-  
+
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -51,13 +46,16 @@ export const PropertyDetails = ({
     role: "",
     avatar: "",
     propertyCount: 0,
+    phoneNumber: "",
   });
 
-  const [detailsData, setDetailsData] = useState<PropertyCardProps | null>(null);
+  const [detailsData, setDetailsData] = useState<PropertyCardProps | null>(
+    null
+  );
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [modalType, setModalType] = useState< activeModalType | null>(null);
+  const [modalType, setModalType] = useState<activeModalType | null>(null);
   const [activeModal, setActiveModal] = useState(false);
-  const [itemIdInModal, setItemIdInModal] = useState('');
+  const [itemIdInModal, setItemIdInModal] = useState("");
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
 
@@ -105,7 +103,7 @@ export const PropertyDetails = ({
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     getPropertyFunction();
   }, [showModal, isVerifying]);
@@ -114,12 +112,11 @@ export const PropertyDetails = ({
     setActiveModal((prevState) => !prevState);
   };
 
-  const openModal = (state: activeModalType, id?:string)=>{
+  const openModal = (state: activeModalType, id?: string) => {
     id && setItemIdInModal(id);
     toggleModal();
     setModalType(state);
   };
-
 
   const verifyPropertyFn = async (status: string) => {
     if (!id) {
@@ -160,11 +157,12 @@ export const PropertyDetails = ({
       setIsVerifying(false);
     }
   };
- 
+
   const deletePropertyFn = async () => {
+    setIsVerifying(true);
     try {
       const req = await deleteProperty(id); // If no error occurs, the following code runs
-      // console.log("response", req);
+
       router.push("/property");
       toast({
         status: "success",
@@ -173,6 +171,7 @@ export const PropertyDetails = ({
         position: "top",
         duration: 1000,
       });
+      setIsVerifying(false);
     } catch (err) {
       toast({
         status: "error",
@@ -181,17 +180,17 @@ export const PropertyDetails = ({
         position: "top",
         duration: 1000,
       });
-      // console.log("err", err);
+      setIsVerifying(false);
+      console.log("err", err);
     }
   };
 
   useEffect(() => {
     getPropertyDetailFn();
   }, [id, showModal, isVerifying]);
-  
+
   return (
     <>
-      
       <Modal
         closeOnOverlayClick={true}
         onClose={toggleModal}
@@ -199,33 +198,32 @@ export const PropertyDetails = ({
       >
         <ModalOverlay />
         <ModalContent>
-          {
-
-            modalType === 'suspend'?
+          {modalType === "suspend" ? (
             <SuspendState
-             verifyPropertyFn={verifyPropertyFn}
-             isVerifying={isVerifying}
-             toggleModal={toggleModal}
-            />:
-
-            modalType ==='delete'?
+              verifyPropertyFn={verifyPropertyFn}
+              isVerifying={isVerifying}
+              toggleModal={toggleModal}
+            />
+          ) : modalType === "delete" ? (
             <DeleteProperty
-             toggleModal={toggleModal}
-             isVerifying={isVerifying}
-             deletePropertyFn={deletePropertyFn}
-            />:
-            
-            modalType ==='documents' && detailsData?.documents?
-            <embed src={detailsData?.documents?.find(item=>item.document)?.document} width="400px" height="600px" type="application/pdf"/>
-            : 
+              toggleModal={toggleModal}
+              isVerifying={isVerifying}
+              deletePropertyFn={deletePropertyFn}
+            />
+          ) : modalType === "documents" && detailsData?.documents ? (
+            <embed
+              src={
+                detailsData?.documents?.find((item) => item.document)?.document
+              }
+              width="400px"
+              height="600px"
+              type="application/pdf"
+            />
+          ) : (
             <></>
-          
-          }
-
+          )}
         </ModalContent>
-  
       </Modal>
-
 
       <Box bg={"#FFF"} w={"100%"}>
         <Flex w={"100%"} my={my || "24px"} pos={"relative"}>
@@ -320,17 +318,19 @@ export const PropertyDetails = ({
               </Text>
               <Box fontSize={"18px"} fontWeight={300} textColor={"#626871"}>
                 <Text>Key Features</Text>
-                {detailsData?.features?.map((feature: string, index: number) => {
-                  return (
-                    <Flex key={index} alignItems={"center"} gap={"4px"}>
-                      <BsDot />
-                      <Text>
-                        {feature.slice(0, 1).toUpperCase()}
-                        {feature.slice(1, feature.length).toLowerCase()}
-                      </Text>
-                    </Flex>
-                  );
-                })}
+                {detailsData?.features?.map(
+                  (feature: string, index: number) => {
+                    return (
+                      <Flex key={index} alignItems={"center"} gap={"4px"}>
+                        <BsDot />
+                        <Text>
+                          {feature.slice(0, 1).toUpperCase()}
+                          {feature.slice(1, feature.length).toLowerCase()}
+                        </Text>
+                      </Flex>
+                    );
+                  }
+                )}
               </Box>
               <Flex
                 bg={"var(--weak50)"}
@@ -349,10 +349,10 @@ export const PropertyDetails = ({
                 </Text>
               </Flex>
               <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
-                {detailsData?.documents?.map((document,key) => {
+                {detailsData?.documents?.map((document, key) => {
                   return (
                     <Flex
-                      key={(String(document?.type) + key)}
+                      key={String(document?.type) + key}
                       alignItems={"center"}
                       position={"relative"}
                       borderRadius={"8.5px"}
@@ -361,7 +361,7 @@ export const PropertyDetails = ({
                       w={"100%"}
                       h={"52px"}
                     >
-                      <Box fontSize={'12px'}> {document?.type} </Box>
+                      <Box fontSize={"12px"}> {document?.type} </Box>
                       <Btn
                         pos={"absolute"}
                         bg={"transparent"}
@@ -376,7 +376,9 @@ export const PropertyDetails = ({
                         fontSize={"10px"}
                         fontWeight={500}
                         insetEnd={4}
-                        onClick={()=>{openModal('documents',document.document)}}
+                        onClick={() => {
+                          openModal("documents", document.document);
+                        }}
                       >
                         View
                       </Btn>
@@ -404,7 +406,7 @@ export const PropertyDetails = ({
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--primaryBase)"}
-                      onClick={()=>openModal('suspend') }
+                      onClick={() => openModal("suspend")}
                     >
                       Suspend
                     </Btn>
@@ -418,12 +420,12 @@ export const PropertyDetails = ({
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--errorBase)"}
-                      onClick={()=>openModal('delete')}
+                      onClick={() => openModal("delete")}
                     >
                       Delete
                     </Btn>
                   </Flex>
-                ) :  (
+                ) : (
                   <Flex gap={"16px"} direction={"column"}>
                     {/* <Btn
                       bg={"transparent"}
@@ -449,13 +451,13 @@ export const PropertyDetails = ({
                       borderRadius={"10px"}
                       h={"40px"}
                       textColor={"var(--errorBase)"}
-                      onClick={()=> openModal('delete')}
+                      onClick={() => openModal("delete")}
                     >
                       Delete
                     </Btn>
                   </Flex>
-                ) 
-                
+                )
+              ) : (
                 // : (
                 //   <Flex gap={"16px"} direction={"column"}>
                 //     <Btn
@@ -488,7 +490,6 @@ export const PropertyDetails = ({
                 //     </Btn>
                 //   </Flex>
                 // )
-              ) : (
                 <></>
               )}
               <Flex
@@ -546,7 +547,7 @@ export const PropertyDetails = ({
                     >
                       PHONE NO.
                     </Text>
-                    <Text fontSize={"14px"}>08123456786</Text>
+                    <Text fontSize={"14px"}>{user?.phoneNumber}</Text>
                   </Box>
                   <Box textColor={"#626871"} fontWeight={500}>
                     <Text
@@ -559,7 +560,7 @@ export const PropertyDetails = ({
                     <Text fontSize={"14px"}>Affiliate</Text>
                   </Box>
                 </Flex>
-                <Box textColor={"#626871"} fontWeight={500}>
+                {/* <Box textColor={"#626871"} fontWeight={500}>
                   <Text
                     mb={"4px"}
                     textColor={"var(--soft400)"}
@@ -568,7 +569,7 @@ export const PropertyDetails = ({
                     PROPERTY
                   </Text>
                   <Text fontSize={"14px"}>{user?.propertyCount}</Text>
-                </Box>
+                </Box> */}
               </Flex>
             </Flex>
           </Flex>
@@ -599,7 +600,6 @@ export const PropertyDetails = ({
           })}
         </Flex>
       </Box>
-
     </>
   );
 };

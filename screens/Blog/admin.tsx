@@ -80,12 +80,13 @@ const BlogScreen = () => {
     }
   };
 
+  console.log(isAdmin);
   useEffect(() => {
     const userData = localStorage.getItem("userData") || null;
 
     if (userData) {
       const parsedData = JSON.parse(userData);
-      setIsAdmin(parsedData.role);
+      setIsAdmin(parsedData.user.role);
     }
   }, []);
 

@@ -66,7 +66,6 @@ export const CustomerSignUpcreen = () => {
           >
             Sign in with Google <FcGoogle />
           </Btn>
-
           {/* <Flex w="100%" my={"10px"} justifyContent={"space-between"}>
             <Text
               fontWeight={400}
@@ -86,8 +85,6 @@ export const CustomerSignUpcreen = () => {
               </Text>
             </Link>
           </Flex> */}
-
-
         </Box>
       </Flex>
       <Text fontSize={"14px"} fontWeight={400} textColor={"var(--sub600)"}>

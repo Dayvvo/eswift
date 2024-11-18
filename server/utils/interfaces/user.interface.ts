@@ -36,6 +36,15 @@ export interface IUser {
   matchPassword?: FunctionConstructor;
   increasePropertyCount?: FunctionConstructor;
   decreasePropertyCount?: FunctionConstructor;
+  state?: string;
+  propertyInterest?: string[];
+  locationInterest?: string[];
+  isExistingCustomer?: boolean;
+  contactMethod?: string;
+  idDocument?: string;
+  agendIdDocument?: string;
+  occupation: string;
+  isOnboarded?: boolean
 }
 
 export interface IUserInRequest extends IUser {
