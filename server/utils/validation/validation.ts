@@ -211,18 +211,10 @@ export const validateProfile = (userProfile: ProfileInterface) => {
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     phoneNumber: Joi.string().required(),
-    residentialAddress: Joi.string().required(),
+    address: Joi.string().required(),
     officeAddress: Joi.string().required(),
     city: Joi.string().required(),
     state: Joi.string().required(),
-    country: Joi.string().required(),
-    areYouAnExistingCustomer: Joi.boolean().required(),
-    howDidYouHearAboutUs: Joi.string().required(),
-    modeOfIdentification: Joi.string().required(),
-    idDocument: Joi.string().required(),
-    passport: Joi.string().required(),
-    agentIdProof: Joi.string().required(),
-    currentOccupation: Joi.string().required(),
   });
   return profileSchema.validate(userProfile);
 };
