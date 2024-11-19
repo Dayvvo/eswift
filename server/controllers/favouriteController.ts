@@ -27,12 +27,15 @@ class FavouritePropertyController {
         user: userId._id,
         property: propertyId,
       });
+
       if (propertyExistsInFavorites) {
-        return res.status(400).json({
-          statusCode: 400,
+        return res.status(200).json({
+          statusCode: 200,
+          isInFavourite: true,
           message: "Property is already part of favourites!",
         });
       }
+
       const favouriteProperty = new FavouriteProperty({
         user: userId?._id,
         property: propertyId,
@@ -51,8 +54,10 @@ class FavouritePropertyController {
 
   getAllFavouriteProperty = async (req: Request, res: Response) => {
     try {
-      console.log('matching user', req?.user)
-      const properties = await FavouriteProperty.find({user: req.user }).populate('property');
+      console.log("matching user", req?.user);
+      const properties = await FavouriteProperty.find({
+        user: req.user,
+      }).populate("property");
       return res.status(200).json({
         statusCode: 200,
         message: "Favourite properties",
@@ -86,7 +91,6 @@ class FavouritePropertyController {
       res.status(500).send("An Error ocurred removing favourite properties");
     }
   };
-  
 }
 
 let favouritePropertyController = new FavouritePropertyController();
