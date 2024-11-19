@@ -31,9 +31,9 @@ const Header = ({ casedPath }: { casedPath: string }) => {
       // padding={"40px 30px 40px 60px"}
       px={{ base: "12px", lg: "40px" }}
       py={{ base: "20px", lg: "40px" }}
+      pos="relative"
       left={{ base: "2px", lg: "256px" }}
       maxW={{ base: "full", lg: "80vw" }}
-      pos="sticky"
       zIndex={99}
     >
       <Grid gridTemplateColumns={"40px 2fr"} gap={0}>

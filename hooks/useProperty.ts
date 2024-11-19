@@ -78,10 +78,10 @@ const useProperty = () => {
     [token]
   );
   
-  const getAdminProperty = async (inputValue: string, page: any) => {
+  const getAdminProperty = async (inputValue: string) => {
     try {
       const res = await query(
-        `/property/admin?keyword=${inputValue}&pageNumber=${page}`
+        `/property/admin?keyword=${inputValue}`
       );
       return res as PropertyResponse;
     } catch (err: any) {

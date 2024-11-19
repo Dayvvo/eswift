@@ -151,7 +151,7 @@ interface User {
       setLoading(true);
       try {
         setLoading(false);
-        const getAllProperties = await getAdminProperty(inputValue, page);
+        const getAllProperties = await getAdminProperty(inputValue);
         setGetProperty(getAllProperties?.data?.data);
         console.log(getAllProperties?.data?.data);
         setTotalPages(getAllProperties.data?.pagination.pages);
