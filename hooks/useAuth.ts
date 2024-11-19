@@ -29,7 +29,7 @@ export interface IUsers {
   refCount?: number;
   propertyCount?: number;
   role: UserRole;
-  onboard?: R;
+  isOnboarded?: R;
 }
 export interface IUser {
   _id?: string;
@@ -48,7 +48,7 @@ export interface IUser {
   refCount?: number;
   propertyCount?: number;
   role: UserRole;
-  onboard?: R;
+  isOnboarded?: R;
 }
 
 const useAuth = () => {

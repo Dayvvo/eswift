@@ -302,11 +302,13 @@ const NavBar = () => {
               {token ? 
                 <Flex w="100%" flexDir={'column'} alignItems={'center'} mt={8} className="robotoF">
                   <Flex onClick={onClose} w={'fit-content'} >
-                    <Btn cursor={'pointer'} onClick={logout} fontSize={'14px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
+                    <Btn cursor={'pointer'} fontSize={'14px'} color='#000' _hover={{color:'#3170A6'}} backgroundColor={'transparent'} 
                       display={'flex'} gap={'4px'} alignItems={'center'} fontWeight={500}
                     >
                       <VscSettings />
-                      Settings
+                      <Link href={'/settings'}>
+                        Settings
+                      </Link>
                     </Btn>
                   </Flex>
                   <Flex onClick={onClose} w={'fit-content'} >

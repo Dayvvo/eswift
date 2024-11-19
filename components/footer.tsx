@@ -188,9 +188,9 @@ export const Footer = () => {
             </Flex>
           </Box>
           <Box className="roboto" w={{ base: "100%", lg: "20%" }}>
-            {NavLink.map((item) => (
+            {NavLink.map((item, index) => (
               // eslint-disable-next-line react/jsx-key
-              <Link href={`${item?.Link}`}>
+              <Link href={`${item?.Link}`} key={index}>
                 <Text
                   fontWeight={400}
                   fontSize={"16px"}

@@ -5,15 +5,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState, FormEvent } from "react";
 import {
   Box,
-  Checkbox,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { CheckboxInput, SelectInput, TextInput } from "@/components/Inputs";
 import { useInputSettings } from "@/hooks/useInput";
@@ -21,7 +20,10 @@ import { nigerianStates } from "@/utils/modules";
 import Btn from "@/components/Btn";
 import { HappyIcon } from "@/components/svg";
 import Divider from "@/components/Divider";
+import { useApiUrl } from "@/hooks/useApi";
+import Preloader from "@/components/Preloader";
 
+// Onboarding Modal Component
 type InformationModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -30,79 +32,75 @@ type InformationModalProps = {
 type ValidationType = {
   [key in keyof {
     state: string;
-    property: string;
-    location: string;
+    propertyInterest: string;
+    locationInterest: string;
   }]: (input: string) => boolean;
 };
 
 const validation: ValidationType = {
   state: (input: string) => (input ? input.trim().length > 1 : false),
-  property: (input: string) => (input ? input.trim().length > 1 : false),
-  location: (input: string) => true,
+  propertyInterest: (input: string) => (input ? input.trim().length > 1 : false),
+  locationInterest: (input: string) => true,
 };
 
-const PREFERED_PROPERTY_TYPE = ["Apartment", "House", "Condo", "Townhouse"];
+const PREFERED_PROPERTY_TYPE = ["Land", "House"];
 
 const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
-  const [loading, setLoading] = useState();
+  const client = useApiUrl();
+  const { toast }: any = useToast();
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+
   const {
     input,
     onChangeHandler,
     inputIsinvalid,
-    inputIsvalid,
     onBlurHandler,
   } = useInputSettings(
     {
       state: "",
-      property: "",
-      location: "",
+      propertyInterest: "",
+      locationInterest: "",
     },
     validation
   );
 
-  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(input);
+    setLoading(true);
+    try {
+      const data = await client.put(`/user/profile?onboarding=true`, {
+        ...input,
+        ...user,
+      });
+      toast({
+        status: "success",
+        description: "Preference updated successfully",
+        title: "Onboarding Completed",
+        position: "top",
+        duration: 1000,
+      });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   };
+
   return (
-    <Modal
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      size={"lg"}
-      closeOnOverlayClick={true}
-    >
+    <Modal isCentered isOpen={isOpen} onClose={onClose} size={"lg"}>
       <ModalOverlay />
-      <ModalContent className="robotoF">
-        <ModalHeader
-          className="robotoF"
-          display={"flex"}
-          flexDir={"column"}
-          alignItems={"center"}
-        >
+      <ModalContent>
+        <ModalHeader display={"flex"} flexDir={"column"} alignItems={"center"}>
           <HappyIcon />
           <Box>
-            <Text
-              fontWeight={400}
-              fontSize={"24px"}
-              className="robotoF"
-              textAlign={"center"}
-            >
-              Welcome to E-Swift 🏠
+            <Text fontWeight={400} fontSize={"24px"} textAlign={"center"}>
+              Welcome to E-Swift 🏠
             </Text>
-            <Text
-              fontWeight={400}
-              fontSize={"12px"}
-              color={"#525866"}
-              textAlign={"center"}
-            >
-              Let us help you find your dream property effortlessly using our
-              tailored search options. We’re excited to have you join our
-              community!
+            <Text fontWeight={400} fontSize={"12px"} color={"#525866"} textAlign={"center"}>
+              Let us help you find your dream property effortlessly using our tailored search options. We’re excited to have you join our community!
             </Text>
           </Box>
         </ModalHeader>
-        {/* <ModalCloseButton /> */}
         <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
           <Divider w="90%" h={"1px"} color="#E1E4EA" />
         </Box>
@@ -110,14 +108,22 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
         <form onSubmit={submitHandler}>
           <ModalBody pb={4}>
             <Box mt={1}>
-              <Text className="inter" fontWeight={700} fontSize={"14px"}>
+              <Text fontWeight={700} fontSize={"14px"}>
                 Preferred Property Type
               </Text>
-              <Box display={"flex"} flexDir={"column"} gap={"10px"}>
-                {PREFERED_PROPERTY_TYPE.map((property, index) => {
-                  return <CheckboxInput key={index} label={property} />;
-                })}
-              </Box>
+            </Box>
+            <Box my={5}>
+              <SelectInput
+                items={["Land", "House", "Both"]}
+                label="What property are you interested in buying"
+                placeholder="Select property"
+                name="propertyInterest"
+                errorMessage="Select property"
+                inputIsinvalid={inputIsinvalid("propertyInterest")}
+                value={input?.propertyInterest}
+                onChange={onChangeHandler}
+                onBlur={() => onBlurHandler("propertyInterest")}
+              />
             </Box>
             <Box>
               <SelectInput
@@ -125,42 +131,28 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
                 label="State"
                 placeholder="Select state"
                 name="state"
-                inputIsinvalid={inputIsinvalid("state")}
                 errorMessage="Select state"
-                value={input.state}
+                inputIsinvalid={inputIsinvalid("state")}
+                value={input?.state}
                 onChange={onChangeHandler}
                 onBlur={() => onBlurHandler("state")}
               />
             </Box>
             <Box mt={5}>
-              <SelectInput
-                items={["Land", "House", "or both"]}
-                label="What property are you intrested in buying"
-                placeholder="Select property"
-                name="property"
-                errorMessage="Select property"
-                inputIsinvalid={inputIsinvalid("property")}
-                value={input.property}
-                onChange={onChangeHandler}
-                onBlur={() => onBlurHandler("property")}
-              />
-            </Box>
-            <Box mt={5}>
               <TextInput
                 label="Where are you interested in buying property"
-                name="location"
+                name="locationInterest"
                 placeholder="Enter location"
-                value={input.location}
+                errorMessage="enter your location"
+                value={input?.locationInterest}
                 onChange={onChangeHandler}
-                onBlur={() => onBlurHandler("location")}
+                onBlur={() => onBlurHandler("locationInterest")}
               />
             </Box>
           </ModalBody>
           <ModalFooter>
             <Btn
               bg={"transparent"}
-              display={"flex"}
-              alignItems={"center"}
               w={"100%"}
               h={"40px"}
               border={"1px solid var(--primaryBase)"}
@@ -173,10 +165,9 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
                 textColor: "#FFF",
               }}
               isLoading={loading}
-              // loadingText="submitting"
               disabled={loading}
             >
-              submit
+              Submit
             </Btn>
           </ModalFooter>
         </form>
@@ -186,58 +177,70 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
 };
 
 export default function Home() {
-  const [building, setBuilding] = useState<boolean>(false);
-  // const [cookie, setCookie] = useState("")
+  const [building, setBuilding] = useState(false);
+  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
   const [showModal, setShowModal] = useState(false);
-
-  const toggleModal = () => {
-    setShowModal((prev) => !prev);
-  };
-
   const navigate = useRouter();
-
-  const isWidow = typeof window !== "undefined";
 
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user && !user?.onboard) {
-      // setShowModal(true);
+    if (user && !user?.isOnboarded) {
+      setShowModal(true);
     }
   }, [user]);
 
   useEffect(() => {
-    if (isWidow) {
+    if (typeof window !== "undefined") {
       const getCookie = (name: string) => {
-        if (window?.document?.cookie) {
-          const windowCookie = window.document.cookie;
-          const value = `; ${windowCookie}`;
-          const parts = value.split(`; ${name}=`);
-
-          if (parts.length === 2) {
-            let uriEncodedValue = parts.pop()?.split(";").shift() as string;
-            return decodeURIComponent(uriEncodedValue);
-          }
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+          return decodeURIComponent(parts.pop()?.split(";").shift() || "");
         }
       };
-      try {
-        const myCookie = getCookie("auth-cookie") as string;
-        myCookie && localStorage.setItem("userData", myCookie);
-        console.log("old cookie", myCookie);
+
+      const myCookie = getCookie("auth-cookie");
+      if (myCookie) {
+        localStorage.setItem("userData", myCookie);
         const authRoute = sessionStorage.getItem("authRoute");
-        authRoute && navigate.push(authRoute);
-      } catch (error) {
-        console.error("Error parsing JSON:", error);
+        if (authRoute) {
+          navigate.push(authRoute);
+        }
       }
     }
+
     return () => localStorage.removeItem("authRoute");
-  }, [isWidow]);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoadingScreen(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
-      <OnboardingModal isOpen={showModal} onClose={toggleModal} />
-
-      {building ? <Resdesign /> : <HomePage />}
+      {showLoadingScreen ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            backgroundColor: "#f0f0f0",
+          }}
+        >
+          <Preloader />
+        </div>
+      ) : (
+        <>
+          <OnboardingModal isOpen={showModal} onClose={() => setShowModal(false)} />
+          {building ? <Resdesign /> : <HomePage />}
+        </>
+      )}
     </>
   );
 }

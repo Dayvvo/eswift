@@ -42,11 +42,11 @@ const BlogspotScreen = () => {
 
         setBlogPost(req?.data);
         setLoading(false);
+        console.log("req", req);
       } catch (error) {
         setLoading(false);
       }
 
-      // console.log("req", req?.data);
     };
 
     getBlogFn();
