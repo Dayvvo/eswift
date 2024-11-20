@@ -1,6 +1,6 @@
 import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
-import { Box, Grid } from "@chakra-ui/react";
+import { Box, Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
 import { BlogCard } from "./blogsCard";
 import { useEffect, useState } from "react";
 import useBlog from "@/hooks/useBlog";
@@ -32,6 +32,14 @@ const BlogspotScreen = () => {
   }
 
   console.log('blogPost', blogPost);
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  
+  useEffect(() => {
+    if (blogPost.length === 0) {
+      onOpen();
+    }
+  }, [blogPost, onOpen]);
 
   useEffect(() => {
     const getBlogFn = async () => {
@@ -75,22 +83,35 @@ const BlogspotScreen = () => {
         gap={"20px"}
         mb={"120px"}
       >
-        <Grid
-          templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
-          gap={{ base: "24px", lg: "60px" }}
-        >
-          {blogPost && blogPost.map((item) => {
-            return (
-              <BlogCard
-                key={item?._id} id={item?._id}
-                picture={item?.header_image}
-                title={item?.title}
-                details={item?.introduction}
-                date={item?.createdAt}
-              />
-            );
-          })}
-        </Grid>
+        {
+          blogPost.length > 0 ? (
+            <Grid
+              templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
+              gap={{ base: "24px", lg: "60px" }}
+            >
+              {blogPost && blogPost.map((item) => {
+                return (
+                  <BlogCard
+                    key={item?._id} id={item?._id}
+                    picture={item?.header_image}
+                    title={item?.title}
+                    details={item?.introduction}
+                    date={item?.createdAt}
+                  />
+                );
+              })}
+            </Grid>
+          ): (
+            <>
+              <Text className="robotoF">No Blogs Found</Text>
+              <Text className="robotoF">
+                We couldn't find any blog. Please try creating a blog.
+              </Text>
+
+        </>
+          )
+
+        }
 
         <LoadMore click={()=> page + 1}/>
       </Box>
