@@ -76,9 +76,8 @@ export const PropertyScreen = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [features, setFeatures] = useState<string[]>([]);
 
-  console.log('getProperty', getProperty);
-  console.log('propertyEl', propertyEl);
-
+  
+  
   const [documents, setDocuments] = useState<Documents>({
     FamilyReceipt: null,
     SurveyPlan: null,

@@ -21,7 +21,7 @@ const validation: ValidationType = {
   phoneNumber: (input: string) => (input ? /^0?\d{10}$/.test(input) : false),
   address: (input: string) => (input ? input.trim().length > 5 : false),
   state: (input: string) => (input ? input.trim().length > 1 : false),
-  avatar: (input: string) => true,
+  avatar: (_input: string) => true,
   role: (input: string) => input === "GUEST" || input !== "ADMIN",
 };
 
@@ -94,7 +94,7 @@ export const SettingsScreen = () => {
     },
   ];
 
-  const { updateUser, getUserById } = useUser();
+  const { updateUser, } = useUser();
   const { toast } = useToast();
 
   const { user: profile } = useAuth();
