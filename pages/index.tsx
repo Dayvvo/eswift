@@ -2,9 +2,10 @@ import useAuth from "@/hooks/useAuth";
 import HomePage from "@/screens/home/home";
 import { Resdesign } from "@/screens/home/redesign";
 import { useRouter } from "next/router";
-import { useEffect, useState, FormEvent } from "react";
+import { useEffect, useState, FormEvent, KeyboardEvent } from "react";
 import {
   Box,
+  Flex,
   Modal,
   ModalBody,
   ModalContent,
@@ -15,13 +16,16 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { CheckboxInput, SelectInput, TextInput } from "@/components/Inputs";
-import { useInputSettings } from "@/hooks/useInput";
 import { nigerianStates } from "@/utils/modules";
 import Btn from "@/components/Btn";
 import { HappyIcon } from "@/components/svg";
 import Divider from "@/components/Divider";
 import { useApiUrl } from "@/hooks/useApi";
 import Preloader from "@/components/Preloader";
+import { IoCloseOutline } from "react-icons/io5";
+import { BsPlus } from "react-icons/bs";
+
+
 
 // Onboarding Modal Component
 type InformationModalProps = {
@@ -37,41 +41,55 @@ type ValidationType = {
   }]: (input: string) => boolean;
 };
 
-const validation: ValidationType = {
-  state: (input: string) => (input ? input.trim().length > 1 : false),
-  propertyInterest: (input: string) => (input ? input.trim().length > 1 : false),
-  locationInterest: (input: string) => true,
-};
+type onBoard ={
+  state?:string;
+  propertyInterest?:string[],
+  locationInterest?:string[],
+}
+
+// const validation: ValidationType = {
+//   state: (input: string) => (input ? input.trim().length > 1 : false),
+//   propertyInterest: (input: string[]) => (input ? input.length === 1 : false),
+//   locationInterest: (input: string[]) => (input ? input),
+// };
+
 
 const PREFERED_PROPERTY_TYPE = ["Land", "House"];
 
-const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
+export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   const client = useApiUrl();
   const { toast }: any = useToast();
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+  const [inputValue, setInputValue] = useState<string>('')
+  const [onboard , setOnboard] = useState<onBoard>({
+    state:'',
+    propertyInterest:[],
+    locationInterest: [],
+  }) 
 
-  const {
-    input,
-    onChangeHandler,
-    inputIsinvalid,
-    onBlurHandler,
-  } = useInputSettings(
-    {
-      state: "",
-      propertyInterest: "",
-      locationInterest: "",
-    },
-    validation
-  );
+  // const {
+  //   input,
+  //   onChangeHandler,
+  //   inputIsinvalid,
+  //   onBlurHandler,
+  // } = useInputSettings(
+  //   {
+  //     state: "",
+  //     propertyInterest:[],
+  //     locationInterest:[]
+  //   },
+  //   validation
+  // );
+
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     try {
       const data = await client.put(`/user/profile?onboarding=true`, {
-        ...input,
         ...user,
+        ...onboard,
       });
       toast({
         status: "success",
@@ -86,11 +104,62 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
     }
   };
 
+
+
+  // const handleAddTag = () => {
+  //   const newLocation = inputValue.trim();
+  //   if (newLocation && !onboard?.locationInterest.includes(newLocation)) {
+  //     setOnboard((prevOnboard) => ({
+  //       ...prevOnboard,
+  //       locationInterest: [...prevOnboard.locationInterest, newLocation],
+  //     }));
+  //     setInputValue('');
+  
+  // };
+
+  const handleAddTag = () => {
+    const newLocation = inputValue.trim();
+    if (newLocation && !(onboard?.locationInterest ?? []).includes(newLocation)) {
+      setOnboard((prevOnboard) => ({
+        ...prevOnboard,
+        locationInterest: [...(prevOnboard.locationInterest ?? []), newLocation],
+      }));
+      setInputValue('');
+    }
+  };
+
+ 
+  const handleRemoveTag =(index: number)=> {
+    setOnboard((prevOnboard) => ({
+      ...prevOnboard,
+      locationInterest: prevOnboard.locationInterest?.filter((_location, i) => i !== index) ?? [],
+    }));  
+  }
+
+  // const handleKeyPress =(e:KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter'){
+  //     handleAddTag()
+  //   }
+  // }
+ 
+  const handleTagInput =(e:any)=> {
+    setInputValue(e.target.value)
+  }
+
+  const handlePropertyInterest =(e:any)=> {
+    setOnboard((prevOnboard)=> ({
+      ...prevOnboard,
+      propertyInterest: Array.isArray(e.target.value) ? e.target.value : [e.target.value] 
+      ,
+    }))
+  }
+
+
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size={"lg"}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader display={"flex"} flexDir={"column"} alignItems={"center"}>
+        <ModalHeader display={"flex"} flexDir={"column"} alignItems={"center"} className={'urbanist'}>
           <HappyIcon />
           <Box>
             <Text fontWeight={400} fontSize={"24px"} textAlign={"center"}>
@@ -105,7 +174,7 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
           <Divider w="90%" h={"1px"} color="#E1E4EA" />
         </Box>
 
-        <form onSubmit={submitHandler}>
+        <form onSubmit={submitHandler} className={'urbanist'}>
           <ModalBody pb={4}>
             <Box mt={1}>
               <Text fontWeight={700} fontSize={"14px"}>
@@ -119,10 +188,9 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
                 placeholder="Select property"
                 name="propertyInterest"
                 errorMessage="Select property"
-                inputIsinvalid={inputIsinvalid("propertyInterest")}
-                value={input?.propertyInterest}
-                onChange={onChangeHandler}
-                onBlur={() => onBlurHandler("propertyInterest")}
+                value={onboard?.propertyInterest}
+                onChange={handlePropertyInterest}
+                // onBlur={() => onBlurHandler("propertyInterest")}
               />
             </Box>
             <Box>
@@ -132,22 +200,45 @@ const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
                 placeholder="Select state"
                 name="state"
                 errorMessage="Select state"
-                inputIsinvalid={inputIsinvalid("state")}
-                value={input?.state}
-                onChange={onChangeHandler}
-                onBlur={() => onBlurHandler("state")}
+                // inputIsinvalid={inputIsinvalid("state")}
+                value={onboard?.state}
+                onChange={(e) => setOnboard((prevOnboard) => ({ ...prevOnboard, state: e.target.value }))}
+
+                // onBlur={() => onBlurHandler("state")}
               />
             </Box>
             <Box mt={5}>
-              <TextInput
-                label="Where are you interested in buying property"
-                name="locationInterest"
-                placeholder="Enter location"
-                errorMessage="enter your location"
-                value={input?.locationInterest}
-                onChange={onChangeHandler}
-                onBlur={() => onBlurHandler("locationInterest")}
-              />
+              <Flex gap="8px" alignItems={'end'}>
+                <TextInput
+                  label="Where are you interested in buying property"
+                  name="locationInterest"
+                  placeholder="Enter location"
+                  errorMessage="enter your location"
+                  value={inputValue}
+                  onChange={handleTagInput}
+                  // onBlur={() => onBlurHandler("locationInterest")}
+                />
+                <Btn w={'40px'} h={'40px'} fontSize={'36px'} px={'4px'}
+                  borderRadius={'10'} justifyContent={'center'} alignItems={'center'}
+                  onClick={handleAddTag}
+                >
+                  <BsPlus/>
+                </Btn>
+              </Flex>
+              <Flex flexWrap={'wrap'} gap={'8px'} mt={'8px'}>
+                { 
+                  onboard?.locationInterest?.map((location,index)=>(
+                    <Flex gap="8px" key={index} alignItems={'center'} fontSize={'12px'}
+                      bg={'var(--soft200)'} px={'6px'} py={'2px'} borderRadius={'10px'}
+                    >
+                      {location}
+                      <Flex onClick={()=> handleRemoveTag(index)} fontSize={'14px'}>
+                        <IoCloseOutline />
+                      </Flex>
+                    </Flex>
+                  ))
+                }
+              </Flex>
             </Box>
           </ModalBody>
           <ModalFooter>
