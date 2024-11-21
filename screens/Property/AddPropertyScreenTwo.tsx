@@ -1,7 +1,7 @@
 import Btn from "@/components/Btn";
 import { SelectInput, TextInput } from "@/components/Inputs";
 import useToast from "@/hooks/useToast";
-import { nigerianStates } from "@/utils/modules";
+import { nigerianStates, validateRequired } from "@/utils/modules";
 import {
   Box,
   Flex,
@@ -24,57 +24,35 @@ import { IoIosArrowForward } from "react-icons/io";
 interface ButtonFunction {
   next: () => void;
   previous: () => void;
-  // duration: string;
-  price: any;
-  address: string;
-  onChangeAddress: (event: ChangeEvent<HTMLInputElement>) => void;
-  onChangePrice: (event: ChangeEvent<HTMLInputElement>) => void;
-  // onChangeDuration: (event: ChangeEvent<HTMLSelectElement>) => void;
-  invalidPrice: boolean | null;
-  // invalidDuration: boolean | null;
-  invalidAddress: boolean | null;
-  validPrice: boolean;
-  // validDuration: boolean;
-  validAddress: boolean;
-  onBlurPrice: any;
-  onBlurAdddress: any;
-  // onBlurDuration: any;
-  state: string;
-  lga: string;
-  invalidLga: boolean | null;
-  onChangeLga: (event: ChangeEvent<HTMLInputElement>) => void;
-  onBlurLga: any;
-  invalidState: any;
-  onChangeState: (event: ChangeEvent<HTMLSelectElement>) => void;
-  onBlurState: any;
+  handleOnchange: (
+    event: ChangeEvent<
+      HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement
+    >
+  ) => void;
+  handleOnblur: any;
+  input: {
+    state: string;
+    lga: string;
+    address: string;
+    price: string;
+  };
+  touched: {
+    state: boolean;
+    lga: boolean;
+    address: boolean;
+    price: boolean;
+  };
+  setTouched: React.Dispatch<React.SetStateAction<any>>;
 }
 export const AddPropertyScreenTwo = ({
   next,
   previous,
-  lga,
-  onBlurLga,
-  invalidLga,
-  onChangeLga,
-  // duration,
-  // onChangeDuration,
-  price,
-  onChangePrice,
-  address,
-  onChangeAddress,
-  invalidPrice,
-  // invalidDuration,
-  invalidAddress,
-  validPrice,
-  state,
-  invalidState,
-  onChangeState,
-  onBlurState,
-  // validDuration,
-  validAddress,
-  onBlurPrice,
-  onBlurAdddress,
-}: // onBlurDuration,
-ButtonFunction) => {
+  input,
+  handleOnblur,
+  handleOnchange,
+  touched,
+  setTouched,
+}: ButtonFunction) => {
   const { toast } = useToast();
   const subs: any[] = [
     {
@@ -107,25 +85,27 @@ ButtonFunction) => {
     },
   ];
 
-  const validate = () => {
-    if (!validAddress) {
-      onBlurAdddress();
-      return false;
-    } else if (!validPrice) {
-      onBlurPrice();
-      return false;
-    }
-    // } else if (!validDuration) {
-    //   onBlurDuration();
-    //   return false;
-    // }
-    return true;
-  };
+  const validation = validateRequired({
+    title: input.state,
+    state: input.state,
+    address: input.address,
+    price: input.price,
+  });
 
   const nextFn = () => {
-    const isFormValid = validate();
-
-    if (!isFormValid) {
+    const hasValidationError =
+      validation && Object.values(validation).includes(false);
+    if (hasValidationError) {
+      const fieldsWithErrors = Object.keys(validation).reduce((acc, key) => {
+        if (!validation[key]) {
+          acc[key] = true;
+        }
+        return acc;
+      }, {} as Record<string, boolean>);
+      setTouched((prev: any) => ({
+        ...prev,
+        ...fieldsWithErrors,
+      }));
       toast({
         status: "error",
         description: "Validation failed",
@@ -135,6 +115,7 @@ ButtonFunction) => {
       });
       return;
     }
+
     next();
   };
 
@@ -183,10 +164,10 @@ ButtonFunction) => {
           label="State"
           placeholder="select state"
           name="state"
-          value={state}
-          inputIsinvalid={invalidState}
-          onChange={onChangeState}
-          onBlur={onBlurState}
+          value={input.state}
+          inputIsinvalid={touched.state && !validation.state}
+          onChange={handleOnchange}
+          onBlur={handleOnblur}
           errorMessage="select state!"
         />
         <Box mt={3}>
@@ -194,11 +175,8 @@ ButtonFunction) => {
             name="lga"
             label="Local government"
             placeholder="Enter a local government"
-            value={lga}
-            inputIsinvalid={invalidLga}
-            onChange={onChangeLga}
-            onBlur={onBlurLga}
-            errorMessage="select local government"
+            value={input.lga}
+            onChange={handleOnchange}
           />
         </Box>
 
@@ -215,7 +193,7 @@ ButtonFunction) => {
               borderRadius={"10px"}
               // borderColor={"var(--soft200)"}
               border={
-                invalidAddress
+                touched.address && !validation.address
                   ? "1px solid var(--errorBase)"
                   : "1px solid var(--soft200)"
               }
@@ -232,12 +210,12 @@ ButtonFunction) => {
                 type="text"
                 placeholder="The location of the property"
                 name="address"
-                value={address}
-                onBlur={onBlurAdddress}
-                onChange={onChangeAddress}
+                value={input.address}
+                onBlur={handleOnblur}
+                onChange={handleOnchange}
               />
             </InputGroup>
-            {invalidAddress && (
+            {touched.address && !validation.address && (
               <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                 {"Enter a valid address"}
               </FormHelperText>
@@ -269,7 +247,7 @@ ButtonFunction) => {
             >
               <Input
                 border={
-                  invalidPrice
+                  touched.price && !validation.price
                     ? "1px solid var(--errorBase)"
                     : "1px solid var(--soft200)"
                 }
@@ -278,42 +256,16 @@ ButtonFunction) => {
                 type="number"
                 placeholder="₦ 0.00"
                 name="price"
-                value={price}
-                onBlur={onBlurPrice}
-                onChange={onChangePrice}
+                value={input.price}
+                onBlur={handleOnblur}
+                onChange={handleOnchange}
               />
-              {/* <Select
-                cursor={"pointer"}
-                border={"0px solid #FFFFFF"}
-                borderLeftRadius={"0px"}
-                _focusWithin={"0px solid #FFFFFF"}
-                fontSize={14}
-                textColor={"var(--sub600)"}
-                w="20%"
-                h="40px"
-                _placeholder={{ textColor: "var(--soft400)" }}
-                placeholder="Duration"
-                onChange={onChangeDuration}
-                onBlur={onBlurDuration}
-                value={duration}
-              >
-                {["Annually", "Weekly", "Monthly", "Quarterly"].map((entry) => (
-                  <option value={`${entry}`} key={entry}>
-                    {entry}
-                  </option>
-                ))}
-              </Select> */}
             </InputGroup>
-            {invalidPrice && (
+            {touched.price && !validation.price && (
               <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                 {"Enter a valid price"}
               </FormHelperText>
             )}
-            {/* {invalidDuration && (
-                <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
-                  {"Select duration"}
-                </FormHelperText>
-              )} */}
           </FormControl>
         </Flex>
         <Flex gap={"2rem"}>

@@ -13,7 +13,6 @@ interface ButtonFunction {
   next: () => void;
   previous: () => void;
   onChangeFileName: (name: string, value: File | null) => void;
-  fileName: string;
   documents: Documents;
   loading: boolean;
 }
