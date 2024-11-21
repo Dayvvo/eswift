@@ -14,10 +14,10 @@ import {
 } from "@chakra-ui/react";
 import Btn from "@/components/Btn";
 import { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Modal } from "../../components/modal";
 import { BsPlus } from "react-icons/bs";
-import {  SearchIcon } from "../../components/svg";
+import { SearchIcon } from "../../components/svg";
 import useProperty from "@/hooks/useProperty";
 import { useImage, useInputText } from "../../hooks/useInput";
 import { useApiUrl } from "../../hooks/useApi";
@@ -26,30 +26,11 @@ import { AddPropertyScreenOne } from "./AddPropertyScreenOne";
 import { AddPropertyScreenTwo } from "./AddPropertyScreenTwo";
 import { AddPropertyScreenThree } from "./AddPropertyScreenThree";
 import { AddPropertyScreenFour } from "./AddPropertyScreenFour";
-// import {
-//   DoubleNextBtn,
-//   DoublePrevBtn,
-//   NextBtn,
-//   PreviousBtn,
-// } from "@/components/svg";
 import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { DocumentTypes, R } from "@/utils/types";
 import useUpload from "@/hooks/useUpload";
 import { IoFilter } from "react-icons/io5";
 import Pagination from "@/components/Pagination";
-
-// interface MyData {
-//   _id: any;
-//   title: string;
-//   price: string;
-//   address: string;
-//   email: string;
-//   owner: string;
-//   userImage: string;
-//   verificationState: string;
-//   images: any;
-//   creatorID: any;
-// }
 
 interface User {
   _id: any;
@@ -67,7 +48,7 @@ export type Documents = {
 export const PropertyScreen = () => {
   const [showModal, setShowModal] = useState(false);
   const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
-  const [propertyEl, setPropertyEl] = useState<PropertyCardProps[]>([])
+  const [propertyEl, setPropertyEl] = useState<PropertyCardProps[]>([]);
   const [page, setPage] = useState<any>(1);
   const [totalPages, setTotalPages] = useState<any>(1);
   const [inputValue, setInputValue] = useState<any>("");
@@ -76,8 +57,48 @@ export const PropertyScreen = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [features, setFeatures] = useState<string[]>([]);
 
-  
-  
+  const [inputs, setInput] = useState({
+    title: "",
+    description: "",
+    state: "",
+    lga: "",
+    address: "",
+    price: "",
+    category: "",
+  });
+  const [touched, setTouched] = useState({
+    title: false,
+    description: false,
+    state: false,
+    lga: false,
+    address: false,
+    price: false,
+    category: false,
+  });
+  const handleOnchange = (
+    event: ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = event.target;
+
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleOnblur = (
+    event: ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name } = event.target;
+
+    setTouched((prev) => ({
+      ...prev,
+      [name]: true,
+    }));
+  };
   const [documents, setDocuments] = useState<Documents>({
     FamilyReceipt: null,
     SurveyPlan: null,
@@ -95,95 +116,6 @@ export const PropertyScreen = () => {
       [name]: value,
     }));
   };
-
-  const {
-    input: title,
-    onChangeInput: onChangeTitle,
-    onBlurHandler: onBlurTitle,
-    valueIsInvalid: invalidTitle,
-    valueIsValid: validTitle,
-    reset: titleReset,
-  } = useInputText((title) => title.length > 2);
-
-  const {
-    input: category,
-    onChangeInput: onChangeCategory,
-    onBlurHandler: onBlurCategory,
-    valueIsInvalid: invlidCategory,
-    valueIsValid: validCategory,
-    reset: categoryReset,
-  } = useInputText((category) => category !== "");
-
-  const {
-    input: description,
-    onChangeInput: onChangeDescription,
-    onBlurHandler: onBlurDescription,
-    valueIsInvalid: invalidDescription,
-    valueIsValid: validDescription,
-    reset: descriptionReset,
-  } = useInputText((description) => description.length > 10);
-
-  const {
-    input: address,
-    onChangeInput: onChangeAddress,
-    onBlurHandler: onBlurAddress,
-    valueIsInvalid: invalidAddress,
-    valueIsValid: validAddress,
-    reset: addressReset,
-  } = useInputText((address) => address.length > 3);
-
-  const {
-    input: lga,
-    onChangeInput: onChangeLga,
-    onBlurHandler: onBlurLga,
-    valueIsInvalid: invalidLga,
-    valueIsValid: validLga,
-    reset: lgaReset,
-  } = useInputText((lga) => lga.length > 2);
- 
-  const {
-    input: typeOfProperty,
-    onChangeInput: onChangeType,
-    onBlurHandler: onBlurType,
-    valueIsInvalid: invlidType,
-    valueIsValid: validType,
-    reset: typeReset,
-  } = useInputText((typeOfProperty) => typeOfProperty !== "");
-
-  // const {
-  //   input: duration,
-  //   onChangeInput: onChangeDuration,
-  //   onBlurHandler: onBlurDuration,
-  //   valueIsInvalid: invalidDuration,
-  //   valueIsValid: validDuration,
-  //   reset: durationReset,
-  // } = useInputText((duration) => duration !== "");
-
-  const {
-    input: fileName,
-    onChangeInput: onChangeFileName,
-    onBlurHandler: onBlurFilename,
-    valueIsInvalid: invalidFilename,
-    valueIsValid: validFilename,
-    reset: fileNameReset,
-  } = useInputText((fileName) => fileName !== "");
-
-  const {
-    input: price,
-    onChangeInput: onChangePrice,
-    onBlurHandler: onBlurPrice,
-    valueIsInvalid: invalidPrice,
-    valueIsValid: validPrice,
-    reset: priceReset,
-  } = useInputText((price) => price !== "");
-  const {
-    input: state,
-    onChangeInput: onChangeState,
-    onBlurHandler: onBlurState,
-    valueIsInvalid: invalidState,
-    valueIsValid: validState,
-    reset: stateReset,
-  } = useInputText((price) => price !== "");
 
   const {
     images,
@@ -206,34 +138,19 @@ export const PropertyScreen = () => {
   };
 
   const propertyData = {
-    title,
-    lga,
-    state,
-    address,
-    price,
-    category,
-    description,
+    title: inputs.title,
+    lga: inputs.lga,
+    state: inputs.state,
+    address: inputs.address,
+    price: inputs.price,
+    category: inputs.category,
+    description: inputs.description,
     features: features,
     images,
     documents,
   };
-  console.log(propertyData);
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
-  };
-
-  const resetFields = () => {
-    titleReset();
-    // categoryReset();
-    descriptionReset();
-    // durationReset();
-    imageReset();
-    fileNameReset();
-    priceReset();
-    typeReset();
-    addressReset();
-    stateReset();
-    setShowScreen(1);
   };
 
   const uploadPropertyFiles = async (images: File[], documents: Documents) => {
@@ -307,10 +224,28 @@ export const PropertyScreen = () => {
       };
 
       uploadedFiles && (await addProperty(payload)); // If no error occurs, the following code runs
-    
+
       setShowModal(false);
 
-      resetFields();
+      setInput({
+        title: "",
+        description: "",
+        state: "",
+        lga: "",
+        address: "",
+        price: "",
+        category: "",
+      });
+      setTouched({
+        title: false,
+        description: false,
+        state: false,
+        lga: false,
+        address: false,
+        price: false,
+        category: false,
+      });
+      setShowScreen(1);
 
       toast({
         status: "success",
@@ -336,14 +271,13 @@ export const PropertyScreen = () => {
     setLoading(true);
     try {
       setLoading(false);
-      const {data} = await getAdminProperty(inputValue);
-      console.log('data.data', data?.data);
+      const { data } = await getAdminProperty(inputValue);
 
       const propertiesToAdd = data?.data.filter((prop: PropertyCardProps) => {
         return getProperty.findIndex((index) => index._id === prop._id) === -1;
       });
- 
-      setGetProperty(prev=>([...prev, ...propertiesToAdd ]));
+
+      setGetProperty((prev) => [...prev, ...propertiesToAdd]);
       setPropertyEl(data?.data);
 
       setTotalPages(data?.pagination.pages);
@@ -378,8 +312,6 @@ export const PropertyScreen = () => {
     getPropertyFunction();
   }, [showModal, loading, inputValue, page]);
 
-
-
   return (
     <>
       <form>
@@ -387,54 +319,22 @@ export const PropertyScreen = () => {
           {/* {currentChildComponent} */}
           {showScreen === 1 ? (
             <AddPropertyScreenOne
-              onChangeTitle={onChangeTitle}
-              onChangeCategory={onChangeCategory}
-              // typeOfProperty={typeOfProperty}
-              // validType={validType}
-              // onBlurType={onBlurType}
-              onChangeDescription={onChangeDescription}
-              description={description}
-              title={title}
-              category={category}
-              invalidCategory={invlidCategory}
-              invalidTitle={invalidTitle}
-              invalidType={invlidType}
-              invalidDescription={invalidDescription}
-              validCategory={validCategory}
-              validTitle={validTitle}
-              validDescription={validDescription}
-              onBlurDescription={onBlurDescription}
-              onBlurTitle={onBlurTitle}
-              onBlurCategory={onBlurCategory}
+              handleOnchange={handleOnchange}
+              handleOnblur={handleOnblur}
+              input={inputs}
+              touched={touched}
+              setTouched={setTouched}
               features={features}
               setFeatures={setFeatures}
               onClick={() => setShowScreen(2)}
             />
           ) : showScreen === 2 ? (
             <AddPropertyScreenTwo
-              address={address}
-              price={price}
-              // duration={duration}
-              invalidPrice={invalidPrice}
-              state={state}
-              invalidState={invalidState}
-              onChangeState={onChangeState}
-              onBlurState={onBlurState}
-              lga={lga}
-              onBlurLga={onBlurLga}
-              onChangeLga={onChangeLga}
-              invalidLga={invalidLga}
-              // invalidDuration={invalidDuration}
-              invalidAddress={invalidAddress}
-              validPrice={validPrice}
-              // validDuration={validDuration}
-              validAddress={validAddress}
-              onBlurPrice={onBlurPrice}
-              onBlurAdddress={onBlurAddress}
-              // onBlurDuration={onBlurDuration}
-              onChangeAddress={onChangeAddress}
-              onChangePrice={onChangePrice}
-              // onChangeDuration={onChangeDuration}
+              handleOnchange={handleOnchange}
+              handleOnblur={handleOnblur}
+              input={inputs}
+              touched={touched}
+              setTouched={setTouched}
               next={() => setShowScreen(3)}
               previous={() => setShowScreen(1)}
             />
@@ -451,7 +351,6 @@ export const PropertyScreen = () => {
             <AddPropertyScreenFour
               next={addPropertyFn}
               previous={() => setShowScreen(3)}
-              fileName={fileName}
               documents={documents}
               onChangeFileName={handleDocumentChange}
               loading={loading}
@@ -642,38 +541,6 @@ export const PropertyScreen = () => {
           >{`page ${page} of ${totalPages}`}</Text>
 
           <Box></Box>
-
-          {/* <Box
-            display={"flex"}
-            alignItems={"center"}
-            gap={"20px"}
-            justifyContent={"center"}
-            flex="1"
-          >
-            <Box>
-              <DoublePrevBtn />
-            </Box>
-            <Box onClick={goToPrevPage}>
-              <PreviousBtn />
-            </Box>
-            <Box display={"flex"} alignItems={"center"} gap={"5px"}>
-              <PaginationButton onClick={() => goToPage(1)}>1</PaginationButton>
-              <PaginationButton onClick={() => goToPage(2)}>2</PaginationButton>
-              <PaginationButton onClick={() => goToPage(3)}>3</PaginationButton>
-              <PaginationButton onClick={() => goToPage(4)}>4</PaginationButton>
-              <PaginationButton onClick={() => goToPage(5)}>5</PaginationButton>
-              <PaginationButton>...</PaginationButton>
-              <PaginationButton onClick={() => goToPage(16)}>
-                16
-              </PaginationButton>
-            </Box>
-            <Box onClick={goToNextPage}>
-              <NextBtn />
-            </Box>
-            <Box>
-              <DoubleNextBtn />
-            </Box>
-          </Box> */}
         </Box>
       )}
     </>
