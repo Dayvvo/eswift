@@ -9,7 +9,8 @@ import {
   Select,
   Text,
 } from "@chakra-ui/react";
-import { ChangeEvent } from "react";
+import { ChangeEvent, KeyboardEventHandler, ReactNode } from "react";
+import { Children } from "react";
 
 type SelectInputProps = {
   items: string[];
@@ -18,10 +19,12 @@ type SelectInputProps = {
   name: string;
   onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: any;
-  value?: string;
+  value?: string | string[];
   inputIsinvalid?: boolean;
   errorMessage?: string;
   border?: any;
+  multiple?:boolean;
+  rest?:{}
 };
 
 type CheckboxInputProps = {
@@ -34,9 +37,10 @@ type TextInputProps = {
   name: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: any;
-  value?: string;
+  value?: string | string[];
   inputIsinvalid?: any;
   errorMessage?: string;
+  keyPress?: (e:KeyboardEvent<HTMLInputElement>) => void | null;
 };
 
 export const SelectInput = ({
@@ -50,6 +54,7 @@ export const SelectInput = ({
   inputIsinvalid,
   errorMessage,
   border,
+  ...rest
 }: SelectInputProps) => {
   return (
     <FormControl w={"100%"} display={"flex"} flexDir={"column"} gap={"1px"}>
@@ -79,6 +84,7 @@ export const SelectInput = ({
         onBlur={onBlur}
         value={value}
         onChange={onChange}
+        {...rest}
       >
         {items.map((entry) => (
           <option value={`${entry}`} key={entry}>
@@ -104,6 +110,8 @@ export const TextInput = ({
   value,
   inputIsinvalid,
   errorMessage,
+  keyPress,
+
 }: TextInputProps) => {
   return (
     <FormControl display={"flex"} flexDir={"column"} w={{ base: "100%" }}>
@@ -132,6 +140,7 @@ export const TextInput = ({
         value={value}
         onBlur={onBlur}
         onChange={onChange}
+        onKeyDown={keyPress}
       />
 
       {inputIsinvalid && (
