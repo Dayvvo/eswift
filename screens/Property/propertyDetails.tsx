@@ -96,7 +96,7 @@ export const PropertyDetails = ({
     setIsVerifying(true);
     try {
       setIsVerifying(false);
-      const getAllProperties = await getAdminProperty("", 1);
+      const getAllProperties = await getAdminProperty("");
       setGetProperty(getAllProperties?.data?.data);
     } catch (error) {
       setIsVerifying(false);
