@@ -2,9 +2,8 @@ import { createTransport } from 'nodemailer'
 import { google } from 'googleapis'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
-const OAuth2 = google.auth.OAuth2
+const OAuth2 = google.auth.OAuth2;
 
-const { PASS, SENDING_MAIL } = process.env
 
 
 const getOauthCreds = async()=>{
@@ -40,23 +39,25 @@ export const mailTransport = async (
     smtpConfig?:boolean  
   }
 ) => {
+  
   const {attachments,smtpConfig} = optional || {};
+ 
   const smtpTransportOptions: SMTPTransport.Options = {
     service: 'gmail',
     auth: smtpConfig? {
-      user: SENDING_MAIL,
-      pass: PASS,
+      user: process.env['SENDING_MAIL'],
+      pass: process.env['PASS'],
     }:{
       type: 'OAuth2',
-      user: SENDING_MAIL,
+      user: process.env['SENDING_MAIL'],
       ...await getOauthCreds()
     },
     tls: {
       rejectUnauthorized: false,
     },
-  }
+  };
 
-  const smtpTransport = createTransport(smtpTransportOptions)
+  const smtpTransport = createTransport(smtpTransportOptions);
 
   const mailOptions = {
     from,
@@ -65,7 +66,7 @@ export const mailTransport = async (
     html,
     attachments,
   };
-  console.log('mail options',mailOptions);
+  console.log('mail options', process.env['SENDING_MAIL'], process.env['PASS']);
 
   try {
     const info = await smtpTransport.sendMail(mailOptions);

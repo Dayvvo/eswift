@@ -18,6 +18,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import useToast from "@/hooks/useToast";
 import { BsPlus } from "react-icons/bs";
 import { IoCloseOutline } from "react-icons/io5";
+import { R } from "@/utils/types";
 
 interface AddPropertyScreenOneProps {
   onClick: () => void;
@@ -129,14 +130,12 @@ export const AddPropertyScreenOne = ({
 
   const handleAddTag = () => {
     const newFeature:string = inputValue.trim();
-    console.log('features at change',features);
     if(newFeature && !features.includes(newFeature)){
       setFeatures(prev=>[...prev, newFeature])
       setInputValue('')
     }
   };
-  console.log('features',features);
-
+ 
   const handleRemoveTag =(index: number)=> {
     setFeatures(features.filter((_features, i) => i !== index));
   }
@@ -146,10 +145,40 @@ export const AddPropertyScreenOne = ({
       handleAddTag();
     }
   };
-
-  
+ 
   const handleTagInput =(e:any)=> {
     setInputValue(e.target.value)
+  }
+
+  const [details,setDetails] = useState({
+    title:'',
+    description:'',
+    name:''
+  });
+
+  const validateRequired = (values:R)=>{
+    let isValid = true
+    Object.keys(values).map(detail=>  {
+      if (!(values[detail])){
+        isValid = false;
+      }
+    })
+    return isValid;
+  }
+ 
+  const submit = ()=>{
+
+    const {title, ...rest} = details;
+
+    const requiredValuesExist = validateRequired({...rest})
+
+    if(requiredValuesExist){
+
+
+
+    }
+    
+
   }
 
 

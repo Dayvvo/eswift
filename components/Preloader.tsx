@@ -31,9 +31,9 @@ const Preloader = () => {
     }, [pathname]);
 
     return (
-        <Modal motionPreset="slideInTop" size={'full'} isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
-            <ModalOverlay />
-            <ModalContent>
+        // <Modal motionPreset="slideInTop" size={'full'} isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
+        //     <ModalOverlay />
+        //     <ModalContent>
                 <Flex className="flexx" alignItems={'center'} justifyContent={'center'} w='100%' height='100vh'>
                     <Box w={'100%'}
                         h='100%'
@@ -70,8 +70,8 @@ const Preloader = () => {
                         </Box>
                     </Box>
                 </Flex>
-            </ModalContent>
-        </Modal>
+        //     </ModalContent>
+        // </Modal>
     )
 }
 

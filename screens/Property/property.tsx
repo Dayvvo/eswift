@@ -18,7 +18,6 @@ import { useEffect, useState } from "react";
 import { Modal } from "../../components/modal";
 import { BsPlus } from "react-icons/bs";
 import {  SearchIcon } from "../../components/svg";
-
 import useProperty from "@/hooks/useProperty";
 import { useImage, useInputText } from "../../hooks/useInput";
 import { useApiUrl } from "../../hooks/useApi";
@@ -68,6 +67,7 @@ export type Documents = {
 export const PropertyScreen = () => {
   const [showModal, setShowModal] = useState(false);
   const [getProperty, setGetProperty] = useState<PropertyCardProps[]>([]);
+  const [propertyEl, setPropertyEl] = useState<PropertyCardProps[]>([])
   const [page, setPage] = useState<any>(1);
   const [totalPages, setTotalPages] = useState<any>(1);
   const [inputValue, setInputValue] = useState<any>("");
@@ -76,6 +76,8 @@ export const PropertyScreen = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [features, setFeatures] = useState<string[]>([]);
 
+  
+  
   const [documents, setDocuments] = useState<Documents>({
     FamilyReceipt: null,
     SurveyPlan: null,
@@ -334,13 +336,15 @@ export const PropertyScreen = () => {
     setLoading(true);
     try {
       setLoading(false);
-      const { data } = await getAdminProperty(inputValue, page);
+      const {data} = await getAdminProperty(inputValue);
+      console.log('data.data', data?.data);
 
       const propertiesToAdd = data?.data.filter((prop: PropertyCardProps) => {
         return getProperty.findIndex((index) => index._id === prop._id) === -1;
       });
-
-      setGetProperty((prev) => [...prev, ...propertiesToAdd]);
+ 
+      setGetProperty(prev=>([...prev, ...propertiesToAdd ]));
+      setPropertyEl(data?.data);
 
       setTotalPages(data?.pagination.pages);
     } catch (error) {
@@ -374,27 +378,7 @@ export const PropertyScreen = () => {
     getPropertyFunction();
   }, [showModal, loading, inputValue, page]);
 
-  const goToNextPage = () => {
-    if (page < totalPages) setPage(page + 1);
-  };
 
-  const goToPrevPage = () => {
-    if (page > 1) setPage(page - 1);
-  };
-
-  const goToPage = (pageNumber: number) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setPage(pageNumber);
-    }
-  };
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalCount = 8;
-  const lastRowsIndex = currentPage * totalCount;
-  const firstRowsIndex = lastRowsIndex - totalCount;
-  const currentPropertyInView =
-    getProperty && getProperty?.slice(firstRowsIndex, lastRowsIndex);
-  const rowsToShow = 4;
 
   return (
     <>
@@ -599,7 +583,7 @@ export const PropertyScreen = () => {
             </Stack>
           )}
 
-          {!loading && getProperty?.length > 0 && (
+          {!loading && propertyEl?.length > 0 && (
             <Grid
               mt={4}
               w={"fit-content"}
@@ -612,7 +596,7 @@ export const PropertyScreen = () => {
               gap={{ base: "24px", lg: "28px" }}
               paddingBottom={{ base: "20rem", lg: "3rem", xl: "6rem" }}
             >
-              {currentPropertyInView.map((property, index) => {
+              {propertyEl.map((property, index) => {
                 const user = users.find((u) => u._id === property?.creatorID);
 
                 return (
@@ -633,21 +617,7 @@ export const PropertyScreen = () => {
               })}
             </Grid>
           )}
-          {getProperty.length > totalCount && (
-            <VStack align={"start"} gap="15px" mt="10px">
-              <div className="">
-                Showing {firstRowsIndex + 1} to {lastRowsIndex}
-              </div>
-
-              <Pagination
-                rowsPerPage={rowsToShow}
-                totalPostLength={getProperty?.length}
-                setCurrentPage={setCurrentPage}
-                currentPage={currentPage}
-              />
-            </VStack>
-          )}
-          {!loading && getProperty?.length === 0 && (
+          {!loading && propertyEl?.length === 0 && (
             <Card>
               <CardBody>
                 <Text>No property available please wait</Text>
@@ -656,7 +626,7 @@ export const PropertyScreen = () => {
           )}
         </Box>
       </Box>
-      {!loading && getProperty?.length > 0 && (
+      {!loading && propertyEl?.length > 0 && (
         <Box
           display={"flex"}
           alignItems={"center"}

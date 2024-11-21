@@ -51,25 +51,31 @@ const UserSchema = new Schema<IUser>(
       default: false,
       required: false,
     },
+  
     referrer: {
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+  
     refCode: {
       type: String,
     },
+  
     refCount: {
       type: Number,
       default: 0,
     },
+  
     isActive: {
       type: Boolean,
       default: true,
     },
+  
     verification: {
       type: String,
       default: "pending",
     },
+  
     phoneNumber: {
       type: String,
       default: "",
@@ -77,6 +83,7 @@ const UserSchema = new Schema<IUser>(
     state: {
       type: String,
     },
+  
     propertyInterest: {
       type: [String],
     },

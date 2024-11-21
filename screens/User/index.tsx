@@ -287,19 +287,29 @@ const UserScreen = () => {
   const [table, setTable] = useState<any>([]);
   const [userEl, setUserEl] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState<string>("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { getUser, getUserById } = useUser();
 
   const getUserFn = async () => {
-    const res: any = await getUser();
-    setTable(res?.data?.data);
+    const res: any = await getUser(search);
+    let data = res?.data?.data as any;
+    setTable(data);
+
+    console.log('table', table);
   };
 
   useEffect(() => {
     getUserFn();
-  }, []);
+  }, [search]);
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      getUserFn();
+    }
+  };
 
   
   const btnRef = React.useRef();
@@ -326,6 +336,8 @@ const UserScreen = () => {
             type="text"
             placeholder="Search..."
             border={"1px solid #E1E4EA"}
+            onChange={(e: any) => setSearch(e.target.value)}
+            onKeyDown={handleKeyPress}
           />
         </InputGroup>
         <Flex
