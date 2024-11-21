@@ -1,5 +1,10 @@
 import Btn from "../../components/Btn";
-import React, { KeyboardEvent, KeyboardEventHandler, useEffect, useState } from "react";
+import React, {
+  KeyboardEvent,
+  KeyboardEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import {
   Box,
   Flex,
@@ -19,55 +24,42 @@ import useToast from "@/hooks/useToast";
 import { BsPlus } from "react-icons/bs";
 import { IoCloseOutline } from "react-icons/io5";
 import { R } from "@/utils/types";
+import { validateRequired } from "@/utils/modules";
 
 interface AddPropertyScreenOneProps {
   onClick: () => void;
-  title: string;
-  category: string;
-  description: string;
-  // onChangeType: (event: ChangeEvent<HTMLSelectElement>) => void;
-  onChangeDescription: (event: ChangeEvent<HTMLTextAreaElement>) => void;
-  onChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void;
-  onChangeCategory: (event: ChangeEvent<HTMLSelectElement>) => void;
-  invalidCategory: boolean | null;
-  invalidTitle: boolean | null;
-  invalidType: boolean | null;
-  invalidDescription: boolean | null;
-  validCategory: boolean;
-  validTitle: boolean;
-  // validType: boolean;
-  validDescription: boolean;
-  onBlurTitle: any;
-  // onBlurType: any;
-  onBlurCategory: any;
-  onBlurDescription: any;
-  setFeatures:React.Dispatch<React.SetStateAction<string[]>>;
-  features: string[]
+  handleOnchange: (
+    event: ChangeEvent<
+      HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement
+    >
+  ) => void;
+  handleOnblur: any;
+  input: {
+    title: string;
+    description: string;
+    category: string;
+  };
+  touched: {
+    title: boolean;
+    description: boolean;
+    category: boolean;
+  };
+  setTouched: React.Dispatch<React.SetStateAction<any>>;
+  setFeatures: React.Dispatch<React.SetStateAction<string[]>>;
+  features: string[];
 }
 export const AddPropertyScreenOne = ({
   onClick,
-  title,
-  onChangeTitle,
-  category,
-  onChangeCategory,
-  // onChangeType,
-  description,
-  invalidCategory,
-  invalidTitle,
-  invalidDescription,
-  validCategory,
-  validTitle,
-  validDescription,
-  onBlurTitle,
-  onBlurDescription,
-  onBlurCategory,
-  invalidType,
-  onChangeDescription,
+  handleOnblur,
+  touched,
+  setTouched,
   setFeatures,
   features,
+  handleOnchange,
+  input,
 }: AddPropertyScreenOneProps) => {
   const { toast } = useToast();
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>("");
   const subs: any[] = [
     {
       id: 1,
@@ -95,27 +87,53 @@ export const AddPropertyScreenOne = ({
     },
   ];
 
-  const validate = () => {
-    if (!validTitle) {
-      onBlurTitle();
-      return false;
-    } else if (!validCategory) {
-      onBlurCategory();
-      return false;
-    } else if (!validDescription) {
-      onBlurDescription();
-      return false;
+  const handleAddTag = () => {
+    const newFeature: string = inputValue.trim();
+    if (newFeature && !features.includes(newFeature)) {
+      setFeatures((prev) => [...prev, newFeature]);
+      setInputValue("");
     }
-    else if (!features){
-      return false;
-    }
-    return true;
   };
 
-  const nextFn = () => {
-    const isFormValid = validate();
+  const handleRemoveTag = (index: number) => {
+    setFeatures(features.filter((_features, i) => i !== index));
+  };
 
-    if (!isFormValid) {
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleAddTag();
+    }
+  };
+
+  const handleTagInput = (e: any) => {
+    setInputValue(e.target.value);
+  };
+
+  const [featureErr, setFeaureErr] = useState(false);
+
+  const validation = validateRequired({
+    title: input.title,
+    description: input.description,
+    category: input.category,
+  });
+
+  const nextFn = () => {
+    const hasValidationError =
+      validation && Object.values(validation).includes(false);
+    if (hasValidationError) {
+      const fieldsWithErrors = Object.keys(validation).reduce((acc, key) => {
+        console.log("acc", acc);
+        console.log("key", key);
+
+        if (!validation[key]) {
+          acc[key] = true;
+        }
+        return acc;
+      }, {} as Record<string, boolean>);
+      setTouched((prev: any) => ({
+        ...prev,
+        ...fieldsWithErrors,
+      }));
       toast({
         status: "error",
         description: "Validation failed",
@@ -125,63 +143,19 @@ export const AddPropertyScreenOne = ({
       });
       return;
     }
+    if (features.length < 1) {
+      setFeaureErr(true);
+      toast({
+        status: "error",
+        description: "Add features",
+        title: "Failed",
+        position: "top",
+        duration: 1500,
+      });
+      return;
+    }
     onClick();
   };
-
-  const handleAddTag = () => {
-    const newFeature:string = inputValue.trim();
-    if(newFeature && !features.includes(newFeature)){
-      setFeatures(prev=>[...prev, newFeature])
-      setInputValue('')
-    }
-  };
- 
-  const handleRemoveTag =(index: number)=> {
-    setFeatures(features.filter((_features, i) => i !== index));
-  }
-
-  const handleKeyPress = (e:KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleAddTag();
-    }
-  };
- 
-  const handleTagInput =(e:any)=> {
-    setInputValue(e.target.value)
-  }
-
-  const [details,setDetails] = useState({
-    title:'',
-    description:'',
-    name:''
-  });
-
-  const validateRequired = (values:R)=>{
-    let isValid = true
-    Object.keys(values).map(detail=>  {
-      if (!(values[detail])){
-        isValid = false;
-      }
-    })
-    return isValid;
-  }
- 
-  const submit = ()=>{
-
-    const {title, ...rest} = details;
-
-    const requiredValuesExist = validateRequired({...rest})
-
-    if(requiredValuesExist){
-
-
-
-    }
-    
-
-  }
-
-
   return (
     <>
       <Box w={"100%"} px={"20px"} className="inter">
@@ -245,16 +219,20 @@ export const AddPropertyScreenOne = ({
               <Input
                 w={"100%"}
                 h={"100%"}
-                border={invalidTitle ? "1px solid var(--errorBase)" : ""}
+                border={
+                  touched.title && !validation.title
+                    ? "1px solid var(--errorBase)"
+                    : ""
+                }
                 type="text"
                 placeholder="A descriptive name for the property"
                 name="title"
-                value={title}
-                onBlur={onBlurTitle}
-                onChange={onChangeTitle}
+                value={input.title}
+                onBlur={handleOnblur}
+                onChange={handleOnchange}
               />
             </InputGroup>
-            {invalidTitle && (
+            {touched.title && !validation.title && (
               <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                 {"Enter a valid property title"}
               </FormHelperText>
@@ -271,19 +249,19 @@ export const AddPropertyScreenOne = ({
             <Select
               w="100%"
               h="40px"
-              border={
-                invalidType
-                  ? "1px solid var(--errorBase)"
-                  : "1px solid var(--soft200)"
-              }
               borderRadius={"10px"}
               fontSize={14}
               textColor={"var--(sub600)"}
               _placeholder={{ textColor: "var--(soft400)" }}
               placeholder="Type of property"
-              onBlur={onBlurCategory}
-              value={category}
-              onChange={onChangeCategory}
+              name="category"
+              border={
+                touched.category && !validation.category
+                  ? "1px solid var(--errorBase)"
+                  : "1px solid var(--soft200)"
+              }
+              onChange={handleOnchange}
+              onBlur={handleOnblur}
             >
               {["Land", "House"].map((entry) => (
                 <option value={`${entry}`} key={entry}>
@@ -291,60 +269,12 @@ export const AddPropertyScreenOne = ({
                 </option>
               ))}
             </Select>
-            {invalidType && (
+            {touched.category && !validation.category && (
               <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                 {"Select valid property type"}
               </FormHelperText>
             )}
           </FormControl>
-
-          {/* {typeOfProperty && (
-            <FormControl w={"100%"}>
-              <FormLabel
-                fontWeight={500}
-                fontSize={"14px"}
-                textColor={"var(--strong950)"}
-              >
-                Property category
-              </FormLabel>
-              <Select
-                w="100%"
-                h="40px"
-                border={
-                  invalidCategory
-                    ? "1px solid var(--errorBase)"
-                    : "1px solid var(--soft200)"
-                }
-                borderRadius={"10px"}
-                fontSize={14}
-                textColor={"var--(sub600)"}
-                _placeholder={{ textColor: "var--(soft400)" }}
-                placeholder="Category of the property"
-                value={category}
-                onBlur={onBlurCategory}
-                onChange={onChangeCategory}
-              >
-                {typeOfProperty === "House" &&
-                  ["Bungalo", "Duplex", "Self contain"].map((entry) => (
-                    <option value={`${entry}`} key={entry}>
-                      {entry}
-                    </option>
-                  ))}
-                {typeOfProperty === "Land" &&
-                  ["100 X 100", "100 X 150", "200 X 200"].map((entry) => (
-                    <option value={`${entry}`} key={entry}>
-                      {entry}
-                    </option>
-                  ))}
-              </Select>
-              {invalidCategory && (
-                <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
-                  {"Select type of property"}
-                </FormHelperText>
-              )}
-            </FormControl>
-          )} */}
-
           <FormControl w={"100%"}>
             <FormLabel
               fontWeight={500}
@@ -355,7 +285,7 @@ export const AddPropertyScreenOne = ({
             </FormLabel>
             <Textarea
               border={
-                invalidDescription
+                touched.description && !validation.description
                   ? "1px solid var(--errorBase)"
                   : "1px solid var(--soft200)"
               }
@@ -364,11 +294,12 @@ export const AddPropertyScreenOne = ({
               fontSize={14}
               textColor={"var--(sub600)"}
               _placeholder={{ textColor: "var--(soft400)" }}
-              value={description}
-              onBlur={onBlurDescription}
-              onChange={onChangeDescription}
+              name="description"
+              value={input.description}
+              onBlur={handleOnblur}
+              onChange={handleOnchange}
             />
-            {invalidDescription && (
+            {touched.description && !validation.description && (
               <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                 {"Description must be at least 10 characters long"}
               </FormHelperText>
@@ -380,64 +311,78 @@ export const AddPropertyScreenOne = ({
               fontSize={"14px"}
               textColor={"var(--strong950)"}
             >
-                Features
+              Features
             </FormLabel>
-            <Flex w={'100%'}  h={'fit-content'}
-              alignItems={'center'} justifyContent={'space-between'}
-              border={
-                invalidType
-                  ? "1px solid var(--errorBase)"
-                  : "1px solid var(--soft200)"
-              }
-              gap={'8px'}
-              borderRadius={'10px'}
+            <Flex
+              w={"100%"}
+              h={"fit-content"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              border={"1px solid var(--soft200)"}
+              gap={"8px"}
+              borderRadius={"10px"}
             >
               <Flex
-                gap={'8px'} w={'100%'}
-                h={'fit-content'}
-                flexDir={'column'}
-                alignItems={'start'}
+                gap={"8px"}
+                w={"100%"}
+                h={"fit-content"}
+                flexDir={"column"}
+                alignItems={"start"}
               >
                 <InputGroup
                   cursor={"text"}
                   fontSize={14}
                   textColor={"var--(sub600)"}
-                  h={'40px'}
+                  h={"40px"}
                 >
-                    <Input
-                      type={'text'}
-                      height={'100%'}
-                      _placeholder={{ textColor: "var--(soft400)" }}
-                      border={'1px solid transparent'}
-                      borderRadius={'4px'}
-                      value={inputValue}
-                      onChange={handleTagInput}
-                      onKeyDown={handleKeyPress}
-                    />
+                  <Input
+                    type={"text"}
+                    height={"100%"}
+                    _placeholder={{ textColor: "var--(soft400)" }}
+                    border={"1px solid transparent"}
+                    borderRadius={"4px"}
+                    value={inputValue}
+                    onChange={handleTagInput}
+                    onKeyDown={handleKeyPress}
+                  />
                 </InputGroup>
               </Flex>
-              <Flex w={'24px'} h={'24px'} fontSize={'36px'} px={'4px'}
-                borderRadius={'10'} justifyContent={'center'} alignItems={'center'}
+              <Flex
+                w={"24px"}
+                h={"24px"}
+                fontSize={"36px"}
+                px={"4px"}
+                borderRadius={"10"}
+                justifyContent={"center"}
+                alignItems={"center"}
                 onClick={handleAddTag}
               >
-                <BsPlus/>
+                <BsPlus />
               </Flex>
             </Flex>
-            <Flex flexWrap={'wrap'} gap={'8px'} mt={'2px'}>
-              { 
-                features.map((feature,index)=>(
-                  <Flex gap="8px" key={index} alignItems={'center'} fontSize={'14px'}
-                    bg={'var(--soft200)'} px={'8px'} py={'2px'} borderRadius={'10px'}
+            <Flex flexWrap={"wrap"} gap={"8px"} mt={"2px"}>
+              {features.map((feature, index) => (
+                <Flex
+                  gap="8px"
+                  key={index}
+                  alignItems={"center"}
+                  fontSize={"14px"}
+                  bg={"var(--soft200)"}
+                  px={"8px"}
+                  py={"2px"}
+                  borderRadius={"10px"}
+                >
+                  {feature}
+                  <Flex
+                    onClick={() => handleRemoveTag(index)}
+                    fontSize={"14px"}
                   >
-                    {feature} 
-                    <Flex onClick={()=> handleRemoveTag(index)} fontSize={'14px'}>
-                      <IoCloseOutline />
-                    </Flex>
+                    <IoCloseOutline />
                   </Flex>
-                ))
-              }
+                </Flex>
+              ))}
             </Flex>
-            {invalidDescription && (
+            {featureErr && (
               <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
                 {"No Feature listed"}
               </FormHelperText>
