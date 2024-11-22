@@ -36,12 +36,13 @@ class ProfileController {
 
   updateProfile = async (req: Request, res: Response) => {
     try {
-      const {onboard} = req.query;
+      const { onboarding } = req.query;
+      console.log("onboard", onboarding);
       const { error, value } = validateProfile(req.body);
       if (error) {
         return res.status(400).json(error.message);
       }
-      const user = req.user as IUserInRequest
+      const user = req.user as IUserInRequest;
       const userId = user?._id;
       if (!userId) {
         return res.status(401).json({ message: "Unauthorized" });
@@ -49,14 +50,13 @@ class ProfileController {
 
       const userProfile = await Profile.findOneAndUpdate(
         { _id: userId },
-        { ...value, ...onboard? {isOnboarded:true}:{} },
+        { ...value, ...(onboarding ? { isOnboarded: true } : {}) },
         { new: true }
       );
 
       if (!userProfile) {
         return res.status(404).json({ message: "Profile not found" });
       }
-
       return res.status(201).json({
         statusCode: 201,
         data: userProfile,
@@ -69,7 +69,7 @@ class ProfileController {
 
   getProfileByUserId = async (req: Request, res: Response) => {
     try {
-      const user = req.user as IUserInRequest
+      const user = req.user as IUserInRequest;
       const userId = user?._id;
       if (!userId) {
         return res.status(401).json({ message: "Unauthorized" });
