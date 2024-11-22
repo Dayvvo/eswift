@@ -214,6 +214,7 @@ export const validateProfile = (userProfile: ProfileInterface) => {
     address: Joi.string(),
     phoneNumber: Joi.string(),
     state: Joi.string(),
+    isOnboarded: Joi.boolean(),
     propertyInterest: Joi.array().min(1),
     locationInterest: Joi.array().min(1),
   });
