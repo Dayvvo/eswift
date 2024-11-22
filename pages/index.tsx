@@ -87,7 +87,6 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
         firstName: user?.firstName,
         lastName: user?.lastName,
         email: user?.email,
-        isOnboarded: true,
         ...onboard,
       });
       if (data.status === 201) {
