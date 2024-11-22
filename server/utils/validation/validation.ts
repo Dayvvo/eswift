@@ -210,10 +210,12 @@ export const validateProfile = (userProfile: ProfileInterface) => {
   const profileSchema = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
+    email: Joi.string().required(),
     address: Joi.string(),
+    phoneNumber: Joi.string(),
     state: Joi.string(),
     propertyInterest: Joi.array().min(1),
-    locationInterest: Joi.array().min(1)
+    locationInterest: Joi.array().min(1),
   });
   return profileSchema.validate(userProfile);
 };
