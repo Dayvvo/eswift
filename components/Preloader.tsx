@@ -47,7 +47,7 @@ const Preloader = () => {
                         <Box w={'100%'}
                             h={'100%'}
                             position={'relative'}
-                            bgImage="url('/Tall.png')"
+                            bgImage="url('/Preloader.png')"
                             bgSize="cover"
                             bgPosition="center"
                             px={{base:'24px',md:'44px'}}
