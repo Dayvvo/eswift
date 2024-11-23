@@ -154,18 +154,24 @@ class PropertyController {
 
     const user = req.user as any;
     const userId = user?._id as string;
+    let isFavorite = false;
     try {
       const property = await Property.findById(id);
       // Check if the property is in the user's favorites
 
-      const isFavorite = await Favourite.exists({ user: userId, property: id });
-      
+      const existInFavourite = await Favourite.exists({
+        user: userId,
+        property: id,
+      });
+
       if (!property)
         return res.status(404).json({
           statusCode: 404,
           message: `Property with id ${id} not found`,
         });
-
+      if (existInFavourite) {
+        isFavorite = true;
+      }
       return res.json({
         statusCode: 200,
         message: "Successful",
