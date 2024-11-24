@@ -13,7 +13,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  useToast,
 } from "@chakra-ui/react";
 import { CheckboxInput, SelectInput, TextInput } from "@/components/Inputs";
 import { nigerianStates } from "@/utils/modules";
@@ -24,8 +23,7 @@ import { useApiUrl } from "@/hooks/useApi";
 import Preloader from "@/components/Preloader";
 import { IoCloseOutline } from "react-icons/io5";
 import { BsPlus } from "react-icons/bs";
-
-
+import useToast from "@/hooks/useToast";
 
 // Onboarding Modal Component
 type InformationModalProps = {
@@ -41,11 +39,11 @@ type ValidationType = {
   }]: (input: string) => boolean;
 };
 
-type onBoard ={
-  state?:string;
-  propertyInterest?:string[],
-  locationInterest?:string[],
-}
+type onBoard = {
+  state?: string;
+  propertyInterest?: string[];
+  locationInterest?: string[];
+};
 
 // const validation: ValidationType = {
 //   state: (input: string) => (input ? input.trim().length > 1 : false),
@@ -53,20 +51,19 @@ type onBoard ={
 //   locationInterest: (input: string[]) => (input ? input),
 // };
 
-
 const PREFERED_PROPERTY_TYPE = ["Land", "House"];
 
 export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   const client = useApiUrl();
-  const { toast }: any = useToast();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
-  const [inputValue, setInputValue] = useState<string>('')
-  const [onboard , setOnboard] = useState<onBoard>({
-    state:'',
-    propertyInterest:[],
+  const [inputValue, setInputValue] = useState<string>("");
+  const [onboard, setOnboard] = useState<onBoard>({
+    state: "",
+    propertyInterest: [],
     locationInterest: [],
-  }) 
+  });
 
   // const {
   //   input,
@@ -82,29 +79,45 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   //   validation
   // );
 
-
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     try {
       const data = await client.put(`/user/profile?onboarding=true`, {
-        ...user,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        email: user?.email,
         ...onboard,
       });
+      if (data.status === 201) {
+        const storedData = localStorage.getItem("userData");
+        if (storedData) {
+          const userData = JSON.parse(storedData);
+          userData.user = data.data.data;
+          localStorage.setItem("userData", JSON.stringify(userData));
+        }
+        onClose();
+
+        toast({
+          status: "success",
+          description: "Preference updated successfully",
+          title: "Onboarding Completed",
+          position: "top",
+          duration: 1000,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
       toast({
-        status: "success",
-        description: "Preference updated successfully",
-        title: "Onboarding Completed",
+        status: "error",
+        description: "Onboarding failed",
+        title: "Failed",
         position: "top",
         duration: 1000,
       });
       setLoading(false);
-    } catch (error) {
-      setLoading(false);
     }
   };
-
-
 
   // const handleAddTag = () => {
   //   const newLocation = inputValue.trim();
@@ -114,59 +127,78 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   //       locationInterest: [...prevOnboard.locationInterest, newLocation],
   //     }));
   //     setInputValue('');
-  
+
   // };
 
   const handleAddTag = () => {
     const newLocation = inputValue.trim();
-    if (newLocation && !(onboard?.locationInterest ?? []).includes(newLocation)) {
+    if (
+      newLocation &&
+      !(onboard?.locationInterest ?? []).includes(newLocation)
+    ) {
       setOnboard((prevOnboard) => ({
         ...prevOnboard,
-        locationInterest: [...(prevOnboard.locationInterest ?? []), newLocation],
+        locationInterest: [
+          ...(prevOnboard.locationInterest ?? []),
+          newLocation,
+        ],
       }));
-      setInputValue('');
+      setInputValue("");
     }
   };
 
- 
-  const handleRemoveTag =(index: number)=> {
+  const handleRemoveTag = (index: number) => {
     setOnboard((prevOnboard) => ({
       ...prevOnboard,
-      locationInterest: prevOnboard.locationInterest?.filter((_location, i) => i !== index) ?? [],
-    }));  
-  }
+      locationInterest:
+        prevOnboard.locationInterest?.filter((_location, i) => i !== index) ??
+        [],
+    }));
+  };
 
   // const handleKeyPress =(e:KeyboardEvent<HTMLInputElement>) => {
   //   if (e.key === 'Enter'){
   //     handleAddTag()
   //   }
   // }
- 
-  const handleTagInput =(e:any)=> {
-    setInputValue(e.target.value)
-  }
 
-  const handlePropertyInterest =(e:any)=> {
-    setOnboard((prevOnboard)=> ({
+  const handleTagInput = (e: any) => {
+    setInputValue(e.target.value);
+  };
+
+  const handlePropertyInterest = (e: any) => {
+    setOnboard((prevOnboard) => ({
       ...prevOnboard,
-      propertyInterest: Array.isArray(e.target.value) ? e.target.value : [e.target.value] 
-      ,
-    }))
-  }
-
+      propertyInterest: Array.isArray(e.target.value)
+        ? e.target.value
+        : [e.target.value],
+    }));
+  };
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size={"lg"}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader display={"flex"} flexDir={"column"} alignItems={"center"} className={'urbanist'}>
+        <ModalHeader
+          display={"flex"}
+          flexDir={"column"}
+          alignItems={"center"}
+          className={"urbanist"}
+        >
           <HappyIcon />
           <Box>
             <Text fontWeight={400} fontSize={"24px"} textAlign={"center"}>
               Welcome to E-Swift 🏠
             </Text>
-            <Text fontWeight={400} fontSize={"12px"} color={"#525866"} textAlign={"center"}>
-              Let us help you find your dream property effortlessly using our tailored search options. We’re excited to have you join our community!
+            <Text
+              fontWeight={400}
+              fontSize={"12px"}
+              color={"#525866"}
+              textAlign={"center"}
+            >
+              Let us help you find your dream property effortlessly using our
+              tailored search options. We’re excited to have you join our
+              community!
             </Text>
           </Box>
         </ModalHeader>
@@ -174,7 +206,7 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
           <Divider w="90%" h={"1px"} color="#E1E4EA" />
         </Box>
 
-        <form onSubmit={submitHandler} className={'urbanist'}>
+        <form onSubmit={submitHandler} className={"urbanist"}>
           <ModalBody pb={4}>
             <Box mt={1}>
               <Text fontWeight={700} fontSize={"14px"}>
@@ -202,13 +234,18 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
                 errorMessage="Select state"
                 // inputIsinvalid={inputIsinvalid("state")}
                 value={onboard?.state}
-                onChange={(e) => setOnboard((prevOnboard) => ({ ...prevOnboard, state: e.target.value }))}
+                onChange={(e) =>
+                  setOnboard((prevOnboard) => ({
+                    ...prevOnboard,
+                    state: e.target.value,
+                  }))
+                }
 
                 // onBlur={() => onBlurHandler("state")}
               />
             </Box>
             <Box mt={5}>
-              <Flex gap="8px" alignItems={'end'}>
+              <Flex gap="8px" alignItems={"end"}>
                 <TextInput
                   label="Where are you interested in buying property"
                   name="locationInterest"
@@ -218,26 +255,40 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
                   onChange={handleTagInput}
                   // onBlur={() => onBlurHandler("locationInterest")}
                 />
-                <Btn w={'40px'} h={'40px'} fontSize={'36px'} px={'4px'}
-                  borderRadius={'10'} justifyContent={'center'} alignItems={'center'}
+                <Btn
+                  w={"40px"}
+                  h={"40px"}
+                  fontSize={"36px"}
+                  px={"4px"}
+                  borderRadius={"10"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
                   onClick={handleAddTag}
                 >
-                  <BsPlus/>
+                  <BsPlus />
                 </Btn>
               </Flex>
-              <Flex flexWrap={'wrap'} gap={'8px'} mt={'8px'}>
-                { 
-                  onboard?.locationInterest?.map((location,index)=>(
-                    <Flex gap="8px" key={index} alignItems={'center'} fontSize={'12px'}
-                      bg={'var(--soft200)'} px={'6px'} py={'2px'} borderRadius={'10px'}
+              <Flex flexWrap={"wrap"} gap={"8px"} mt={"8px"}>
+                {onboard?.locationInterest?.map((location, index) => (
+                  <Flex
+                    gap="8px"
+                    key={index}
+                    alignItems={"center"}
+                    fontSize={"12px"}
+                    bg={"var(--soft200)"}
+                    px={"6px"}
+                    py={"2px"}
+                    borderRadius={"10px"}
+                  >
+                    {location}
+                    <Flex
+                      onClick={() => handleRemoveTag(index)}
+                      fontSize={"14px"}
                     >
-                      {location}
-                      <Flex onClick={()=> handleRemoveTag(index)} fontSize={'14px'}>
-                        <IoCloseOutline />
-                      </Flex>
+                      <IoCloseOutline />
                     </Flex>
-                  ))
-                }
+                  </Flex>
+                ))}
               </Flex>
             </Box>
           </ModalBody>
@@ -328,7 +379,10 @@ export default function Home() {
         </div>
       ) : (
         <>
-          <OnboardingModal isOpen={showModal} onClose={() => setShowModal(false)} />
+          <OnboardingModal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+          />
           {building ? <Resdesign /> : <HomePage />}
         </>
       )}

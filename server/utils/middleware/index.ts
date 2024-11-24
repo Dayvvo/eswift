@@ -12,12 +12,12 @@ export const isAuth = async (
   if (req.headers.authorization) {
     try {
       token = req.headers.authorization;
-      console.log('auth token in middleware',token)
+      console.log("auth token in middleware", token);
       const decoded = jwt.verify(
         token,
         process.env["JWT_SECRET"] as string
       ) as any;
-      console.log('decoded id',decoded);
+      console.log("decoded id", decoded);
       const userFound = await User.findById(decoded?.id).select("-hash");
       req.user = userFound ? userFound : undefined;
       if (!req.user) {
@@ -28,7 +28,7 @@ export const isAuth = async (
 
       next();
     } catch (error: any) {
-      console.error(error['message']);
+      console.error(error["message"]);
       return res.status(401).json({ message: "Not authorized, invalid token" });
     }
   } else {
@@ -45,6 +45,31 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   }
   next();
 };
+
+export const hasAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    req.user = undefined;
+    return next();
+  }
+
+  try {
+    const token = authHeader;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
+    const user = await User.findById(decoded.id).select("-hash");
+
+    req.user = user || undefined;
+  } catch (error) {
+    req.user = undefined;
+  }
+
+  next();
+};
+
 // // Ensure user is an admin
 // export const admin = async (req:RequestWithUser, res:Response,next:NextFunction) => {
 //   const user = await User.findOne({
