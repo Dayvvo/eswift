@@ -70,7 +70,7 @@ const BlogspotScreen = () => {
         buttonPos={null}
         w={"100%"}
         h={"100vh"}
-        video={"/PropertiesVid.mp4"}
+        video={"/PropertiesVideo.mp4"}
       />
       <Background/>
       <Box
