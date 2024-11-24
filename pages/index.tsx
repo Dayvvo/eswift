@@ -2,7 +2,7 @@ import useAuth from "@/hooks/useAuth";
 import HomePage from "@/screens/home/home";
 import { Resdesign } from "@/screens/home/redesign";
 import { useRouter } from "next/router";
-import { useEffect, useState, FormEvent, KeyboardEvent } from "react";
+import { useEffect, useState, FormEvent } from "react";
 import {
   Box,
   Flex,
@@ -15,7 +15,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { CheckboxInput, SelectInput, TextInput } from "@/components/Inputs";
+import {  SelectInput, TextInput } from "@/components/Inputs";
 import { nigerianStates } from "@/utils/modules";
 import Btn from "@/components/Btn";
 import { HappyIcon } from "@/components/svg";
@@ -33,13 +33,6 @@ type InformationModalProps = {
   onClose: () => void;
 };
 
-type ValidationType = {
-  [key in keyof {
-    state: string;
-    propertyInterest: string;
-    locationInterest: string;
-  }]: (input: string) => boolean;
-};
 
 type onBoard ={
   state?:string;
@@ -47,14 +40,7 @@ type onBoard ={
   locationInterest?:string[],
 }
 
-// const validation: ValidationType = {
-//   state: (input: string) => (input ? input.trim().length > 1 : false),
-//   propertyInterest: (input: string[]) => (input ? input.length === 1 : false),
-//   locationInterest: (input: string[]) => (input ? input),
-// };
 
-
-const PREFERED_PROPERTY_TYPE = ["Land", "House"];
 
 export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   const client = useApiUrl();

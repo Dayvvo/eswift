@@ -51,7 +51,7 @@ const FavouriteScreen = ()=>{
       <Box>
             {
                 favourites?.length === 0  ?  
-                <Flex flexDir={'column'} alignItems={'start'} gap={'16px'} justifyContent={'space-between'} className="urbanist">
+                <Flex flexDir={'column'} alignItems={'start'} rowGap={'10px'} gap={'16px'} justifyContent={'space-between'} className="urbanist">
                     <Text fontSize={'16px'}>
                         No favourites, explore new properties...
                     </Text>
@@ -73,7 +73,7 @@ const FavouriteScreen = ()=>{
                     </Btn>
                 </Flex>
                 : 
-                <Grid templateColumns={{lg:'repeat(3,1fr)'}} columnGap={{md:'1.2em',lg:'1.5em'}}>
+                <Grid templateColumns={{lg:'repeat(3,1fr)'}} rowGap={'2em'} columnGap={{md:'1.2em',lg:'1.5em'}}>
                     {
                         favourites.map((fave,index)=>
                             <PropertiesCard key={index} {...fave} />                
