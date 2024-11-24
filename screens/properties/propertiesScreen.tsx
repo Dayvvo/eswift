@@ -58,7 +58,7 @@ const PropertiesScreen =()=> {
                 <HeroPropsVideo  
                     bg={"#00000070"} header={"Find Dream Properties"}
                     details={"Explore our extensive listings of properties in Lagos and beyond"}
-                    buttonPos={null} w={"100%"} h={"100vh"} video={"/PropertiesVid.mp4"} click={scrollToSection}
+                    buttonPos={null} w={"100%"} h={"100vh"} video={"/PropertiesVideo.mp4"} click={scrollToSection}
                 />
                 <Background/>
                 <Box id='main'
