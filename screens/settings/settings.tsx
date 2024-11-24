@@ -94,7 +94,7 @@ export const SettingsScreen = () => {
     },
   ];
 
-  const { updateUser, } = useUser();
+  const { updateUser } = useUser();
   const { toast } = useToast();
 
   const { user: profile } = useAuth();
@@ -108,15 +108,12 @@ export const SettingsScreen = () => {
     state: user.state,
   };
 
-  console.log("datas", datas);
-
   const updateUserFn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     try {
       const user = await updateUser(datas);
-      console.log(user.data.data);
-      if (user.status === 200) {
+      if (user.status === 201) {
         const storedData = localStorage.getItem("userData");
         if (storedData) {
           const userData = JSON.parse(storedData);
