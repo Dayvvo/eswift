@@ -118,7 +118,7 @@ class PropertyController {
 
     const keyword = req.query.keyword as string
 
-    const regex = new RegExp(keyword, 'i')
+    const regex = new RegExp(keyword, 'i');
 
     const findQuery = {
       $or: [{ title: regex }, { description: regex }, { category: regex }],
@@ -128,14 +128,24 @@ class PropertyController {
     try {
       const count = await Property.countDocuments(findQuery)
 
-      const properties = await Property.find(findQuery)
+      const user = req?.user as IUser 
+      const matchingFavorites = await Favourite.find({
+        user: user._id
+      }).select('property').lean();
+
+      const favoritePropertyIds = new Set(matchingFavorites.map((fav) => fav.property.toString()));
+
+      const properties = await Property.find(findQuery).lean()
         .limit(pageSize)
         .skip(pageSize * (page - 1))
 
       return res.status(200).json({
         statusCode: 200,
         message: 'Property List',
-        data: properties,
+        data: properties.map(prop=>({
+          ...prop,
+          isInFavorites: favoritePropertyIds.has(prop._id.toString())
+        })) ,
         pagination: { page, pages: Math.ceil(count / pageSize), count },
       })
     } catch (err: any) {

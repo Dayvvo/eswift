@@ -66,6 +66,7 @@ export const PropertyScreen = () => {
     price: "",
     category: "",
   });
+ 
   const [touched, setTouched] = useState({
     title: false,
     description: false,
@@ -75,6 +76,7 @@ export const PropertyScreen = () => {
     price: false,
     category: false,
   });
+
   const handleOnchange = (
     event: ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -87,6 +89,7 @@ export const PropertyScreen = () => {
       [name]: value,
     }));
   };
+ 
   const handleOnblur = (
     event: ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -99,6 +102,7 @@ export const PropertyScreen = () => {
       [name]: true,
     }));
   };
+
   const [documents, setDocuments] = useState<Documents>({
     FamilyReceipt: null,
     SurveyPlan: null,
