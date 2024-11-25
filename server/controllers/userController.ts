@@ -11,7 +11,13 @@ class UserController {
   async verifyUser(req: Request, res: Response) {
     const { userId } = req.params;
     const { verification } = req.body;
-    const allowedVerificationStatuses = ["pending", "verified", "rejected"];
+    const allowedVerificationStatuses = [
+      "Pending",
+      "Verified",
+      "Rejected",
+      "Suspend",
+      "Resume",
+    ];
     if (!allowedVerificationStatuses.includes(verification)) {
       return res.status(400).json({ message: "Invalid verification status" });
     }
