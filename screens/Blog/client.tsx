@@ -1,6 +1,17 @@
 import { HeroPropsVideo } from "@/components/heroPropsVideo";
 import NavBar from "@/components/navBar";
-import { Box, Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { BlogCard } from "./blogsCard";
 import { useEffect, useState } from "react";
 import useBlog from "@/hooks/useBlog";
@@ -23,7 +34,7 @@ const BlogspotScreen = () => {
   const navigate = useRouter();
   const [blogPost, setBlogPost] = useState<BlogPostProps[]>([]);
   const [loading, setLoading] = useState(false);
-  const [page , setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(1);
   const { getBlog } = useBlog();
 
   function scrollToSection() {
@@ -31,10 +42,10 @@ const BlogspotScreen = () => {
     section.scrollIntoView({ behavior: "smooth" });
   }
 
-  console.log('blogPost', blogPost);
+  console.log("blogPost", blogPost);
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   useEffect(() => {
     if (blogPost.length === 0) {
       onOpen();
@@ -45,7 +56,6 @@ const BlogspotScreen = () => {
     const getBlogFn = async () => {
       setLoading(true);
       try {
-
         const req = await getBlog();
 
         setBlogPost(req?.data);
@@ -54,7 +64,6 @@ const BlogspotScreen = () => {
       } catch (error) {
         setLoading(false);
       }
-
     };
 
     getBlogFn();
@@ -70,9 +79,9 @@ const BlogspotScreen = () => {
         buttonPos={null}
         w={"100%"}
         h={"100vh"}
-        video={"/PropertiesVid.mp4"}
+        video={"/PropertiesVideo.mp4"}
       />
-      <Background/>
+      <Background />
       <Box
         id="blogs"
         py={"70px"}
@@ -83,16 +92,17 @@ const BlogspotScreen = () => {
         gap={"20px"}
         mb={"120px"}
       >
-        {
-          blogPost.length > 0 ? (
-            <Grid
-              templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
-              gap={{ base: "24px", lg: "60px" }}
-            >
-              {blogPost && blogPost.map((item) => {
+        {blogPost.length > 0 ? (
+          <Grid
+            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
+            gap={{ base: "24px", lg: "60px" }}
+          >
+            {blogPost &&
+              blogPost.map((item) => {
                 return (
                   <BlogCard
-                    key={item?._id} id={item?._id}
+                    key={item?._id}
+                    id={item?._id}
                     picture={item?.header_image}
                     title={item?.title}
                     details={item?.introduction}
@@ -100,22 +110,16 @@ const BlogspotScreen = () => {
                   />
                 );
               })}
-            </Grid>
-          ): (
-            <>
-              <Text className="robotoF">No Blogs Found</Text>
-              <Text className="robotoF">
-                We couldn't find any blog. Please try creating a blog.
-              </Text>
+          </Grid>
+        ) : (
+          <>
+            <Text className="robotoF">No Blogs Found</Text>
+          </>
+        )}
 
-        </>
-          )
-
-        }
-
-        <LoadMore click={()=> page + 1}/>
+        <LoadMore click={() => page + 1} />
       </Box>
-      <Footer/>
+      <Footer />
     </Box>
   );
 };
