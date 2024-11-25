@@ -30,7 +30,7 @@ export interface IUser {
   isActive: boolean;
   passwordUpdated: boolean;
   referrer: ObjectId;
-  verification: "pending" | "verified" | "rejected";
+  verification: "Pending" | "Verified" | "Rejected" | "Suspend" | "Resume";
   phoneNumber: string;
   address: string;
   matchPassword?: FunctionConstructor;
@@ -44,7 +44,7 @@ export interface IUser {
   idDocument?: string;
   agendIdDocument?: string;
   occupation: string;
-  isOnboarded?: boolean
+  isOnboarded?: boolean;
 }
 
 export interface IUserInRequest extends IUser {
