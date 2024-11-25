@@ -53,7 +53,12 @@ const PropertySchema = new mongoose.Schema<IProperty>(
     },
     creatorID: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'user',
+      required: true,
+    },
+    ownerID: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
       required: true,
     },
     documents: [DocumentSchema],

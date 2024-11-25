@@ -20,6 +20,7 @@ export interface IAddPropertyValidation {
   price: string;
   category: string;
   description: string;
+  ownerID: string;
   features: Array<string>;
   images: Array<string>;
   documents: Array<IDocument>;
