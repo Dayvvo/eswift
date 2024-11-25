@@ -1,4 +1,5 @@
 import Btn from "@/components/Btn";
+import { Modal } from "@/components/modal";
 import {
   Box,
   Drawer,
@@ -8,6 +9,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Flex,
+  HStack,
   Img,
   Text,
 } from "@chakra-ui/react";
@@ -33,6 +35,12 @@ const UserDrawer = ({ isOpen, onClose, btnRef, userEl }: any) => {
     1,
     userEl?.lastName.length
   )}`;
+
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
 
   return (
     <Drawer
@@ -149,10 +157,11 @@ const UserDrawer = ({ isOpen, onClose, btnRef, userEl }: any) => {
               fontSize={".875rem"}
               fontWeight={500}
               boxShadow={"0px 1px 2px 0px rgba(10, 13, 20, 0.03)"}
+              onClick={() => setShowModal(true)}
             >
               Suspend
             </Btn>
-            <Btn
+            {/* <Btn
               bgColor="transparent"
               border="1px solid #FB3748"
               color="#FB3748"
@@ -164,8 +173,17 @@ const UserDrawer = ({ isOpen, onClose, btnRef, userEl }: any) => {
               boxShadow={"0px 1px 2px 0px rgba(10, 13, 20, 0.03)"}
             >
               Delete
-            </Btn>
+            </Btn> */}
           </Flex>
+          <Modal onClose={toggleModal} isVisible={showModal} label="Suspend user">
+            <Box className="robotoF">
+              <Text>Are you sure you want to suspend <strong>{fullName || "John Doe"}</strong>?</Text>
+              <HStack justify={'center'} mt='15px'>
+                <Btn bg={"#335CFF"}>Suspend</Btn>
+                <Btn bg={"red"} onClick={toggleModal}>Close</Btn>
+              </HStack>
+            </Box>
+          </Modal>
         </DrawerBody>
       </DrawerContent>
     </Drawer>

@@ -15,7 +15,7 @@ export const Modal:React.FC<ModalProps> =({
     const ModalClose =(e:any)=>{
         if(e.target.id === "close")
         onClose()
-    };  
+    };
 
     if (!isVisible) return null;
 
