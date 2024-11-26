@@ -4,12 +4,7 @@ import Link from "next/link";
 import React, { ReactNode, useEffect, useState } from "react";
 import Divider from "./Divider";
 import Btn from "./Btn";
-import {
-  BlogIcon,
-  DashboardIcon,
-  SettingsIcon,
-  UserIcon,
-} from "./svg";
+import { BlogIcon, DashboardIcon, SettingsIcon, UserIcon } from "./svg";
 import { FiHome } from "react-icons/fi";
 import { NextRouter, useRouter } from "next/router";
 // import axios from "axios";
@@ -18,10 +13,10 @@ import useProfile from "@/hooks/useProfile";
 import { token } from "morgan";
 
 const Header = ({ casedPath }: { casedPath: string }) => {
-  const isUser = "An overview of activities, verify users and properties."
-  const {isWindow,user} = useAuth();
-  if(user?.role === 'ADMIN') {
-    return isUser
+  const isUser = "An overview of activities, verify users and properties.";
+  const { isWindow, user } = useAuth();
+  if (user?.role === "ADMIN") {
+    return isUser;
   }
   return (
     <Flex
@@ -63,9 +58,8 @@ const Header = ({ casedPath }: { casedPath: string }) => {
             fontSize={".75rem"}
             fontWeight={400}
           >
-            {
-              isUser && 'Overview of your favourite properties and profile settings' 
-            }
+            {isUser &&
+              "Overview of your favourite properties and profile settings"}
           </Text>
         </Flex>
       </Grid>
@@ -84,7 +78,6 @@ const Wrapper = ({
   children: ReactNode;
   noPadding?: boolean;
 }) => {
-
   const [route, setRoute] = useState("");
   const [path, setPath] = useState("");
 
@@ -92,41 +85,42 @@ const Wrapper = ({
   const { getProfile } = useProfile();
   const navigate = useRouter() as NextRouter;
 
-
   const navData = [
-    ...user?.role ==='ADMIN'? [ 
-      {
-        label: "Dashboard",
-        icon: (color: string) => <DashboardIcon color={color} />,
-        url: "/dashboard",
-      },
-      {
-        label: "Users",
-        icon: (color: string) => <UserIcon color={color} />,
-        url: "/users",
-      },
-      {
-        label: "Property",
-        icon: (color: string) => <FiHome size={"1rem"} color={color} />,
-        url: "/property",
-      },
-      {
-        label: "Blog",
-        icon: (color: string) => <BlogIcon color={color} />,
-        url: "/blog",
-      },
-    ]:[
-      {
-        label: "Favorites",
-        icon: (color: string) => <DashboardIcon color={color} />,
-        url: "/favourites",
-      },
-      {
-        label: "Browse",
-        icon: (color: string) => <FiHome size={"1rem"} color={color} />,
-        url: "/properties",
-      },
-    ],
+    ...(user?.role === "ADMIN"
+      ? [
+          {
+            label: "Dashboard",
+            icon: (color: string) => <DashboardIcon color={color} />,
+            url: "/dashboard",
+          },
+          {
+            label: "Users",
+            icon: (color: string) => <UserIcon color={color} />,
+            url: "/users",
+          },
+          {
+            label: "Property",
+            icon: (color: string) => <FiHome size={"1rem"} color={color} />,
+            url: "/property",
+          },
+          {
+            label: "Blog",
+            icon: (color: string) => <BlogIcon color={color} />,
+            url: "/blog",
+          },
+        ]
+      : [
+          {
+            label: "Favorites",
+            icon: (color: string) => <DashboardIcon color={color} />,
+            url: "/favourites",
+          },
+          {
+            label: "Browse",
+            icon: (color: string) => <FiHome size={"1rem"} color={color} />,
+            url: "/properties",
+          },
+        ]),
     {
       label: "Settings",
       icon: (color: string) => <SettingsIcon color={color} />,
@@ -154,31 +148,32 @@ const Wrapper = ({
     const getProfileFn = async () => {
       try {
         const res = await getProfile();
-        console.log('res', res);
+        console.log("res", res);
+      } catch (err) {
+        console.log("err", err);
       }
-      catch (err) {
-        console.log('err', err);
-      }
-    }
-  
+    };
+
     getProfileFn();
-  
   }, []);
-  const logout =()=> {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userData');
-    navigate.push('/auth');
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
+    navigate.push("/auth");
   };
 
   const casedPath = `${path.slice(0, 1).toUpperCase()}${path.slice(1)}`;
 
-  console.log('user',user);
-
-  if(!token){
-    return <></>
+  if (!token) {
+    return <></>;
   }
   return (
-    <Box w={"100%"} py={{base:'40px',lg:"10px"}} minH={"100vh"} overflowX={"hidden"}>
+    <Box
+      w={"100%"}
+      py={{ base: "40px", lg: "10px" }}
+      minH={"100vh"}
+      overflowX={"hidden"}
+    >
       <Box w={"100%"}>
         <Box
           borderRight={"1px solid #E1E4EA"}
@@ -192,7 +187,7 @@ const Wrapper = ({
           py="40px"
           overflowY={"auto"}
           display={{ base: "none", lg: "flex" }}
-          flexDir={'column'}
+          flexDir={"column"}
         >
           <Link href={"/"}>
             <Image src="/logo.svg" width="226px" height="40px" alt="logo" />
@@ -205,7 +200,7 @@ const Wrapper = ({
             flexDir={"column"}
             gap={"1rem"}
             alignItems={"flex-start"}
-            h={'100%'}
+            h={"100%"}
           >
             {navData.map((item) => {
               const isActive = path === item.label.toLowerCase();
@@ -217,7 +212,7 @@ const Wrapper = ({
                     className="robotoF"
                     cursor={"pointer"}
                     display={"flex"}
-                    alignItems={'center'}
+                    alignItems={"center"}
                     justifyContent={"start"}
                     fontWeight={500}
                     w="196px"
