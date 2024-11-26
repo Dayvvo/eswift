@@ -1,4 +1,6 @@
 import Btn from "@/components/Btn";
+import useToast from "@/hooks/useToast";
+import useUser from "@/hooks/useUser";
 import {
   Box,
   Drawer,
@@ -13,8 +15,16 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const UserDrawer = ({ isOpen, onClose, btnRef, userEl }: any) => {
+const UserDrawer = ({
+  isOpen,
+  onClose,
+  btnRef,
+  userEl,
+  verify,
+  setVerify,
+}: any) => {
   // const [table, setTable] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   // const { getUser } = useUser();
 
@@ -23,6 +33,53 @@ const UserDrawer = ({ isOpen, onClose, btnRef, userEl }: any) => {
   //   console.log(res);
   //   setTable(res?.data?.data);
   // }
+  const { toast } = useToast();
+  const { verifyUser } = useUser();
+
+  //  toast({
+  //    status: "success",
+  //    description: "profile updated",
+  //    title: "Success",
+  //    position: "top",
+  //    duration: 1000,
+  //  });
+  const suspendFn = async (status: string) => {
+    if (!userEl._id) {
+      toast({
+        status: "error",
+        description: "Invalid userId",
+        title: "Failed",
+        position: "top",
+        duration: 1000,
+      });
+      return;
+    }
+    setLoading(true);
+
+    try {
+      const res: any = await verifyUser(userEl._id, {
+        verification: status,
+      });
+      setVerify(res.data.data.verification);
+      toast({
+        status: "success",
+        description: `${userEl.firstName} ${status}`,
+        title: "Success",
+        position: "top",
+        duration: 1000,
+      });
+      setLoading(false);
+    } catch (error) {
+      toast({
+        status: "error",
+        description: `Failed to ${status} ${userEl.firstName} try again`,
+        title: "Failed",
+        position: "top",
+        duration: 1000,
+      });
+      setLoading(false);
+    }
+  };
 
   const fullName = `${userEl?.firstName
     ?.slice(0, 1)
@@ -139,19 +196,68 @@ const UserDrawer = ({ isOpen, onClose, btnRef, userEl }: any) => {
               </Text>
             </Box>
           </Box>
-          <Flex direction={"column"} px="15px" mt={"50px"} mb='15px'>
-            <Btn
-              bgColor="transparent"
-              border="1px solid #335CFF"
-              color="#335CFF"
-              borderRadius={"10px"}
-              className="robotoF"
-              fontSize={".875rem"}
-              fontWeight={500}
-              boxShadow={"0px 1px 2px 0px rgba(10, 13, 20, 0.03)"}
-            >
-              Suspend
-            </Btn>
+          <Flex direction={"column"} px="15px" mt={"50px"} mb="15px">
+            {verify === "Suspend" ? (
+              <Btn
+                bgColor="transparent"
+                border="1px solid #335CFF"
+                color="#335CFF"
+                borderRadius="10px"
+                className="robotoF"
+                fontSize=".875rem"
+                fontWeight={500}
+                boxShadow="0px 1px 2px 0px rgba(10, 13, 20, 0.03)"
+                onClick={() => suspendFn("Resume")}
+                isLoading={loading}
+                disabled={loading}
+                _hover={{
+                  bg: "#1A1D66",
+                  textColor: "#FFF",
+                }}
+              >
+                Resume
+              </Btn>
+            ) : verify === "Verified" ? (
+              <Btn
+                bgColor="transparent"
+                border="1px solid #335CFF"
+                color="#335CFF"
+                borderRadius="10px"
+                className="robotoF"
+                fontSize=".875rem"
+                fontWeight={500}
+                boxShadow="0px 1px 2px 0px rgba(10, 13, 20, 0.03)"
+                onClick={() => suspendFn("Suspend")}
+                isLoading={loading}
+                disabled={loading}
+                _hover={{
+                  bg: "#1A1D66",
+                  textColor: "#FFF",
+                }}
+              >
+                Suspend
+              </Btn>
+            ) : (
+              <Btn
+                bgColor="transparent"
+                border="1px solid #335CFF"
+                color="#335CFF"
+                borderRadius="10px"
+                className="robotoF"
+                fontSize=".875rem"
+                fontWeight={500}
+                boxShadow="0px 1px 2px 0px rgba(10, 13, 20, 0.03)"
+                onClick={() => suspendFn("Verified")}
+                isLoading={loading}
+                disabled={loading}
+                _hover={{
+                  bg: "#1A1D66",
+                  textColor: "#FFF",
+                }}
+              >
+                Verify
+              </Btn>
+            )}
             <Btn
               bgColor="transparent"
               border="1px solid #FB3748"
