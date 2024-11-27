@@ -25,6 +25,9 @@ import { PropertyCard, PropertyCardProps } from "./propertyCard";
 import { useRouter } from "next/router";
 import { SuspendState, DeleteProperty } from "./VerificationState";
 import useToast from "@/hooks/useToast";
+import { AddProperties } from "./Add";
+import { BiEdit } from "react-icons/bi";
+import { color } from "framer-motion";
 
 export const PropertyDetails = ({
   my,
@@ -35,7 +38,7 @@ export const PropertyDetails = ({
   p?: string;
   cardWidth?: any;
 }) => {
-  type activeModalType = "suspend" | "delete" | "gallery" | "documents";
+  type activeModalType = "suspend" | "delete" | "gallery" | "documents" | 'edit';
 
   const { globalContext } = useAppContext();
 
@@ -106,14 +109,14 @@ export const PropertyDetails = ({
 
   useEffect(() => {
     getPropertyFunction();
-  }, [showModal, isVerifying]);
+  }, [ isVerifying]);
 
   const toggleModal = () => {
     setActiveModal((prevState) => !prevState);
   };
 
   const openModal = (state: activeModalType, id?: string) => {
-    id && setItemIdInModal(id);
+    // id && setItemIdInModal(id);
     toggleModal();
     setModalType(state);
   };
@@ -224,6 +227,13 @@ export const PropertyDetails = ({
           )}
         </ModalContent>
       </Modal>
+      
+      {
+        detailsData?._id?
+        <AddProperties property={detailsData as PropertyCardProps} showModal={showModal} setShowModal={setShowModal} />
+        :<></>
+      }
+
 
       <Box bg={"#FFF"} w={"100%"}>
         <Flex w={"100%"} my={my || "24px"} pos={"relative"}>
@@ -283,8 +293,12 @@ export const PropertyDetails = ({
             fontWeight={600}
             textColor={"#000"}
             fontSize={"40px"}
+            gap={'1.5em'}
           >
-            <Text fontSize={"40px"}>{detailsData?.title}</Text>
+            <Flex w='100%' justify={'space-between'} align={'center'} gap='1em'>
+              <Text fontSize={"40px"}>{detailsData?.title}</Text>
+              <Btn  onClick={()=>setShowModal(true)} leftIcon={<BiEdit/>}> Edit </Btn>
+            </Flex>
             <Text fontWeight={500} display={"flex"} alignItems={"center"}>
               <TbCurrencyNaira />
               <Text as={"span"}>{detailsData?.price?.amount}</Text>

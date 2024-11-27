@@ -129,15 +129,17 @@ class PropertyController {
       const count = await Property.countDocuments(findQuery);
 
       const user = req?.user as IUser 
+      
       const matchingFavorites = await Favourite.find({
-        user: user._id
+        ...user?{
+          user: user._id
+        }:{}
       }).select('property').lean();
+
 
       const favoritePropertyIds = new Set(matchingFavorites.map((fav) => fav.property.toString()));
 
-      const properties = await Property.find(findQuery).lean()
-        .limit(pageSize)
-        .skip(pageSize * (page - 1));
+      const properties = await Property.find(findQuery).lean().limit(pageSize).skip(pageSize * (page - 1));
 
       return res.status(200).json({
         statusCode: 200,
@@ -148,6 +150,7 @@ class PropertyController {
         })) ,
         pagination: { page, pages: Math.ceil(count / pageSize), count },
       });
+
     } catch (err: any) {
       console.error(err?.message);
       res.status(500).send("An Error ocurred while retrieving data");
@@ -164,9 +167,9 @@ class PropertyController {
 
     const user = req.user as any;
     const userId = user?._id as string;
-    let isFavorite = false;
+    let isInFavorites = false;
     try {
-      const property = await Property.findById(id);
+      const property = await Property.findById(id).lean();
       // Check if the property is in the user's favorites
 
       const existInFavourite = await Favourite.exists({
@@ -180,12 +183,12 @@ class PropertyController {
           message: `Property with id ${id} not found`,
         });
       if (existInFavourite) {
-        isFavorite = true;
+        isInFavorites = true;
       }
       return res.json({
         statusCode: 200,
         message: "Successful",
-        data: { ...property, isFavorite },
+        data: { ...property, isInFavorites },
       });
     } catch (error: any) {
       console.log("Error in email login", error);

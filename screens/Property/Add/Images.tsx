@@ -289,7 +289,7 @@ export const AddPropertyScreenThree = ({
                 <Image
                   h="100%"
                   w="100%"
-                  src={URL.createObjectURL(image)}
+                  src={typeof(image) ==='string'?image: URL.createObjectURL(image)}
                   alt={image.name}
                   borderRadius="6px"
                   objectFit="cover"

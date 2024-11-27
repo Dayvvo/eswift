@@ -99,11 +99,11 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
     price: priceSchema.required(),
     category: Joi.string().required(),
     description: Joi.string().required(),
-    state: Joi.string(),
-    lga: Joi.string(),
-    features: Joi.array().items(Joi.string().min(2).max(50)).min(1).required(),
+    state: Joi.string().required(),
+    lga:Joi.string(). allow(''),
+    features: Joi.array().items(Joi.string().max(50)),
     images: Joi.array().items(Joi.string().uri()).min(1).required(),
-    documents: Joi.array().items(documentSchema).required(),
+    documents: Joi.array().items(documentSchema),
   });
 
   return propertySchema.validate(property);
@@ -133,6 +133,8 @@ export const ValidateEditProperty = (property: IAddPropertyValidation) => {
     price: priceSchema.optional(),
     category: Joi.string().optional(),
     description: Joi.string().optional(),
+    lga: Joi.string().optional(),
+    state: Joi.string().optional(),
     features: Joi.array().items(Joi.string().min(2).max(50)).min(1).optional(),
     images: Joi.array().items(Joi.string().uri()).min(1).optional(),
     documents: Joi.array().items(documentSchema).optional(),

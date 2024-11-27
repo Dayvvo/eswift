@@ -1,4 +1,4 @@
-import useAuth from "@/hooks/useAuth";
+import useAuth, { IUser } from "@/hooks/useAuth";
 import HomePage from "@/screens/home/home";
 import { Resdesign } from "@/screens/home/redesign";
 import { useRouter } from "next/router";
@@ -44,7 +44,7 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
   const client = useApiUrl();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [inputValue, setInputValue] = useState<string>("");
   const [onboard, setOnboard] = useState<onBoard>({
     state: "",
@@ -52,36 +52,32 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
     locationInterest: [],
   });
 
-  // const {
-  //   input,
-  //   onChangeHandler,
-  //   inputIsinvalid,
-  //   onBlurHandler,
-  // } = useInputSettings(
-  //   {
-  //     state: "",
-  //     propertyInterest:[],
-  //     locationInterest:[]
-  //   },
-  //   validation
-  // );
-
+ 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
+    const {firstName, lastName, email} = user  as IUser;
     try {
-      const data = await client.put(`/user/profile?onboarding=true`, {
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-        email: user?.email,
+      const {data,status} = await client.put(`/user/profile?onboarding=true`, {
+        firstName,
+        lastName,
+        email,
         ...onboard,
       });
-      if (data.status === 201) {
+      if (status === 201) {
         const storedData = localStorage.getItem("userData");
         if (storedData) {
-          const userData = JSON.parse(storedData);
-          userData.user = data.data.data;
-          localStorage.setItem("userData", JSON.stringify(userData));
+          const existingTokenStore = JSON.parse(storedData);
+          let newUser = {
+            ...user,
+            ...onboard,
+            isOnboarded: true
+          } as IUser        
+          localStorage.setItem("userData", JSON.stringify({
+            ...existingTokenStore,
+            user:newUser
+          }));
+          setUser(newUser)
         }
         onClose();
 
@@ -106,16 +102,6 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
     }
   };
 
-  // const handleAddTag = () => {
-  //   const newLocation = inputValue.trim();
-  //   if (newLocation && !onboard?.locationInterest.includes(newLocation)) {
-  //     setOnboard((prevOnboard) => ({
-  //       ...prevOnboard,
-  //       locationInterest: [...prevOnboard.locationInterest, newLocation],
-  //     }));
-  //     setInputValue('');
-
-  // };
 
   const handleAddTag = () => {
     const newLocation = inputValue.trim();
@@ -311,16 +297,17 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useRouter();
 
-  const { user } = useAuth();
+  const { user,isWindow } = useAuth();
 
   useEffect(() => {
     if (user && !user?.isOnboarded) {
+      console.log('user',user)
       setShowModal(true);
     }
   }, [user]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (isWindow) {
       const getCookie = (name: string) => {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
@@ -331,7 +318,8 @@ export default function Home() {
 
       const myCookie = getCookie("auth-cookie");
       if (myCookie) {
-        localStorage.setItem("userData", myCookie);
+        const userData = localStorage.getItem('userData');
+        !userData && localStorage.setItem("userData", myCookie);
         const authRoute = sessionStorage.getItem("authRoute");
         if (authRoute) {
           navigate.push(authRoute);
@@ -340,7 +328,7 @@ export default function Home() {
     }
 
     return () => localStorage.removeItem("authRoute");
-  }, []);
+  }, [isWindow]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

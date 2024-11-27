@@ -24,9 +24,14 @@ import { MdLocationOn } from "react-icons/md";
 import { ZigiZagaIcon } from "../../components/svg";
 import { AxiosError, AxiosResponse } from "axios";
 import useToast from "@/hooks/useToast";
+import useAuth from "@/hooks/useAuth";
 
 export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const router = useRouter()
+  const pathName = router.pathname;
+
+  const {authProtectedFn} = useAuth()
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
@@ -120,6 +125,11 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
 
   const isAdmin = user?.role === "Admin";
 
+  if(!detailsData) {
+    return(<></>);
+  }
+
+
   return (
     <Box bg={"#FFF"} w={clientView ? "80%" : "100%"}>
       <Flex justifyContent={"space-between"} alignItems={"center"}>
@@ -179,7 +189,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
           },
         }}
       >
-        {detailsData?.images.map((image, index) => (
+        {detailsData?.images?.map((image, index) => (
           <Box
             key={index}
             h="74px"
@@ -237,14 +247,14 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
           </Box>
         </Box>
       }
-      <Flex gap={"16px"} mt={"16px"}>
+      <Flex direction={{base:'column', lg:'row'}} gap={"16px"} mt={"16px"}>
         <Box
           display={"flex"}
           flexDir={"column"}
           borderRadius={"10px"}
           border="1px solid #262626"
           padding={"40px"}
-          w="630px"
+          w={{lg:"630px"}}
           h={"514px"}
         >
           <Box flex={"1"}>
@@ -428,7 +438,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               </Text>
             </Box>
           </Flex> */}
-          <Flex gap={"8px"} mt={"20px"}>
+          <Flex direction={{base:'column', lg:'row'}} gap={"8px"} mt={"20px"}>
             <Btn
               border="1px solid #335CFF"
               borderRadius={"10px"}
@@ -437,11 +447,14 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               bgColor="transparent"
               className="robotoF"
               w="100%"
+              as='a'
+              href='https://wa.me/message/GI7M6PJK4RGPL1'
+              target='_blank'
             >
               Contact
             </Btn>
 
-            {detailsData?.isFavorite ? (
+            {!detailsData?.isInFavorites ? (
               <Btn
                 border="1px solid #FB3748"
                 borderRadius={"10px"}
@@ -450,7 +463,9 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
                 className="robotoF"
                 bgColor="transparent"
                 w="100%"
-                onClick={() => addToFave(detailsData?._id as string)}
+                onClick={() => 
+                  authProtectedFn(()=> addToFave(detailsData?._id as string), pathName )
+                }
                 isLoading={loadingBtn}
               >
                 Add to favorites
@@ -478,7 +493,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
           borderRadius={"10px"}
           border="1px solid #262626"
           padding={"40px"}
-          w="630px"
+          w={{lg:"630px"}}
         >
           <Text
             fontWeight={"600"}

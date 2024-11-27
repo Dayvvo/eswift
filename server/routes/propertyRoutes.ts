@@ -8,7 +8,7 @@ const router = express.Router();
 router
   .route("/")
   .post(isAuth, propertyController.createProperty)
-  .get(propertyController.getCreatedProperties);
+  .get(hasAuth,propertyController.getCreatedProperties);
 
 router
   .route("/favourite/:propertyId")

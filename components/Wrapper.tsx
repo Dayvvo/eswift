@@ -94,12 +94,12 @@ const Wrapper = ({
 
 
   const navData = [
+    {
+      label: "Dashboard",
+      icon: (color: string) => <DashboardIcon color={color} />,
+      url: "/dashboard",
+    },
     ...user?.role ==='ADMIN'? [ 
-      {
-        label: "Dashboard",
-        icon: (color: string) => <DashboardIcon color={color} />,
-        url: "/dashboard",
-      },
       {
         label: "Users",
         icon: (color: string) => <UserIcon color={color} />,
@@ -122,7 +122,7 @@ const Wrapper = ({
         url: "/favourites",
       },
       {
-        label: "Browse",
+        label: "Browse Properties",
         icon: (color: string) => <FiHome size={"1rem"} color={color} />,
         url: "/properties",
       },

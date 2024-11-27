@@ -22,7 +22,7 @@ export type PropertyCardProps = {
   category?:string;
   verification?: 'Pending' | 'Verified' | 'Rejected';
   features?: string[]
-  documents?: {type:string, document:string}[];
+  documents?: {type:string, document:string, _id?: string}[];
   location?:string;
   description?: string;
   address?: string;
@@ -34,7 +34,7 @@ export type PropertyCardProps = {
   onClick?: () => void;
   verificationState?: string;
   creatorID?:string;
-  isFavorite?: boolean;
+  isInFavorites?: boolean;
   favoriteId?:string
 };
 

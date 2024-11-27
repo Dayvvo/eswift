@@ -1,8 +1,6 @@
-import Btn from "../../components/Btn";
+import Btn from "@/components/Btn";
 import React, {
   KeyboardEvent,
-  KeyboardEventHandler,
-  useEffect,
   useState,
 } from "react";
 import {
@@ -13,7 +11,6 @@ import {
   FormLabel,
   Input,
   InputGroup,
-  InputRightElement,
   Select,
   Text,
   Textarea,
@@ -23,7 +20,6 @@ import { IoIosArrowForward } from "react-icons/io";
 import useToast from "@/hooks/useToast";
 import { BsPlus } from "react-icons/bs";
 import { IoCloseOutline } from "react-icons/io5";
-import { R } from "@/utils/types";
 import { validateRequired } from "@/utils/modules";
 
 interface AddPropertyScreenOneProps {
@@ -122,18 +118,17 @@ export const AddPropertyScreenOne = ({
       validation && Object.values(validation).includes(false);
     if (hasValidationError) {
       const fieldsWithErrors = Object.keys(validation).reduce((acc, key) => {
-        console.log("acc", acc);
-        console.log("key", key);
-
         if (!validation[key]) {
           acc[key] = true;
         }
         return acc;
       }, {} as Record<string, boolean>);
+     
       setTouched((prev: any) => ({
         ...prev,
         ...fieldsWithErrors,
       }));
+
       toast({
         status: "error",
         description: "Validation failed",
@@ -141,17 +136,7 @@ export const AddPropertyScreenOne = ({
         position: "top",
         duration: 1500,
       });
-      return;
-    }
-    if (features.length < 1) {
-      setFeaureErr(true);
-      toast({
-        status: "error",
-        description: "Add features",
-        title: "Failed",
-        position: "top",
-        duration: 1500,
-      });
+
       return;
     }
     onClick();
@@ -262,6 +247,8 @@ export const AddPropertyScreenOne = ({
               }
               onChange={handleOnchange}
               onBlur={handleOnblur}
+              value={input.category}
+
             >
               {["Land", "House"].map((entry) => (
                 <option value={`${entry}`} key={entry}>
@@ -348,16 +335,17 @@ export const AddPropertyScreenOne = ({
                 </InputGroup>
               </Flex>
               <Flex
-                w={"24px"}
-                h={"24px"}
+                w={"42px"}
+                h={"42px"}
                 fontSize={"36px"}
                 px={"4px"}
                 borderRadius={"10"}
                 justifyContent={"center"}
                 alignItems={"center"}
                 onClick={handleAddTag}
+                background={'#3170A6'}
               >
-                <BsPlus />
+                <BsPlus color='white' fontSize={'25px'} />
               </Flex>
             </Flex>
             <Flex flexWrap={"wrap"} gap={"8px"} mt={"2px"}>
@@ -382,11 +370,11 @@ export const AddPropertyScreenOne = ({
                 </Flex>
               ))}
             </Flex>
-            {featureErr && (
-              <FormHelperText color={"var(--errorBase)"} fontSize={"12px"}>
+            {/* {(
+              <FormHelperText color={"var(--)"} fontSize={"12px"}>
                 {"No Feature listed"}
               </FormHelperText>
-            )}
+            )} */}
           </FormControl>
         </Flex>
         <Btn

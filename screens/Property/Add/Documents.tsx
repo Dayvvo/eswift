@@ -1,11 +1,11 @@
 import Btn from "@/components/Btn";
 import { Box, Flex, Input, Stack, Text } from "@chakra-ui/react";
 import { ChangeEvent } from "react";
-import { FaCheck, FaTrashAlt } from "react-icons/fa";
+import { FaCheck, FaExternalLinkAlt, FaTrashAlt } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { FaFilePdf } from "react-icons/fa6";
-import { Documents } from "./property";
+import { Documents } from ".";
 import { DocumentTypes } from "@/utils/types";
 import useToast from "@/hooks/useToast";
 
@@ -26,7 +26,7 @@ const FileInputComponent = ({
   title: string;
   name: string;
   onChange: (name: string, value: File | null) => void;
-  uploaded: File;
+  uploaded: File | { type: string, document: string, _id?: string };
 }) => {
   const toast = useToast();
   const onFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -98,16 +98,33 @@ const FileInputComponent = ({
         <Flex justify={"space-between"} p="1.2em 1em">
           <Flex gap="0.8em" alignItems={"center"}>
             <FaFilePdf fontSize={"25px"} />
-            <Stack gap={"0.2em"}>
-              <Text fontWeight={500} fontSize={"14px"}>
-                {" "}
-                {uploaded.name}{" "}
-              </Text>
-              <Text color="#525866" fontSize={"13px"}>
-                {" "}
-                {uploaded.size}{" "}
-              </Text>
-            </Stack>
+            {
+              !(uploaded instanceof File)  ?
+              <Stack gap={"0.2em"}>
+                <Text fontWeight={500} fontSize={"14px"}>
+                  {uploaded.type}
+                </Text>
+
+                <a href={uploaded.document} target="_blank" rel="noopener noreferrer">
+                  <Flex direction={'row'} gap='0.5em' alignItems={'center'}>
+                    <FaExternalLinkAlt color='blue' fontSize={'15px'} />
+                    <Text color='blue' fontSize={'13px'}>Preview</Text>                    
+                  </Flex>
+                </a>
+
+              </Stack>
+              :
+              <Stack gap={"0.2em"}>
+                <Text fontWeight={500} fontSize={"14px"}>
+                  {uploaded.name}
+                </Text>
+                <Text color="#525866" fontSize={"13px"}>
+                  {uploaded.size}
+                </Text>
+              </Stack>
+
+            }
+
           </Flex>
 
           <FaTrashAlt
