@@ -33,7 +33,7 @@ import useToast from "@/hooks/useToast";
 
 
 
-const AddUser = ({close}:{close: ()=>void}) => {
+const AddUser = ({close}:{close: ()=>void;}) => {
 
   const toast = useToast();
   

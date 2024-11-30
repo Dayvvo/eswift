@@ -94,8 +94,7 @@ class UserController {
 
       const selectedRole: UserRole[] = [UserRole.AFFILIATE, UserRole.AGENT]
 
-      if (selectedRole.includes(user.role))
-        await mailGenMails.refLink(firstName, email, user.refCode, true)
+      if (selectedRole.includes(user.role)) await mailGenMails.refLink(firstName, email, user.refCode, true)
       else await mailGenMails.updatePassword(firstName, email, password, true)
 
       return res.status(201).json({

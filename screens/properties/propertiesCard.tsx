@@ -25,7 +25,6 @@ export const PropertiesCard =({images, title, price, description, address, _id, 
 
     const  {setGlobalContext} = useAppContext()
 
-
     const {  authProtectedFn } = useAuth();
 
     const { addToFavorites, deleteFromFavorites } = useProperty();

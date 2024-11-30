@@ -47,8 +47,6 @@ export const PropertyScreen = () => {
   const [users, setUsers] = useState<User[]>([]);
 
 
- 
-
   const client = useApiUrl();
 
   const {  getAdminProperty } = useProperty();
