@@ -9,6 +9,7 @@ import {
   // SimpleGrid,
   Text,
   Image,
+  Grid,
   // Heading,
 } from "@chakra-ui/react";
 // import { BsDot } from "react-icons/bs";
@@ -25,6 +26,8 @@ import { ZigiZagaIcon } from "../../components/svg";
 import { AxiosError, AxiosResponse } from "axios";
 import useToast from "@/hooks/useToast";
 import useAuth from "@/hooks/useAuth";
+import { TbCurrencyNaira } from "react-icons/tb";
+import { FaCheckCircle } from "react-icons/fa";
 
 export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -131,8 +134,8 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
 
 
   return (
-    <Box bg={"#FFF"} w={clientView ? "80%" : "100%"}>
-      <Flex justifyContent={"space-between"} alignItems={"center"}>
+    <Box bg={"#FFF"} w={clientView ? "80%" : "100%"} pb={'4rem'}>
+      <Flex justifyContent={"space-between"} alignItems={"center"} py={'1rem'}>
         <Flex gap={"16px"}>
           <Text
             className="urbanist"
@@ -167,7 +170,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               {detailsData?.address}
             </Text>
           </Flex>
-      */}
+        */}
         </Flex>
       </Flex>
       <Flex
@@ -177,7 +180,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
         justifyContent={"center"}
         bgColor={"#E2EDF3"}
         mt={"20px"}
-        border={"1px solid #262626"}
+        border={"1.5px solid #262626"}
         padding="10px"
         borderRadius={"12px"}
         css={{
@@ -216,7 +219,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
 
       {
         <Box
-          border="1px solid #262626"
+          border="1.5px solid #262626"
           borderRadius={"12px"}
           padding={"40px"}
           mt="24px"
@@ -252,7 +255,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
           display={"flex"}
           flexDir={"column"}
           borderRadius={"10px"}
-          border="1px solid #262626"
+          border="1.5px solid #262626"
           padding={"40px"}
           w={{lg:"630px"}}
           h={"514px"}
@@ -300,7 +303,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               </Text>
             </Box>
           )}
-          {detailsData?.state && (
+          {/* {detailsData?.state && (
             <Box flex={"1"}>
               <Text
                 as={"h2"}
@@ -321,7 +324,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
                 {detailsData?.state}
               </Text>
             </Box>
-          )}
+          )} */}
 
           <Box flex={"1"}>
             <Text
@@ -333,8 +336,11 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
             >
               Address
             </Text>
-            <Flex>
-              <MdLocationOn />
+            <Flex alignItems={'center'} gap={'4px'}>
+              <Box fontSize={'14px'}>
+                <MdLocationOn />
+              </Box>
+              
               <Text
                 fontSize="14px"
                 maxW={"90%"}
@@ -359,14 +365,19 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
               Price
             </Text>
 
-            <Text
-              className="urbanist"
-              fontSize={"20px"}
-              fontWeight={600}
-              color={"#000"}
-            >
-              {detailsData?.price?.amount}
-            </Text>
+            <Flex alignItems={'center'}>
+              <Box fontSize={'14px'}>
+                <TbCurrencyNaira />
+              </Box>
+              <Text
+                className="urbanist"
+                fontSize={"20px"}
+                fontWeight={600}
+                color={"#000"}
+              >
+                {detailsData?.price?.amount}
+              </Text>
+            </Flex>
           </Box>
 
           {/* <Flex
@@ -491,7 +502,7 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
         </Box>
         <Box
           borderRadius={"10px"}
-          border="1px solid #262626"
+          border="1.5px solid #262626"
           padding={"40px"}
           w={{lg:"630px"}}
         >
@@ -528,7 +539,57 @@ export const PropertyDetails = ({ clientView }: { clientView?: boolean }) => {
             })}
           </Box>
         </Box>
+        
       </Flex>
+      <Box
+        display={"flex"}
+        flexDir={"column"}
+        borderRadius={"10px"}
+        border="1.5px solid #262626"
+        padding={"40px"}
+        w={'100%'}
+        mt={'20px'}
+        gap={'24px'}
+      >
+          <Text
+              as={"h2"}
+              fontWeight={"600"}
+              fontSize={"20px"}
+              className="robotoF"
+              color={"#000"}
+            >
+              Documents
+            </Text>
+            <Grid templateColumns={{base:'repeat(1, 1fr)', md:'repeat(2, 1fr)', xl:'repeat(3, 1fr)'}} 
+              gap={'20px'} placeContent={'center'}
+            >
+              {detailsData?.documents?.map((item)=>(
+                  <Flex key={item?._id}
+                    borderRadius={"6px"}
+                    border="1px solid #262626"
+                    padding={"10px"}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                  >
+                    <Text
+                      className="urbanist"
+                      fontSize={"20px"}
+                      fontWeight={600}
+                      color={"#00000090"}
+                      whiteSpace={'nowrap'}
+                      overflow={'ellipsis'}
+                    >
+                      {item?.type}
+                    </Text>
+                    <Box fontSize={'20px'} color={'#282'}>
+                      <FaCheckCircle />
+                    </Box>
+                  </Flex>
+                ))
+              }
+            </Grid>
+              
+      </Box>
       {/* <Flex flexDir={"column"} w={"100%"} p={"20px"} gap={"24px"}>
         <Flex flexDir={"column"} w={"100%"} gap={"18px"} className="roboto">
           <Flex w="100%" justify={"space-between"}>
