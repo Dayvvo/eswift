@@ -23,7 +23,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActionIcon, FilterIcon, SearchIcon } from "../../components/svg";
 import UserDrawer from "./UserDrawer";
 import useUser from "@/hooks/useUser";
@@ -31,12 +31,9 @@ import Btn from "@/components/Btn";
 import { Modal } from "@/components/modal";
 import useToast from "@/hooks/useToast";
 
-
-
-const AddUser = ({close}:{close: ()=>void;}) => {
-
+const AddUser = ({ close }: { close: () => void }) => {
   const toast = useToast();
-  
+
   const [userData, setUserData] = useState({
     email: "",
     // password: "",
@@ -47,14 +44,14 @@ const AddUser = ({close}:{close: ()=>void;}) => {
 
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const [errors,setErrors] = useState({
-    email:'',
+  const [errors, setErrors] = useState({
+    email: "",
     // password:'',
     firstName: "",
     lastName: "",
-    role:"ADMIN"
-  })
-  
+    role: "ADMIN",
+  });
+
   const { addUser } = useUser();
 
   const handleChange = (
@@ -81,30 +78,29 @@ const AddUser = ({close}:{close: ()=>void;}) => {
   //   };
   //   return isError;
   // }
-  
-  const validateRequired = ()=>{
+
+  const validateRequired = () => {
     let isErr = false;
     let keys = Object.keys(userData);
-    keys.map((key)=>{
+    keys.map((key) => {
       const keyval = key as keyof typeof errors;
-      if (!userData[keyval]){
-        setErrors(prev=>({
+      if (!userData[keyval]) {
+        setErrors((prev) => ({
           ...prev,
-          [keyval]: `${keyval} is required`
-        }))
-        console.log('missing key',keyval)
+          [keyval]: `${keyval} is required`,
+        }));
         isErr = true;
       }
-    })
-    return isErr; 
-  }
+    });
+    return isErr;
+  };
 
   const createUser = async () => {
     const isRequiredError = validateRequired();
 
     // const isRequiredPasswordLength = validatePassword();
 
-    if(!isRequiredError){
+    if (!isRequiredError) {
       try {
         setLoading(true);
         const res = await addUser(userData);
@@ -120,69 +116,66 @@ const AddUser = ({close}:{close: ()=>void;}) => {
           title: "User created",
         });
         return res;
-      } 
-      catch (err) {
+      } catch (err) {
         console.log("err", err);
-      }
-      finally {
+      } finally {
         setLoading(false);
       }
     }
   };
 
-//   const passW =       <Box pt="15px">
-//   <FormLabel className="robotoF" fontSize={".875rem"} display={"flex"}
-//     gap={"4px"}>
-//     <Text>Password</Text>
-//     <Text color={"red"}>*</Text>
-//     </FormLabel>
-//   {/* <Input className="robotoF" type="text" w="314px" name="password" value={userData.password} onChange={handleChange} /> */}
-//   <InputGroup
-//     display={"flex"}
-//     justifyContent={"center"}
-//     border={"1px"}
-//     borderRadius={"10px"}
-//     borderColor={"var(--soft200)"}
-//     className="robotoF"
-//     cursor={"text"}
-//     fontSize={14}
-//     textColor={"var--(sub600)"}
-//     w="100%"
-//     h="40px"
-//     _placeholder={{ textColor: "var--(soft400)", fontSize: 12 }}
-//   >
-//     <Input
-//       w={"100%"}
-//       h={"100%"}
-//       outline={"none"}
-//       type={show ? "text" : "Password"}
-//       placeholder="*********"
-//       name="password"
-//       value={userData.password}
-//       onChange={handleChange}
-//       onBlur={validatePassword}
-//     />
-//     <InputRightElement
-//       width="fit-content"
-//       marginRight={"20px"}
-//       cursor={"pointer"}
-//     >
-//       <Box onClick={() => setShow(!show)}>
-//         {!show ? (
-//           <BsEyeSlash className="formicon" />
-//         ) : (
-//           <BsEye className="formicon" />
-//         )}
-//       </Box>
-//     </InputRightElement>
-//   </InputGroup>
-//   {err4 && (
-//     <Text className="robotoF" color="red" fontSize={".625rem"}>
-//       Password must be more than 7 characters
-//     </Text>
-//   )}
-// </Box>
-
+  //   const passW =       <Box pt="15px">
+  //   <FormLabel className="robotoF" fontSize={".875rem"} display={"flex"}
+  //     gap={"4px"}>
+  //     <Text>Password</Text>
+  //     <Text color={"red"}>*</Text>
+  //     </FormLabel>
+  //   {/* <Input className="robotoF" type="text" w="314px" name="password" value={userData.password} onChange={handleChange} /> */}
+  //   <InputGroup
+  //     display={"flex"}
+  //     justifyContent={"center"}
+  //     border={"1px"}
+  //     borderRadius={"10px"}
+  //     borderColor={"var(--soft200)"}
+  //     className="robotoF"
+  //     cursor={"text"}
+  //     fontSize={14}
+  //     textColor={"var--(sub600)"}
+  //     w="100%"
+  //     h="40px"
+  //     _placeholder={{ textColor: "var--(soft400)", fontSize: 12 }}
+  //   >
+  //     <Input
+  //       w={"100%"}
+  //       h={"100%"}
+  //       outline={"none"}
+  //       type={show ? "text" : "Password"}
+  //       placeholder="*********"
+  //       name="password"
+  //       value={userData.password}
+  //       onChange={handleChange}
+  //       onBlur={validatePassword}
+  //     />
+  //     <InputRightElement
+  //       width="fit-content"
+  //       marginRight={"20px"}
+  //       cursor={"pointer"}
+  //     >
+  //       <Box onClick={() => setShow(!show)}>
+  //         {!show ? (
+  //           <BsEyeSlash className="formicon" />
+  //         ) : (
+  //           <BsEye className="formicon" />
+  //         )}
+  //       </Box>
+  //     </InputRightElement>
+  //   </InputGroup>
+  //   {err4 && (
+  //     <Text className="robotoF" color="red" fontSize={".625rem"}>
+  //       Password must be more than 7 characters
+  //     </Text>
+  //   )}
+  // </Box>
 
   return (
     <FormControl>
@@ -204,15 +197,19 @@ const AddUser = ({close}:{close: ()=>void;}) => {
           value={userData.firstName}
           onChange={handleChange}
         />
-        {(
-          <Text mt='0.3em' className="robotoF" color="red" fontSize={".825rem"}>
-            { errors.firstName && errors.firstName}
+        {
+          <Text mt="0.3em" className="robotoF" color="red" fontSize={".825rem"}>
+            {errors.firstName && errors.firstName}
           </Text>
-        )}
+        }
       </Box>
       <Box pt="15px">
-        <FormLabel className="robotoF" fontSize={".875rem"} display={"flex"}
-          gap={"4px"}>
+        <FormLabel
+          className="robotoF"
+          fontSize={".875rem"}
+          display={"flex"}
+          gap={"4px"}
+        >
           <Text>Last Name</Text>
           <Text color={"red"}>*</Text>
         </FormLabel>
@@ -224,16 +221,20 @@ const AddUser = ({close}:{close: ()=>void;}) => {
           value={userData.lastName}
           onChange={handleChange}
         />
-        {(
-          <Text mt='0.3em' className="robotoF" color="red" fontSize={".825rem"}>
-            { errors.lastName && errors.lastName}
+        {
+          <Text mt="0.3em" className="robotoF" color="red" fontSize={".825rem"}>
+            {errors.lastName && errors.lastName}
           </Text>
-        )}
+        }
       </Box>
 
       <Box pt="15px">
-        <FormLabel className="robotoF" fontSize={".875rem"} display={"flex"}
-          gap={"4px"}>
+        <FormLabel
+          className="robotoF"
+          fontSize={".875rem"}
+          display={"flex"}
+          gap={"4px"}
+        >
           <Text>Email</Text>
           <Text color={"red"}>*</Text>
         </FormLabel>
@@ -245,14 +246,13 @@ const AddUser = ({close}:{close: ()=>void;}) => {
           value={userData.email}
           onChange={handleChange}
         />
-        {(
-          <Text className="robotoF" color="red" mt='0.3em' fontSize={".825rem"}>
-            { errors.email && errors.email}
+        {
+          <Text className="robotoF" color="red" mt="0.3em" fontSize={".825rem"}>
+            {errors.email && errors.email}
           </Text>
-        )}
+        }
       </Box>
- 
- 
+
       <Box pt="15px" mb="20px">
         <FormLabel className="robotoF" fontSize={".875rem"}>
           User Type
@@ -282,12 +282,12 @@ const AddUser = ({close}:{close: ()=>void;}) => {
   );
 };
 
-
 const UserScreen = () => {
   const [table, setTable] = useState<any>([]);
   const [userEl, setUserEl] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState<string>("");
+  const [verify, setVerify] = useState("Pending");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -297,8 +297,6 @@ const UserScreen = () => {
     const res: any = await getUser(search);
     let data = res?.data?.data as any;
     setTable(data);
-
-    console.log('table', table);
   };
 
   useEffect(() => {
@@ -311,13 +309,12 @@ const UserScreen = () => {
     }
   };
 
-  
   const btnRef = React.useRef();
 
   const openDrawer = async (userId: string) => {
     onOpen();
     const res: any = await getUserById(userId);
-    console.log("res", res);
+    setVerify(res.data.data.verification);
     setUserEl(res?.data?.data);
   };
 
@@ -374,7 +371,7 @@ const UserScreen = () => {
           Add User
         </Btn>
         <Modal onClose={toggleModal} isVisible={showModal} label="Add User">
-          <AddUser close={toggleModal}/>
+          <AddUser close={toggleModal} />
         </Modal>
       </Flex>
       <TableContainer mt="30px">
@@ -406,11 +403,7 @@ const UserScreen = () => {
           <Tbody fontSize={".875rem"} fontWeight={400} className="robotoF">
             {table &&
               table.map((item: any) => (
-                <Tr
-                  key={item._id}
-                  cursor={"pointer"}
-                  onClick={() => openDrawer(item._id)}
-                >
+                <Tr key={item._id} cursor={"pointer"}>
                   <Td color={"#0E121B"} py="12px">{`${item.firstName
                     .slice(0, 1)
                     .toUpperCase()}${item.firstName.slice(
@@ -439,7 +432,11 @@ const UserScreen = () => {
                   </Td>
                   <Td color={"#525866"} py="12px">
                     <Menu>
-                      <MenuButton as={"button"} className="robotoF">
+                      <MenuButton
+                        as={"button"}
+                        className="robotoF"
+                        onClick={() => openDrawer(item._id)}
+                      >
                         <ActionIcon />
                       </MenuButton>
                       <MenuList>
@@ -450,13 +447,15 @@ const UserScreen = () => {
                   </Td>
                 </Tr>
               ))}
-            <UserDrawer
-              isOpen={isOpen}
-              onClose={onClose}
-              btnRef={btnRef}
-              userEl={userEl}
-            />
           </Tbody>
+          <UserDrawer
+            isOpen={isOpen}
+            verify={verify}
+            setVerify={setVerify}
+            onClose={onClose}
+            btnRef={btnRef}
+            userEl={userEl}
+          />
         </Table>
       </TableContainer>
     </Box>
