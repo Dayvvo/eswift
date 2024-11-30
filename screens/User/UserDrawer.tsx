@@ -1,6 +1,7 @@
 import Btn from "@/components/Btn";
 import useToast from "@/hooks/useToast";
 import useUser from "@/hooks/useUser";
+import { Modal } from "@/components/modal";
 import {
   Box,
   Drawer,
@@ -10,6 +11,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Flex,
+  HStack,
   Img,
   Text,
 } from "@chakra-ui/react";
@@ -90,6 +92,12 @@ const UserDrawer = ({
     1,
     userEl?.lastName.length
   )}`;
+
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
 
   return (
     <Drawer
@@ -196,69 +204,21 @@ const UserDrawer = ({
               </Text>
             </Box>
           </Box>
-          <Flex direction={"column"} px="15px" mt={"50px"} mb="15px">
-            {verify === "Suspend" ? (
-              <Btn
-                bgColor="transparent"
-                border="1px solid #335CFF"
-                color="#335CFF"
-                borderRadius="10px"
-                className="robotoF"
-                fontSize=".875rem"
-                fontWeight={500}
-                boxShadow="0px 1px 2px 0px rgba(10, 13, 20, 0.03)"
-                onClick={() => suspendFn("Resume")}
-                isLoading={loading}
-                disabled={loading}
-                _hover={{
-                  bg: "#1A1D66",
-                  textColor: "#FFF",
-                }}
-              >
-                Resume
-              </Btn>
-            ) : verify === "Verified" ? (
-              <Btn
-                bgColor="transparent"
-                border="1px solid #335CFF"
-                color="#335CFF"
-                borderRadius="10px"
-                className="robotoF"
-                fontSize=".875rem"
-                fontWeight={500}
-                boxShadow="0px 1px 2px 0px rgba(10, 13, 20, 0.03)"
-                onClick={() => suspendFn("Suspend")}
-                isLoading={loading}
-                disabled={loading}
-                _hover={{
-                  bg: "#1A1D66",
-                  textColor: "#FFF",
-                }}
-              >
-                Suspend
-              </Btn>
-            ) : (
-              <Btn
-                bgColor="transparent"
-                border="1px solid #335CFF"
-                color="#335CFF"
-                borderRadius="10px"
-                className="robotoF"
-                fontSize=".875rem"
-                fontWeight={500}
-                boxShadow="0px 1px 2px 0px rgba(10, 13, 20, 0.03)"
-                onClick={() => suspendFn("Verified")}
-                isLoading={loading}
-                disabled={loading}
-                _hover={{
-                  bg: "#1A1D66",
-                  textColor: "#FFF",
-                }}
-              >
-                Verify
-              </Btn>
-            )}
+          <Flex direction={"column"} px="15px" mt={"50px"} mb='15px'>
             <Btn
+              bgColor="transparent"
+              border="1px solid #335CFF"
+              color="#335CFF"
+              borderRadius={"10px"}
+              className="robotoF"
+              fontSize={".875rem"}
+              fontWeight={500}
+              boxShadow={"0px 1px 2px 0px rgba(10, 13, 20, 0.03)"}
+              onClick={() => setShowModal(true)}
+            >
+              Suspend
+            </Btn>
+            {/* <Btn
               bgColor="transparent"
               border="1px solid #FB3748"
               color="#FB3748"
@@ -270,8 +230,17 @@ const UserDrawer = ({
               boxShadow={"0px 1px 2px 0px rgba(10, 13, 20, 0.03)"}
             >
               Delete
-            </Btn>
+            </Btn> */}
           </Flex>
+          <Modal onClose={toggleModal} isVisible={showModal} label="Suspend user">
+            <Box className="robotoF">
+              <Text>Are you sure you want to suspend <strong>{fullName || "John Doe"}</strong>?</Text>
+              <HStack justify={'center'} mt='15px'>
+                <Btn bg={"#335CFF"}>Suspend</Btn>
+                <Btn bg={"red"} onClick={toggleModal}>Close</Btn>
+              </HStack>
+            </Box>
+          </Modal>
         </DrawerBody>
       </DrawerContent>
     </Drawer>
