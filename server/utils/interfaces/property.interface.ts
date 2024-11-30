@@ -45,6 +45,7 @@ export interface IProperty {
   images: Array<string>
   documents: Array<IDocument>
   creatorID: ObjectId
+  ownerID: ObjectId
   isActive: boolean
   verification: PropertyVerification,
 

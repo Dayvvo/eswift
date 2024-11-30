@@ -11,7 +11,8 @@ export const isAuth = async (
   let token = "";
   if (req.headers.authorization) {
     try {
-      token = req.headers.authorization;
+      //You keep changing this I don't know why. Bearer token is a best practice.
+      token = req.headers.authorization.split(' ')[1];
       console.log("auth token in middleware", token);
       const decoded = jwt.verify(
         token,
