@@ -23,8 +23,8 @@ type SelectInputProps = {
   inputIsinvalid?: boolean;
   errorMessage?: string;
   border?: any;
-  multiple?:boolean;
-  rest?:{}
+  multiple?: boolean;
+  rest?: {};
 };
 
 type CheckboxInputProps = {
@@ -40,7 +40,7 @@ type TextInputProps = {
   value?: string | string[];
   inputIsinvalid?: any;
   errorMessage?: string;
-  keyPress?: (e:KeyboardEvent<HTMLInputElement>) => void | null;
+  keyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void | null;
 };
 
 export const SelectInput = ({
@@ -111,7 +111,6 @@ export const TextInput = ({
   inputIsinvalid,
   errorMessage,
   keyPress,
-
 }: TextInputProps) => {
   return (
     <FormControl display={"flex"} flexDir={"column"} w={{ base: "100%" }}>
