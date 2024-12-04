@@ -100,14 +100,6 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
     price: priceSchema.required(),
     category: Joi.string().required(),
     description: Joi.string().required(),
-<<<<<<< HEAD
-    state: Joi.string().required(),
-    lga:Joi.string(). allow(''),
-    features: Joi.array().items(Joi.string().max(50)),
-    images: Joi.array().items(Joi.string().uri()).min(1).required(),
-    documents: Joi.array().items(documentSchema),
-  });
-=======
     ownerID: Joi.string().required(),
     state: Joi.string(),
     lga: Joi.string(),
@@ -115,7 +107,6 @@ export const ValidateAddProperty = (property: IAddPropertyValidation) => {
     images: Joi.array().items(Joi.string().uri()).min(1).required(),
     documents: Joi.array().items(documentSchema).required(),
   })
->>>>>>> 1b1ac80e209ae6b91f30ed6348046f54c0fac399
 
   return propertySchema.validate(property)
 }
