@@ -294,6 +294,7 @@ export const OnboardingModal = ({ isOpen, onClose }: InformationModalProps) => {
 export default function Home() {
   const [building, setBuilding] = useState(false);
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+  const [showPreloaderOnce, setShowPreloaderOnce] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const navigate = useRouter();
 
@@ -331,16 +332,25 @@ export default function Home() {
   }, [isWindow]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowLoadingScreen(false);
-    }, 3000);
+    const preloaderShown = sessionStorage.getItem("preloaderShown");
 
-    return () => clearTimeout(timer);
+    if (preloaderShown) {
+      setShowLoadingScreen(false);
+    } else {
+      sessionStorage.setItem("preloaderShown", "true");
+
+      // Hide the preloader after a timeout (e.g., 3 seconds)
+      const timer = setTimeout(() => {
+        setShowLoadingScreen(false);
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   return (
     <>
-      {showLoadingScreen ? (
+      {showLoadingScreen && !showPreloaderOnce ? (
         <div
           style={{
             display: "flex",
