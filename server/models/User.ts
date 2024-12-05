@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 import * as argon from "argon2";
 import { AuthProvider, IUser, UserRole } from "../utils/interfaces";
 import { generateRefCode } from "../utils/helperFunctions/generateRefCode";
+import { UserVerification } from "../utils/interfaces/types";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -51,25 +52,32 @@ const UserSchema = new Schema<IUser>(
       default: false,
       required: false,
     },
+
     referrer: {
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+
     refCode: {
       type: String,
     },
+
     refCount: {
       type: Number,
       default: 0,
     },
+
     isActive: {
       type: Boolean,
       default: true,
     },
+
     verification: {
       type: String,
-      default: "pending",
+      enum: Object.values(UserVerification),
+      default: UserVerification.Pending,
     },
+
     phoneNumber: {
       type: String,
       default: "",
@@ -77,6 +85,7 @@ const UserSchema = new Schema<IUser>(
     state: {
       type: String,
     },
+
     propertyInterest: {
       type: [String],
     },

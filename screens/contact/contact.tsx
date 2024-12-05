@@ -232,7 +232,7 @@ const ContactScreen = () => {
           buttonPos={null}
           w={"100%"}
           h={"100vh"}
-          video={"/AboutVid.mp4"}
+          video={"/AboutVideo.mp4"}
           click={scrollToSection}
         />
         <Background />

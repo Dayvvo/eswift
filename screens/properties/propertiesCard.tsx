@@ -14,17 +14,16 @@ import { useAppContext } from "@/context";
 
 interface propertiesCard extends PropertyCardProps {
     view?: 'client' | 'admin',
-    isFavorite?: boolean;
+    isInFavorites?: boolean;
     onClick?: () => void;
     favoriteId?: string;
 }
 
-export const PropertiesCard =({images, title, price, description, address, _id, onClick, view, favoriteId,isFavorite}:propertiesCard) => {
+export const PropertiesCard =({images, title, price, description, address, _id, onClick, view, favoriteId, isInFavorites}:propertiesCard) => {
 
     const toast = useToast();
 
     const  {setGlobalContext} = useAppContext()
-
 
     const {  authProtectedFn } = useAuth();
 
@@ -176,7 +175,7 @@ export const PropertiesCard =({images, title, price, description, address, _id, 
 
                     <Flex gap='1em' align={'center'}>
                         {
-                            !isFavorite?
+                            !isInFavorites?
                                 <Tooltip content='add to favorites' >
                                     <IoIosHeartEmpty onClick={()=>authProtectedFn(()=> addToFave(_id as string), pathName )} cursor={'pointer'} className="empty"  fontSize={'30px'} color='#3170A6' />
                                 </Tooltip>

@@ -32,13 +32,14 @@ const useProperty = () => {
 
   // console.log(token);
   const {token} = useAuth(); 
+  
   const {
     get:query,
     post,
     put:putMutation,
     delete: delProperty,
+    patch
   } = useApiUrl();
-
 
   const addProperty = useCallback(
     async (data: PropertyObj) => {
@@ -52,6 +53,20 @@ const useProperty = () => {
     },
     [token]
   );
+
+  const editProperty = useCallback(
+    async (data: PropertyObj,id:string) => {
+      try {
+        const res = await patch(`/property/${id}`, data);
+        return res;
+      } catch (err: any) {
+        throw new err();
+      }
+      // return res
+    },
+    [token]
+  );
+
   const verifyProperty = useCallback(
     async (id: any, data: VerificationProps) => {
       try {
@@ -123,7 +138,8 @@ const useProperty = () => {
     getPropertyDetails,
     deleteProperty,
     getFavorites,
-    addToFavorites
+    addToFavorites,
+    editProperty,
   };
 
 

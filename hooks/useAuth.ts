@@ -48,7 +48,7 @@ export interface IUser {
   refCount?: number;
   propertyCount?: number;
   role: UserRole;
-  isOnboarded?: R;
+  isOnboarded?: boolean;
 }
 
 const useAuth = () => {
@@ -123,11 +123,12 @@ const useAuth = () => {
     loading,
     error,
     isWindow,
+    token,
     login,
     logout,
-    token,
     reset,
     authProtectedFn,
+    setUser
   };
 };
 

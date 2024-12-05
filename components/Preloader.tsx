@@ -28,13 +28,9 @@ const Preloader = () => {
         setIsOpen(false);
         sessionStorage.setItem("isOpen", "false");
       }, 4500);
-
-      return () => clearTimeout(timer);
-    } else {
-      setIsOpen(false);
     }
-    console.log(sessionStorage);
-  }, [pathname]);
+  }, [])
+
 
   return (
     <Flex

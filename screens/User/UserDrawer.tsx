@@ -1,4 +1,6 @@
 import Btn from "@/components/Btn";
+import useToast from "@/hooks/useToast";
+import useUser from "@/hooks/useUser";
 import { Modal } from "@/components/modal";
 import {
   Box,
@@ -15,8 +17,16 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const UserDrawer = ({ isOpen, onClose, btnRef, userEl }: any) => {
+const UserDrawer = ({
+  isOpen,
+  onClose,
+  btnRef,
+  userEl,
+  verify,
+  setVerify,
+}: any) => {
   // const [table, setTable] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   // const { getUser } = useUser();
 
@@ -25,6 +35,53 @@ const UserDrawer = ({ isOpen, onClose, btnRef, userEl }: any) => {
   //   console.log(res);
   //   setTable(res?.data?.data);
   // }
+  const { toast } = useToast();
+  const { verifyUser } = useUser();
+
+  //  toast({
+  //    status: "success",
+  //    description: "profile updated",
+  //    title: "Success",
+  //    position: "top",
+  //    duration: 1000,
+  //  });
+  const suspendFn = async (status: string) => {
+    if (!userEl._id) {
+      toast({
+        status: "error",
+        description: "Invalid userId",
+        title: "Failed",
+        position: "top",
+        duration: 1000,
+      });
+      return;
+    }
+    setLoading(true);
+
+    try {
+      const res: any = await verifyUser(userEl._id, {
+        verification: status,
+      });
+      setVerify(res.data.data.verification);
+      toast({
+        status: "success",
+        description: `${userEl.firstName} ${status}`,
+        title: "Success",
+        position: "top",
+        duration: 1000,
+      });
+      setLoading(false);
+    } catch (error) {
+      toast({
+        status: "error",
+        description: `Failed to ${status} ${userEl.firstName} try again`,
+        title: "Failed",
+        position: "top",
+        duration: 1000,
+      });
+      setLoading(false);
+    }
+  };
 
   const fullName = `${userEl?.firstName
     ?.slice(0, 1)

@@ -44,7 +44,6 @@ export class appConfig {
             refferer = User.findOne({refCode})
           }
           
-          console.log({ profileCheck: profile?._json })
           const verifiedUser: GoogleAuthResponse = profile?._json
           try {
             const user = await User.findOneAndUpdate(

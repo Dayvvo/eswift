@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import useProperty from "@/hooks/useProperty";
 import axios from "axios";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useApiUrl } from "@/hooks/useApi";
 
 
 
@@ -60,11 +61,13 @@ const OverviewScreen = () => {
 
     const [propertyList,setPropertyList] = useState<PropertyCardProps[]>([]);
 
+    const { get } = useApiUrl()
+
     const getPropertyFunction = async()=> {
         setLoading(true);
         try {
           setLoading(false);
-          const fetchData = await axios.get(`/api/property?keyword=${inputValue}&PageNumber={${page}}`);
+          const fetchData = await get(`/property?keyword=${inputValue}&PageNumber={${page}}`);
           setFetchData(fetchData?.data?.data);
         } catch (error) {
           setLoading(false);

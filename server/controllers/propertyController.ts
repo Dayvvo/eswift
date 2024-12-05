@@ -26,6 +26,11 @@ class PropertyController {
 
     const user = req.user! as any
     try {
+      if (!isValidObjectId(value.ownerID)) {
+        return res
+          .status(HttpStatusCode.BadRequest)
+          .json({ message: `Invalid object Id` })
+      }
       const newProperty = new Property({ creatorID: user['_id'], ...value })
 
       await newProperty.save()
@@ -95,6 +100,7 @@ class PropertyController {
     try {
       const count = await Property.countDocuments(findQuery)
       const properties = await Property.find(findQuery)
+        .populate({ path: 'ownerID', select: 'role firstName lastName' })
         .limit(pageSize)
         .skip(pageSize * (page - 1))
 
@@ -113,7 +119,7 @@ class PropertyController {
 
   //TODO: finish function
   getCreatedProperties = async (req: Request, res: Response) => {
-    const pageSize = 60;
+    const pageSize = 60
     const page = Number(req.params.pageNumber) || 1
 
     const keyword = req.query.keyword as string
@@ -128,16 +134,29 @@ class PropertyController {
     try {
       const count = await Property.countDocuments(findQuery)
 
-      const properties = await Property.find(findQuery)
-        .limit(pageSize)
-        .skip(pageSize * (page - 1))
+      const user = req?.user as IUser 
+      
+      const matchingFavorites = await Favourite.find({
+        ...user?{
+          user: user._id
+        }:{}
+      }).select('property').lean();
+
+
+      const favoritePropertyIds = new Set(matchingFavorites.map((fav) => fav.property.toString()));
+
+      const properties = await Property.find(findQuery).lean().limit(pageSize).skip(pageSize * (page - 1));
 
       return res.status(200).json({
         statusCode: 200,
         message: 'Property List',
-        data: properties,
+        data: properties.map(prop=>({
+          ...prop,
+          isInFavorites: favoritePropertyIds.has(prop._id.toString())
+        })) ,
         pagination: { page, pages: Math.ceil(count / pageSize), count },
-      })
+      });
+
     } catch (err: any) {
       console.error(err?.message)
       res.status(500).send('An Error ocurred while retrieving data')
@@ -151,22 +170,32 @@ class PropertyController {
         statusCode: 400,
         message: 'Invalid ObjectId',
       })
+
+    const user = req.user as any;
+    const userId = user?._id as string;
+    let isInFavorites = false;
     try {
-      const property = await Property.findById(id)
-        // Check if the property is in the user's favorites
-      const isFavorite = await Favourite.exists({ user: id, property: id });
+      const property = await Property.findById(id).lean();
+      // Check if the property is in the user's favorites
+
+      const existInFavourite = await Favourite.exists({
+        user: userId,
+        property: id,
+      })
 
       if (!property)
         return res.status(404).json({
           statusCode: 404,
           message: `Property with id ${id} not found`,
         })
-
+      if (existInFavourite) {
+        isInFavorites = true;
+      }
       return res.json({
         statusCode: 200,
-        message: 'Successful',
-        data: property,
-      })
+        message: "Successful",
+        data: { ...property, isInFavorites },
+      });
     } catch (error: any) {
       console.log('Error in email login', error)
       console.error(error?.message)

@@ -32,7 +32,6 @@ class BlogPostController {
       if (error) {
         return res.status(400).json(error.message)
       }
-      const user = req.user as IUserInRequest;
       const blogPost = await BlogPost.findOneAndUpdate(
         { _id: req.params.blogPostId },
         { ...value },

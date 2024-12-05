@@ -68,8 +68,10 @@ export const useInputNumber = (
   };
 };
 
-export const useImage = () => {
-  const [images, setImages] = useState<File[]>([]);
+export type PropImages = (File|string)[]
+
+export const useImage = ({existingImages}:{existingImages?: PropImages }) => {
+  const [images, setImages] = useState<PropImages>( existingImages || []);
   const [error, setError] = useState<string | null>(null);
   const validFileTypes: string[] = ["image/jpeg", "image/png", "image/gif"];
   const maxFileSize: number = 5 * 1024 * 1024;

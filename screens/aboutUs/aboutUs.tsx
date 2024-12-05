@@ -28,7 +28,7 @@ const AboutUsScreen = () => {
           buttonPos={null}
           w={"100%"}
           h={"100vh"}
-          video={"/AboutVid.mp4"}
+          video={"https://eswift-space-bucket.lon1.cdn.digitaloceanspaces.com/assets/AboutVideo.mp4"}
           click={scrollToSection}
         />
         <Background />

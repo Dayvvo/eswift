@@ -1,19 +1,23 @@
 import React, { useCallback } from "react";
 import { useApiUrl } from "./useApi";
 
+interface VerificationProps {
+  verification: string;
+}
+
+type AddUserProps = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  role?: string;
+  phoneNumber?: string;
+  address?: string;
+};
+
 const useUser = () => {
   const client = useApiUrl();
 
-  type AddUserProps = {
-    email: string;
-    firstName: string;
-    lastName: string;
-    role?: string;
-    phoneNumber?: string;
-    address?: string;
-  };
-
-  const getUser = useCallback((search?:string) => {
+  const getUser = useCallback((search?: string) => {
     const req = client
       .get(`/user/users?keyword=${search}`)
       .then((res: any) => {
@@ -50,12 +54,25 @@ const useUser = () => {
       throw new err();
     }
   }, []);
+  const verifyUser = useCallback(
+    async (id: string, data: VerificationProps) => {
+      try {
+        const res = await client.put(`user/users/${id}/verify`, data);
+        return res as any;
+      } catch (err: any) {
+        throw new err();
+      }
+      // return res
+    },
+    []
+  );
 
   return {
     getUser,
     getUserById,
     addUser,
     updateUser,
+    verifyUser,
   };
 };
 
