@@ -11,19 +11,28 @@ import {
   useState,
 } from "react";
 
+interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  role:string;
+}
+
 
 interface IGlobalContext {
   user: R,
   token:string,
   properties: R,
   favourites: Favourite[]
+  getUser:User[]
 };
 
 const defaultContextState = {
   user:{},
   token:'',
   properties: {},
-  favourites: []
+  favourites: [],
+  getUser:[]
 };
 
 const AppContext = createContext<{globalContext:IGlobalContext,setGlobalContext?:Dispatch<SetStateAction<IGlobalContext>> }>({globalContext:defaultContextState});
@@ -31,6 +40,8 @@ const AppContext = createContext<{globalContext:IGlobalContext,setGlobalContext?
 export function AppContextWrapper({ children }: { children: ReactNode }) {
 
   const [globalContext,setGlobalContext] = useState<IGlobalContext>(defaultContextState);
+
+
 
   return <AppContext.Provider value={{globalContext,setGlobalContext}}>{children}</AppContext.Provider>;
 

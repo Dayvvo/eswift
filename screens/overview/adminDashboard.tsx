@@ -45,6 +45,8 @@ import { useRouter } from "next/router";
 import users from "@/pages/users";
 import { PropertyCard, PropertyCardProps } from "../Property/propertyCard";
 import useProperty from "@/hooks/useProperty";
+import { setGlobal } from "next/dist/trace";
+import { useAppContext } from "@/context";
   
 interface MyData {
     _id: any;
@@ -119,8 +121,12 @@ interface User {
     
   }
 
+
   const { getUser, getUserById } = useUser();
   console.log("userEl", userEl);
+
+  const { setGlobalContext } = useAppContext();
+
 
   const getUserFn = async () => {
     const res: any = await getUser();
@@ -357,7 +363,7 @@ interface User {
                 </Thead>
                 <Tbody fontSize={".875rem"} fontWeight={400} className="robotoF">
                 {table &&
-                    table.slice(0,5).map((item: any) => (
+                    table.slice(0,5).reverse().map((item: any) => (
                     <Tr
                         key={item._id}
                         cursor={"pointer"}
