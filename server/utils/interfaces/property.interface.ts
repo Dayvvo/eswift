@@ -4,6 +4,7 @@ import { PropertyDocuments, PropertyVerification } from './types'
 export enum PropertyOwner {
   'ESWIFT' = 'ESWIFT',
   'AFFILIATE' = 'AFFILIATE',
+  'AGENT' = 'AGENT'
 }
 
 export interface ILocation {

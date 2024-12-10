@@ -14,12 +14,15 @@ node_modules/
 
 .next/
 .next/*
-
 .next/
 
 /dist/*
 dist/*
 
+
+#github
+.git/
+.git/*
 
 # misc
 .DS_Store
